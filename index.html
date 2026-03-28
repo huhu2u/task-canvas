@@ -234,6 +234,7 @@ canvas#cvs {
 <div id="tabnav">
   <button class="tabn active" onclick="switchTab('tasks')" id="tab-tasks">🗂 任务中心</button>
   <button class="tabn" onclick="switchTab('board')" id="tab-board">📊 业绩进度表</button>
+  <button class="tabn" onclick="switchTab('rt')" id="tab-rt">📈 实时业绩进展</button>
   <button class="tabn" onclick="switchTab('zr')" id="tab-zr">🎫 职人码看板</button>
 </div>
 
@@ -294,6 +295,48 @@ canvas#cvs {
   </div>
 </div>
 
+<!-- 实时业绩进展 Panel -->
+<div id="panel-rt" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:16px;font-weight:700;color:#ffd060;">📈 今日实时业绩进展</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:12px;color:#4a6a8a;" id="rt-upd-time">更新时间：--</span>
+      <button onclick="renderRtPanel()" style="background:#1a2f50;border:1px solid #2a4f80;color:#60c8ff;padding:4px 12px;border-radius:4px;font-size:11px;cursor:pointer;">🔄 刷新</button>
+    </div>
+  </div>
+  <div class="btable-wrap">
+    <div class="btitle" style="background:#1a2a3a;">📈 GTV + CPC 实时进展（今日累计）</div>
+    <table class="btable">
+      <thead>
+        <tr>
+          <th rowspan="2" style="vertical-align:middle;">代运营商</th>
+          <th colspan="6" style="border-bottom:1px solid #2a3a5a;color:#60c8ff;">GTV（元）</th>
+          <th colspan="6" style="border-bottom:1px solid #2a3a5a;color:#4ade80;">CPC（元）</th>
+        </tr>
+        <tr>
+          <th style="color:#60c8ff;">日目标</th>
+          <th style="color:#60c8ff;">今日</th>
+          <th style="color:#60c8ff;">昨日</th>
+          <th style="color:#60c8ff;">日环比</th>
+          <th style="color:#60c8ff;">完成率</th>
+          <th style="color:#60c8ff;">缺口</th>
+          <th style="color:#4ade80;">日目标</th>
+          <th style="color:#4ade80;">今日</th>
+          <th style="color:#4ade80;">昨日</th>
+          <th style="color:#4ade80;">日环比</th>
+          <th style="color:#4ade80;">完成率</th>
+          <th style="color:#4ade80;">缺口</th>
+        </tr>
+      </thead>
+      <tbody id="rt-tbody"></tbody>
+      <tfoot id="rt-tfoot"></tfoot>
+    </table>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:#4a6a8a;padding:8px 12px;background:#0f1825;border-radius:6px;">
+    完成率：<span style="color:#4ade80;">■</span> ≥100%&nbsp;&nbsp;<span style="color:#fbbf24;">■</span> 60-99%&nbsp;&nbsp;<span style="color:#f87171;">■</span> &lt;60%&nbsp;&nbsp;|&nbsp;&nbsp;缺口 = 今日实时 - 日目标&nbsp;&nbsp;|&nbsp;&nbsp;数据来源：Apollo，每半小时更新
+  </div>
+</div>
+
 <!-- 职人码看板 Panel（独立Tab）-->
 <div id="panel-zr" style="display:none; padding:20px 24px;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
@@ -307,8 +350,28 @@ canvas#cvs {
   <!-- 核心指标卡片 -->
   <div id="zr-kpi-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;"></div>
 
-  <!-- 代运营商汇总表 -->
+  <!-- 城市维度汇总表 -->
   <div class="btable-wrap">
+    <div class="btitle" style="background:#1a3050;">🏙️ 城市汇总（今日累计）</div>
+    <table class="btable">
+      <thead>
+        <tr>
+          <th>城市</th>
+          <th>合作门店</th>
+          <th>绑码率</th>
+          <th>月净增绑码</th>
+          <th>日店转订单数</th>
+          <th>昨日店转GTV渗透率</th>
+          <th>月店转GTV渗透率</th>
+        </tr>
+      </thead>
+      <tbody id="zr-city-tbody"></tbody>
+      <tfoot id="zr-city-tfoot"></tfoot>
+    </table>
+  </div>
+
+  <!-- 代运营商汇总表 -->
+  <div class="btable-wrap" style="margin-top:20px;">
     <div class="btitle" style="background:#1a2a3a;">📊 代运营商汇总（今日累计）</div>
     <table class="btable">
       <thead>
@@ -318,6 +381,7 @@ canvas#cvs {
           <th>绑码率</th>
           <th>日净增绑码数</th>
           <th>月净增绑码数</th>
+          <th>日店转订单数</th>
           <th>昨日店转GTV(元)</th>
           <th>昨日店转GTV渗透率</th>
           <th>月店转GTV(元)</th>
@@ -342,6 +406,7 @@ canvas#cvs {
           <th>绑码率</th>
           <th>日净增绑码数</th>
           <th>月净增绑码数</th>
+          <th>日店转订单数</th>
           <th>昨日店转GTV(元)</th>
           <th>昨日店转GTV渗透率</th>
           <th>月店转GTV(元)</th>
@@ -976,10 +1041,12 @@ function showToast(msg, type='') {
 function switchTab(t) {
   document.querySelector('[data-panel="tasks"]').style.display = t==='tasks' ? '' : 'none';
   document.getElementById('panel-board').style.display = t==='board' ? '' : 'none';
+  document.getElementById('panel-rt').style.display = t==='rt' ? '' : 'none';
   document.getElementById('panel-zr').style.display = t==='zr' ? '' : 'none';
   document.querySelectorAll('.tabn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   if(t==='board') renderBoard();
+  if(t==='rt') renderRtPanel();
   if(t==='zr') renderZrPanel();
 }
 
@@ -1097,11 +1164,90 @@ const ZR_SALES = [
   ['宁夏灵创','义乌','朱佳程',    213307,  72, 180,  0, 0, 0.276],
 ];
 
+// 实时业绩进展静态数据
+const RT_DATA = {
+  time: '2026-03-28 22:00',
+  ops: [
+    // [代运营商, GTV日目标, GTV今日, GTV昨日, CPC日目标, CPC今日, CPC昨日]
+    ['惠州巨浪',  85000, 72500, 65800, 1500, 1820, 1650],
+    ['惠州柏万',  72000, 58900, 54200, 1800, 1540, 1720],
+    ['泉州小花猫',70000, 61300, 57400, 2200, 1980, 2100],
+    ['惠安广通',  55000, 43800, 40100, 1200, 1050,  980],
+    ['义乌汐洋',  50000, 39200, 36700, 1600, 1380, 1290],
+    ['慈溪哲光',  52000, 41600, 38900, 2000, 1710, 1850],
+    ['宁夏灵创',  60000, 52400, 49800, 2200, 2180, 2050],
+  ]
+};
+
 // 色阶
 function zrBindColor(r)  { return r>=0.35?'zr-green':r>=0.25?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
 function zrPaveColor(r)  { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
 function zrDxColor(r)    { return r>=0.55?'zr-green':r>=0.40?'zr-yellow':r>=0.25?'zr-orange':'zr-red'; }
-function zrGtvColor(r)   { return r>=0.30?'zr-green':r>=0.20?'zr-yellow':r>=0.12?'zr-orange':'zr-red'; }
+function zrGtvColor(r)   { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
+function zrIncrColor(n)  { return (n>50)?'zr-green':(n>20)?'zr-yellow':(n>0)?'zr-orange':'zr-red'; }
+
+function renderRtPanel() {
+  const d = RT_DATA;
+  document.getElementById('rt-upd-time').textContent = '更新时间：' + d.time;
+  function fmtK(v) { return v.toLocaleString('zh-CN', {maximumFractionDigits:0}); }
+  function rateBadge(r) {
+    const pct = (r*100).toFixed(1)+'%';
+    const color = r>=1?'#4ade80':r>=0.6?'#fbbf24':'#f87171';
+    return `<span style="color:${color};font-weight:700;">${pct}</span>`;
+  }
+  function momBadge(today, yest) {
+    if(!yest) return '—';
+    const chg = (today-yest)/yest;
+    const pct = (Math.abs(chg)*100).toFixed(1)+'%';
+    return chg>=0
+      ? `<span style="color:#4ade80;">↑${pct}</span>`
+      : `<span style="color:#f87171;">↓${pct}</span>`;
+  }
+  function gapCell(today, target) {
+    const gap = today - target;
+    const color = gap>=0?'#4ade80':'#f87171';
+    return `<span style="color:${color};">${gap>=0?'+':''}${fmtK(gap)}</span>`;
+  }
+
+  let rows = '';
+  let tGtvT=0, tGtvNow=0, tGtvY=0, tCpcT=0, tCpcNow=0, tCpcY=0;
+  d.ops.forEach(o => {
+    const [name, gtvT, gtvNow, gtvY, cpcT, cpcNow, cpcY] = o;
+    tGtvT+=gtvT; tGtvNow+=gtvNow; tGtvY+=gtvY;
+    tCpcT+=cpcT; tCpcNow+=cpcNow; tCpcY+=cpcY;
+    rows += `<tr>
+      <td style="font-weight:700;color:#e0e6f0;">${name}</td>
+      <td style="color:#60c8ff;">${fmtK(gtvT)}</td>
+      <td style="color:#e0e6f0;font-weight:600;">${fmtK(gtvNow)}</td>
+      <td style="color:#8a9ab8;">${fmtK(gtvY)}</td>
+      <td>${momBadge(gtvNow,gtvY)}</td>
+      <td>${rateBadge(gtvNow/gtvT)}</td>
+      <td>${gapCell(gtvNow,gtvT)}</td>
+      <td style="color:#4ade80;">${fmtK(cpcT)}</td>
+      <td style="color:#e0e6f0;font-weight:600;">${fmtK(cpcNow)}</td>
+      <td style="color:#8a9ab8;">${fmtK(cpcY)}</td>
+      <td>${momBadge(cpcNow,cpcY)}</td>
+      <td>${rateBadge(cpcNow/cpcT)}</td>
+      <td>${gapCell(cpcNow,cpcT)}</td>
+    </tr>`;
+  });
+  document.getElementById('rt-tbody').innerHTML = rows;
+  document.getElementById('rt-tfoot').innerHTML = `<tr>
+    <td>合计</td>
+    <td style="color:#60c8ff;">${fmtK(tGtvT)}</td>
+    <td>${fmtK(tGtvNow)}</td>
+    <td style="color:#8a9ab8;">${fmtK(tGtvY)}</td>
+    <td>${momBadge(tGtvNow,tGtvY)}</td>
+    <td>${rateBadge(tGtvNow/tGtvT)}</td>
+    <td>${gapCell(tGtvNow,tGtvT)}</td>
+    <td style="color:#4ade80;">${fmtK(tCpcT)}</td>
+    <td>${fmtK(tCpcNow)}</td>
+    <td style="color:#8a9ab8;">${fmtK(tCpcY)}</td>
+    <td>${momBadge(tCpcNow,tCpcY)}</td>
+    <td>${rateBadge(tCpcNow/tCpcT)}</td>
+    <td>${gapCell(tCpcNow,tCpcT)}</td>
+  </tr>`;
+}
 
 function renderZrPanel() {
   document.getElementById('zr-upd-time').textContent = `数据截至 ${ZR_DATE} · 全月累计`;
@@ -1119,7 +1265,83 @@ function renderZrPanel() {
       <div style="font-size:11px;color:#6a8aaa;margin-top:4px;">${k.sub}</div>
     </div>`).join('');
 
-  // ── 汇总表 ──
+  // ── 城市维度汇总表 ──
+  // 建立城市 -> 代运营商映射，再从ZR_LIVE找月净增和昨日渗透率
+  const cityAgencyMap = {}; // city -> [agency, ...]
+  ZR_SALES.forEach(s => {
+    const city = s[1], agency = s[0];
+    if(!cityAgencyMap[city]) cityAgencyMap[city] = new Set();
+    cityAgencyMap[city].add(agency);
+  });
+  // 从ZR_SALES聚合城市数据
+  const cityAggMap = {};
+  ZR_SALES.forEach(s => {
+    const city = s[1];
+    if(!cityAggMap[city]) cityAggMap[city] = { stores:0, bind:0, gtvSum:0, gtvWt:0 };
+    cityAggMap[city].stores += s[5];
+    cityAggMap[city].bind   += s[4];
+    cityAggMap[city].gtvSum += s[8] * s[5]; // weighted by stores
+    cityAggMap[city].gtvWt  += s[5];
+  });
+  // 从ZR_LIVE获取城市的月净增绑码和昨日渗透率
+  const liveMap = {};
+  ZR_LIVE.forEach(o => { liveMap[o[0]] = o; });
+
+  let cityRows = '';
+  let cTotalStores=0, cTotalBind=0, cTotalMonthIncr=0;
+  const cities = Object.keys(cityAggMap).sort();
+  cities.forEach(city => {
+    const cd = cityAggMap[city];
+    const bindR = cd.stores>0 ? cd.bind/cd.stores : 0;
+    const monthGtvR = cd.gtvWt>0 ? cd.gtvSum/cd.gtvWt : 0;
+    // 月净增绑码：加总该城市所有代运营商的o[11]
+    let monthIncr = 0;
+    let hasIncr = false;
+    const agencies = cityAgencyMap[city] || new Set();
+    agencies.forEach(ag => {
+      const lo = liveMap[ag];
+      if(lo && lo[11]!=null) { monthIncr += lo[11]; hasIncr = true; }
+    });
+    // 昨日店转GTV渗透率：该城市代运营商o[10]平均值
+    let yRateSum=0, yRateCnt=0;
+    agencies.forEach(ag => {
+      const lo = liveMap[ag];
+      if(lo && lo[10]!=null) { yRateSum += lo[10]; yRateCnt++; }
+    });
+    const yRateAvg = yRateCnt>0 ? yRateSum/yRateCnt : null;
+
+    cTotalStores += cd.stores;
+    cTotalBind   += cd.bind;
+    if(hasIncr) cTotalMonthIncr += monthIncr;
+
+    const incrStr = hasIncr ? `+${monthIncr}` : '—';
+    const incrClass = hasIncr ? zrIncrColor(monthIncr) : '';
+    const yRateStr = yRateAvg!=null ? (yRateAvg*100).toFixed(1)+'%' : '—';
+    const yRateClass = yRateAvg!=null ? zrGtvColor(yRateAvg) : '';
+
+    cityRows += `<tr>
+      <td style="font-weight:700;color:#e0e6f0;">📍 ${city}</td>
+      <td>${cd.stores.toLocaleString()}</td>
+      <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
+      <td class="${incrClass}" style="font-weight:700;">${incrStr}</td>
+      <td style="color:#8a9ab8;">—</td>
+      <td class="${yRateClass}" style="font-weight:700;">${yRateStr}</td>
+      <td class="${zrGtvColor(monthGtvR)}" style="font-weight:700;">${(monthGtvR*100).toFixed(1)}%</td>
+    </tr>`;
+  });
+  document.getElementById('zr-city-tbody').innerHTML = cityRows;
+  const cTotalBindR = cTotalStores>0 ? cTotalBind/cTotalStores : 0;
+  document.getElementById('zr-city-tfoot').innerHTML = `<tr>
+    <td>粤闽浙合计</td>
+    <td>${cTotalStores.toLocaleString()}</td>
+    <td class="${zrBindColor(cTotalBindR)}">${(cTotalBindR*100).toFixed(1)}%</td>
+    <td class="${zrIncrColor(cTotalMonthIncr)}"  style="font-weight:700;">+${cTotalMonthIncr}</td>
+    <td>—</td>
+    <td>—</td>
+    <td class="${zrGtvColor(t.gtv_rate)}">${(t.gtv_rate*100).toFixed(1)}%</td>
+  </tr>`;
+
+  // ── 代运营商汇总表 ──
   let rows = '';
   ZR_LIVE.forEach(o => {
     const bindRate = o[2]/o[1];
@@ -1128,13 +1350,15 @@ function renderZrPanel() {
     const yRate = o[10] != null ? (o[10]*100).toFixed(1)+'%'    : '—';
     const yRateClass = o[10] != null ? zrGtvColor(o[10]) : '';
     const monthIncr = o[11] != null ? `+${o[11]}`  : '—';
+    const monthIncrClass = o[11] != null ? zrIncrColor(o[11]) : '';
     const dayIncr   = o[12] != null ? `+${o[12]}`  : '—';
     rows += `<tr>
       <td style="font-weight:700;color:#e0e6f0;">${o[0]}</td>
       <td>${o[1].toLocaleString()}</td>
       <td class="${zrBindColor(bindRate)}" style="font-weight:700;">${(bindRate*100).toFixed(1)}%</td>
       <td style="color:#4ade80;font-weight:600;">${dayIncr}</td>
-      <td style="color:#60c8ff;font-weight:600;">${monthIncr}</td>
+      <td class="${monthIncrClass}" style="font-weight:700;">${monthIncr}</td>
+      <td style="color:#8a9ab8;">—</td>
       <td style="color:#60c8ff;">${yGtv}</td>
       <td class="${yRateClass}" style="font-weight:700;">${yRate}</td>
       <td>${o[8].toLocaleString()}</td>
@@ -1148,22 +1372,35 @@ function renderZrPanel() {
     <td>${t.stores.toLocaleString()}</td>
     <td class="zr-yellow">${(t.bind/t.stores*100).toFixed(1)}%</td>
     <td style="color:#4ade80;font-weight:600;">—</td>
-    <td style="color:#60c8ff;font-weight:600;">+${totalMonthIncr}</td>
+    <td class="${zrIncrColor(totalMonthIncr)}" style="font-weight:700;">+${totalMonthIncr}</td>
+    <td>—</td>
     <td style="color:#60c8ff;">—</td>
     <td>—</td>
     <td>${t.month_gtv.toLocaleString()}</td>
     <td class="${zrGtvColor(t.gtv_rate)}">${(t.gtv_rate*100).toFixed(1)}%</td>
   </tr>`;
 
-  // ── 销售明细表 ──
+  // ── 销售明细表（按城市分层）──
   let salesRows = '';
-  const agencyOrder = ZR_LIVE.map(o => o[0]);
-  agencyOrder.forEach(agency => {
-    const ss = ZR_SALES.filter(s => s[0] === agency);
-    ss.sort((a,b) => (a[4]/a[5]) - (b[4]/b[5])).forEach(s => {
+  // 按城市分组
+  const salesByCityMap = {};
+  ZR_SALES.forEach(s => {
+    const city = s[1];
+    if(!salesByCityMap[city]) salesByCityMap[city] = [];
+    salesByCityMap[city].push(s);
+  });
+  // 城市排序（按城市名）
+  const cityOrder = Object.keys(salesByCityMap).sort();
+  // 总列数 = 12
+  const totalCols = 12;
+  cityOrder.forEach(city => {
+    // 城市标题行
+    salesRows += `<tr><td colspan="${totalCols}" style="background:#1a2f40;color:#ffd060;font-weight:700;text-align:left;padding:8px 14px;">📍 ${city}</td></tr>`;
+    // 该城市销售按月店转GTV渗透率(s[8])升序
+    const ss = salesByCityMap[city].slice().sort((a,b) => a[8]-b[8]);
+    ss.forEach(s => {
       const bindR = s[5]>0 ? s[4]/s[5] : 0;
       const gtvR  = s[8];
-      // s[9]=昨日店转GTV, s[10]=昨日店转GTV渗透率, s[11]=月净增绑码, s[12]=日净增绑码（销售级暂无）
       const syGtv  = s[9]  != null ? s[9].toLocaleString()       : '—';
       const syRate = s[10] != null ? (s[10]*100).toFixed(1)+'%'  : '—';
       const syRateClass = s[10] != null ? zrGtvColor(s[10]) : '';
@@ -1175,6 +1412,7 @@ function renderZrPanel() {
         <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
         <td style="color:#4ade80;font-weight:600;">—</td>
         <td style="color:#60c8ff;font-weight:600;">—</td>
+        <td style="color:#8a9ab8;">—</td>
         <td style="color:#60c8ff;">${syGtv}</td>
         <td class="${syRateClass}">${syRate}</td>
         <td>${s[3].toLocaleString()}</td>
@@ -1226,48 +1464,58 @@ function renderZrPanel() {
   });
   document.getElementById('zr-attr-city').innerHTML = cityHtml;
 
-  // 销售维度归因：分绑码率偏低 & 店转渗透率偏低两组
-  const bindWeak = ZR_SALES
-    .filter(s => s[5]>0 && s[4]/s[5] < bindTarget)
-    .sort((a,b) => a[4]/a[5] - b[4]/b[5]);
-  const gtvWeak = ZR_SALES
-    .filter(s => s[8] < gtvRateTarget)
-    .sort((a,b) => a[8] - b[8]);
+  // ── 重点关注人员卡片 ──
+  // 筛选条件：绑码率 < 0.25 或 店转渗透率 < 0.165
+  const focusSales = ZR_SALES.filter(s => {
+    const bindR = s[5]>0 ? s[4]/s[5] : 0;
+    return bindR < 0.25 || s[8] < 0.165;
+  }).map(s => {
+    const bindR = s[5]>0 ? s[4]/s[5] : 0;
+    const bindLow = bindR < 0.25;
+    const gtvLow  = s[8] < 0.165;
+    const issues = (bindLow?1:0) + (gtvLow?1:0);
+    return { s, bindR, bindLow, gtvLow, issues };
+  }).sort((a,b) => {
+    if(b.issues !== a.issues) return b.issues - a.issues;
+    return a.bindR - b.bindR;
+  });
 
-  let salesAttrHtml = `<div style="color:#8a9ab8;margin-bottom:12px;font-size:12px;">以下列出需关注的销售，按指标从低到高排序</div>`;
+  let salesAttrHtml = `<div style="color:#8a9ab8;margin-bottom:12px;font-size:12px;">筛选条件：绑码率 &lt;25% 或 店转渗透率 &lt;16.5%，按问题数量排序 — 共 ${focusSales.length} 人</div>`;
 
-  // 绑码率偏低
-  salesAttrHtml += `<div style="font-weight:700;color:#fbbf24;margin-bottom:8px;">📎 绑码率偏低（< 35%）— 共 ${bindWeak.length} 人</div>`;
-  if(bindWeak.length === 0) {
-    salesAttrHtml += `<div style="color:#4ade80;margin-bottom:16px;">✅ 全员绑码率达标</div>`;
+  if(focusSales.length === 0) {
+    salesAttrHtml += `<div style="color:#4ade80;padding:12px;">✅ 暂无需要重点关注的销售，所有指标均达标</div>`;
   } else {
-    bindWeak.forEach(s => {
-      const r = s[4]/s[5];
-      const gap = Math.ceil((bindTarget - r) * s[5]);
-      salesAttrHtml += `<div style="padding:8px 12px;margin-bottom:6px;background:#0f1825;border-left:3px solid #f87171;border-radius:0 4px 4px 0;">
-        <span style="color:#c0d8f0;font-weight:700;">${s[2]}</span>
-        <span style="color:#4a6a8a;margin:0 6px;">|</span>
-        <span style="color:#8ab0c8;">${s[0]} · ${s[1]}</span>
-        <span style="color:#f87171;margin-left:10px;">绑码率 ${(r*100).toFixed(1)}%（${s[4]}/${s[5]}）</span>
-        <span style="color:#fbbf24;font-size:12px;margin-left:8px;">📌 TODO：还需绑码 ${gap} 家</span>
-      </div>`;
-    });
-    salesAttrHtml += '<br>';
-  }
-
-  // 店转渗透率偏低
-  salesAttrHtml += `<div style="font-weight:700;color:#60c8ff;margin-bottom:8px;">📈 店转渗透率偏低（< 16.5%）— 共 ${gtvWeak.length} 人</div>`;
-  if(gtvWeak.length === 0) {
-    salesAttrHtml += `<div style="color:#4ade80;">✅ 全员店转渗透率达标</div>`;
-  } else {
-    gtvWeak.forEach(s => {
-      const gap = ((gtvRateTarget - s[8])*100).toFixed(1);
-      salesAttrHtml += `<div style="padding:8px 12px;margin-bottom:6px;background:#0f1825;border-left:3px solid #fbbf24;border-radius:0 4px 4px 0;">
-        <span style="color:#c0d8f0;font-weight:700;">${s[2]}</span>
-        <span style="color:#4a6a8a;margin:0 6px;">|</span>
-        <span style="color:#8ab0c8;">${s[0]} · ${s[1]}</span>
-        <span style="color:#fbbf24;margin-left:10px;">渗透率 ${(s[8]*100).toFixed(1)}%</span>
-        <span style="color:#f87171;font-size:12px;margin-left:8px;">📌 TODO：差 ${gap}pct，加强核销引导</span>
+    focusSales.forEach(item => {
+      const s = item.s;
+      const borderColor = item.issues >= 2 ? '#f87171' : '#fb923c';
+      let problems = '';
+      let idx = 1;
+      if(item.bindLow) {
+        const gap = Math.ceil((0.25 - item.bindR) * s[5]);
+        problems += `<span style="color:#f87171;">① 绑码率 ${(item.bindR*100).toFixed(1)}%（低于25%）</span>`;
+        idx++;
+      }
+      if(item.gtvLow) {
+        const prefix = idx===1 ? '①' : '②';
+        problems += `${idx>1?' ':''}<span style="color:#fbbf24;">${prefix} 店转渗透率 ${(s[8]*100).toFixed(1)}%（低于16.5%）</span>`;
+      }
+      let solution = '';
+      if(item.bindLow && item.gtvLow) {
+        const gap = Math.ceil((0.25 - item.bindR) * s[5]);
+        solution = `主动上门协助绑码，目标增加${gap}家；同步推送核销优惠，引导门店完成店转`;
+      } else if(item.bindLow) {
+        const gap = Math.ceil((0.25 - item.bindR) * s[5]);
+        solution = `主动上门协助绑码，目标增加${gap}家，重点覆盖未绑码高潜门店`;
+      } else {
+        solution = `推送核销优惠活动，引导门店完成店转，提升GTV渗透率至16.5%以上`;
+      }
+      salesAttrHtml += `<div style="padding:12px 16px;margin-bottom:8px;background:#0f1825;border-left:3px solid ${borderColor};border-radius:0 6px 6px 0;">
+        <div style="margin-bottom:5px;">
+          <span style="color:#e0e6f0;font-weight:700;font-size:14px;">${s[2]}</span>
+          <span style="color:#6a8aaa;margin:0 6px;font-size:12px;">${s[0]} · ${s[1]}</span>
+        </div>
+        <div style="margin-bottom:4px;font-size:12px;">问题：${problems}</div>
+        <div style="font-size:12px;color:#8ab0c8;">方案：${solution}</div>
       </div>`;
     });
   }
