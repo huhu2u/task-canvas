@@ -656,11 +656,36 @@ canvas#cvs {
       </tbody>
     </table>
   </div>
-  <div style="margin-top:16px;background:#1a2f40;border-radius:8px;padding:16px;">
+  <!-- 昨日代运营商汇总 -->
+  <div class="btable-wrap" style="margin-top:16px;">
+    <div class="btitle" style="background:#dbeafe;display:flex;justify-content:space-between;align-items:center;">
+      <span>📊 昨日拜访汇总（代运营商维度）</span>
+      <span id="visit-summary-date" style="font-size:11px;color:#8a9ab8;font-weight:400;">—</span>
+    </div>
+    <table class="btable">
+      <thead>
+        <tr>
+          <th>代运营商</th>
+          <th>HC编制</th>
+          <th style="text-align:center;">日拜访&gt;4人数</th>
+          <th style="text-align:center;">HC缺口</th>
+          <th style="text-align:center;">未签到人数</th>
+          <th style="text-align:center;">HC达标率</th>
+        </tr>
+      </thead>
+      <tbody id="visit-summary-tbody">
+        <tr><td colspan="6" style="text-align:center;color:#8a9ab8;padding:20px;">每日09:00自动更新 · 数据来源：Apollo 拜访明细</td></tr>
+      </tbody>
+      <tfoot id="visit-summary-tfoot"></tfoot>
+    </table>
+  </div>
+
+  <div style="margin-top:12px;background:#1a2f40;border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
     <div style="font-size:13px;color:#8a9ab8;">
       📎 拜访明细数据源：
       <a href="https://apollo.sankuai.com/data/report/list?reportId=848" target="_blank" style="color:#60c8ff;">Apollo 拜访明细报表</a>
     </div>
+    <div style="font-size:11px;color:#555;">HC缺口 = HC编制 - 日拜访&gt;4人数（负值=超编，正值=缺口）</div>
   </div>
 </div>
 
@@ -1313,6 +1338,7 @@ function switchTab(t) {
   if(t==='board') renderBoard();
   if(t==='rt') renderRtPanel();
   if(t==='zr') renderZrPanel();
+  if(t==='visit') renderVisitPanel();
 }
 
 // ═══════════════════════════════════════════════════
@@ -1365,6 +1391,14 @@ function renewalClass(r) {
 //  职人码看板 - 真实 API 数据（2026-03-28抓取）
 // ═══════════════════════════════════════════════════
 // 数据结构: [简称, 合作门店, 绑码数, 有效铺设数, 有效动销数, 铺设率, 动销率, 店转GTV渗透率, 月店转GTV,
+// VISIT_DATA_START — 每日09:00由fetch_visit_analysis.py自动更新
+const VISIT_DATA = {
+  date: '—',
+  // [代运营商简称, HC编制, 日拜访>4人数, 未签到人数]
+  rows: []
+};
+// VISIT_DATA_END
+
 //           昨日店转GTV(9), 昨日店转GTV渗透率(10), 月净增绑码数(11), 日净增绑码数(12)]
 // 月净增 = 今日累计 - 3月1日基准; 日净增 = 今日 - 昨日（明天9点抓3月29日后自动有值）
 const ZR_LIVE = [
@@ -1460,6 +1494,52 @@ function zrDxColor(r)         { return r>=0.55?'zr-green':r>=0.40?'zr-yellow':r>
 function zrGtvColor(r)        { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
 function zrIncrColor(n)       { return (n>10)?'zr-green':(n>5)?'zr-yellow':(n>0)?'zr-orange':'zr-red'; }  // 日净增
 function zrMonthIncrColor(n)  { return (n>200)?'zr-green':(n>100)?'zr-yellow':(n>50)?'zr-orange':'zr-red'; } // 月净增
+
+function renderVisitPanel() {
+  const d = VISIT_DATA;
+  const dateEl = document.getElementById('visit-summary-date');
+  const tbody = document.getElementById('visit-summary-tbody');
+  const tfoot = document.getElementById('visit-summary-tfoot');
+  if (!d || !d.rows || d.rows.length === 0) {
+    dateEl.textContent = '暂无数据（每日09:00更新）';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#8a9ab8;padding:20px;">每日09:00自动更新 · 数据来源：Apollo 拜访明细</td></tr>';
+    return;
+  }
+  dateEl.textContent = '数据日期：' + d.date;
+  function rateColor(rate) {
+    if (rate >= 0.8) return '#4ade80';
+    if (rate >= 0.6) return '#ffd060';
+    if (rate >= 0.4) return '#fb923c';
+    return '#f87171';
+  }
+  function gapColor(gap) { return gap <= 0 ? '#4ade80' : '#f87171'; }
+  let rows = '', totalHC = 0, totalAbove4 = 0, totalNoSign = 0;
+  for (const r of d.rows) {
+    const [name, hc, above4, noSign] = r;
+    const gap = above4 - hc;
+    const rate = hc > 0 ? above4 / hc : 0;
+    totalHC += hc; totalAbove4 += above4; totalNoSign += noSign;
+    rows += `<tr>
+      <td>${name}</td>
+      <td style="text-align:center;">${hc}</td>
+      <td style="text-align:center;font-weight:700;color:#60c8ff;">${above4}</td>
+      <td style="text-align:center;font-weight:700;color:${gapColor(gap)};">${gap > 0 ? '+'+gap : gap}</td>
+      <td style="text-align:center;font-weight:700;color:${noSign > 0 ? '#f87171' : '#4ade80'};">${noSign}</td>
+      <td style="text-align:center;font-weight:700;color:${rateColor(rate)};">${(rate*100).toFixed(0)}%</td>
+    </tr>`;
+  }
+  tbody.innerHTML = rows;
+  const totalGap = totalAbove4 - totalHC;
+  const totalRate = totalHC > 0 ? totalAbove4 / totalHC : 0;
+  tfoot.innerHTML = `<tr style="background:#1a2f40;font-weight:700;">
+    <td>合计</td>
+    <td style="text-align:center;">${totalHC}</td>
+    <td style="text-align:center;color:#60c8ff;">${totalAbove4}</td>
+    <td style="text-align:center;color:${gapColor(totalGap)};">${totalGap > 0 ? '+'+totalGap : totalGap}</td>
+    <td style="text-align:center;color:${totalNoSign > 0 ? '#f87171' : '#4ade80'};">${totalNoSign}</td>
+    <td style="text-align:center;color:${rateColor(totalRate)};">${(totalRate*100).toFixed(0)}%</td>
+  </tr>`;
+}
 
 function renderRtPanel() {
   const d = buildRtData();
