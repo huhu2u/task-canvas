@@ -653,15 +653,15 @@ function drawQuickBar(y) {
   QUICK_BTNS.forEach((btn, i) => {
     const bw = widths[i];
     const bg = btn.toggle
-      ? (btn.on ? '#14372a' : '#1a2236')
+      ? (btn.on ? '#dcfce7' : '#f0f4f8')
       : btn.color;
-    const fg = btn.toggle ? (btn.on ? '#4ade80' : '#8a9ab8') : btn.fg;
-    const border = btn.toggle ? (btn.on ? '#166534' : '#2a3a5a') : btn.border;
+    const fg = btn.toggle ? (btn.on ? '#166534' : '#4a6a8a') : btn.fg;
+    const border = btn.toggle ? (btn.on ? '#bbf7d0' : '#d0d8e8') : btn.border;
     roundRect(bx, by, bw, bh, 5, bg, border);
     // toggle 指示点
     if(btn.toggle) {
       ctx.beginPath(); ctx.arc(bx+10, by+bh/2, 4, 0, Math.PI*2);
-      ctx.fillStyle = btn.on ? '#4ade80' : '#f87171'; ctx.fill();
+      ctx.fillStyle = btn.on ? '#22c55e' : '#ef4444'; ctx.fill();
       fillText(btn.label, bx+20, by+bh/2+4, fg, 12, '600');
     } else {
       const tw = textW(btn.label, 12, '600');
@@ -1078,10 +1078,10 @@ function pClass(p) {
   return 'c-red';
 }
 function pBarColor(p) {
-  if(p>=0.90) return '#4ade80';
-  if(p>=0.80) return '#fbbf24';
-  if(p>=0.70) return '#fb923c';
-  return '#f87171';
+  if(p>=0.90) return '#22c55e';
+  if(p>=0.80) return '#f59e0b';
+  if(p>=0.70) return '#f97316';
+  return '#ef4444';
 }
 function barHtml(p) {
   const pct = Math.min(p,1);
@@ -1202,7 +1202,7 @@ function renderRtPanel() {
   function fmtK(v) { return v.toLocaleString('zh-CN', {maximumFractionDigits:0}); }
   function rateBadge(r) {
     const pct = (r*100).toFixed(1)+'%';
-    const color = r>=1?'#4ade80':r>=0.6?'#fbbf24':'#f87171';
+    const color = r>=1?'#166534':r>=0.6?'#854d0e':'#991b1b';
     return `<span style="color:${color};font-weight:700;">${pct}</span>`;
   }
   function momBadge(today, yest) {
@@ -1211,11 +1211,11 @@ function renderRtPanel() {
     const pct = (Math.abs(chg)*100).toFixed(1)+'%';
     return chg>=0
       ? `<span style="color:#166534;">↑${pct}</span>`
-      : `<span style="color:#f87171;">↓${pct}</span>`;
+      : `<span style="color:#ef4444;">↓${pct}</span>`;
   }
   function gapCell(today, target) {
     const gap = today - target;
-    const color = gap>=0?'#4ade80':'#f87171';
+    const color = gap>=0?'#166534':'#ef4444';
     return `<span style="color:${color};">${gap>=0?'+':''}${fmtK(gap)}</span>`;
   }
 
@@ -1253,8 +1253,8 @@ function renderZrPanel() {
   // ── KPI 卡片 ──
   const t = ZR_TOTAL;
   const kpis = [
-    { label:'合作门店总数', val: t.stores.toLocaleString(), sub:'高线粤闽浙城市群', color:'#60c8ff' },
-    { label:'月绑码商户数', val: t.bind.toLocaleString(),   sub:`绑码率 ${(t.bind/t.stores*100).toFixed(1)}%`, color: t.bind/t.stores>=0.35?'#4ade80':'#fbbf24' },
+    { label:'合作门店总数', val: t.stores.toLocaleString(), sub:'高线粤闽浙城市群', color:'#1976d2' },
+    { label:'月绑码商户数', val: t.bind.toLocaleString(),   sub:`绑码率 ${(t.bind/t.stores*100).toFixed(1)}%`, color: t.bind/t.stores>=0.35?'#166534':'#854d0e' },
   ];
   document.getElementById('zr-kpi-cards').innerHTML = kpis.map(k=>`
     <div style="background:#ffffff;border:1px solid #e0e6ef;border-radius:8px;padding:14px 16px;">
@@ -1354,7 +1354,7 @@ function renderZrPanel() {
       <td style="font-weight:700;color:#1a2a3a;">${o[0]}</td>
       <td>${o[1].toLocaleString()}</td>
       <td class="${zrBindColor(bindRate)}" style="font-weight:700;">${(bindRate*100).toFixed(1)}%</td>
-      <td style="color:#4ade80;font-weight:600;">${dayIncr}</td>
+      <td style="color:#166534;font-weight:600;">${dayIncr}</td>
       <td class="${monthIncrClass}" style="font-weight:700;">${monthIncr}</td>
       <td style="color:#8a9ab8;">—</td>
       <td style="color:#1976d2;">${yGtv}</td>
@@ -1369,7 +1369,7 @@ function renderZrPanel() {
     <td>粤闽浙合计</td>
     <td>${t.stores.toLocaleString()}</td>
     <td class="zr-yellow">${(t.bind/t.stores*100).toFixed(1)}%</td>
-    <td style="color:#4ade80;font-weight:600;">—</td>
+    <td style="color:#166534;font-weight:600;">—</td>
     <td class="${zrIncrColor(totalMonthIncr)}" style="font-weight:700;">+${totalMonthIncr}</td>
     <td>—</td>
     <td style="color:#1976d2;">—</td>
@@ -1408,8 +1408,8 @@ function renderZrPanel() {
         <td style="font-weight:600;color:#1a2a3a;">${s[2]}</td>
         <td>${s[5].toLocaleString()}</td>
         <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
-        <td style="color:#4ade80;font-weight:600;">—</td>
-        <td style="color:#60c8ff;font-weight:600;">—</td>
+        <td style="color:#166534;font-weight:600;">—</td>
+        <td style="color:#1976d2;font-weight:600;">—</td>
         <td style="color:#8a9ab8;">—</td>
         <td style="color:#1976d2;">${syGtv}</td>
         <td class="${syRateClass}">${syRate}</td>
@@ -1447,9 +1447,9 @@ function renderZrPanel() {
     const bindOk  = c.bindR  >= bindTarget;
     const gtvOk   = c.avgGtvR >= gtvRateTarget;
     const bindTag = bindOk  ? `<span style="color:#166534;">✅ ${(c.bindR*100).toFixed(1)}%</span>`
-                            : `<span style="color:#f87171;">⚠️ ${(c.bindR*100).toFixed(1)}%（差${((bindTarget-c.bindR)*100).toFixed(1)}pct，需再绑${Math.ceil((bindTarget-c.bindR)*c.stores)}家）</span>`;
+                            : `<span style="color:#ef4444;">⚠️ ${(c.bindR*100).toFixed(1)}%（差${((bindTarget-c.bindR)*100).toFixed(1)}pct，需再绑${Math.ceil((bindTarget-c.bindR)*c.stores)}家）</span>`;
     const gtvTag  = gtvOk   ? `<span style="color:#166534;">✅ ${(c.avgGtvR*100).toFixed(1)}%</span>`
-                            : `<span style="color:#fbbf24;">⚠️ ${(c.avgGtvR*100).toFixed(1)}%（差${((gtvRateTarget-c.avgGtvR)*100).toFixed(1)}pct）</span>`;
+                            : `<span style="color:#854d0e;">⚠️ ${(c.avgGtvR*100).toFixed(1)}%（差${((gtvRateTarget-c.avgGtvR)*100).toFixed(1)}pct）</span>`;
     const todos = [];
     if(!bindOk)  todos.push(`📌 TODO：重点推进 ${c.city} 门店绑码，门店基数 ${c.stores}，当前绑码 ${c.bind}，缺口 ${Math.ceil((bindTarget-c.bindR)*c.stores)} 家`);
     if(!gtvOk)   todos.push(`📌 TODO：加强 ${c.city} 核销活动引导，提升店转GTV渗透率`);
@@ -1457,7 +1457,7 @@ function renderZrPanel() {
       <div style="font-weight:700;color:#1a2a3a;margin-bottom:6px;">📍 ${c.city}</div>
       <div>绑码率：${bindTag}</div>
       <div>店转渗透率：${gtvTag}</div>
-      ${todos.length ? `<div style="margin-top:8px;color:#fbbf24;font-size:12px;">${todos.join('<br>')}</div>` : `<div style="margin-top:6px;color:#4ade80;font-size:12px;">✅ 两项指标均达标</div>`}
+      ${todos.length ? `<div style="margin-top:8px;color:#854d0e;font-size:12px;">${todos.join('<br>')}</div>` : `<div style="margin-top:6px;color:#166534;font-size:12px;">✅ 两项指标均达标</div>`}
     </div>`;
   });
   document.getElementById('zr-attr-city').innerHTML = cityHtml;
@@ -1481,21 +1481,21 @@ function renderZrPanel() {
   let salesAttrHtml = `<div style="color:#8a9ab8;margin-bottom:12px;font-size:12px;">筛选条件：绑码率 &lt;25% 或 店转渗透率 &lt;16.5%，按问题数量排序 — 共 ${focusSales.length} 人</div>`;
 
   if(focusSales.length === 0) {
-    salesAttrHtml += `<div style="color:#4ade80;padding:12px;">✅ 暂无需要重点关注的销售，所有指标均达标</div>`;
+    salesAttrHtml += `<div style="color:#166534;padding:12px;">✅ 暂无需要重点关注的销售，所有指标均达标</div>`;
   } else {
     focusSales.forEach(item => {
       const s = item.s;
-      const borderColor = item.issues >= 2 ? '#f87171' : '#fb923c';
+      const borderColor = item.issues >= 2 ? '#ef4444' : '#f97316';
       let problems = '';
       let idx = 1;
       if(item.bindLow) {
         const gap = Math.ceil((0.25 - item.bindR) * s[5]);
-        problems += `<span style="color:#f87171;">① 绑码率 ${(item.bindR*100).toFixed(1)}%（低于25%）</span>`;
+        problems += `<span style="color:#ef4444;">① 绑码率 ${(item.bindR*100).toFixed(1)}%（低于25%）</span>`;
         idx++;
       }
       if(item.gtvLow) {
         const prefix = idx===1 ? '①' : '②';
-        problems += `${idx>1?' ':''}<span style="color:#fbbf24;">${prefix} 店转渗透率 ${(s[8]*100).toFixed(1)}%（低于16.5%）</span>`;
+        problems += `${idx>1?' ':''}<span style="color:#854d0e;">${prefix} 店转渗透率 ${(s[8]*100).toFixed(1)}%（低于16.5%）</span>`;
       }
       let solution = '';
       if(item.bindLow && item.gtvLow) {
@@ -1655,7 +1655,7 @@ function renderAnalysis(d) {
   // ── 1. 总览摘要 ──
   const gtvStatus = gtvP>=0.90?'good': gtvP>=0.80?'warn':'danger';
   const daysStr = `剩余${daysLeft}天`;
-  const gtvColor = gtvP>=0.90?'#4ade80':gtvP>=0.80?'#fbbf24':'#f87171';
+  const gtvColor = gtvP>=0.90?'#22c55e':gtvP>=0.80?'#f59e0b':'#ef4444';
   sections.push(`
   <div class="analysis-summary">
     <div class="analysis-summary-title">📋 整体进度概览（${d.time} · ${daysStr}）</div>
@@ -1672,7 +1672,7 @@ function renderAnalysis(d) {
       </div>
       <div class="asg-item">
         <div class="asg-label">MEM续约率（非全产品）</div>
-        <div class="asg-val" style="color:#fbbf24">51.93%</div>
+        <div class="asg-val" style="color:#854d0e">51.93%</div>
         <div class="asg-sub">环比 ▲25.25%</div>
       </div>
     </div>
