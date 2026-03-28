@@ -243,6 +243,7 @@ canvas#cvs {
   <button class="tabn" onclick="switchTab('board')" id="tab-board">📊 业绩进度表</button>
   <button class="tabn" onclick="switchTab('rt')" id="tab-rt">📈 实时业绩进展</button>
   <button class="tabn" onclick="switchTab('zr')" id="tab-zr">🎫 职人码看板</button>
+  <button class="tabn" onclick="switchTab('zrrt')" id="tab-zrrt">⚡ 职人码实时</button>
 </div>
 
 <div id="canvas-wrap" data-panel="tasks">
@@ -407,6 +408,36 @@ canvas#cvs {
       <div class="btitle" style="background:#eef2f7;">🏢 代运营商归因分析（下钻销售）</div>
       <div id="zr-attr-agency" style="padding:14px 16px;font-size:13px;line-height:1.8;color:#1a2a3a;"></div>
     </div>
+  </div>
+</div>
+
+<!-- 职人码实时看板 Tab -->
+<div id="panel-zrrt" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:18px;font-weight:700;color:#1976d2;">⚡ 职人码实时看板</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span id="zrrt-upd-time" style="font-size:12px;color:#8a9ab8;">加载中...</span>
+      <button onclick="loadZrRt()" style="padding:5px 14px;background:#1976d2;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px;">🔄 立即刷新</button>
+    </div>
+  </div>
+  <div id="zrrt-kpi" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;"></div>
+  <div class="btable-wrap">
+    <div class="btitle" style="background:#dbeafe;">📊 代运营商今日数据</div>
+    <table class="btable">
+      <thead><tr>
+        <th>代运营商</th>
+        <th>今日店转GTV</th>
+        <th>店转订单量</th>
+        <th>合作门店</th>
+        <th>月店转GTV渗透率</th>
+        <th>店转客单均价</th>
+      </tr></thead>
+      <tbody id="zrrt-tbody"></tbody>
+      <tfoot id="zrrt-tfoot"></tfoot>
+    </table>
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:#8a9ab8;text-align:right;">
+    数据来源：Apollo 策略数据 · 自动刷新 30 分钟 · 下次刷新：<span id="zrrt-next-refresh">—</span>
   </div>
 </div>
 
@@ -1018,6 +1049,8 @@ function switchTab(t) {
   document.getElementById('panel-board').style.display = t==='board' ? '' : 'none';
   document.getElementById('panel-rt').style.display = t==='rt' ? '' : 'none';
   document.getElementById('panel-zr').style.display = t==='zr' ? '' : 'none';
+  document.getElementById('panel-zrrt').style.display = t==='zrrt' ? '' : 'none';
+  if(t==='zrrt') loadZrRt();
   document.querySelectorAll('.tabn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   if(t==='board') renderBoard();
@@ -1220,6 +1253,97 @@ function renderRtPanel() {
     <td style="font-weight:700;">${fmtK(tCpcNow)}</td>
     <td>${rateBadge(tCpcNow/tCpcT)}</td>
   </tr>`;
+}
+
+// ── 职人码实时看板 ──
+var zrrtTimer = null;
+var zrrtNextTime = null;
+
+function zrRateColor(r) {
+  // r 是百分比数值，如 29.3
+  return r >= 30 ? 'zr-green' : r >= 22 ? 'zr-yellow' : r >= 15 ? 'zr-orange' : 'zr-red';
+}
+
+function loadZrRt() {
+  var ts = Date.now();
+  fetch('/data/zr_realtime.json?t=' + ts)
+    .then(function(r) { return r.json(); })
+    .then(function(d) { renderZrRt(d); })
+    .catch(function(e) {
+      document.getElementById('zrrt-upd-time').textContent = '数据加载失败，请刷新重试';
+      console.error('loadZrRt error:', e);
+    });
+}
+
+function renderZrRt(d) {
+  var orgs = d.orgs || [];
+  var tot = d.total || {};
+
+  // KPI卡片
+  var totalGtv = tot.gtv || 0;
+  var totalOrders = tot.orders || 0;
+  var totalShops = tot.shops || 0;
+  var totalMonthRate = tot.month_rate || 0;
+  var totalAvg = totalOrders > 0 ? Math.round(totalGtv / totalOrders) : 0;
+
+  var kpiHtml = [
+    {label:'今日店转GTV', val: '¥' + totalGtv.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}), color:'#1976d2'},
+    {label:'店转订单量', val: totalOrders.toLocaleString() + ' 单', color:'#0891b2'},
+    {label:'月店转GTV渗透率', val: totalMonthRate.toFixed(1) + '%', color: totalMonthRate >= 30 ? '#166534' : totalMonthRate >= 22 ? '#854d0e' : '#b91c1c'},
+    {label:'店转客单均价', val: '¥' + totalAvg.toLocaleString(), color:'#6d28d9'}
+  ].map(function(k) {
+    return '<div style="background:#fff;border:1px solid #e0e6ef;border-radius:8px;padding:14px 16px;text-align:center;">' +
+      '<div style="font-size:11px;color:#8a9ab8;margin-bottom:6px;">' + k.label + '</div>' +
+      '<div style="font-size:22px;font-weight:800;color:' + k.color + ';">' + k.val + '</div>' +
+      '</div>';
+  }).join('');
+  document.getElementById('zrrt-kpi').innerHTML = kpiHtml;
+
+  // 代运营商行
+  var tbody = '';
+  orgs.forEach(function(o) {
+    var gtv = o.gtv || 0;
+    var orders = o.orders || 0;
+    var shops = o.shops || 0;
+    var mRate = o.month_rate || 0;
+    var avg = o.avg_price || 0;
+    // 简化名称
+    var name = o.name.replace(/-.*/, '').replace(/市/, '').replace(/乐生活组/, '').trim();
+    var rateClass = zrRateColor(mRate);
+    tbody += '<tr>' +
+      '<td style="font-weight:700;color:#1a2a3a;">' + name + '</td>' +
+      '<td style="color:#1976d2;font-weight:700;">¥' + gtv.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
+      '<td>' + orders.toLocaleString() + '</td>' +
+      '<td>' + shops.toLocaleString() + '</td>' +
+      '<td class="' + rateClass + '" style="font-weight:700;">' + mRate.toFixed(1) + '%</td>' +
+      '<td style="color:#6d28d9;font-weight:600;">¥' + Math.round(avg).toLocaleString() + '</td>' +
+      '</tr>';
+  });
+  document.getElementById('zrrt-tbody').innerHTML = tbody;
+
+  // 合计行
+  var totRateClass = zrRateColor(totalMonthRate);
+  document.getElementById('zrrt-tfoot').innerHTML = '<tr style="font-weight:800;background:#f0f4f8;">' +
+    '<td>粤闽浙合计</td>' +
+    '<td style="color:#1976d2;">¥' + totalGtv.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
+    '<td>' + totalOrders.toLocaleString() + '</td>' +
+    '<td>' + totalShops.toLocaleString() + '</td>' +
+    '<td class="' + totRateClass + '">' + totalMonthRate.toFixed(1) + '%</td>' +
+    '<td style="color:#6d28d9;">¥' + totalAvg.toLocaleString() + '</td>' +
+    '</tr>';
+
+  // 更新时间 & 下次刷新
+  document.getElementById('zrrt-upd-time').textContent = '数据更新：' + (d.update_time || '未知');
+  var nextMs = 30 * 60 * 1000;
+  var nextTime = new Date(Date.now() + nextMs);
+  document.getElementById('zrrt-next-refresh').textContent =
+    nextTime.getHours() + ':' + String(nextTime.getMinutes()).padStart(2,'0');
+
+  // 设置下次自动刷新
+  if(zrrtTimer) clearTimeout(zrrtTimer);
+  zrrtTimer = setTimeout(function() {
+    if(document.getElementById('panel-zrrt').style.display !== 'none') loadZrRt();
+  }, nextMs);
 }
 
 function renderZrPanel() {
