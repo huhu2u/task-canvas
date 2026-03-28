@@ -244,6 +244,8 @@ canvas#cvs {
   <button class="tabn" onclick="switchTab('rt')" id="tab-rt">📈 实时业绩进展</button>
   <button class="tabn" onclick="switchTab('zr')" id="tab-zr">🎫 职人码看板</button>
   <button class="tabn" onclick="switchTab('zrrt')" id="tab-zrrt">⚡ 职人码实时</button>
+  <button class="tabn" onclick="switchTab('visit')" id="tab-visit">🚶 拜访统计</button>
+  <button class="tabn" onclick="switchTab('price')" id="tab-price">💰 价格带分析</button>
 </div>
 
 <div id="canvas-wrap" data-panel="tasks">
@@ -439,6 +441,66 @@ canvas#cvs {
   </div>
   <div style="margin-top:12px;font-size:11px;color:#8a9ab8;text-align:right;">
     数据来源：Apollo 策略数据 · 自动刷新 30 分钟 · 下次刷新：<span id="zrrt-next-refresh">—</span>
+  </div>
+</div>
+
+<!-- 拜访统计面板 -->
+<div id="panel-visit" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:18px;font-weight:700;color:#1976d2;">🚶 拜访统计</div>
+    <div style="font-size:12px;color:#8a9ab8;">每天 9:00 自动发送前一天分析报告</div>
+  </div>
+  <div style="background:#1a2f40;border-radius:8px;padding:20px;margin-bottom:16px;">
+    <div style="font-size:14px;font-weight:700;color:#ffd060;margin-bottom:12px;">📋 报告说明</div>
+    <div style="font-size:13px;color:#c8d8e8;line-height:2;">
+      每天 <b style="color:#4ade80">09:00</b> 自动生成前一天拜访分析 xlsx 并发送<br>
+      📊 <b>Sheet1</b> — 每日有效拜访数（人×日期矩阵，0值红底）<br>
+      📊 <b>Sheet2</b> — 月度汇总（≥20天绿 / 15-19天黄 / &lt;15天红）<br>
+      📊 <b>Sheet3</b> — 昨日签到检核（未签到整行标红）<br>
+      📊 <b>Sheet4</b> — 代理商汇总（>4人数 / HC / 达标率 / 未签到人数）
+    </div>
+  </div>
+  <div class="btable-wrap">
+    <div class="btitle" style="background:#dbeafe;">🏢 HC编制参考</div>
+    <table class="btable">
+      <thead><tr><th>代运营商</th><th>城市</th><th>HC编制</th></tr></thead>
+      <tbody>
+        <tr><td>宁夏灵创-金华义乌生活组</td><td>义乌</td><td>6</td></tr>
+        <tr><td>慈溪哲光-金华义乌生活组</td><td>义乌</td><td>6</td></tr>
+        <tr><td>义乌市汐洋-金华义乌乐生活组</td><td>义乌</td><td>6</td></tr>
+        <tr><td>泉州市小花猫-泉州乐生活组</td><td>泉州</td><td>7</td></tr>
+        <tr><td>惠安广通-晋江乐生活组</td><td>晋江</td><td>5</td></tr>
+        <tr><td>惠州市巨浪-惠州乐生活组</td><td>惠州</td><td>9</td></tr>
+        <tr><td>惠州市柏万-惠阳乐生活组</td><td>惠阳</td><td>7</td></tr>
+        <tr style="font-weight:700;background:#1a2f40;"><td>合计</td><td>—</td><td>46</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:16px;background:#1a2f40;border-radius:8px;padding:16px;">
+    <div style="font-size:13px;color:#8a9ab8;">
+      📎 拜访明细数据源：
+      <a href="https://apollo.sankuai.com/data/report/list?reportId=848" target="_blank" style="color:#60c8ff;">Apollo 拜访明细报表</a>
+    </div>
+  </div>
+</div>
+
+<!-- 价格带分析面板 -->
+<div id="panel-price" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:18px;font-weight:700;color:#1976d2;">💰 价格带分析</div>
+    <div style="font-size:12px;color:#8a9ab8;">数据来源：Apollo 报表 #864</div>
+  </div>
+  <div style="background:#1a2f40;border-radius:8px;padding:20px;margin-bottom:16px;">
+    <div style="font-size:14px;color:#c8d8e8;line-height:2;">
+      📊 超价格带占比数据，每天 9:00 自动更新<br>
+      <span style="color:#ffd060;">⚠️ 数据接入中，敬请期待</span>
+    </div>
+  </div>
+  <div style="text-align:center;padding:20px;">
+    <a href="https://apollo.sankuai.com/data/report/list?reportId=864" target="_blank"
+       style="display:inline-block;padding:10px 24px;background:#1976d2;color:#fff;border-radius:6px;text-decoration:none;font-size:14px;">
+      🔗 打开 Apollo 价格带报表
+    </a>
   </div>
 </div>
 
@@ -1062,6 +1124,8 @@ function switchTab(t) {
   document.getElementById('panel-rt').style.display = t==='rt' ? '' : 'none';
   document.getElementById('panel-zr').style.display = t==='zr' ? '' : 'none';
   document.getElementById('panel-zrrt').style.display = t==='zrrt' ? '' : 'none';
+  document.getElementById('panel-visit').style.display = t==='visit' ? '' : 'none';
+  document.getElementById('panel-price').style.display = t==='price' ? '' : 'none';
   if(t==='zrrt') loadZrRt();
   document.querySelectorAll('.tabn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
