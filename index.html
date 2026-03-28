@@ -491,6 +491,9 @@ canvas#cvs {
 
 <div id="toast"></div>
 
+<!-- ZR_RT_DATA: 由 fetch_zr_realtime.py 自动更新，勿手动修改此行 -->
+<script>window.ZR_RT_FALLBACK={"update_time":"2026-03-28 23:51","date":"2026-03-28","total":{"name":"高线粤闽浙城市群","gtv":259041.63,"orders":967,"shops":11230,"month_rate":29.3,"avg_price":267.88},"orgs":[{"name":"泉州市小花猫-泉州乐生活组","gtv":70125.47,"orders":212,"shops":1825,"month_rate":29.5,"avg_price":330.78},{"name":"义乌市汐洋-金华义乌乐生活组","gtv":47279.5,"orders":129,"shops":1138,"month_rate":22.8,"avg_price":366.51},{"name":"慈溪哲光-金华义乌乐生活组","gtv":42311.27,"orders":110,"shops":1148,"month_rate":26.1,"avg_price":384.65},{"name":"惠州市柏万-惠阳乐生活组","gtv":38647.61,"orders":202,"shops":1683,"month_rate":27.0,"avg_price":191.32},{"name":"惠安广通-晋江乐生活组","gtv":35683.88,"orders":129,"shops":1614,"month_rate":28.1,"avg_price":276.62},{"name":"惠州市巨浪-惠州乐生活组","gtv":24214.31,"orders":169,"shops":2559,"month_rate":21.2,"avg_price":143.28},{"name":"宁夏灵创-金华义乌乐生活组","gtv":779.58,"orders":16,"shops":1263,"month_rate":50.8,"avg_price":48.72}]};</script>
+
 <script>
 // ═══════════════════════════════════════════════════
 //  数据层
@@ -1266,12 +1269,27 @@ function zrRateColor(r) {
 
 function loadZrRt() {
   var ts = Date.now();
-  fetch('/data/zr_realtime.json?t=' + ts)
-    .then(function(r) { return r.json(); })
-    .then(function(d) { renderZrRt(d); })
-    .catch(function(e) {
-      document.getElementById('zrrt-upd-time').textContent = '数据加载失败，请刷新重试';
-      console.error('loadZrRt error:', e);
+  // 先用内嵌备用数据立即渲染（公网GitHub Pages访问时无需等待）
+  if (window.ZR_RT_FALLBACK) {
+    renderZrRt(window.ZR_RT_FALLBACK);
+  }
+  // 同时尝试从内网拉最新数据（内网/VPN环境下会成功并刷新）
+  var intranetUrl = 'http://33.230.52.208:8899/data/zr_realtime.json?t=' + ts;
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, 3000); // 3秒超时
+  fetch(intranetUrl, {signal: ctrl.signal})
+    .then(function(r) {
+      clearTimeout(timer);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(d) {
+      window.ZR_RT_FALLBACK = d;
+      renderZrRt(d);
+    })
+    .catch(function() {
+      clearTimeout(timer);
+      // 内网请求失败静默处理，已经用内嵌数据渲染了
     });
 }
 
