@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>粤闽浙渠道 任务管理中心</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0d1117; color:#e0e6f0; font-family:'PingFang SC','Microsoft YaHei',sans-serif; overflow-x:hidden; }
+
+/* ── 顶部 ── */
+#topbar {
+  background:linear-gradient(90deg,#0f1923 0%,#1a2540 100%);
+  border-bottom:1px solid #1e3050;
+  height:52px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px; position:sticky; top:0; z-index:100;
+}
+#topbar-left { display:flex; flex-direction:column; }
+#topbar-title { font-size:17px; font-weight:700; color:#ffd060; letter-spacing:.5px; }
+#topbar-sub { font-size:11px; color:#4a6a8a; margin-top:1px; }
+#topbar-right { text-align:right; }
+#clock { font-size:20px; font-weight:700; color:#60c8ff; font-variant-numeric:tabular-nums; }
+#clockdate { font-size:10px; color:#4a6a8a; margin-top:1px; }
+
+/* ── 状态栏 ── */
+#statusbar {
+  background:#0f1923; border-bottom:1px solid #1a2840;
+  height:34px; display:flex; align-items:center; padding:0 18px; gap:16px; overflow-x:auto;
+}
+.si { display:flex; align-items:center; gap:5px; font-size:11px; color:#6a8aaa; white-space:nowrap; }
+.si-val { color:#e0e6f0; font-weight:600; }
+.si-hi { color:#ffd060; font-weight:700; }
+.si-danger { color:#f87171; font-weight:700; }
+.si-div { width:1px; height:12px; background:#1e3050; flex-shrink:0; }
+.dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.dg { background:#22c55e; box-shadow:0 0 4px #22c55e80; }
+.dy { background:#f59e0b; }
+.db { background:#3b82f6; }
+.dc { background:#06b6d4; }
+.dp { background:#a855f7; }
+
+/* ── Canvas 区 ── */
+#canvas-wrap {
+  display:flex; justify-content:center; align-items:flex-start;
+  padding:16px; min-height:calc(100vh - 86px);
+}
+canvas#cvs {
+  cursor:pointer;
+  border-radius:12px;
+  display:block;
+}
+
+/* ── 悬浮面板（编辑/新建） ── */
+.overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.65); z-index:200;
+  align-items:center; justify-content:center;
+}
+.overlay.show { display:flex; }
+.panel {
+  background:#131c2e; border:1px solid #2a3a5a;
+  border-radius:12px; padding:24px; width:460px; max-width:95vw;
+  box-shadow:0 8px 40px rgba(0,0,0,0.6);
+}
+.panel-title { font-size:15px; font-weight:700; color:#ffd060; margin-bottom:16px; }
+.fg { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+.fl { font-size:11px; color:#7a9aba; }
+.fi, .fsel, .fta {
+  background:#0d1117; border:1px solid #2a3a5a; border-radius:6px;
+  color:#e0e6f0; padding:7px 10px; font-size:13px; font-family:inherit;
+}
+.fta { resize:vertical; min-height:60px; }
+.fi:focus,.fsel:focus,.fta:focus { outline:none; border-color:#3b82f6; }
+.pacts { display:flex; gap:8px; justify-content:flex-end; margin-top:6px; }
+.pbtn {
+  padding:6px 16px; border-radius:6px; border:none;
+  font-size:12px; font-weight:600; cursor:pointer; font-family:inherit;
+}
+.pbtn-ok { background:#1e3a5f; color:#60c8ff; }
+.pbtn-ok:hover { background:#2a4a7f; }
+.pbtn-save { background:#14372a; color:#4ade80; }
+.pbtn-save:hover { background:#1a4a35; }
+.pbtn-cancel { background:#1a2236; color:#8a9ab8; }
+.pbtn-cancel:hover { background:#222c42; }
+.pbtn-danger { background:#3a1a1a; color:#f87171; }
+.pbtn-danger:hover { background:#4a2020; }
+
+/* ── Tab Nav ── */
+#tabnav {
+  background:#0f1923; border-bottom:1px solid #1a2840;
+  display:flex; padding:0 18px; gap:4px;
+}
+.tabn {
+  background:none; border:none; border-bottom:2px solid transparent;
+  color:#6a8aaa; font-size:13px; font-weight:600; font-family:inherit;
+  padding:9px 18px; cursor:pointer; transition:all .2s;
+}
+.tabn:hover { color:#e0e6f0; }
+.tabn.active { color:#ffd060; border-bottom-color:#ffd060; }
+
+/* ── 业绩进度表 ── */
+.btable-wrap { border-radius:8px; overflow:hidden; border:1px solid #1e2d45; }
+.btitle {
+  padding:10px 16px; font-size:13px; font-weight:700; color:#fff;
+  letter-spacing:.3px;
+}
+.btable {
+  width:100%; border-collapse:collapse; font-size:13px;
+  background:#0d1117;
+}
+.btable thead tr { background:#131c2e; }
+.btable th {
+  padding:8px 12px; text-align:center; color:#8a9ab8;
+  font-weight:600; font-size:12px; border-bottom:1px solid #1e2d45;
+}
+.btable tbody tr:nth-child(odd)  { background:#0f1825; }
+.btable tbody tr:nth-child(even) { background:#131c2e; }
+.btable td {
+  padding:9px 12px; text-align:center; color:#e0e6f0;
+  border-bottom:1px solid #151f30;
+}
+.btable tfoot tr { background:#1a2a40; }
+.btable tfoot td {
+  padding:9px 12px; text-align:center;
+  font-weight:700; color:#ffd060;
+  border-top:1px solid #2a3a5a;
+}
+.bbar-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.bbar-pct { font-size:12px; font-weight:700; }
+.bbar { height:10px; background:#1e2d45; border-radius:5px; width:120px; overflow:hidden; }
+.bbar-fill { height:10px; border-radius:5px; }
+/* 职人码子Tab */
+.zr-subtab {
+  padding:6px 16px; font-size:12px; border-radius:4px 4px 0 0;
+  border:none; cursor:pointer; background:#131c2e; color:#8a9ab8;
+  font-family:inherit; transition:all .2s;
+}
+.zr-subtab.active { background:#1a2f50; color:#60c8ff; font-weight:700; }
+.zr-subtab:hover:not(.active) { background:#1a2535; color:#c0d8f0; }
+/* 职人码色阶 */
+.zr-green  { color:#4ade80; font-weight:700; }
+.zr-yellow { color:#fbbf24; font-weight:700; }
+.zr-orange { color:#fb923c; font-weight:700; }
+.zr-red    { color:#f87171; font-weight:700; }
+.zr-warn   { color:#fb923c; font-size:12px; }
+.zr-ok     { color:#4ade80; font-size:12px; }
+/* 职人码机构行 */
+.zr-agency-row td { background:#1a2f50 !important; color:#ffd060 !important; font-weight:700; text-align:left !important; }
+.c-green { color:#4ade80; }
+.c-yellow { color:#fbbf24; }
+.c-orange { color:#fb923c; }
+.c-red { color:#f87171; }
+.c-cyan { color:#60c8ff; }
+
+/* ── 分析归因 ── */
+.analysis-section {
+  background:#131c2e; border:1px solid #1e2d45; border-radius:8px;
+  margin-bottom:12px; overflow:hidden;
+}
+.analysis-section-hdr {
+  padding:10px 16px; font-size:13px; font-weight:700;
+  display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid #1e2d45;
+}
+.analysis-section-body { padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+.analysis-item {
+  display:flex; gap:10px; align-items:flex-start;
+  padding:10px 14px; border-radius:6px; background:#0d1117;
+  border-left:3px solid transparent;
+}
+.analysis-item.warn  { border-left-color:#f59e0b; background:#1a1500; }
+.analysis-item.danger{ border-left-color:#f87171; background:#1a0a0a; }
+.analysis-item.good  { border-left-color:#4ade80; background:#0a1a0a; }
+.analysis-item.info  { border-left-color:#60c8ff; background:#0a1525; }
+.ai-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+.ai-body {}
+.ai-title { font-size:13px; font-weight:700; color:#e0e6f0; margin-bottom:4px; }
+.ai-desc  { font-size:12px; color:#8a9ab8; line-height:1.6; }
+.ai-desc b { color:#e0e6f0; }
+.analysis-summary {
+  background:#1a2a40; border:1px solid #2a3a5a; border-radius:8px;
+  padding:14px 18px; margin-bottom:12px;
+}
+.analysis-summary-title { font-size:13px; font-weight:700; color:#60c8ff; margin-bottom:10px; }
+.analysis-summary-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+}
+.asg-item { background:#0d1117; border-radius:6px; padding:10px 12px; }
+.asg-label { font-size:11px; color:#6a8aaa; margin-bottom:4px; }
+.asg-val   { font-size:18px; font-weight:700; }
+.asg-sub   { font-size:11px; color:#6a8aaa; margin-top:3px; }
+
+/* ── Toast ── */
+#toast {
+  position:fixed; bottom:18px; right:18px;
+  background:#131c2e; border:1px solid #2a5a8f; border-radius:8px;
+  padding:10px 16px; font-size:13px; color:#60c8ff;
+  z-index:300; opacity:0; transition:opacity .3s; pointer-events:none;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+#toast.show { opacity:1; }
+#toast.ok { border-color:#166534; color:#4ade80; }
+#toast.err { border-color:#5a2020; color:#f87171; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topbar-left">
+    <div id="topbar-title">🗂 粤闽浙渠道 任务管理中心</div>
+    <div id="topbar-sub">核心业绩播报 · 实时进度 · 拜访管理 · 职人码管理 · 系统工具</div>
+  </div>
+  <div id="topbar-right">
+    <div id="clock">--:--:--</div>
+    <div id="clockdate">--</div>
+  </div>
+</div>
+
+<div id="statusbar">
+  <div class="si"><span class="dot dg"></span>运行中 <span class="si-val" id="s-run">3</span></div>
+  <div class="si-div"></div>
+  <div class="si"><span class="dot dy"></span>待配置 <span class="si-val" id="s-idle">4</span></div>
+  <div class="si-div"></div>
+  <div class="si"><span class="dot db"></span>月 GTV <span class="si-hi" id="s-gtv">87.2%</span></div>
+  <div class="si-div"></div>
+  <div class="si"><span class="dot dc"></span>剩余 <span class="si-danger" id="s-days">4天</span></div>
+  <div class="si-div"></div>
+  <div class="si"><span class="dot dp"></span>下次推送 <span class="si-val" id="s-next">今日18:00</span></div>
+  <div class="si-div"></div>
+  <div class="si">📡 数据更新 <span class="si-val" id="s-upd">--</span></div>
+</div>
+
+<!-- Tab Nav -->
+<div id="tabnav">
+  <button class="tabn active" onclick="switchTab('tasks')" id="tab-tasks">🗂 任务中心</button>
+  <button class="tabn" onclick="switchTab('board')" id="tab-board">📊 业绩进度表</button>
+  <button class="tabn" onclick="switchTab('zr')" id="tab-zr">🎫 职人码看板</button>
+</div>
+
+<div id="canvas-wrap" data-panel="tasks">
+  <canvas id="cvs"></canvas>
+</div>
+
+<!-- 业绩进度表 Panel -->
+<div id="panel-board" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:16px;font-weight:700;color:#ffd060;">📊 粤闽浙城市群 业绩进度表</div>
+    <div style="font-size:12px;color:#4a6a8a;" id="board-upd-time">数据截至 2026-03-28 18:28 · 剩余 4 天</div>
+  </div>
+
+  <!-- GTV表 -->
+  <div class="btable-wrap">
+    <div class="btitle" style="background:#1e3a5f;">📊 GTV 月度进度</div>
+    <table class="btable">
+      <thead>
+        <tr><th>代运营商</th><th>负责人</th><th>本月GTV(元)</th><th>月度目标(元)</th><th>进度</th><th>日缺口(元)</th><th>昨日GTV(元)</th><th>剔除率</th></tr>
+      </thead>
+      <tbody id="gtv-tbody"></tbody>
+      <tfoot id="gtv-tfoot"></tfoot>
+    </table>
+  </div>
+
+  <!-- CPC表 -->
+  <div class="btable-wrap" style="margin-top:20px;">
+    <div class="btitle" style="background:#1a3a20;">📱 CPC 月度进度</div>
+    <table class="btable">
+      <thead>
+        <tr><th>代运营商</th><th>负责人</th><th>CPC&QCPS(元)</th><th>月度目标(元)</th><th>进度</th><th>日缺口(元)</th><th>有效新签</th><th>旺铺通(元)</th></tr>
+      </thead>
+      <tbody id="cpc-tbody"></tbody>
+      <tfoot id="cpc-tfoot"></tfoot>
+    </table>
+  </div>
+
+  <!-- MEM表 -->
+  <div class="btable-wrap" style="margin-top:20px;">
+    <div class="btitle" style="background:#2a1a3a;">💰 MEM 收款与续约率</div>
+    <table class="btable">
+      <thead>
+        <tr><th>代运营商</th><th>负责人</th><th>MEM收款额(元)</th><th>MEM续约率</th><th>续约率月环比</th></tr>
+      </thead>
+      <tbody id="mem-tbody"></tbody>
+      <tfoot id="mem-tfoot"></tfoot>
+    </table>
+  </div>
+
+  <!-- 分析归因区块 -->
+  <div style="margin-top:28px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div style="font-size:15px;font-weight:700;color:#ffd060;">📝 今日数据分析与归因</div>
+      <div style="font-size:11px;color:#4a6a8a;" id="analysis-time"></div>
+    </div>
+    <div id="analysis-body"></div>
+  </div>
+</div>
+
+<!-- 职人码看板 Panel（独立Tab）-->
+<div id="panel-zr" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:16px;font-weight:700;color:#ffd060;">🎫 职人码数据看板</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:12px;color:#4a6a8a;" id="zr-upd-time">数据截至 2026-03-28 · 全月累计</span>
+      <button onclick="renderZrPanel()" style="background:#1a2f50;border:1px solid #2a4f80;color:#60c8ff;padding:4px 12px;border-radius:4px;font-size:11px;cursor:pointer;">🔄 刷新</button>
+    </div>
+  </div>
+
+  <!-- 核心指标卡片 -->
+  <div id="zr-kpi-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;"></div>
+
+  <!-- 代运营商汇总表 -->
+  <div class="btable-wrap">
+    <div class="btitle" style="background:#1a2a3a;">📊 代运营商汇总（今日累计）</div>
+    <table class="btable">
+      <thead>
+        <tr>
+          <th>代运营商</th>
+          <th>合作门店</th>
+          <th>绑码率</th>
+          <th>日净增绑码数</th>
+          <th>月净增绑码数</th>
+          <th>昨日店转GTV(元)</th>
+          <th>昨日店转GTV渗透率</th>
+          <th>月店转GTV(元)</th>
+          <th>月店转GTV渗透率</th>
+        </tr>
+      </thead>
+      <tbody id="zr-summary-tbody2"></tbody>
+      <tfoot id="zr-summary-tfoot2"></tfoot>
+    </table>
+  </div>
+
+  <!-- 销售明细表 -->
+  <div class="btable-wrap" style="margin-top:20px;">
+    <div class="btitle" style="background:#1a2a3a;">👤 销售明细（按城市分层）</div>
+    <table class="btable">
+      <thead>
+        <tr>
+          <th>代运营商</th>
+          <th>城市</th>
+          <th>销售姓名</th>
+          <th>合作门店</th>
+          <th>绑码率</th>
+          <th>日净增绑码数</th>
+          <th>月净增绑码数</th>
+          <th>昨日店转GTV(元)</th>
+          <th>昨日店转GTV渗透率</th>
+          <th>月店转GTV(元)</th>
+          <th>月店转GTV渗透率</th>
+        </tr>
+      </thead>
+      <tbody id="zr-sales-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- 归因分析 -->
+  <div style="margin-top:24px;">
+    <div style="font-size:15px;font-weight:700;color:#ffd060;margin-bottom:14px;">🔍 归因分析</div>
+
+    <!-- 城市维度归因 -->
+    <div class="btable-wrap" style="margin-bottom:16px;">
+      <div class="btitle" style="background:#1a1e2a;">🏙️ 城市维度归因</div>
+      <div id="zr-attr-city" style="padding:14px 16px;font-size:13px;line-height:2;color:#c0d0e0;"></div>
+    </div>
+
+    <!-- 销售维度归因 -->
+    <div class="btable-wrap">
+      <div class="btitle" style="background:#1a1e2a;">👤 销售维度归因</div>
+      <div id="zr-attr-sales" style="padding:14px 16px;font-size:13px;line-height:2;color:#c0d0e0;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 任务详情/编辑面板 -->
+<div class="overlay" id="overlay-edit">
+  <div class="panel">
+    <div class="panel-title" id="edit-title">编辑任务</div>
+    <div class="fg"><label class="fl">任务名称</label><input class="fi" id="edit-name"></div>
+    <div class="fg"><label class="fl">Cron 时间（如 0 18 * * *）</label><input class="fi" id="edit-cron"></div>
+    <div class="fg"><label class="fl">发送目标（大象UID）</label><input class="fi" id="edit-target" value="3264994429"></div>
+    <div class="fg"><label class="fl">数据源 / 内容说明</label><textarea class="fta" id="edit-desc"></textarea></div>
+    <div class="fg">
+      <label class="fl">状态</label>
+      <select class="fsel" id="edit-status">
+        <option value="running">运行中</option>
+        <option value="pending">待配置</option>
+        <option value="disabled">已停用</option>
+      </select>
+    </div>
+    <div class="pacts">
+      <button class="pbtn pbtn-danger" id="edit-del">删除任务</button>
+      <button class="pbtn pbtn-cancel" onclick="closeEdit()">取消</button>
+      <button class="pbtn pbtn-save" onclick="saveEdit()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新建任务面板 -->
+<div class="overlay" id="overlay-new">
+  <div class="panel">
+    <div class="panel-title">＋ 新建任务</div>
+    <div class="fg"><label class="fl">任务名称</label><input class="fi" id="new-name" placeholder="如：每日GTV播报"></div>
+    <div class="fg">
+      <label class="fl">所属模块</label>
+      <select class="fsel" id="new-module">
+        <option value="kpi">核心业绩播报</option>
+        <option value="rt">实时进度看板</option>
+        <option value="visit">拜访管理</option>
+        <option value="zr">职人码管理</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">Cron 时间</label><input class="fi" id="new-cron" placeholder="0 18 * * *"></div>
+    <div class="fg"><label class="fl">发送目标</label><input class="fi" id="new-target" value="3264994429"></div>
+    <div class="fg"><label class="fl">内容说明</label><textarea class="fta" id="new-desc"></textarea></div>
+    <div class="pacts">
+      <button class="pbtn pbtn-cancel" onclick="closeNew()">取消</button>
+      <button class="pbtn pbtn-ok" onclick="createTask()">创建</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  数据层
+// ═══════════════════════════════════════════════════
+const MODULES = [
+  { id:'kpi',   label:'🏆 核心业绩播报', color:'#22c55e' },
+  { id:'rt',    label:'📈 实时进度看板', color:'#3b82f6' },
+  { id:'visit', label:'📋 拜访管理',     color:'#f59e0b' },
+  { id:'zr',    label:'🎫 职人码管理',   color:'#a855f7' },
+];
+
+const DEFAULT_TASKS = [
+  // kpi
+  { id:'t1', mod:'kpi',   name:'每日早报',           cron:'0 9 * * *',     target:'3264994429', desc:'月累计GTV/CPC进度，各家缺口', status:'running', next:'明日09:00' },
+  { id:'t2', mod:'kpi',   name:'月度业绩看板',         cron:'0 17 * * 5',    target:'3264994429', desc:'GTV/CPC/MEM三表合并看板',    status:'running', next:'周五17:00' },
+  { id:'t3', mod:'kpi',   name:'月末冲刺提醒',         cron:'0 18 25-31 * *',target:'3264994429', desc:'月末冲刺缺口预警',           status:'running', next:'明日18:00' },
+  // rt
+  { id:'t4', mod:'rt',    name:'实时进度_18点',        cron:'0 18 * * *',    target:'3264994429', desc:'Apollo revenue-analysis',   status:'running', next:'今日18:00' },
+  { id:'t5', mod:'rt',    name:'实时进度_21点',        cron:'0 21 * * *',    target:'3264994429', desc:'Apollo revenue-analysis',   status:'running', next:'今日21:00' },
+  { id:'t6', mod:'rt',    name:'实时进度_23点',        cron:'0 23 * * *',    target:'3264994429', desc:'Apollo revenue-analysis',   status:'running', next:'今日23:00' },
+  // visit
+  { id:'t7', mod:'visit', name:'拜访明细自动分析',      cron:'文件触发',       target:'3264994429', desc:'发xlsx自动生成3Sheet报告',   status:'pending', next:'-' },
+  { id:'t8', mod:'visit', name:'每日签到检核播报',      cron:'0 21 * * *',    target:'3264994429', desc:'',                          status:'pending', next:'-' },
+  { id:'t9', mod:'visit', name:'周拜访达标预警',        cron:'0 18 * * 5',    target:'3264994429', desc:'',                          status:'pending', next:'-' },
+  // zr
+  { id:'ta', mod:'zr',    name:'职人码到期预警',        cron:'0 9 * * *',     target:'3264994429', desc:'提前7天预警',                status:'pending', next:'-' },
+  { id:'tb', mod:'zr',    name:'新职人码申请汇总',      cron:'0 10 * * *',    target:'3264994429', desc:'每日10:00播报',              status:'pending', next:'-' },
+  { id:'tc', mod:'zr',    name:'职人码使用率周报',      cron:'0 9 * * 1',     target:'3264994429', desc:'周一9:00发送',               status:'pending', next:'-' },
+];
+
+function loadTasks() {
+  try { const s = localStorage.getItem('tmgr_tasks'); return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_TASKS)); }
+  catch(e) { return JSON.parse(JSON.stringify(DEFAULT_TASKS)); }
+}
+function saveTasks() { try { localStorage.setItem('tmgr_tasks', JSON.stringify(tasks)); } catch(e){} }
+
+let tasks = loadTasks();
+
+// 快捷操作按钮定义
+const QUICK_BTNS = [
+  { id:'qb-board', label:'📊 立即生成看板', color:'#1e3a5f', fg:'#60c8ff', border:'#2a5a8f' },
+  { id:'qb-new',   label:'＋ 新建任务',     color:'#14372a', fg:'#4ade80', border:'#166534' },
+  { id:'qb-rt',    label:'● 实时进度',      color:'#14372a', fg:'#4ade80', border:'#166534', toggle:true, on:true },
+  { id:'qb-apollo',label:'🔗 打开Apollo',   color:'#3a2a10', fg:'#fbbf24', border:'#5a3a10' },
+  { id:'qb-refresh',label:'🔄 刷新',        color:'#1a2236', fg:'#8a9ab8', border:'#2a3a5a' },
+];
+
+// 工具卡片
+const TOOLS = [
+  { label:'Apollo数据源',  icon:'📡', desc:'财收分析，每半小时更新', btnLabel:'打开', color:'#1e3a5f', fg:'#60c8ff',
+    url:'https://apollo.meituan.com/crm-pc-data-bulletin-board/revenue-analysis/index.html#/data-overview' },
+  { label:'业绩看板·全月',  icon:'📊', desc:'全月业绩进展（GTV/CPC/MEM）', btnLabel:'打开', color:'#1e3a10', fg:'#4ade80',
+    url:'https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGY3JtLWRhdGEtYnVsbGV0aW4tYm9hcmQlMkZwZXJmb3JtYW5jZS1ib2FyZCUyRmluZGV4Lmh0bWwlMjMlMkZvcGVyYXRlU3RhdHVzJTJGYWRk&pageId=1697177864yq2dyl' },
+  { label:'业绩看板·单日',  icon:'📅', desc:'单日业绩进展（GTV/CPC/MEM）', btnLabel:'打开', color:'#2a1e3a', fg:'#c084fc',
+    url:'https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGY3JtLWRhdGEtYnVsbGV0aW4tYm9hcmQlMkZwZXJmb3JtYW5jZS1ib2FyZCUyRmluZGV4Lmh0bWwlMjMlMkZvcGVyYXRlU3RhdHVzJTJGYWRk&pageId=1697177864yq2dyl' },
+  { label:'拜访明细分析',  icon:'📋', desc:'发xlsx自动生成3Sheet报告', btnLabel:'发起分析', color:'#14372a', fg:'#4ade80', url:null },
+  { label:'看板生成器',    icon:'📊', desc:'立即生成并发送进度看板', btnLabel:'立即生成', color:'#3a2a10', fg:'#fbbf24', url:null },
+  { label:'任务管理',      icon:'📅', desc:'查看所有/停止定时任务', btnLabel:'查看所有', color:'#1a2236', fg:'#8a9ab8', url:null },
+];
+
+// ═══════════════════════════════════════════════════
+//  Canvas 渲染
+// ═══════════════════════════════════════════════════
+const cvs = document.getElementById('cvs');
+const ctx = cvs.getContext('2d');
+
+// 命中区域注册表（用于点击检测）
+const hitZones = [];
+function clearHitZones() { hitZones.length = 0; }
+function addHit(x, y, w, h, action, data) { hitZones.push({x,y,w,h,action,data}); }
+
+let FONT = "'PingFang SC','Microsoft YaHei',sans-serif";
+let DPR = window.devicePixelRatio || 1;
+
+// 布局常量（逻辑像素）
+const PAD = 18;
+const CW = 1200; // canvas逻辑宽
+let CH = 900;    // 初始高，会动态计算
+
+// 色彩
+const C = {
+  bg:       '#0d1117',
+  card:     '#131c2e',
+  cardHdr:  '#0f1825',
+  border:   '#1e2d45',
+  row_odd:  '#131c2e',
+  row_even: '#0f1825',
+  row_total:'#1a2a40',
+  text:     '#e0e6f0',
+  sub:      '#8a9ab8',
+  muted:    '#4a5a7a',
+  gold:     '#ffd060',
+  cyan:     '#60c8ff',
+  green:    '#4ade80',
+  yellow:   '#fbbf24',
+  orange:   '#fb923c',
+  red:      '#f87171',
+  purple:   '#c084fc',
+  running:  '#22c55e',
+  pending:  '#f59e0b',
+  disabled: '#4a5a7a',
+  quickBg:  '#111827',
+};
+
+function setFont(size, weight='normal') {
+  ctx.font = `${weight} ${size}px ${FONT}`;
+}
+function fillText(txt, x, y, color, size=13, weight='normal') {
+  ctx.fillStyle = color;
+  setFont(size, weight);
+  ctx.fillText(txt, x, y);
+}
+function textW(txt, size=13, weight='normal') {
+  setFont(size, weight);
+  return ctx.measureText(txt).width;
+}
+function roundRect(x, y, w, h, r, fill, stroke) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y); ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+  if(fill) { ctx.fillStyle=fill; ctx.fill(); }
+  if(stroke) { ctx.strokeStyle=stroke; ctx.lineWidth=1; ctx.stroke(); }
+}
+function hline(x1, y, x2, color='#1e2d45') {
+  ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=1;
+  ctx.moveTo(x1,y); ctx.lineTo(x2,y); ctx.stroke();
+}
+
+// 状态点
+function statusDot(x, y, status) {
+  const colors = { running:C.running, pending:C.pending, disabled:C.disabled };
+  ctx.beginPath();
+  ctx.arc(x, y, 4, 0, Math.PI*2);
+  ctx.fillStyle = colors[status] || C.disabled;
+  ctx.fill();
+  if(status==='running') {
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.strokeStyle = colors[status]+'60'; ctx.lineWidth=2; ctx.stroke();
+  }
+}
+
+// 小按钮
+function drawMiniBtn(x, y, w, h, label, bg, fg, border, hitAction, hitData) {
+  roundRect(x, y, w, h, 4, bg, border);
+  const tw = textW(label, 11);
+  fillText(label, x+(w-tw)/2, y+h/2+4, fg, 11);
+  addHit(x, y, w, h, hitAction, hitData);
+}
+
+// ── 快捷操作栏 ──────────────────────────────────────
+function drawQuickBar(y) {
+  const bh = 30, gap = 8;
+  const labels = QUICK_BTNS.map(b => b.label);
+  const widths = labels.map(l => textW(l, 12) + 24);
+
+  roundRect(PAD, y, CW-PAD*2, bh+20, 6, '#111827', '#1a2840');
+  fillText('⚡ 快捷操作', PAD+12, y+15, C.muted, 11);
+
+  let bx = PAD + 12;
+  const by = y + 24;
+  QUICK_BTNS.forEach((btn, i) => {
+    const bw = widths[i];
+    const bg = btn.toggle
+      ? (btn.on ? '#14372a' : '#1a2236')
+      : btn.color;
+    const fg = btn.toggle ? (btn.on ? '#4ade80' : '#8a9ab8') : btn.fg;
+    const border = btn.toggle ? (btn.on ? '#166534' : '#2a3a5a') : btn.border;
+    roundRect(bx, by, bw, bh, 5, bg, border);
+    // toggle 指示点
+    if(btn.toggle) {
+      ctx.beginPath(); ctx.arc(bx+10, by+bh/2, 4, 0, Math.PI*2);
+      ctx.fillStyle = btn.on ? '#4ade80' : '#f87171'; ctx.fill();
+      fillText(btn.label, bx+20, by+bh/2+4, fg, 12, '600');
+    } else {
+      const tw = textW(btn.label, 12, '600');
+      fillText(btn.label, bx+(bw-tw)/2, by+bh/2+4, fg, 12, '600');
+    }
+    addHit(bx, by, bw, bh, 'quick', btn.id);
+    bx += bw + gap;
+  });
+  return y + bh + 20 + 10;
+}
+
+// ── 模块卡片 ──────────────────────────────────────
+const MODULE_COLS = 2;
+const MODULE_W = (CW - PAD*2 - 12) / 2;
+const ROW_H = 36;
+const HDR_H = 40;
+const FOOT_H = 30;
+
+function drawModuleCard(mod, tasks_in, x, y) {
+  const n = tasks_in.length;
+  const cardH = HDR_H + n * ROW_H + FOOT_H + 4;
+  const running = tasks_in.filter(t=>t.status==='running').length;
+  const pending  = tasks_in.filter(t=>t.status==='pending').length;
+
+  // Card bg
+  roundRect(x, y, MODULE_W, cardH, 8, C.card, C.border);
+
+  // Header bg
+  roundRect(x, y, MODULE_W, HDR_H, 8, C.cardHdr, C.border);
+  // 左侧色条
+  ctx.fillStyle = mod.color;
+  roundRect(x, y, 3, HDR_H, 2, mod.color);
+
+  // Title
+  fillText(mod.label, x+16, y+HDR_H/2+5, C.text, 14, '700');
+
+  // Badge
+  const badgeLabel = running>0 ? `${running} 运行中` : `${pending} 待配置`;
+  const badgeBg = running>0 ? '#14372a' : '#3a2a10';
+  const badgeFg = running>0 ? C.green : C.yellow;
+  const badgeBorder = running>0 ? '#166534' : '#5a3a10';
+  const bw2 = textW(badgeLabel, 11) + 14;
+  const bx2 = x + MODULE_W - bw2 - 36;
+  roundRect(bx2, y+12, bw2, 16, 8, badgeBg, badgeBorder);
+  fillText(badgeLabel, bx2+7, y+24, badgeFg, 11);
+
+  // 折叠按钮（▲）
+  fillText('▲', x+MODULE_W-22, y+HDR_H/2+4, C.muted, 12);
+  addHit(x+MODULE_W-28, y+8, 28, HDR_H-8, 'collapse', mod.id);
+
+  // 任务行
+  tasks_in.forEach((task, i) => {
+    const ty = y + HDR_H + i*ROW_H;
+    const bg = i%2===0 ? C.row_odd : C.row_even;
+    ctx.fillStyle = bg;
+    ctx.fillRect(x+1, ty, MODULE_W-2, ROW_H);
+    hline(x+1, ty+ROW_H, x+MODULE_W-1, '#0f1825');
+
+    // 状态点
+    statusDot(x+14, ty+ROW_H/2, task.status);
+
+    // 任务名
+    fillText(task.name, x+26, ty+ROW_H/2+4, C.text, 12);
+
+    // Cron
+    const cronX = x + MODULE_W - 240;
+    fillText(task.cron, cronX, ty+ROW_H/2+4, C.muted, 10);
+
+    // 下次时间
+    const nextColor = task.next.includes('今') ? C.yellow : C.cyan;
+    const nextTxt = task.status==='pending' ? '未启用' : task.next;
+    const nc = task.status==='pending' ? C.muted : nextColor;
+    const nw = textW(nextTxt, 11);
+    fillText(nextTxt, x+MODULE_W-nw-80, ty+ROW_H/2+4, nc, 11);
+
+    // 操作按钮
+    const btnY = ty + (ROW_H-20)/2;
+    if(task.status === 'pending') {
+      drawMiniBtn(x+MODULE_W-62, btnY, 54, 20, '启用', '#1e3a5f', C.cyan, '#2a5a8f', 'enable', task.id);
+    } else {
+      drawMiniBtn(x+MODULE_W-62, btnY, 20, 20, '▶', '#14372a', C.green, '#166534', 'run', task.id);
+      drawMiniBtn(x+MODULE_W-38, btnY, 20, 20, '✎', '#1e3a5f', C.cyan, '#2a5a8f', 'edit', task.id);
+      drawMiniBtn(x+MODULE_W-14, btnY+1, 10, 18, '×', '#1a1a1a', C.red, '#3a1a1a', 'del', task.id);
+    }
+  });
+
+  // Footer
+  const fy = y + HDR_H + n*ROW_H + 1;
+  ctx.fillStyle = '#0c1522';
+  ctx.fillRect(x+1, fy, MODULE_W-2, FOOT_H+2);
+  roundRect(x, y+cardH-FOOT_H, MODULE_W, FOOT_H, 8, '#0c1522', C.border);
+  fillText('＋ 新增任务', x+14, y+cardH-FOOT_H/2+4, '#3b82f6', 12);
+  addHit(x+1, y+cardH-FOOT_H, MODULE_W-2, FOOT_H, 'new_task', mod.id);
+
+  return cardH;
+}
+
+// ── 系统工具 ──────────────────────────────────────
+function drawTools(y) {
+  const COLS = 3;
+  const toolW = (CW-PAD*2 - (COLS-1)*12) / COLS;
+  const toolH = 120;
+  const headerH = 36;
+  const ROWS = Math.ceil(TOOLS.length / COLS);
+  const totalH = headerH + ROWS*(toolH+10) + PAD;
+
+  roundRect(PAD, y, CW-PAD*2, totalH, 8, C.card, C.border);
+  fillText('⚙️ 系统工具 & 快捷链接', PAD+14, y+24, C.text, 14, '700');
+  const ubw = textW('Apollo', 11)+14;
+  roundRect(CW-PAD-ubw-8, y+10, ubw, 16, 8, '#1e3a5f', '#2a5a8f');
+  fillText('Apollo', CW-PAD-ubw-8+7, y+22, C.cyan, 11);
+  hline(PAD+1, y+headerH, CW-PAD-1, C.border);
+
+  TOOLS.forEach((tool, i) => {
+    const col = i % COLS;
+    const row = Math.floor(i / COLS);
+    const tx = PAD + col*(toolW+12) + 1;
+    const ty2 = y + headerH + PAD/2 + row*(toolH+10);
+    roundRect(tx, ty2, toolW, toolH, 6, '#0d1117', tool.url ? '#1e3a5f' : '#1e2d45');
+    fillText(tool.icon, tx+12, ty2+24, C.text, 18);
+    fillText(tool.label, tx+12, ty2+46, C.text, 13, '700');
+    // desc换行截断
+    const descShort = tool.desc.length>22 ? tool.desc.slice(0,22)+'…' : tool.desc;
+    fillText(descShort, tx+12, ty2+62, C.muted, 11);
+    // 有链接的显示外链标志
+    if(tool.url) fillText('🔗', tx+toolW-28, ty2+14, C.cyan, 12);
+    drawMiniBtn(tx+12, ty2+toolH-28, textW(tool.btnLabel,11)+16, 22, tool.btnLabel, tool.color, tool.fg, tool.color, 'tool', i);
+  });
+
+  return y + totalH + 10;
+}
+
+// ═══════════════════════════════════════════════════
+//  主渲染
+// ═══════════════════════════════════════════════════
+let collapsed = {};
+
+function render() {
+  clearHitZones();
+
+  // 动态计算高度
+  let estH = PAD + 56 + 14; // quickbar
+  const maxRows = Math.max(
+    tasks.filter(t=>t.mod==='kpi').length,
+    tasks.filter(t=>t.mod==='rt').length
+  );
+  const maxRows2 = Math.max(
+    tasks.filter(t=>t.mod==='visit').length,
+    tasks.filter(t=>t.mod==='zr').length
+  );
+  estH += Math.max(HDR_H + maxRows*ROW_H + FOOT_H+4, HDR_H + maxRows*ROW_H + FOOT_H+4) + 14;
+  estH += Math.max(HDR_H + maxRows2*ROW_H + FOOT_H+4, HDR_H + maxRows2*ROW_H + FOOT_H+4) + 14;
+  estH += 36 + 120 + PAD + 20 + PAD;
+  CH = Math.max(estH, 900);
+
+  cvs.width = CW * DPR; cvs.height = CH * DPR;
+  cvs.style.width = CW + 'px'; cvs.style.height = CH + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+  // 背景
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, CW, CH);
+
+  let y = PAD;
+
+  // 快捷操作栏
+  y = drawQuickBar(y);
+
+  // 模块卡片（2列 x 2行）
+  const modOrder = [['kpi','rt'],['visit','zr']];
+  modOrder.forEach(row => {
+    let maxH = 0;
+    row.forEach((modId, col) => {
+      const mod = MODULES.find(m=>m.id===modId);
+      const t = tasks.filter(t=>t.mod===modId);
+      const mx = PAD + col*(MODULE_W+12);
+      const h = drawModuleCard(mod, t, mx, y);
+      maxH = Math.max(maxH, h);
+    });
+    y += maxH + 14;
+  });
+
+  // 系统工具
+  y = drawTools(y);
+}
+
+// ═══════════════════════════════════════════════════
+//  交互处理
+// ═══════════════════════════════════════════════════
+let editingTaskId = null;
+
+function handleClick(lx, ly) {
+  for(const hz of hitZones) {
+    if(lx>=hz.x && lx<=hz.x+hz.w && ly>=hz.y && ly<=hz.y+hz.h) {
+      doAction(hz.action, hz.data);
+      return;
+    }
+  }
+}
+
+function doAction(action, data) {
+  switch(action) {
+    case 'quick':
+      if(data==='qb-board') { showToast('📊 正在生成看板...'); setTimeout(()=>showToast('✓ 看板已发送至大象','ok'),1500); }
+      else if(data==='qb-new') { openNew(); }
+      else if(data==='qb-rt') {
+        const btn = QUICK_BTNS.find(b=>b.id==='qb-rt');
+        btn.on = !btn.on;
+        showToast(btn.on?'✓ 实时进度已启用':'实时进度已暂停', btn.on?'ok':'');
+        render();
+      }
+      else if(data==='qb-apollo') window.open('https://apollo.meituan.com/crm-pc-data-bulletin-board/revenue-analysis/index.html#/data-overview');
+      else if(data==='qb-refresh') { showToast('🔄 已刷新状态','ok'); render(); }
+      break;
+    case 'run':
+      showToast(`▶ 正在执行...`);
+      setTimeout(()=>showToast(`✓ 已触发，结果将发送至大象`,'ok'),1200);
+      break;
+    case 'edit':
+      openEdit(data);
+      break;
+    case 'del':
+      if(confirm('确认删除此任务？')) {
+        tasks = tasks.filter(t=>t.id!==data);
+        saveTasks(); render();
+        showToast('已删除','ok');
+      }
+      break;
+    case 'enable':
+      const t = tasks.find(t=>t.id===data);
+      if(t) { t.status='running'; saveTasks(); render(); showToast(`✓ 「${t.name}」已启用`,'ok'); }
+      break;
+    case 'new_task':
+      document.getElementById('new-module').value = data;
+      openNew();
+      break;
+    case 'collapse':
+      collapsed[data] = !collapsed[data];
+      render();
+      break;
+    case 'tool':
+      const tool = TOOLS[data];
+      if(tool && tool.url) {
+        window.open(tool.url, '_blank');
+        showToast('打开 ' + tool.label + '...');
+      } else {
+        showToast((tool ? tool.label : '工具') + ' 功能待接入');
+      }
+      break;
+  }
+}
+
+// canvas click
+cvs.addEventListener('click', e => {
+  const rect = cvs.getBoundingClientRect();
+  const lx = (e.clientX - rect.left);
+  const ly = (e.clientY - rect.top);
+  handleClick(lx, ly);
+});
+
+// hover cursor
+cvs.addEventListener('mousemove', e => {
+  const rect = cvs.getBoundingClientRect();
+  const lx = e.clientX - rect.left;
+  const ly = e.clientY - rect.top;
+  let hit = false;
+  for(const hz of hitZones) {
+    if(lx>=hz.x && lx<=hz.x+hz.w && ly>=hz.y && ly<=hz.y+hz.h) { hit=true; break; }
+  }
+  cvs.style.cursor = hit ? 'pointer' : 'default';
+});
+
+// ═══════════════════════════════════════════════════
+//  编辑面板
+// ═══════════════════════════════════════════════════
+function openEdit(taskId) {
+  const t = tasks.find(t=>t.id===taskId);
+  if(!t) return;
+  editingTaskId = taskId;
+  document.getElementById('edit-title').textContent = `编辑：${t.name}`;
+  document.getElementById('edit-name').value = t.name;
+  document.getElementById('edit-cron').value = t.cron;
+  document.getElementById('edit-target').value = t.target;
+  document.getElementById('edit-desc').value = t.desc;
+  document.getElementById('edit-status').value = t.status;
+  document.getElementById('overlay-edit').classList.add('show');
+  document.getElementById('edit-del').onclick = () => {
+    if(confirm('确认删除？')) {
+      tasks = tasks.filter(t=>t.id!==editingTaskId);
+      saveTasks(); render(); closeEdit();
+      showToast('已删除');
+    }
+  };
+}
+function closeEdit() { document.getElementById('overlay-edit').classList.remove('show'); }
+function saveEdit() {
+  const t = tasks.find(t=>t.id===editingTaskId);
+  if(!t) return;
+  t.name   = document.getElementById('edit-name').value.trim() || t.name;
+  t.cron   = document.getElementById('edit-cron').value.trim() || t.cron;
+  t.target = document.getElementById('edit-target').value.trim();
+  t.desc   = document.getElementById('edit-desc').value.trim();
+  t.status = document.getElementById('edit-status').value;
+  saveTasks(); render(); closeEdit();
+  showToast(`✓ 「${t.name}」已保存`, 'ok');
+}
+
+// ═══════════════════════════════════════════════════
+//  新建面板
+// ═══════════════════════════════════════════════════
+function openNew() { document.getElementById('overlay-new').classList.add('show'); }
+function closeNew() { document.getElementById('overlay-new').classList.remove('show'); }
+function createTask() {
+  const name = document.getElementById('new-name').value.trim();
+  const cron = document.getElementById('new-cron').value.trim();
+  if(!name||!cron) { showToast('请填写任务名称和Cron时间','err'); return; }
+  const newTask = {
+    id: 't'+Date.now(),
+    mod: document.getElementById('new-module').value,
+    name, cron,
+    target: document.getElementById('new-target').value,
+    desc: document.getElementById('new-desc').value,
+    status: 'pending',
+    next: '-'
+  };
+  tasks.push(newTask);
+  saveTasks(); render(); closeNew();
+  document.getElementById('new-name').value='';
+  document.getElementById('new-cron').value='';
+  document.getElementById('new-desc').value='';
+  showToast(`✓ 「${name}」已创建`, 'ok');
+}
+
+// overlay 点背景关闭
+['overlay-edit','overlay-new'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if(e.target===e.currentTarget) { e.currentTarget.classList.remove('show'); }
+  });
+});
+
+// ═══════════════════════════════════════════════════
+//  时钟 & 状态栏
+// ═══════════════════════════════════════════════════
+const WD = ['日','一','二','三','四','五','六'];
+function tick() {
+  const now = new Date();
+  const h=String(now.getHours()).padStart(2,'0'),
+        m=String(now.getMinutes()).padStart(2,'0'),
+        s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent=`${h}:${m}:${s}`;
+  const y=now.getFullYear(),mo=String(now.getMonth()+1).padStart(2,'0'),d=String(now.getDate()).padStart(2,'0');
+  document.getElementById('clockdate').textContent=`${y}-${mo}-${d} 周${WD[now.getDay()]} CST (UTC+8)`;
+  const upd_m = now.getMinutes()>=30?'30':'00';
+  document.getElementById('s-upd').textContent=`${h}:${upd_m}`;
+  const next = now.getHours()<18?'今日18:00':now.getHours()<21?'今日21:00':now.getHours()<23?'今日23:00':'明日18:00';
+  document.getElementById('s-next').textContent=next;
+  const running = tasks.filter(t=>t.status==='running').length;
+  const pending  = tasks.filter(t=>t.status==='pending').length;
+  document.getElementById('s-run').textContent=running;
+  document.getElementById('s-idle').textContent=pending;
+}
+setInterval(tick,1000); tick();
+
+// ═══════════════════════════════════════════════════
+//  Toast
+// ═══════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent=msg; el.className='toast show '+type;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.className='toast',2800);
+}
+
+// ═══════════════════════════════════════════════════
+//  Tab 切换
+// ═══════════════════════════════════════════════════
+function switchTab(t) {
+  document.querySelector('[data-panel="tasks"]').style.display = t==='tasks' ? '' : 'none';
+  document.getElementById('panel-board').style.display = t==='board' ? '' : 'none';
+  document.getElementById('panel-zr').style.display = t==='zr' ? '' : 'none';
+  document.querySelectorAll('.tabn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='board') renderBoard();
+  if(t==='zr') renderZrPanel();
+}
+
+// ═══════════════════════════════════════════════════
+//  业绩进度表数据与渲染
+// ═══════════════════════════════════════════════════
+const BOARD_DATA = {
+  time: '2026-03-28 18:28',
+  daysLeft: 4,
+  // name, owner, gtv_m, gtv_t, gtv_y, excl, cpc_m, cpc_t, cpc_y, new_done, new_tgt, wpu, mem_m, renewal, mom
+  ops: [
+    ['惠州巨浪',  '肖立铭', 3089866, 3566000, 129149, 0.0273, 51966,  53400,  733, 11, 18, 22062, 119082, 0.5179,  1.1454],
+    ['惠州柏万',  '林启梁', 2722606, 3050000, 108999, 0.0294, 74899,  80300, 2140, 13, 14, 18864,  96313, 0.4792, -0.0417],
+    ['泉州小花猫','康子诚', 2346909, 2809000, 114695, 0.0234, 93054, 112300, 5185, 16, 14, 17846,  60064, 0.4324,   null],
+    ['宁夏灵创',  '车路顺', 2252892, 2582000,  90708, 0.0341, 93479, 100800, 2948, 14, 12, 10476, 107601, 0.6897,  1.2069],
+    ['惠安广通',  '尤云生', 1925759, 2252000,  86211, 0.0360, 43092,  46600, 1771,  9, 10, 11413,  48000, 0.5238, -0.0833],
+    ['慈溪哲光',  '贾凌姗', 1740826, 2125000,  98313, 0.0334, 63770,  85100, 3211,  6, 12,  7793,  59289, 0.5172,  0.0345],
+    ['义乌汐洋',  '陈铨',   1716194, 2021000,  98201, 0.0282, 68549,  72100, 2450,  7,  6,  8139,  25400, 0.5385,  0.5385],
+  ]
+};
+
+function fmtN(v) { return v.toLocaleString('zh-CN', {maximumFractionDigits:0}); }
+function fmtP(v) { return (v*100).toFixed(1)+'%'; }
+function pClass(p) {
+  if(p>=0.90) return 'c-green';
+  if(p>=0.80) return 'c-yellow';
+  if(p>=0.70) return 'c-orange';
+  return 'c-red';
+}
+function pBarColor(p) {
+  if(p>=0.90) return '#4ade80';
+  if(p>=0.80) return '#fbbf24';
+  if(p>=0.70) return '#fb923c';
+  return '#f87171';
+}
+function barHtml(p) {
+  const pct = Math.min(p,1);
+  const cls = pClass(p);
+  return `<div class="bbar-wrap">
+    <span class="bbar-pct ${cls}">${fmtP(p)}</span>
+    <div class="bbar"><div class="bbar-fill" style="width:${(pct*100).toFixed(1)}%;background:${pBarColor(p)}"></div></div>
+  </div>`;
+}
+function renewalClass(r) {
+  if(r>=0.80) return 'c-green';
+  if(r>=0.70) return 'c-yellow';
+  return 'c-red';
+}
+
+// ═══════════════════════════════════════════════════
+//  职人码看板 - 真实 API 数据（2026-03-28抓取）
+// ═══════════════════════════════════════════════════
+// 数据结构: [简称, 合作门店, 绑码数, 有效铺设数, 有效动销数, 铺设率, 动销率, 店转GTV渗透率, 月店转GTV,
+//           昨日店转GTV(9), 昨日店转GTV渗透率(10), 月净增绑码数(11), 日净增绑码数(12)]
+// 月净增 = 今日累计 - 3月1日基准; 日净增 = 今日 - 昨日（明天9点抓3月29日后自动有值）
+const ZR_LIVE = [
+  ['泉州小花猫', 1825, 489, 139,  90, 0.284, 0.633, 0.295,  695051, null, null,  91, null],
+  ['义乌汐洋',   1138, 406,  86,  56, 0.212, 0.640, 0.228,  395034, null, null,  41, null],
+  ['惠安广通',   1614, 391, 120,  70, 0.307, 0.583, 0.281,  541907, null, null,  65, null],
+  ['惠州柏万',   1683, 441, 116,  74, 0.263, 0.681, 0.270,  735700, null, null,  77, null],
+  ['惠州巨浪',   2559, 582, 114,  93, 0.196, 0.719, 0.212,  653187, null, null,  81, null],
+  ['慈溪哲光',   1148, 293,  45,  35, 0.154, 0.756, 0.261,  453516, null, null,  14, null],
+  ['宁夏灵创',   1263, 424,  61,  54, 0.144, 0.639, 0.508, 1202003, null, null,   1, null],
+];
+const ZR_TOTAL = { stores:11230, bind:3026, valid:681, dx:472, pave_rate:0.225, dx_rate:0.656, gtv_rate:0.293, month_gtv:4676398 };
+const ZR_DATE  = '2026-03-28';
+
+// 销售明细数据：[代运营商, 城市, 姓名, 月GTV, 绑码数, 合作门店, 铺设数, 动销数, 店转GTV渗透率]
+// 铺设率=铺设/绑码, 动销率=动销/铺设, 渗透率来自原始数据
+const ZR_SALES = [
+  ['泉州小花猫','泉州','兰思帆',  272378,  31,  67,  0, 0, 0.827],
+  ['泉州小花猫','泉州','刘芸',     70820,  22,  78,  0, 0, 0.205],
+  ['泉州小花猫','泉州','林俊贤',  137521,  33, 184,  0, 0, 0.055],
+  ['泉州小花猫','泉州','孙林喻',  433776,  92, 278,  0, 0, 0.179],
+  ['泉州小花猫','泉州','曾鹏东',  174194,  43, 206,  0, 0, 0.184],
+  ['泉州小花猫','泉州','刘洋',    651649, 152, 509,  0, 0, 0.310],
+  ['泉州小花猫','泉州','郭俊峰',  613811, 115, 493,  0, 0, 0.222],
+  ['义乌汐洋','义乌','申屠昊雍',  340739,  92, 219,  0, 0, 0.157],
+  ['义乌汐洋','义乌','兰将兵',    343050,  65, 216,  0, 0, 0.364],
+  ['义乌汐洋','义乌','郭国江',    332614,  91, 230,  0, 0, 0.301],
+  ['义乌汐洋','义乌','郭靖宇',     17786,  23,  63,  0, 0, 0.045],
+  ['义乌汐洋','义乌','李立江',    657278, 101, 237,  0, 0, 0.174],
+  ['义乌汐洋','义乌','陈浪涛',     43688,  31, 161,  0, 0, 0.036],
+  ['惠安广通','晋江','陈泳权',    282872,  62, 295,  0, 0, 0.084],
+  ['惠安广通','晋江','王少镕',    262706,  75, 313,  0, 0, 0.095],
+  ['惠安广通','晋江','王伟龙',    468680,  14,  25,  0, 0, 0.638],
+  ['惠安广通','晋江','陈建江',    335824,  85, 357,  0, 0, 0.209],
+  ['惠安广通','晋江','董超亚',    313459,  77, 299,  0, 0, 0.265],
+  ['惠安广通','晋江','王燕娥',    258797,  74, 316,  0, 0, 0.147],
+  ['惠州柏万','惠阳','黄子明',    687226, 107, 353,  0, 0, 0.364],
+  ['惠州柏万','惠阳','赖宇能',    466580,  96, 345,  0, 0, 0.333],
+  ['惠州柏万','惠阳','邓百明',    504589,  92, 285,  0, 0, 0.290],
+  ['惠州柏万','惠阳','卢晓翔',    375392,  72, 347,  0, 0, 0.189],
+  ['惠州柏万','惠阳','刘锦科',    669182,  68, 326,  0, 0, 0.168],
+  ['惠州巨浪','惠州','梁庆锋',    210260,  64, 264,  0, 0, 0.190],
+  ['惠州巨浪','惠州','张德亮',    514526,  84, 413,  0, 0, 0.167],
+  ['惠州巨浪','惠州','吴誉',      580025,  91, 424,  0, 0, 0.200],
+  ['惠州巨浪','惠州','王瑞',       34129,   5,  19,  0, 0, 0.830],
+  ['惠州巨浪','惠州','李柠',      380780,  68, 319,  0, 0, 0.156],
+  ['惠州巨浪','惠州','杨伟纯',    417606,  73, 330,  0, 0, 0.246],
+  ['惠州巨浪','惠州','梁庆幸',    572649,  97, 422,  0, 0, 0.280],
+  ['惠州巨浪','惠州','黄嘉琳',    371763,  88, 331,  0, 0, 0.161],
+  ['慈溪哲光','义乌','柯利兵',    915443,  61, 329,  0, 0, 0.309],
+  ['慈溪哲光','义乌','王婵娟',    131345,  25, 126,  0, 0, 0.217],
+  ['慈溪哲光','义乌','蒋玉晗',     66791,  13,  81,  0, 0, 0.106],
+  ['慈溪哲光','义乌','舒文谦',    171934,  68, 207,  0, 0, 0.098],
+  ['慈溪哲光','义乌','高淼',        5562,   2,   8,  0, 0, 0.031],
+  ['慈溪哲光','义乌','李凯鸿',    279136,  68, 193,  0, 0, 0.344],
+  ['慈溪哲光','义乌','胡仁俊',    167419,  55, 192,  0, 0, 0.133],
+  ['宁夏灵创','义乌','刘俊宝',     30956,  12,  22,  0, 0, 0.196],
+  ['宁夏灵创','义乌','王浩新',    297267,  68, 213,  0, 0, 0.048],
+  ['宁夏灵创','义乌','吴柳虹',   1283911,  84, 403,  0, 0, 0.844],
+  ['宁夏灵创','义乌','王勇杰',    270846, 110, 236,  0, 0, 0.089],
+  ['宁夏灵创','义乌','余孝樟',    266654,  65, 180,  0, 0, 0.059],
+  ['宁夏灵创','义乌','朱佳程',    213307,  72, 180,  0, 0, 0.276],
+];
+
+// 色阶
+function zrBindColor(r)  { return r>=0.35?'zr-green':r>=0.25?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
+function zrPaveColor(r)  { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
+function zrDxColor(r)    { return r>=0.55?'zr-green':r>=0.40?'zr-yellow':r>=0.25?'zr-orange':'zr-red'; }
+function zrGtvColor(r)   { return r>=0.30?'zr-green':r>=0.20?'zr-yellow':r>=0.12?'zr-orange':'zr-red'; }
+
+function renderZrPanel() {
+  document.getElementById('zr-upd-time').textContent = `数据截至 ${ZR_DATE} · 全月累计`;
+
+  // ── KPI 卡片 ──
+  const t = ZR_TOTAL;
+  const kpis = [
+    { label:'合作门店总数', val: t.stores.toLocaleString(), sub:'高线粤闽浙城市群', color:'#60c8ff' },
+    { label:'月绑码商户数', val: t.bind.toLocaleString(),   sub:`绑码率 ${(t.bind/t.stores*100).toFixed(1)}%`, color: t.bind/t.stores>=0.35?'#4ade80':'#fbbf24' },
+  ];
+  document.getElementById('zr-kpi-cards').innerHTML = kpis.map(k=>`
+    <div style="background:#0f1825;border:1px solid #1e3050;border-radius:8px;padding:14px 16px;">
+      <div style="font-size:11px;color:#4a6a8a;margin-bottom:6px;">${k.label}</div>
+      <div style="font-size:24px;font-weight:700;color:${k.color};">${k.val}</div>
+      <div style="font-size:11px;color:#6a8aaa;margin-top:4px;">${k.sub}</div>
+    </div>`).join('');
+
+  // ── 汇总表 ──
+  let rows = '';
+  ZR_LIVE.forEach(o => {
+    const bindRate = o[2]/o[1];
+    // o[9]=昨日店转GTV, o[10]=昨日店转GTV渗透率, o[11]=月净增绑码数, o[12]=日净增绑码数
+    const yGtv  = o[9]  != null ? o[9].toLocaleString()         : '—';
+    const yRate = o[10] != null ? (o[10]*100).toFixed(1)+'%'    : '—';
+    const yRateClass = o[10] != null ? zrGtvColor(o[10]) : '';
+    const monthIncr = o[11] != null ? `+${o[11]}`  : '—';
+    const dayIncr   = o[12] != null ? `+${o[12]}`  : '—';
+    rows += `<tr>
+      <td style="font-weight:700;color:#e0e6f0;">${o[0]}</td>
+      <td>${o[1].toLocaleString()}</td>
+      <td class="${zrBindColor(bindRate)}" style="font-weight:700;">${(bindRate*100).toFixed(1)}%</td>
+      <td style="color:#4ade80;font-weight:600;">${dayIncr}</td>
+      <td style="color:#60c8ff;font-weight:600;">${monthIncr}</td>
+      <td style="color:#60c8ff;">${yGtv}</td>
+      <td class="${yRateClass}" style="font-weight:700;">${yRate}</td>
+      <td>${o[8].toLocaleString()}</td>
+      <td class="${zrGtvColor(o[7])}">${(o[7]*100).toFixed(1)}%</td>
+    </tr>`;
+  });
+  document.getElementById('zr-summary-tbody2').innerHTML = rows;
+  const totalMonthIncr = ZR_LIVE.reduce((s,o)=>s+(o[11]||0), 0);
+  document.getElementById('zr-summary-tfoot2').innerHTML = `<tr>
+    <td>粤闽浙合计</td>
+    <td>${t.stores.toLocaleString()}</td>
+    <td class="zr-yellow">${(t.bind/t.stores*100).toFixed(1)}%</td>
+    <td style="color:#4ade80;font-weight:600;">—</td>
+    <td style="color:#60c8ff;font-weight:600;">+${totalMonthIncr}</td>
+    <td style="color:#60c8ff;">—</td>
+    <td>—</td>
+    <td>${t.month_gtv.toLocaleString()}</td>
+    <td class="${zrGtvColor(t.gtv_rate)}">${(t.gtv_rate*100).toFixed(1)}%</td>
+  </tr>`;
+
+  // ── 销售明细表 ──
+  let salesRows = '';
+  const agencyOrder = ZR_LIVE.map(o => o[0]);
+  agencyOrder.forEach(agency => {
+    const ss = ZR_SALES.filter(s => s[0] === agency);
+    ss.sort((a,b) => (a[4]/a[5]) - (b[4]/b[5])).forEach(s => {
+      const bindR = s[5]>0 ? s[4]/s[5] : 0;
+      const gtvR  = s[8];
+      // s[9]=昨日店转GTV, s[10]=昨日店转GTV渗透率, s[11]=月净增绑码, s[12]=日净增绑码（销售级暂无）
+      const syGtv  = s[9]  != null ? s[9].toLocaleString()       : '—';
+      const syRate = s[10] != null ? (s[10]*100).toFixed(1)+'%'  : '—';
+      const syRateClass = s[10] != null ? zrGtvColor(s[10]) : '';
+      salesRows += `<tr>
+        <td style="color:#7a9ab8;">${s[0]}</td>
+        <td style="color:#8ab0c8;">${s[1]}</td>
+        <td style="font-weight:600;color:#e0e6f0;">${s[2]}</td>
+        <td>${s[5].toLocaleString()}</td>
+        <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
+        <td style="color:#4ade80;font-weight:600;">—</td>
+        <td style="color:#60c8ff;font-weight:600;">—</td>
+        <td style="color:#60c8ff;">${syGtv}</td>
+        <td class="${syRateClass}">${syRate}</td>
+        <td>${s[3].toLocaleString()}</td>
+        <td class="${zrGtvColor(gtvR)}">${(gtvR*100).toFixed(1)}%</td>
+      </tr>`;
+    });
+  });
+  document.getElementById('zr-sales-tbody').innerHTML = salesRows;
+
+  // ── 归因分析 ──
+  // 按城市分组（从销售数据提取）
+  const cityMap = {};
+  ZR_SALES.forEach(s => {
+    const city = s[1];
+    if(!cityMap[city]) cityMap[city] = { stores:0, bind:0, gtv:0, gtvRate:[] };
+    cityMap[city].stores += s[5];
+    cityMap[city].bind   += s[4];
+    cityMap[city].gtv    += s[3];
+    cityMap[city].gtvRate.push(s[8]);
+  });
+
+  // 城市维度归因
+  const bindTarget = 0.35;
+  const gtvRateTarget = 0.165;
+  let cityHtml = `<div style="color:#8a9ab8;margin-bottom:12px;font-size:12px;">数据日期：${ZR_DATE} | 目标：绑码率 ≥35%，店转渗透率 ≥16.5%</div>`;
+
+  const cityEntries = Object.entries(cityMap).map(([city, d]) => {
+    const bindR = d.bind / d.stores;
+    const avgGtvR = d.gtvRate.reduce((a,b)=>a+b,0) / d.gtvRate.length;
+    return { city, bindR, avgGtvR, stores: d.stores, bind: d.bind };
+  }).sort((a,b) => a.bindR - b.bindR);
+
+  cityEntries.forEach(c => {
+    const bindOk  = c.bindR  >= bindTarget;
+    const gtvOk   = c.avgGtvR >= gtvRateTarget;
+    const bindTag = bindOk  ? `<span style="color:#4ade80;">✅ ${(c.bindR*100).toFixed(1)}%</span>`
+                            : `<span style="color:#f87171;">⚠️ ${(c.bindR*100).toFixed(1)}%（差${((bindTarget-c.bindR)*100).toFixed(1)}pct，需再绑${Math.ceil((bindTarget-c.bindR)*c.stores)}家）</span>`;
+    const gtvTag  = gtvOk   ? `<span style="color:#4ade80;">✅ ${(c.avgGtvR*100).toFixed(1)}%</span>`
+                            : `<span style="color:#fbbf24;">⚠️ ${(c.avgGtvR*100).toFixed(1)}%（差${((gtvRateTarget-c.avgGtvR)*100).toFixed(1)}pct）</span>`;
+    const todos = [];
+    if(!bindOk)  todos.push(`📌 TODO：重点推进 ${c.city} 门店绑码，门店基数 ${c.stores}，当前绑码 ${c.bind}，缺口 ${Math.ceil((bindTarget-c.bindR)*c.stores)} 家`);
+    if(!gtvOk)   todos.push(`📌 TODO：加强 ${c.city} 核销活动引导，提升店转GTV渗透率`);
+    cityHtml += `<div style="margin-bottom:14px;padding:10px 14px;background:#0f1825;border-left:3px solid ${bindOk&&gtvOk?'#22c55e':'#f87171'};border-radius:0 6px 6px 0;">
+      <div style="font-weight:700;color:#e0e6f0;margin-bottom:6px;">📍 ${c.city}</div>
+      <div>绑码率：${bindTag}</div>
+      <div>店转渗透率：${gtvTag}</div>
+      ${todos.length ? `<div style="margin-top:8px;color:#fbbf24;font-size:12px;">${todos.join('<br>')}</div>` : `<div style="margin-top:6px;color:#4ade80;font-size:12px;">✅ 两项指标均达标</div>`}
+    </div>`;
+  });
+  document.getElementById('zr-attr-city').innerHTML = cityHtml;
+
+  // 销售维度归因：分绑码率偏低 & 店转渗透率偏低两组
+  const bindWeak = ZR_SALES
+    .filter(s => s[5]>0 && s[4]/s[5] < bindTarget)
+    .sort((a,b) => a[4]/a[5] - b[4]/b[5]);
+  const gtvWeak = ZR_SALES
+    .filter(s => s[8] < gtvRateTarget)
+    .sort((a,b) => a[8] - b[8]);
+
+  let salesAttrHtml = `<div style="color:#8a9ab8;margin-bottom:12px;font-size:12px;">以下列出需关注的销售，按指标从低到高排序</div>`;
+
+  // 绑码率偏低
+  salesAttrHtml += `<div style="font-weight:700;color:#fbbf24;margin-bottom:8px;">📎 绑码率偏低（< 35%）— 共 ${bindWeak.length} 人</div>`;
+  if(bindWeak.length === 0) {
+    salesAttrHtml += `<div style="color:#4ade80;margin-bottom:16px;">✅ 全员绑码率达标</div>`;
+  } else {
+    bindWeak.forEach(s => {
+      const r = s[4]/s[5];
+      const gap = Math.ceil((bindTarget - r) * s[5]);
+      salesAttrHtml += `<div style="padding:8px 12px;margin-bottom:6px;background:#0f1825;border-left:3px solid #f87171;border-radius:0 4px 4px 0;">
+        <span style="color:#c0d8f0;font-weight:700;">${s[2]}</span>
+        <span style="color:#4a6a8a;margin:0 6px;">|</span>
+        <span style="color:#8ab0c8;">${s[0]} · ${s[1]}</span>
+        <span style="color:#f87171;margin-left:10px;">绑码率 ${(r*100).toFixed(1)}%（${s[4]}/${s[5]}）</span>
+        <span style="color:#fbbf24;font-size:12px;margin-left:8px;">📌 TODO：还需绑码 ${gap} 家</span>
+      </div>`;
+    });
+    salesAttrHtml += '<br>';
+  }
+
+  // 店转渗透率偏低
+  salesAttrHtml += `<div style="font-weight:700;color:#60c8ff;margin-bottom:8px;">📈 店转渗透率偏低（< 16.5%）— 共 ${gtvWeak.length} 人</div>`;
+  if(gtvWeak.length === 0) {
+    salesAttrHtml += `<div style="color:#4ade80;">✅ 全员店转渗透率达标</div>`;
+  } else {
+    gtvWeak.forEach(s => {
+      const gap = ((gtvRateTarget - s[8])*100).toFixed(1);
+      salesAttrHtml += `<div style="padding:8px 12px;margin-bottom:6px;background:#0f1825;border-left:3px solid #fbbf24;border-radius:0 4px 4px 0;">
+        <span style="color:#c0d8f0;font-weight:700;">${s[2]}</span>
+        <span style="color:#4a6a8a;margin:0 6px;">|</span>
+        <span style="color:#8ab0c8;">${s[0]} · ${s[1]}</span>
+        <span style="color:#fbbf24;margin-left:10px;">渗透率 ${(s[8]*100).toFixed(1)}%</span>
+        <span style="color:#f87171;font-size:12px;margin-left:8px;">📌 TODO：差 ${gap}pct，加强核销引导</span>
+      </div>`;
+    });
+  }
+  document.getElementById('zr-attr-sales').innerHTML = salesAttrHtml;
+}
+
+function renderBoard() {
+  const d = BOARD_DATA;
+  document.getElementById('board-upd-time').textContent =
+    `数据截至 ${d.time} · 剩余 ${d.daysLeft} 天`;
+
+  // ── GTV ──
+  let gtvHtml='', total_gtv=0, total_gtv_t=0, total_gtv_y=0;
+  d.ops.forEach((o,i) => {
+    const [name,owner,gm,gt,gy,excl] = o;
+    const p = gm/gt;
+    const gap = Math.round((gt-gm)/d.daysLeft);
+    total_gtv+=gm; total_gtv_t+=gt; total_gtv_y+=gy;
+    gtvHtml += `<tr>
+      <td>${name}</td><td>${owner}</td>
+      <td>${fmtN(gm)}</td><td>${fmtN(gt)}</td>
+      <td>${barHtml(p)}</td>
+      <td class="c-orange">${fmtN(gap)}</td>
+      <td>${fmtN(gy)}</td>
+      <td>${fmtP(excl)}</td>
+    </tr>`;
+  });
+  document.getElementById('gtv-tbody').innerHTML = gtvHtml;
+  const pt = total_gtv/total_gtv_t;
+  const gtot_gap = Math.round((total_gtv_t-total_gtv)/d.daysLeft);
+  document.getElementById('gtv-tfoot').innerHTML = `<tr>
+    <td>合计</td><td>—</td>
+    <td>${fmtN(total_gtv)}</td><td>${fmtN(total_gtv_t)}</td>
+    <td>${barHtml(pt)}</td>
+    <td class="c-orange">${fmtN(gtot_gap)}</td>
+    <td>${fmtN(total_gtv_y)}</td><td>—</td>
+  </tr>`;
+
+  // ── CPC ──
+  let cpcHtml='', total_cpc=0, total_cpc_t=0, total_new=0, total_new_t=0, total_wpu=0;
+  d.ops.forEach(o => {
+    const [name,owner,,,,,cm,ct,cy,nd,nt,wpu] = o;
+    const p = cm/ct;
+    const gap = Math.round((ct-cm)/d.daysLeft);
+    total_cpc+=cm; total_cpc_t+=ct; total_new+=nd; total_new_t+=nt; total_wpu+=wpu;
+    const newGap = nt-nd;
+    const newStr = newGap<=0
+      ? `<span class="c-green">${nd}/${nt} ▲${-newGap}</span>`
+      : `<span class="c-red">${nd}/${nt} ▼${newGap}</span>`;
+    cpcHtml += `<tr>
+      <td>${name}</td><td>${owner}</td>
+      <td>${fmtN(cm)}</td><td>${fmtN(ct)}</td>
+      <td>${barHtml(p)}</td>
+      <td class="c-orange">${fmtN(gap)}</td>
+      <td>${newStr}</td>
+      <td>${fmtN(wpu)}</td>
+    </tr>`;
+  });
+  document.getElementById('cpc-tbody').innerHTML = cpcHtml;
+  const pc = total_cpc/total_cpc_t;
+  const ctot_gap = Math.round((total_cpc_t-total_cpc)/d.daysLeft);
+  const ng = total_new_t-total_new;
+  const newTotStr = ng<=0
+    ? `<span class="c-green">${total_new}/${total_new_t} ▲${-ng}</span>`
+    : `<span class="c-red">${total_new}/${total_new_t} ▼${ng}</span>`;
+  document.getElementById('cpc-tfoot').innerHTML = `<tr>
+    <td>合计</td><td>—</td>
+    <td>${fmtN(total_cpc)}</td><td>${fmtN(total_cpc_t)}</td>
+    <td>${barHtml(pc)}</td>
+    <td class="c-orange">${fmtN(ctot_gap)}</td>
+    <td>${newTotStr}</td>
+    <td>${fmtN(total_wpu)}</td>
+  </tr>`;
+
+  // ── MEM ──
+  let memHtml='', total_mem=0;
+  d.ops.forEach(o => {
+    const [name,owner,,,,,,,,,,,mm,renewal,mom] = o;
+    total_mem+=mm;
+    const rc = renewalClass(renewal);
+    const momStr = mom===null ? '—'
+      : mom>=0 ? `<span class="c-green">▲${fmtP(mom)}</span>`
+               : `<span class="c-red">▼${fmtP(Math.abs(mom))}</span>`;
+    memHtml += `<tr>
+      <td>${name}</td><td>${owner}</td>
+      <td>${fmtN(mm)}</td>
+      <td class="${rc}">${fmtP(renewal)}</td>
+      <td>${momStr}</td>
+    </tr>`;
+  });
+  document.getElementById('mem-tbody').innerHTML = memHtml;
+  document.getElementById('mem-tfoot').innerHTML = `<tr>
+    <td>合计</td><td>—</td>
+    <td>${fmtN(total_mem)}</td>
+    <td class="c-yellow">51.93%</td>
+    <td class="c-green">▲25.25%</td>
+  </tr>`;
+
+  // ── 分析归因 ──
+  renderAnalysis(d);
+}
+
+function renderAnalysis(d) {
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('analysis-time').textContent =
+    `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())} 自动生成`;
+
+  // 计算各指标
+  const ops = d.ops;
+  const daysLeft = d.daysLeft;
+
+  // GTV分析
+  const gtvItems = ops.map(o => ({ name:o[0], owner:o[1], gm:o[2], gt:o[3], gy:o[4], p:o[2]/o[3], gap:Math.round((o[3]-o[2])/daysLeft) }));
+  const gtvTotal = gtvItems.reduce((s,o)=>s+o.gm,0);
+  const gtvTarget = gtvItems.reduce((s,o)=>s+o.gt,0);
+  const gtvP = gtvTotal/gtvTarget;
+  const gtvDayGap = Math.round((gtvTarget-gtvTotal)/daysLeft);
+
+  // CPC分析
+  const cpcItems = ops.map(o => ({ name:o[0], owner:o[1], cm:o[6], ct:o[7], p:o[6]/o[7], nd:o[9], nt:o[10], wpu:o[11] }));
+  const cpcTotal = cpcItems.reduce((s,o)=>s+o.cm,0);
+  const cpcTarget = cpcItems.reduce((s,o)=>s+o.ct,0);
+  const newTotal = cpcItems.reduce((s,o)=>s+o.nd,0);
+  const newTarget = cpcItems.reduce((s,o)=>s+o.nt,0);
+
+  // MEM分析
+  const memItems = ops.map(o => ({ name:o[0], owner:o[1], mm:o[12], renewal:o[13], mom:o[14] }));
+  const renewalRisk = memItems.filter(o => o.renewal < 0.55);
+  const renewalLow  = memItems.filter(o => o.renewal >= 0.55 && o.renewal < 0.70);
+
+  // GTV风险排序（进度最低的）
+  const gtvRisk = [...gtvItems].sort((a,b)=>a.p-b.p);
+  // CPC新签风险
+  const cpcNewRisk = cpcItems.filter(o=>o.nt-o.nd>=3).sort((a,b)=>(b.nt-b.nd)-(a.nt-a.nd));
+
+  let sections = [];
+
+  // ── 1. 总览摘要 ──
+  const gtvStatus = gtvP>=0.90?'good': gtvP>=0.80?'warn':'danger';
+  const daysStr = `剩余${daysLeft}天`;
+  const gtvColor = gtvP>=0.90?'#4ade80':gtvP>=0.80?'#fbbf24':'#f87171';
+  sections.push(`
+  <div class="analysis-summary">
+    <div class="analysis-summary-title">📋 整体进度概览（${d.time} · ${daysStr}）</div>
+    <div class="analysis-summary-grid">
+      <div class="asg-item">
+        <div class="asg-label">GTV月度完成率</div>
+        <div class="asg-val" style="color:${gtvColor}">${fmtP(gtvP)}</div>
+        <div class="asg-sub">日缺口 ${fmtN(gtvDayGap)} 元</div>
+      </div>
+      <div class="asg-item">
+        <div class="asg-label">CPC月度完成率</div>
+        <div class="asg-val" style="color:${pBarColor(cpcTotal/cpcTarget)}">${fmtP(cpcTotal/cpcTarget)}</div>
+        <div class="asg-sub">有效新签 ${newTotal}/${newTarget}，缺${Math.max(0,newTarget-newTotal)}</div>
+      </div>
+      <div class="asg-item">
+        <div class="asg-label">MEM续约率（非全产品）</div>
+        <div class="asg-val" style="color:#fbbf24">51.93%</div>
+        <div class="asg-sub">环比 ▲25.25%</div>
+      </div>
+    </div>
+  </div>`);
+
+  // ── 2. GTV归因分析 ──
+  let gtvAnalysisItems = '';
+
+  // 最落后的
+  const gtvBottom = gtvRisk.slice(0,2);
+  gtvBottom.forEach(o => {
+    const level = o.p<0.80?'danger':'warn';
+    const icon = o.p<0.80?'🔴':'🟡';
+    gtvAnalysisItems += `
+    <div class="analysis-item ${level}">
+      <div class="ai-icon">${icon}</div>
+      <div class="ai-body">
+        <div class="ai-title">${o.name}（${o.owner}）GTV进度偏低 — ${fmtP(o.p)}</div>
+        <div class="ai-desc">
+          累计完成 <b>${fmtN(o.gm)}元</b>，月度目标 <b>${fmtN(o.gt)}元</b>，
+          剩余缺口 <b>${fmtN(o.gt-o.gm)}元</b>，按剩余${daysLeft}天需每日补 <b>${fmtN(o.gap)}元</b>。
+          建议加大高客单价门店拜访频次，优先攻坚大单转化。
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // 超额完成的
+  const gtvTop = [...gtvItems].filter(o=>o.p>=0.90).sort((a,b)=>b.p-a.p).slice(0,1);
+  gtvTop.forEach(o => {
+    gtvAnalysisItems += `
+    <div class="analysis-item good">
+      <div class="ai-icon">🟢</div>
+      <div class="ai-body">
+        <div class="ai-title">${o.name}（${o.owner}）GTV进度领先 — ${fmtP(o.p)}</div>
+        <div class="ai-desc">
+          累计完成 <b>${fmtN(o.gm)}元</b>，目标 <b>${fmtN(o.gt)}元</b>，
+          日均产出 <b>${fmtN(Math.round(o.gm/(28-daysLeft)))}元</b>，
+          可作为标杆经验在城市群内复制推广。
+        </div>
+      </div>
+    </div>`;
+  });
+
+  sections.push(`
+  <div class="analysis-section">
+    <div class="analysis-section-hdr" style="background:#0f1e35;color:#60c8ff;">
+      📊 GTV 归因分析
+    </div>
+    <div class="analysis-section-body">${gtvAnalysisItems}</div>
+  </div>`);
+
+  // ── 3. CPC归因分析 ──
+  let cpcAnalysisItems = '';
+
+  // 新签缺口大的
+  if(cpcNewRisk.length>0) {
+    cpcNewRisk.forEach(o => {
+      const gap = o.nt-o.nd;
+      cpcAnalysisItems += `
+      <div class="analysis-item danger">
+        <div class="ai-icon">🔴</div>
+        <div class="ai-body">
+          <div class="ai-title">${o.name}（${o.owner}）有效新签缺口大 — 已完成${o.nd}/${o.nt}，缺${gap}家</div>
+          <div class="ai-desc">
+            剩余${daysLeft}天需再签 <b>${gap}家</b>，日均需完成 <b>${(gap/daysLeft).toFixed(1)}家/天</b>。
+            建议重点跟进在谈门店，加快合同确认节奏；旺铺通当前 <b>${fmtN(o.wpu)}元</b>，
+            可通过增配旺铺通权益提升新签成功率。
+          </div>
+        </div>
+      </div>`;
+    });
+  }
+
+  // CPC消耗低的
+  const cpcLow = cpcItems.filter(o=>o.p<0.80).sort((a,b)=>a.p-b.p);
+  cpcLow.forEach(o => {
+    cpcAnalysisItems += `
+    <div class="analysis-item warn">
+      <div class="ai-icon">🟡</div>
+      <div class="ai-body">
+        <div class="ai-title">${o.name}（${o.owner}）CPC消耗进度偏慢 — ${fmtP(o.p)}</div>
+        <div class="ai-desc">
+          已消耗 <b>${fmtN(o.cm)}元</b>，目标 <b>${fmtN(o.ct)}元</b>，
+          需关注存量门店推广活跃度，推动门店提升CPC出价或预算，
+          旺铺通当前 <b>${fmtN(o.wpu)}元</b>（占比${fmtP(o.wpu/o.cm)}）。
+        </div>
+      </div>
+    </div>`;
+  });
+
+  if(!cpcAnalysisItems) {
+    cpcAnalysisItems = `<div class="analysis-item good"><div class="ai-icon">🟢</div>
+      <div class="ai-body"><div class="ai-title">CPC整体进展良好</div>
+      <div class="ai-desc">各家消耗进度均在 80% 以上，继续保持当前节奏即可完成月度目标。</div></div></div>`;
+  }
+
+  sections.push(`
+  <div class="analysis-section">
+    <div class="analysis-section-hdr" style="background:#0f201a;color:#4ade80;">
+      📱 CPC 归因分析
+    </div>
+    <div class="analysis-section-body">${cpcAnalysisItems}</div>
+  </div>`);
+
+  // ── 4. MEM归因分析 ──
+  let memAnalysisItems = '';
+
+  renewalRisk.forEach(o => {
+    memAnalysisItems += `
+    <div class="analysis-item danger">
+      <div class="ai-icon">🔴</div>
+      <div class="ai-body">
+        <div class="ai-title">${o.name}（${o.owner}）MEM续约率偏低 — ${fmtP(o.renewal)}</div>
+        <div class="ai-desc">
+          续约率低于 55%，需排查到期未续约门店名单，
+          识别流失原因（价格/产品/满意度），联系门店负责人开展定向续约攻坚。
+          ${o.mom!==null?`环比${o.mom>=0?'▲'+fmtP(o.mom):'▼'+fmtP(Math.abs(o.mom))}，趋势${o.mom>=0?'向好，保持跟进':'下滑，需紧急介入'}。`:''}
+        </div>
+      </div>
+    </div>`;
+  });
+
+  renewalLow.forEach(o => {
+    memAnalysisItems += `
+    <div class="analysis-item warn">
+      <div class="ai-icon">🟡</div>
+      <div class="ai-body">
+        <div class="ai-title">${o.name}（${o.owner}）MEM续约率需关注 — ${fmtP(o.renewal)}</div>
+        <div class="ai-desc">
+          续约率在 55%~70% 区间，建议在月末前开展一轮续约回访，
+          重点关注上月新签门店的首次续约转化情况。
+        </div>
+      </div>
+    </div>`;
+  });
+
+  const renewalGood = memItems.filter(o=>o.renewal>=0.70).sort((a,b)=>b.renewal-a.renewal).slice(0,1);
+  renewalGood.forEach(o => {
+    memAnalysisItems += `
+    <div class="analysis-item good">
+      <div class="ai-icon">🟢</div>
+      <div class="ai-body">
+        <div class="ai-title">${o.name}（${o.owner}）MEM续约率领先 — ${fmtP(o.renewal)}</div>
+        <div class="ai-desc">
+          续约率优秀，收款额 <b>${fmtN(o.mm)}元</b>，
+          运营模式和续约策略可作为城市群内最佳实践推广。
+        </div>
+      </div>
+    </div>`;
+  });
+
+  sections.push(`
+  <div class="analysis-section">
+    <div class="analysis-section-hdr" style="background:#1a1030;color:#c084fc;">
+      💰 MEM 续约归因分析
+    </div>
+    <div class="analysis-section-body">${memAnalysisItems}</div>
+  </div>`);
+
+  // ── 5. 月末冲刺建议 ──
+  const urgentOps = gtvRisk.slice(0,3).map(o=>o.name).join('、');
+  sections.push(`
+  <div class="analysis-section">
+    <div class="analysis-section-hdr" style="background:#1a1500;color:#fbbf24;">
+      🚀 月末冲刺行动建议（剩余${daysLeft}天）
+    </div>
+    <div class="analysis-section-body">
+      <div class="analysis-item info">
+        <div class="ai-icon">📌</div>
+        <div class="ai-body">
+          <div class="ai-title">GTV重点攻坚：${urgentOps}</div>
+          <div class="ai-desc">
+            城市群GTV整体完成率 <b>${fmtP(gtvP)}</b>，日缺口 <b>${fmtN(gtvDayGap)}元</b>。
+            建议重点跟进进度落后代运营商，每日跟进当日进展，
+            聚焦高客单价门店推进签约与消耗。
+          </div>
+        </div>
+      </div>
+      <div class="analysis-item info">
+        <div class="ai-icon">📌</div>
+        <div class="ai-body">
+          <div class="ai-title">新签冲刺：${cpcNewRisk.map(o=>o.name).join('、') || '各家按计划推进'}</div>
+          <div class="ai-desc">
+            有效新签合计 <b>${newTotal}/${newTarget}</b>，尚缺 <b>${Math.max(0,newTarget-newTotal)}家</b>。
+            ${cpcNewRisk.length>0?`重点盯紧 ${cpcNewRisk[0].name}（缺${cpcNewRisk[0].nt-cpcNewRisk[0].nd}家），每日推进在谈门店名单跟进。`:'保持节奏，月底前可完成目标。'}
+          </div>
+        </div>
+      </div>
+      <div class="analysis-item info">
+        <div class="ai-icon">📌</div>
+        <div class="ai-body">
+          <div class="ai-title">MEM续约：月末前完成存量续约收款</div>
+          <div class="ai-desc">
+            续约率偏低代运营商（${renewalRisk.map(o=>o.name).join('、')||'暂无'}）需在月底前完成续约攻坚，
+            确保收款到账；其余代运营商保持续约节奏，月环比整体向好。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`);
+
+  document.getElementById('analysis-body').innerHTML = sections.join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  启动
+// ═══════════════════════════════════════════════════
+window.addEventListener('resize', render);
+render();
+</script>
+</body>
+</html>
