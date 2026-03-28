@@ -351,26 +351,6 @@ canvas#cvs {
   <!-- 核心指标卡片 -->
   <div id="zr-kpi-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;"></div>
 
-  <!-- 城市维度汇总表 -->
-  <div class="btable-wrap">
-    <div class="btitle" style="background:#dbeafe;">🏙️ 城市汇总（今日累计）</div>
-    <table class="btable">
-      <thead>
-        <tr>
-          <th>城市</th>
-          <th>合作门店</th>
-          <th>绑码率</th>
-          <th>月净增绑码</th>
-          <th>日店转订单数</th>
-          <th>昨日店转GTV渗透率</th>
-          <th>月店转GTV渗透率</th>
-        </tr>
-      </thead>
-      <tbody id="zr-city-tbody"></tbody>
-      <tfoot id="zr-city-tfoot"></tfoot>
-    </table>
-  </div>
-
   <!-- 代运营商汇总表 -->
   <div class="btable-wrap" style="margin-top:20px;">
     <div class="btitle" style="background:#eef2f7;">📊 代运营商汇总（今日累计）</div>
@@ -396,7 +376,7 @@ canvas#cvs {
 
   <!-- 销售明细表 -->
   <div class="btable-wrap" style="margin-top:20px;">
-    <div class="btitle" style="background:#eef2f7;">👤 销售明细（按城市分层）</div>
+    <div class="btitle" style="background:#eef2f7;">👤 销售明细（按代运营商分层）</div>
     <table class="btable">
       <thead>
         <tr>
@@ -1190,11 +1170,12 @@ function buildRtData() {
 }
 
 // 色阶
-function zrBindColor(r)  { return r>=0.35?'zr-green':r>=0.25?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
-function zrPaveColor(r)  { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
-function zrDxColor(r)    { return r>=0.55?'zr-green':r>=0.40?'zr-yellow':r>=0.25?'zr-orange':'zr-red'; }
-function zrGtvColor(r)   { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
-function zrIncrColor(n)  { return (n>50)?'zr-green':(n>20)?'zr-yellow':(n>0)?'zr-orange':'zr-red'; }
+function zrBindColor(r)       { return r>=0.35?'zr-green':r>=0.25?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
+function zrPaveColor(r)       { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
+function zrDxColor(r)         { return r>=0.55?'zr-green':r>=0.40?'zr-yellow':r>=0.25?'zr-orange':'zr-red'; }
+function zrGtvColor(r)        { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
+function zrIncrColor(n)       { return (n>10)?'zr-green':(n>5)?'zr-yellow':(n>0)?'zr-orange':'zr-red'; }  // 日净增
+function zrMonthIncrColor(n)  { return (n>200)?'zr-green':(n>100)?'zr-yellow':(n>50)?'zr-orange':'zr-red'; } // 月净增
 
 function renderRtPanel() {
   const d = buildRtData();
@@ -1285,60 +1266,6 @@ function renderZrPanel() {
   const liveMap = {};
   ZR_LIVE.forEach(o => { liveMap[o[0]] = o; });
 
-  let cityRows = '';
-  let cTotalStores=0, cTotalBind=0, cTotalMonthIncr=0;
-  const cities = Object.keys(cityAggMap).sort();
-  cities.forEach(city => {
-    const cd = cityAggMap[city];
-    const bindR = cd.stores>0 ? cd.bind/cd.stores : 0;
-    const monthGtvR = cd.gtvWt>0 ? cd.gtvSum/cd.gtvWt : 0;
-    // 月净增绑码：加总该城市所有代运营商的o[11]
-    let monthIncr = 0;
-    let hasIncr = false;
-    const agencies = cityAgencyMap[city] || new Set();
-    agencies.forEach(ag => {
-      const lo = liveMap[ag];
-      if(lo && lo[11]!=null) { monthIncr += lo[11]; hasIncr = true; }
-    });
-    // 昨日店转GTV渗透率：该城市代运营商o[10]平均值
-    let yRateSum=0, yRateCnt=0;
-    agencies.forEach(ag => {
-      const lo = liveMap[ag];
-      if(lo && lo[10]!=null) { yRateSum += lo[10]; yRateCnt++; }
-    });
-    const yRateAvg = yRateCnt>0 ? yRateSum/yRateCnt : null;
-
-    cTotalStores += cd.stores;
-    cTotalBind   += cd.bind;
-    if(hasIncr) cTotalMonthIncr += monthIncr;
-
-    const incrStr = hasIncr ? `+${monthIncr}` : '—';
-    const incrClass = hasIncr ? zrIncrColor(monthIncr) : '';
-    const yRateStr = yRateAvg!=null ? (yRateAvg*100).toFixed(1)+'%' : '—';
-    const yRateClass = yRateAvg!=null ? zrGtvColor(yRateAvg) : '';
-
-    cityRows += `<tr>
-      <td style="font-weight:700;color:#1a2a3a;">📍 ${city}</td>
-      <td>${cd.stores.toLocaleString()}</td>
-      <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
-      <td class="${incrClass}" style="font-weight:700;">${incrStr}</td>
-      <td style="color:#8a9ab8;">—</td>
-      <td class="${yRateClass}" style="font-weight:700;">${yRateStr}</td>
-      <td class="${zrGtvColor(monthGtvR)}" style="font-weight:700;">${(monthGtvR*100).toFixed(1)}%</td>
-    </tr>`;
-  });
-  document.getElementById('zr-city-tbody').innerHTML = cityRows;
-  const cTotalBindR = cTotalStores>0 ? cTotalBind/cTotalStores : 0;
-  document.getElementById('zr-city-tfoot').innerHTML = `<tr>
-    <td>粤闽浙合计</td>
-    <td>${cTotalStores.toLocaleString()}</td>
-    <td class="${zrBindColor(cTotalBindR)}">${(cTotalBindR*100).toFixed(1)}%</td>
-    <td class="${zrIncrColor(cTotalMonthIncr)}"  style="font-weight:700;">+${cTotalMonthIncr}</td>
-    <td>—</td>
-    <td>—</td>
-    <td class="${zrGtvColor(t.gtv_rate)}">${(t.gtv_rate*100).toFixed(1)}%</td>
-  </tr>`;
-
   // ── 代运营商汇总表 ──
   let rows = '';
   ZR_LIVE.forEach(o => {
@@ -1348,7 +1275,7 @@ function renderZrPanel() {
     const yRate = o[10] != null ? (o[10]*100).toFixed(1)+'%'    : '—';
     const yRateClass = o[10] != null ? zrGtvColor(o[10]) : '';
     const monthIncr = o[11] != null ? `+${o[11]}`  : '—';
-    const monthIncrClass = o[11] != null ? zrIncrColor(o[11]) : '';
+    const monthIncrClass = o[11] != null ? zrMonthIncrColor(o[11]) : '';
     const dayIncr   = o[12] != null ? `+${o[12]}`  : '—';
     rows += `<tr>
       <td style="font-weight:700;color:#1a2a3a;">${o[0]}</td>
@@ -1370,7 +1297,7 @@ function renderZrPanel() {
     <td>${t.stores.toLocaleString()}</td>
     <td class="zr-yellow">${(t.bind/t.stores*100).toFixed(1)}%</td>
     <td style="color:#166534;font-weight:600;">—</td>
-    <td class="${zrIncrColor(totalMonthIncr)}" style="font-weight:700;">+${totalMonthIncr}</td>
+    <td class="${zrMonthIncrColor(totalMonthIncr)}" style="font-weight:700;">+${totalMonthIncr}</td>
     <td>—</td>
     <td style="color:#1976d2;">—</td>
     <td>—</td>
@@ -1378,30 +1305,36 @@ function renderZrPanel() {
     <td class="${zrGtvColor(t.gtv_rate)}">${(t.gtv_rate*100).toFixed(1)}%</td>
   </tr>`;
 
-  // ── 销售明细表（按城市分层）──
+  // ── 销售明细表（按代运营商分层）──
   let salesRows = '';
-  // 按城市分组
-  const salesByCityMap = {};
+  // 按代运营商分组
+  const salesByAgencyMap = {};
+  // 保持ZR_LIVE里的顺序
+  ZR_LIVE.forEach(o => { salesByAgencyMap[o[0]] = []; });
   ZR_SALES.forEach(s => {
-    const city = s[1];
-    if(!salesByCityMap[city]) salesByCityMap[city] = [];
-    salesByCityMap[city].push(s);
+    const ag = s[0];
+    if(!salesByAgencyMap[ag]) salesByAgencyMap[ag] = [];
+    salesByAgencyMap[ag].push(s);
   });
-  // 城市排序（按城市名）
-  const cityOrder = Object.keys(salesByCityMap).sort();
   // 总列数 = 12
   const totalCols = 12;
-  cityOrder.forEach(city => {
-    // 城市标题行
-    salesRows += `<tr><td colspan="${totalCols}" style="background:#dbeafe;color:#1976d2;font-weight:700;text-align:left;padding:8px 14px;">📍 ${city}</td></tr>`;
-    // 该城市销售按月店转GTV渗透率(s[8])升序
-    const ss = salesByCityMap[city].slice().sort((a,b) => a[8]-b[8]);
+  ZR_LIVE.forEach(o => {
+    const ag = o[0];
+    const agSales = salesByAgencyMap[ag] || [];
+    if(agSales.length === 0) return;
+    // 代运营商标题行
+    salesRows += `<tr><td colspan="${totalCols}" style="background:#dbeafe;color:#1976d2;font-weight:700;text-align:left;padding:8px 14px;">🏢 ${ag}</td></tr>`;
+    // 该代运营商销售按月店转GTV渗透率(s[8])升序
+    const ss = agSales.slice().sort((a,b) => a[8]-b[8]);
     ss.forEach(s => {
       const bindR = s[5]>0 ? s[4]/s[5] : 0;
       const gtvR  = s[8];
       const syGtv  = s[9]  != null ? s[9].toLocaleString()       : '—';
       const syRate = s[10] != null ? (s[10]*100).toFixed(1)+'%'  : '—';
       const syRateClass = s[10] != null ? zrGtvColor(s[10]) : '';
+      const mIncrVal = s[11] != null ? s[11] : null;
+      const mIncrStr = mIncrVal!=null ? `+${mIncrVal}` : '—';
+      const mIncrClass = mIncrVal!=null ? zrMonthIncrColor(mIncrVal) : '';
       salesRows += `<tr>
         <td style="color:#7a9ab8;">${s[0]}</td>
         <td style="color:#4a6a8a;">${s[1]}</td>
@@ -1409,12 +1342,12 @@ function renderZrPanel() {
         <td>${s[5].toLocaleString()}</td>
         <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
         <td style="color:#166534;font-weight:600;">—</td>
-        <td style="color:#1976d2;font-weight:600;">—</td>
+        <td class="${mIncrClass}" style="font-weight:700;">${mIncrStr}</td>
         <td style="color:#8a9ab8;">—</td>
         <td style="color:#1976d2;">${syGtv}</td>
-        <td class="${syRateClass}">${syRate}</td>
+        <td class="${syRateClass}" style="font-weight:700;">${syRate}</td>
         <td>${s[3].toLocaleString()}</td>
-        <td class="${zrGtvColor(gtvR)}">${(gtvR*100).toFixed(1)}%</td>
+        <td class="${zrGtvColor(gtvR)}" style="font-weight:700;">${(gtvR*100).toFixed(1)}%</td>
       </tr>`;
     });
   });
