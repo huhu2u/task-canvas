@@ -427,6 +427,7 @@ canvas#cvs {
       <thead><tr>
         <th>代运营商</th>
         <th>今日店转GTV</th>
+        <th>今日GTV占比</th>
         <th>店转订单量</th>
         <th>合作门店</th>
         <th>月店转GTV渗透率</th>
@@ -1324,13 +1325,16 @@ function renderZrRt(d) {
     var orders = o.orders || 0;
     var shops = o.shops || 0;
     var mRate = o.month_rate || 0;
+    var tRate = o.today_rate;
     var avg = o.avg_price || 0;
     // 简化名称
     var name = o.name.replace(/-.*/, '').replace(/市/, '').replace(/乐生活组/, '').trim();
     var rateClass = zrRateColor(mRate);
+    var tRateStr = tRate != null ? tRate.toFixed(1) + '%' : '-';
     tbody += '<tr>' +
       '<td style="font-weight:700;color:#1a2a3a;">' + name + '</td>' +
       '<td style="color:#1976d2;font-weight:700;">¥' + gtv.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
+      '<td style="color:#0891b2;font-weight:600;">' + tRateStr + '</td>' +
       '<td>' + orders.toLocaleString() + '</td>' +
       '<td>' + shops.toLocaleString() + '</td>' +
       '<td class="' + rateClass + '" style="font-weight:700;">' + mRate.toFixed(1) + '%</td>' +
@@ -1341,9 +1345,12 @@ function renderZrRt(d) {
 
   // 合计行
   var totRateClass = zrRateColor(totalMonthRate);
+  var totTRate = tot.today_rate;
+  var totTRateStr = totTRate != null ? totTRate.toFixed(1) + '%' : '-';
   document.getElementById('zrrt-tfoot').innerHTML = '<tr style="font-weight:800;background:#f0f4f8;">' +
     '<td>粤闽浙合计</td>' +
     '<td style="color:#1976d2;">¥' + totalGtv.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
+    '<td style="color:#0891b2;">' + totTRateStr + '</td>' +
     '<td>' + totalOrders.toLocaleString() + '</td>' +
     '<td>' + totalShops.toLocaleString() + '</td>' +
     '<td class="' + totRateClass + '">' + totalMonthRate.toFixed(1) + '%</td>' +
