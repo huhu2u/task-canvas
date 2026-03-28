@@ -402,16 +402,10 @@ canvas#cvs {
   <div style="margin-top:24px;">
     <div style="font-size:15px;font-weight:700;color:#1976d2;margin-bottom:14px;">🔍 归因分析</div>
 
-    <!-- 城市维度归因 -->
-    <div class="btable-wrap" style="margin-bottom:16px;">
-      <div class="btitle" style="background:#eef2f7;">🏙️ 城市维度归因</div>
-      <div id="zr-attr-city" style="padding:14px 16px;font-size:13px;line-height:2;color:#1a2a3a;"></div>
-    </div>
-
-    <!-- 销售维度归因 -->
+    <!-- 代运营商维度归因（下钻销售） -->
     <div class="btable-wrap">
-      <div class="btitle" style="background:#eef2f7;">👤 销售维度归因</div>
-      <div id="zr-attr-sales" style="padding:14px 16px;font-size:13px;line-height:2;color:#1a2a3a;"></div>
+      <div class="btitle" style="background:#eef2f7;">🏢 代运营商归因分析（下钻销售）</div>
+      <div id="zr-attr-agency" style="padding:14px 16px;font-size:13px;line-height:1.8;color:#1a2a3a;"></div>
     </div>
   </div>
 </div>
@@ -1353,104 +1347,92 @@ function renderZrPanel() {
   });
   document.getElementById('zr-sales-tbody').innerHTML = salesRows;
 
-  // ── 归因分析 ──
-  // 按城市分组（从销售数据提取）
-  const cityMap = {};
+  // ── 归因分析（按代运营商，下钻销售）──
+  const bindTarget  = 0.35;
+  const gtvRateTarget = 0.165;
+
+  // 按代运营商分组销售
+  const agencySalesMap = {};
+  ZR_LIVE.forEach(o => { agencySalesMap[o[0]] = []; });
   ZR_SALES.forEach(s => {
-    const city = s[1];
-    if(!cityMap[city]) cityMap[city] = { stores:0, bind:0, gtv:0, gtvRate:[] };
-    cityMap[city].stores += s[5];
-    cityMap[city].bind   += s[4];
-    cityMap[city].gtv    += s[3];
-    cityMap[city].gtvRate.push(s[8]);
+    if(!agencySalesMap[s[0]]) agencySalesMap[s[0]] = [];
+    agencySalesMap[s[0]].push(s);
   });
 
-  // 城市维度归因
-  const bindTarget = 0.35;
-  const gtvRateTarget = 0.165;
-  let cityHtml = `<div style="color:#8a9ab8;margin-bottom:12px;font-size:12px;">数据日期：${ZR_DATE} | 目标：绑码率 ≥35%，店转渗透率 ≥16.5%</div>`;
+  let agencyHtml = `<div style="color:#8a9ab8;margin-bottom:14px;font-size:12px;">
+    数据日期：${ZR_DATE} &nbsp;|&nbsp; 目标：绑码率 ≥35%，店转渗透率 ≥16.5% &nbsp;|&nbsp;
+    重点关注条件：绑码率 &lt;25% 或 渗透率 &lt;16.5%
+  </div>`;
 
-  const cityEntries = Object.entries(cityMap).map(([city, d]) => {
-    const bindR = d.bind / d.stores;
-    const avgGtvR = d.gtvRate.reduce((a,b)=>a+b,0) / d.gtvRate.length;
-    return { city, bindR, avgGtvR, stores: d.stores, bind: d.bind };
-  }).sort((a,b) => a.bindR - b.bindR);
+  ZR_LIVE.forEach(o => {
+    const agName  = o[0];
+    const agBind  = o[2]/o[1];
+    const agGtvR  = o[7];
+    const agBindOk = agBind  >= bindTarget;
+    const agGtvOk  = agGtvR  >= gtvRateTarget;
+    const borderColor = (agBindOk && agGtvOk) ? '#22c55e' : (!agBindOk && !agGtvOk) ? '#ef4444' : '#f97316';
 
-  cityEntries.forEach(c => {
-    const bindOk  = c.bindR  >= bindTarget;
-    const gtvOk   = c.avgGtvR >= gtvRateTarget;
-    const bindTag = bindOk  ? `<span style="color:#166534;">✅ ${(c.bindR*100).toFixed(1)}%</span>`
-                            : `<span style="color:#ef4444;">⚠️ ${(c.bindR*100).toFixed(1)}%（差${((bindTarget-c.bindR)*100).toFixed(1)}pct，需再绑${Math.ceil((bindTarget-c.bindR)*c.stores)}家）</span>`;
-    const gtvTag  = gtvOk   ? `<span style="color:#166534;">✅ ${(c.avgGtvR*100).toFixed(1)}%</span>`
-                            : `<span style="color:#854d0e;">⚠️ ${(c.avgGtvR*100).toFixed(1)}%（差${((gtvRateTarget-c.avgGtvR)*100).toFixed(1)}pct）</span>`;
-    const todos = [];
-    if(!bindOk)  todos.push(`📌 TODO：重点推进 ${c.city} 门店绑码，门店基数 ${c.stores}，当前绑码 ${c.bind}，缺口 ${Math.ceil((bindTarget-c.bindR)*c.stores)} 家`);
-    if(!gtvOk)   todos.push(`📌 TODO：加强 ${c.city} 核销活动引导，提升店转GTV渗透率`);
-    cityHtml += `<div style="margin-bottom:14px;padding:10px 14px;background:#f7f9fc;border:1px solid #e0e6ef;border-left:3px solid ${bindOk&&gtvOk?'#22c55e':'#ef4444'};border-radius:0 6px 6px 0;">
-      <div style="font-weight:700;color:#1a2a3a;margin-bottom:6px;">📍 ${c.city}</div>
-      <div>绑码率：${bindTag}</div>
-      <div>店转渗透率：${gtvTag}</div>
-      ${todos.length ? `<div style="margin-top:8px;color:#854d0e;font-size:12px;">${todos.join('<br>')}</div>` : `<div style="margin-top:6px;color:#166534;font-size:12px;">✅ 两项指标均达标</div>`}
+    const agBindTag = agBindOk
+      ? `<span style="color:#166534;font-weight:700;">✅ ${(agBind*100).toFixed(1)}%</span>`
+      : `<span style="color:#ef4444;font-weight:700;">⚠️ ${(agBind*100).toFixed(1)}%（差${((bindTarget-agBind)*100).toFixed(1)}pct，需再绑${Math.ceil((bindTarget-agBind)*o[1])}家）</span>`;
+    const agGtvTag = agGtvOk
+      ? `<span style="color:#166534;font-weight:700;">✅ ${(agGtvR*100).toFixed(1)}%</span>`
+      : `<span style="color:#854d0e;font-weight:700;">⚠️ ${(agGtvR*100).toFixed(1)}%（差${((gtvRateTarget-agGtvR)*100).toFixed(1)}pct）</span>`;
+
+    // 下钻：该代运营商重点关注销售
+    const salesList = agencySalesMap[agName] || [];
+    const focusSales = salesList.filter(s => {
+      const bindR = s[5]>0 ? s[4]/s[5] : 0;
+      return bindR < 0.25 || s[8] < 0.165;
+    }).map(s => {
+      const bindR = s[5]>0 ? s[4]/s[5] : 0;
+      return { s, bindR, bindLow: bindR<0.25, gtvLow: s[8]<0.165, issues: (bindR<0.25?1:0)+(s[8]<0.165?1:0) };
+    }).sort((a,b) => b.issues - a.issues || a.bindR - b.bindR);
+
+    let salesDrillHtml = '';
+    if(focusSales.length === 0) {
+      salesDrillHtml = `<div style="color:#166534;font-size:12px;padding:6px 0;">✅ 所有销售指标均达标</div>`;
+    } else {
+      focusSales.forEach(item => {
+        const s = item.s;
+        const bc = item.issues >= 2 ? '#ef4444' : '#f97316';
+        let problems = [];
+        if(item.bindLow) {
+          const gap = Math.ceil((0.25-item.bindR)*s[5]);
+          problems.push(`<span style="color:#ef4444;">绑码率 ${(item.bindR*100).toFixed(1)}%（缺${gap}家）</span>`);
+        }
+        if(item.gtvLow) {
+          problems.push(`<span style="color:#854d0e;">店转渗透率 ${(s[8]*100).toFixed(1)}%</span>`);
+        }
+        let solution = '';
+        if(item.bindLow && item.gtvLow) {
+          solution = `上门协助绑码+推核销优惠，目标绑码+${Math.ceil((0.25-item.bindR)*s[5])}家`;
+        } else if(item.bindLow) {
+          solution = `主动上门绑码，目标增加${Math.ceil((0.25-item.bindR)*s[5])}家`;
+        } else {
+          solution = `推送核销优惠，引导门店完成店转`;
+        }
+        salesDrillHtml += `<div style="margin:6px 0 6px 12px;padding:8px 12px;background:#fff;border:1px solid #e0e6ef;border-left:3px solid ${bc};border-radius:0 4px 4px 0;font-size:12px;">
+          <span style="font-weight:700;color:#1a2a3a;">${s[2]}</span>
+          <span style="color:#6a8ab8;margin:0 8px;">${s[1]}</span>
+          <span>${problems.join(' · ')}</span>
+          <div style="color:#4a6a8a;margin-top:3px;">💡 ${solution}</div>
+        </div>`;
+      });
+    }
+
+    agencyHtml += `<div style="margin-bottom:16px;border:1px solid #e0e6ef;border-left:4px solid ${borderColor};border-radius:0 8px 8px 0;overflow:hidden;">
+      <div style="padding:10px 16px;background:#f7f9fc;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <span style="font-weight:700;font-size:14px;color:#1a2a3a;">🏢 ${agName}</span>
+        <span style="font-size:12px;">绑码率：${agBindTag}</span>
+        <span style="font-size:12px;">店转渗透率：${agGtvTag}</span>
+        <span style="font-size:11px;color:#8a9ab8;">合作门店 ${o[1]} | 绑码 ${o[2]}</span>
+      </div>
+      <div style="padding:4px 8px 10px 8px;">${salesDrillHtml}</div>
     </div>`;
   });
-  document.getElementById('zr-attr-city').innerHTML = cityHtml;
 
-  // ── 重点关注人员卡片 ──
-  // 筛选条件：绑码率 < 0.25 或 店转渗透率 < 0.165
-  const focusSales = ZR_SALES.filter(s => {
-    const bindR = s[5]>0 ? s[4]/s[5] : 0;
-    return bindR < 0.25 || s[8] < 0.165;
-  }).map(s => {
-    const bindR = s[5]>0 ? s[4]/s[5] : 0;
-    const bindLow = bindR < 0.25;
-    const gtvLow  = s[8] < 0.165;
-    const issues = (bindLow?1:0) + (gtvLow?1:0);
-    return { s, bindR, bindLow, gtvLow, issues };
-  }).sort((a,b) => {
-    if(b.issues !== a.issues) return b.issues - a.issues;
-    return a.bindR - b.bindR;
-  });
-
-  let salesAttrHtml = `<div style="color:#8a9ab8;margin-bottom:12px;font-size:12px;">筛选条件：绑码率 &lt;25% 或 店转渗透率 &lt;16.5%，按问题数量排序 — 共 ${focusSales.length} 人</div>`;
-
-  if(focusSales.length === 0) {
-    salesAttrHtml += `<div style="color:#166534;padding:12px;">✅ 暂无需要重点关注的销售，所有指标均达标</div>`;
-  } else {
-    focusSales.forEach(item => {
-      const s = item.s;
-      const borderColor = item.issues >= 2 ? '#ef4444' : '#f97316';
-      let problems = '';
-      let idx = 1;
-      if(item.bindLow) {
-        const gap = Math.ceil((0.25 - item.bindR) * s[5]);
-        problems += `<span style="color:#ef4444;">① 绑码率 ${(item.bindR*100).toFixed(1)}%（低于25%）</span>`;
-        idx++;
-      }
-      if(item.gtvLow) {
-        const prefix = idx===1 ? '①' : '②';
-        problems += `${idx>1?' ':''}<span style="color:#854d0e;">${prefix} 店转渗透率 ${(s[8]*100).toFixed(1)}%（低于16.5%）</span>`;
-      }
-      let solution = '';
-      if(item.bindLow && item.gtvLow) {
-        const gap = Math.ceil((0.25 - item.bindR) * s[5]);
-        solution = `主动上门协助绑码，目标增加${gap}家；同步推送核销优惠，引导门店完成店转`;
-      } else if(item.bindLow) {
-        const gap = Math.ceil((0.25 - item.bindR) * s[5]);
-        solution = `主动上门协助绑码，目标增加${gap}家，重点覆盖未绑码高潜门店`;
-      } else {
-        solution = `推送核销优惠活动，引导门店完成店转，提升GTV渗透率至16.5%以上`;
-      }
-      salesAttrHtml += `<div style="padding:12px 16px;margin-bottom:8px;background:#f7f9fc;border:1px solid #e0e6ef;border-left:3px solid ${borderColor};border-radius:0 6px 6px 0;">
-        <div style="margin-bottom:5px;">
-          <span style="color:#1a2a3a;font-weight:700;font-size:14px;">${s[2]}</span>
-          <span style="color:#4a6a8a;margin:0 6px;font-size:12px;">${s[0]} · ${s[1]}</span>
-        </div>
-        <div style="margin-bottom:4px;font-size:12px;">问题：${problems}</div>
-        <div style="font-size:12px;color:#4a6a8a;">方案：${solution}</div>
-      </div>`;
-    });
-  }
-  document.getElementById('zr-attr-sales').innerHTML = salesAttrHtml;
+  document.getElementById('zr-attr-agency').innerHTML = agencyHtml;
 }
 
 function renderBoard() {
