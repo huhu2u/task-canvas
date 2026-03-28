@@ -246,6 +246,7 @@ canvas#cvs {
   <button class="tabn" onclick="switchTab('zrrt')" id="tab-zrrt">⚡ 职人码实时</button>
   <button class="tabn" onclick="switchTab('policy')" id="tab-policy">📋 机制管理</button>
   <button class="tabn" onclick="switchTab('visit')" id="tab-visit">🚶 拜访统计</button>
+  <button class="tabn" onclick="switchTab('strategy')" id="tab-strategy">🎯 核心策略</button>
   <button class="tabn" onclick="switchTab('price')" id="tab-price">💰 价格带分析</button>
 </div>
 
@@ -686,6 +687,141 @@ canvas#cvs {
       <a href="https://apollo.sankuai.com/data/report/list?reportId=848" target="_blank" style="color:#60c8ff;">Apollo 拜访明细报表</a>
     </div>
     <div style="font-size:11px;color:#555;">HC缺口 = HC编制 - 日拜访&gt;4人数（负值=超编，正值=缺口）</div>
+  </div>
+</div>
+
+<!-- 核心策略面板 -->
+<div id="panel-strategy" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:18px;font-weight:700;color:#1976d2;">🎯 核心数据策略</div>
+    <div style="font-size:11px;color:#8a9ab8;">持续更新 · 来源：学城内部文档</div>
+  </div>
+
+  <!-- GTV框架策略 -->
+  <div style="margin-bottom:16px;background:#1a2f40;border-radius:10px;overflow:hidden;">
+    <div style="background:linear-gradient(90deg,#1565c0,#1976d2);padding:12px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none';this.querySelector('.arrow').textContent=this.nextElementSibling.style.display===''?'▼':'▶'">
+      <span style="font-size:16px;">📊</span>
+      <span style="font-weight:700;color:#fff;font-size:14px;">GTV 框架策略</span>
+      <span class="arrow" style="margin-left:auto;color:#90caf9;font-size:11px;">▼</span>
+    </div>
+    <div style="padding:16px;">
+      <div style="font-size:13px;color:#c8d8e8;line-height:2.0;">
+        <div style="color:#ffd060;font-weight:700;margin-bottom:8px;">🎯 核心目标</div>
+        <div>提升<b style="color:#4ade80;">自然店转渗透率</b>，减少对地推/营销活动的依赖。标杆城市目标 <b style="color:#4ade80;">10%+</b>，当前落后城市约 5%。</div>
+        <div style="margin-top:12px;color:#ffd060;font-weight:700;margin-bottom:8px;">🔑 三阶段路径</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div style="background:#0d1f2d;border-radius:6px;padding:10px;border-left:3px solid #f87171;">
+            <div style="color:#f87171;font-weight:700;font-size:12px;">第一阶段</div>
+            <div style="color:#c8d8e8;font-size:12px;margin-top:4px;">亏损打标杆<br>做案例、建信任</div>
+          </div>
+          <div style="background:#0d1f2d;border-radius:6px;padding:10px;border-left:3px solid #ffd060;">
+            <div style="color:#ffd060;font-weight:700;font-size:12px;">第二阶段</div>
+            <div style="color:#c8d8e8;font-size:12px;margin-top:4px;">降资源保本<br>盘点低质换优质</div>
+          </div>
+          <div style="background:#0d1f2d;border-radius:6px;padding:10px;border-left:3px solid #4ade80;">
+            <div style="color:#4ade80;font-weight:700;font-size:12px;">第三阶段</div>
+            <div style="color:#c8d8e8;font-size:12px;margin-top:4px;">持续盈利<br>常态化职人码运营</div>
+          </div>
+        </div>
+        <div style="color:#ffd060;font-weight:700;margin-bottom:8px;">⚙️ 框架执行规则</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#f87171;min-width:16px;">①</span><span>目标达成即返点，<b style="color:#f87171;">未达目标一分不返</b>，必须前置告知商户</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#f87171;min-width:16px;">②</span><span>告知<b style="color:#ffd060;">剔除规则</b>（风控订单不计入），避免后期争议</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#f87171;min-width:16px;">③</span><span>小额框铺开（单店约1万），降低风险，扩大覆盖面</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#f87171;min-width:16px;">④</span><span>超额储备框架用于置换高补贴"烂框"，持续提升框架质量</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#f87171;min-width:16px;">⑤</span><span>高GTV门店必须强制上线<b style="color:#4ade80;">神会员权益</b>，不因商户拒绝就妥协</span></div>
+        </div>
+        <div style="margin-top:10px;color:#ffd060;font-weight:700;margin-bottom:6px;">📌 质量门店判断标准</div>
+        <div>有职人码常态化产出 + 有自然店转沉淀 + 不靠补贴维持GTV</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CPC置换策略 -->
+  <div style="margin-bottom:16px;background:#1a2f40;border-radius:10px;overflow:hidden;">
+    <div style="background:linear-gradient(90deg,#7b1fa2,#9c27b0);padding:12px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none';this.querySelector('.arrow').textContent=this.nextElementSibling.style.display===''?'▼':'▶'">
+      <span style="font-size:16px;">🔁</span>
+      <span style="font-weight:700;color:#fff;font-size:14px;">CPC 置换策略</span>
+      <span class="arrow" style="margin-left:auto;color:#e1bee7;font-size:11px;">▼</span>
+    </div>
+    <div style="padding:16px;">
+      <div style="font-size:13px;color:#c8d8e8;line-height:2.0;">
+        <div style="color:#ffd060;font-weight:700;margin-bottom:8px;">🎯 核心目标</div>
+        <div>用 CPC 资源置换商户的<b style="color:#4ade80;">框架承诺（GTV目标）</b>，实现"花钱买质量"而非"花钱买数字"。</div>
+        <div style="margin-top:12px;color:#ffd060;font-weight:700;margin-bottom:8px;">🔑 置换逻辑</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#e879f9;min-width:16px;">①</span><span>给商户 CPC 资源（如 2%CPC）= 换取商户签约月GTV目标承诺</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#e879f9;min-width:16px;">②</span><span>资源前置讲清：<b style="color:#ffd060;">未达目标CPC返点归零</b>，契约精神优先</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#e879f9;min-width:16px;">③</span><span>代办型CPC：节奏"<b style="color:#4ade80;">前紧后松</b>"，月初拉满避免月底被动充值兜底</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#e879f9;min-width:16px;">④</span><span>有效新签目标：下钻到<b style="color:#4ade80;">单店日消耗进度</b>，提前发现缺口</span></div>
+        </div>
+        <div style="margin-top:12px;color:#ffd060;font-weight:700;margin-bottom:8px;">⚠️ 避坑原则</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#f87171;min-width:16px;">✗</span><span>禁止：CPC + 现金同时叠加补贴（纯亏损无商户沉淀）</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#f87171;min-width:16px;">✗</span><span>禁止：高资源商户无职人码/无神会员产出还持续补贴</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#4ade80;min-width:16px;">✓</span><span>正确：CPC资源集中给<b style="color:#4ade80;">有职人码活跃度</b>的门店</span></div>
+        </div>
+        <div style="margin-top:10px;background:#0d1f2d;border-radius:6px;padding:10px;border-left:3px solid #e879f9;">
+          <div style="color:#e879f9;font-weight:700;font-size:12px;margin-bottom:4px;">🔢 参考比例</div>
+          <div>旺铺通 + CPC 合理配比：单店框架 1~2万目标，CPC资源≤50%（现金资源控制）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEM增量策略 -->
+  <div style="margin-bottom:16px;background:#1a2f40;border-radius:10px;overflow:hidden;">
+    <div style="background:linear-gradient(90deg,#1b5e20,#2e7d32);padding:12px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none';this.querySelector('.arrow').textContent=this.nextElementSibling.style.display===''?'▼':'▶'">
+      <span style="font-size:16px;">💰</span>
+      <span style="font-weight:700;color:#fff;font-size:14px;">MEM 增量策略</span>
+      <span class="arrow" style="margin-left:auto;color:#a5d6a7;font-size:11px;">▼</span>
+    </div>
+    <div style="padding:16px;">
+      <div style="font-size:13px;color:#c8d8e8;line-height:2.0;">
+        <div style="color:#ffd060;font-weight:700;margin-bottom:8px;">🎯 核心目标</div>
+        <div>提升<b style="color:#4ade80;">神会员（MEM）续约率</b>和收款额，当前口径续约率 <b style="color:#ffd060;">49.15%</b>（全产品口径 72.65%）。</div>
+        <div style="margin-top:12px;color:#ffd060;font-weight:700;margin-bottom:8px;">🔑 增量路径</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#4ade80;min-width:16px;">①</span><span><b style="color:#4ade80;">高GTV门店强制上线神会员</b>：不因商户利润顾虑妥协，讲清神会员对客户沉淀的价值</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#4ade80;min-width:16px;">②</span><span><b style="color:#4ade80;">旺铺通开通</b>：配合神会员做客户沉淀，目标每城市组月增20-30家</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#4ade80;min-width:16px;">③</span><span>历史退款问题：过往直营退款不计入代理商MEM业绩，已确认口径</span></div>
+          <div style="display:flex;align-items:flex-start;gap:8px;"><span style="color:#4ade80;min-width:16px;">④</span><span>货架陈列优化：利用AI工具优化门店货架，提升用户感知提升转化</span></div>
+        </div>
+        <div style="margin-top:12px;color:#ffd060;font-weight:700;margin-bottom:8px;">📊 关键数据</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div style="background:#0d1f2d;border-radius:6px;padding:10px;text-align:center;">
+            <div style="color:#4ade80;font-weight:700;font-size:16px;">49.15%</div>
+            <div style="color:#8a9ab8;font-size:11px;margin-top:2px;">月度续约率口径</div>
+          </div>
+          <div style="background:#0d1f2d;border-radius:6px;padding:10px;text-align:center;">
+            <div style="color:#ffd060;font-weight:700;font-size:16px;">72.65%</div>
+            <div style="color:#8a9ab8;font-size:11px;margin-top:2px;">全产品口径（参考）</div>
+          </div>
+          <div style="background:#0d1f2d;border-radius:6px;padding:10px;text-align:center;">
+            <div style="color:#60c8ff;font-weight:700;font-size:16px;">旺铺通</div>
+            <div style="color:#8a9ab8;font-size:11px;margin-top:2px;">增量抓手，每周跟进</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;background:#0d1f2d;border-radius:6px;padding:10px;border-left:3px solid #4ade80;">
+          <div style="color:#4ade80;font-weight:700;font-size:12px;margin-bottom:4px;">⚠️ 注意</div>
+          <div>旺铺通扣款有Bug（导致职人码订单误判），单量少则安抚，单量多可小额补贴，无系统级解法。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 策略总原则 -->
+  <div style="background:#0d1f2d;border-radius:8px;padding:16px;border:1px solid #1976d2;">
+    <div style="font-size:13px;font-weight:700;color:#ffd060;margin-bottom:10px;">🧭 总策略原则（英杰定稿）</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#c8d8e8;">
+      <div style="display:flex;gap:8px;"><span style="color:#60c8ff;font-weight:700;">契约</span><span>目标定多少返多少，未达目标寸步不让，前置讲清剔除规则</span></div>
+      <div style="display:flex;gap:8px;"><span style="color:#60c8ff;font-weight:700;">质量</span><span>高质量 = 有职人码 + 有旺铺通 + 有自然店转，缺一不可</span></div>
+      <div style="display:flex;gap:8px;"><span style="color:#60c8ff;font-weight:700;">盘点</span><span>城市组HC齐后持续盘点，用低资源高质量门店置换劣质门店</span></div>
+      <div style="display:flex;gap:8px;"><span style="color:#60c8ff;font-weight:700;">降本</span><span>阶段性减少资源投入，禁止现金+CPC叠加补贴，避免无底洞</span></div>
+    </div>
+    <div style="margin-top:12px;text-align:right;">
+      <a href="https://km.sankuai.com/page/2753580104" target="_blank" style="font-size:11px;color:#8a9ab8;">📚 来源：3月业绩复盘与4月框架规划会议纪要</a>
+    </div>
   </div>
 </div>
 
@@ -1331,6 +1467,7 @@ function switchTab(t) {
   document.getElementById('panel-zrrt').style.display = t==='zrrt' ? '' : 'none';
   document.getElementById('panel-policy').style.display = t==='policy' ? '' : 'none';
   document.getElementById('panel-visit').style.display = t==='visit' ? '' : 'none';
+  document.getElementById('panel-strategy').style.display = t==='strategy' ? '' : 'none';
   document.getElementById('panel-price').style.display = t==='price' ? '' : 'none';
   if(t==='zrrt') loadZrRt();
   document.querySelectorAll('.tabn').forEach(b => b.classList.remove('active'));
