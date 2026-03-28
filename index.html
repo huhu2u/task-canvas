@@ -427,7 +427,7 @@ canvas#cvs {
       <thead><tr>
         <th>代运营商</th>
         <th>今日店转GTV</th>
-        <th>今日GTV占比</th>
+        <th>今日优惠码实付验证GTV占比</th>
         <th>店转订单量</th>
         <th>合作门店</th>
         <th>月店转GTV渗透率</th>
@@ -504,6 +504,7 @@ const MODULES = [
   { id:'rt',    label:'📈 实时进度看板', color:'#3b82f6' },
   { id:'visit', label:'📋 拜访管理',     color:'#f59e0b' },
   { id:'zr',    label:'🎫 职人码管理',   color:'#a855f7' },
+  { id:'price', label:'💰 超价格带占比', color:'#ef4444' },
 ];
 
 const DEFAULT_TASKS = [
@@ -519,10 +520,14 @@ const DEFAULT_TASKS = [
   { id:'t7', mod:'visit', name:'拜访明细自动分析',      cron:'文件触发',       target:'3264994429', desc:'发xlsx自动生成3Sheet报告',   status:'pending', next:'-' },
   { id:'t8', mod:'visit', name:'每日签到检核播报',      cron:'0 21 * * *',    target:'3264994429', desc:'',                          status:'pending', next:'-' },
   { id:'t9', mod:'visit', name:'周拜访达标预警',        cron:'0 18 * * 5',    target:'3264994429', desc:'',                          status:'pending', next:'-' },
+  // visit - 新增每日拜访分析
+  { id:'tv', mod:'visit', name:'每日拜访分析报告',      cron:'0 9 * * *',     target:'3264994429', desc:'自动抓取并发3Sheet xlsx',    status:'running', next:'明日09:00' },
   // zr
   { id:'ta', mod:'zr',    name:'职人码到期预警',        cron:'0 9 * * *',     target:'3264994429', desc:'提前7天预警',                status:'pending', next:'-' },
   { id:'tb', mod:'zr',    name:'新职人码申请汇总',      cron:'0 10 * * *',    target:'3264994429', desc:'每日10:00播报',              status:'pending', next:'-' },
   { id:'tc', mod:'zr',    name:'职人码使用率周报',      cron:'0 9 * * 1',     target:'3264994429', desc:'周一9:00发送',               status:'pending', next:'-' },
+  // price - 超价格带占比
+  { id:'tp', mod:'price', name:'超价格带占比自动分析',   cron:'0 9 * * *',     target:'3264994429', desc:'从Apollo 864报表自动抓取',  status:'running', next:'明日09:00' },
 ];
 
 function loadTasks() {
@@ -550,7 +555,10 @@ const TOOLS = [
     url:'https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGY3JtLWRhdGEtYnVsbGV0aW4tYm9hcmQlMkZwZXJmb3JtYW5jZS1ib2FyZCUyRmluZGV4Lmh0bWwlMjMlMkZvcGVyYXRlU3RhdHVzJTJGYWRk&pageId=1697177864yq2dyl' },
   { label:'业绩看板·单日',  icon:'📅', desc:'单日业绩进展（GTV/CPC/MEM）', btnLabel:'打开', color:'#f5f3ff', fg:'#5b21b6',
     url:'https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGY3JtLWRhdGEtYnVsbGV0aW4tYm9hcmQlMkZwZXJmb3JtYW5jZS1ib2FyZCUyRmluZGV4Lmh0bWwlMjMlMkZvcGVyYXRlU3RhdHVzJTJGYWRk&pageId=1697177864yq2dyl' },
-  { label:'拜访明细分析',  icon:'📋', desc:'发xlsx自动生成3Sheet报告', btnLabel:'发起分析', color:'#dcfce7', fg:'#166534', url:null },
+  { label:'拜访明细分析',  icon:'📋', desc:'自动抓取并生成3Sheet报告', btnLabel:'打开', color:'#dcfce7', fg:'#166534',
+    url:'https://a.dper.com/gw/smartreport/#/478?_t_=1774714363249&date=%222026-03-27%22&org=%7B%22managerEmployeeId%22%3A%2234178604%22%2C%22level%22%3A2%2C%22levelFromTop%22%3A9%2C%22label%22%3A%22%E9%AB%98%E7%BA%BF%E7%B2%A4%E9%97%BD%E6%B5%99%E5%9F%8E%E5%B8%82%E7%BE%A4%22%2C%22value%22%3A20903327%7D&page=1' },
+  { label:'超价格带报表',  icon:'💰', desc:'Apollo reportId=864', btnLabel:'打开', color:'#fff1f2', fg:'#be123c',
+    url:'https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGZ3clMkZzbWFydHJlcG9ydCUyRiUyMyUyRjg2NCUzRl90XyUzRDE3NzQ3MTUzMjU0MDYlMjZkYXRlJTNEJTI1MjIyMDI2LTAzLTI3JTI1MjIlMjZvcmclM0QlMjU3QiUyNTIybWFuYWdlckVtcGxveWVlSWQlMjUyMiUyNTNBJTI1MjIzNDE3ODYwNCUyNTIyJTI1MkMlMjUyMmxldmVsJTI1MjIlMjUzQTIlMjUyQyUyNTIybGV2ZWxGcm9tVG9wJTI1MjIlMjUzQTklMjUyQyUyNTIybGFiZWwlMjUyMiUyNTNBJTI1MjIlMjVFOSUyNUFCJTI1OTglMjVFNyUyNUJBJTI1QkYlMjVFNyUyNUIyJTI1QTQlMjVFOSUyNTk3JTI1QkQlMjVFNiUyNUI1JTI1OTklMjVFNSUyNTlGJTI1OEUlMjVFNSUyNUI4JTI1ODIlMjVFNyUyNUJFJTI1QTQlMjUyMiUyNTJDJTI1MjJ2YWx1ZSUyNTIyJTI1M0EyMDkwMzMyNyUyNTdEJTI2cGFnZSUzRDE%3D&pageId=apollo.gw.smartreport.864' },
   { label:'看板生成器',    icon:'📊', desc:'立即生成并发送进度看板', btnLabel:'立即生成', color:'#fef9c3', fg:'#854d0e', url:null },
   { label:'任务管理',      icon:'📅', desc:'查看所有/停止定时任务', btnLabel:'查看所有', color:'#f0f4f8', fg:'#4a6a8a', url:null },
 ];
