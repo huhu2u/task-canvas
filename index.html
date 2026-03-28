@@ -310,22 +310,16 @@ canvas#cvs {
       <thead>
         <tr>
           <th rowspan="2" style="vertical-align:middle;">代运营商</th>
-          <th colspan="6" style="border-bottom:1px solid #2a3a5a;color:#60c8ff;">GTV（元）</th>
-          <th colspan="6" style="border-bottom:1px solid #2a3a5a;color:#4ade80;">CPC（元）</th>
+          <th colspan="3" style="border-bottom:1px solid #2a3a5a;color:#60c8ff;">GTV（元）</th>
+          <th colspan="3" style="border-bottom:1px solid #2a3a5a;color:#4ade80;">CPC（元）</th>
         </tr>
         <tr>
           <th style="color:#60c8ff;">日目标</th>
           <th style="color:#60c8ff;">今日</th>
-          <th style="color:#60c8ff;">昨日</th>
-          <th style="color:#60c8ff;">日环比</th>
           <th style="color:#60c8ff;">完成率</th>
-          <th style="color:#60c8ff;">缺口</th>
           <th style="color:#4ade80;">日目标</th>
           <th style="color:#4ade80;">今日</th>
-          <th style="color:#4ade80;">昨日</th>
-          <th style="color:#4ade80;">日环比</th>
           <th style="color:#4ade80;">完成率</th>
-          <th style="color:#4ade80;">缺口</th>
         </tr>
       </thead>
       <tbody id="rt-tbody"></tbody>
@@ -333,7 +327,7 @@ canvas#cvs {
     </table>
   </div>
   <div style="margin-top:10px;font-size:11px;color:#4a6a8a;padding:8px 12px;background:#0f1825;border-radius:6px;">
-    完成率：<span style="color:#4ade80;">■</span> ≥100%&nbsp;&nbsp;<span style="color:#fbbf24;">■</span> 60-99%&nbsp;&nbsp;<span style="color:#f87171;">■</span> &lt;60%&nbsp;&nbsp;|&nbsp;&nbsp;缺口 = 今日实时 - 日目标&nbsp;&nbsp;|&nbsp;&nbsp;数据来源：Apollo，每半小时更新
+    完成率：<span style="color:#4ade80;">■</span> ≥100%&nbsp;&nbsp;<span style="color:#fbbf24;">■</span> 60-99%&nbsp;&nbsp;<span style="color:#f87171;">■</span> &lt;60%&nbsp;&nbsp;|&nbsp;&nbsp;数据来源：Apollo，每半小时更新
   </div>
 </div>
 
@@ -1210,25 +1204,19 @@ function renderRtPanel() {
   }
 
   let rows = '';
-  let tGtvT=0, tGtvNow=0, tGtvY=0, tCpcT=0, tCpcNow=0, tCpcY=0;
+  let tGtvT=0, tGtvNow=0, tCpcT=0, tCpcNow=0;
   d.ops.forEach(o => {
     const [name, gtvT, gtvNow, gtvY, cpcT, cpcNow, cpcY] = o;
-    tGtvT+=gtvT; tGtvNow+=gtvNow; tGtvY+=gtvY;
-    tCpcT+=cpcT; tCpcNow+=cpcNow; tCpcY+=cpcY;
+    tGtvT+=gtvT; tGtvNow+=gtvNow;
+    tCpcT+=cpcT; tCpcNow+=cpcNow;
     rows += `<tr>
       <td style="font-weight:700;color:#e0e6f0;">${name}</td>
       <td style="color:#60c8ff;">${fmtK(gtvT)}</td>
       <td style="color:#e0e6f0;font-weight:600;">${fmtK(gtvNow)}</td>
-      <td style="color:#8a9ab8;">${fmtK(gtvY)}</td>
-      <td>${momBadge(gtvNow,gtvY)}</td>
       <td>${rateBadge(gtvNow/gtvT)}</td>
-      <td>${gapCell(gtvNow,gtvT)}</td>
       <td style="color:#4ade80;">${fmtK(cpcT)}</td>
       <td style="color:#e0e6f0;font-weight:600;">${fmtK(cpcNow)}</td>
-      <td style="color:#8a9ab8;">${fmtK(cpcY)}</td>
-      <td>${momBadge(cpcNow,cpcY)}</td>
       <td>${rateBadge(cpcNow/cpcT)}</td>
-      <td>${gapCell(cpcNow,cpcT)}</td>
     </tr>`;
   });
   document.getElementById('rt-tbody').innerHTML = rows;
@@ -1236,16 +1224,10 @@ function renderRtPanel() {
     <td>合计</td>
     <td style="color:#60c8ff;">${fmtK(tGtvT)}</td>
     <td>${fmtK(tGtvNow)}</td>
-    <td style="color:#8a9ab8;">${fmtK(tGtvY)}</td>
-    <td>${momBadge(tGtvNow,tGtvY)}</td>
     <td>${rateBadge(tGtvNow/tGtvT)}</td>
-    <td>${gapCell(tGtvNow,tGtvT)}</td>
     <td style="color:#4ade80;">${fmtK(tCpcT)}</td>
     <td>${fmtK(tCpcNow)}</td>
-    <td style="color:#8a9ab8;">${fmtK(tCpcY)}</td>
-    <td>${momBadge(tCpcNow,tCpcY)}</td>
     <td>${rateBadge(tCpcNow/tCpcT)}</td>
-    <td>${gapCell(tCpcNow,tCpcT)}</td>
   </tr>`;
 }
 
