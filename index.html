@@ -903,11 +903,12 @@ canvas#cvs {
 //  数据层
 // ═══════════════════════════════════════════════════
 const MODULES = [
-  { id:'kpi',   label:'🏆 核心业绩播报', color:'#22c55e' },
-  { id:'rt',    label:'📈 实时进度看板', color:'#3b82f6' },
-  { id:'visit', label:'📋 拜访管理',     color:'#f59e0b' },
-  { id:'zr',    label:'🎫 职人码管理',   color:'#a855f7' },
-  { id:'price', label:'💰 超价格带占比', color:'#ef4444' },
+  { id:'kpi',      label:'🏆 核心业绩播报', color:'#22c55e' },
+  { id:'rt',       label:'📈 实时进度看板', color:'#3b82f6' },
+  { id:'visit',    label:'📋 拜访管理',     color:'#f59e0b' },
+  { id:'zr',       label:'🎫 职人码管理',   color:'#a855f7' },
+  { id:'strategy', label:'🎯 策略知识库',   color:'#06b6d4' },
+  { id:'price',    label:'💰 超价格带占比', color:'#ef4444' },
 ];
 
 const DEFAULT_TASKS = [
@@ -930,7 +931,10 @@ const DEFAULT_TASKS = [
   { id:'tb', mod:'zr',    name:'新职人码申请汇总',      cron:'0 10 * * *',    target:'3264994429', desc:'每日10:00播报',              status:'pending', next:'-' },
   { id:'tc', mod:'zr',    name:'职人码使用率周报',      cron:'0 9 * * 1',     target:'3264994429', desc:'周一9:00发送',               status:'pending', next:'-' },
   // price - 超价格带占比
-  { id:'tp', mod:'price', name:'超价格带占比自动分析',   cron:'0 9 * * *',     target:'3264994429', desc:'从Apollo 864报表自动抓取',  status:'running', next:'明日09:00' },
+  { id:'tp', mod:'price',    name:'超价格带占比自动分析', cron:'0 9 * * *',    target:'3264994429', desc:'从Apollo 864报表自动抓取',     status:'running', next:'明日09:00' },
+  // strategy - 策略知识库持续学习
+  { id:'ts1', mod:'strategy', name:'每周策略学习更新',   cron:'0 9 * * 1',    target:'3264994429', desc:'读学城最新会议纪要/弹药库文档，同步更新核心策略Tab', status:'running', next:'下周一09:00' },
+  { id:'ts2', mod:'strategy', name:'月度策略复盘沉淀',   cron:'0 10 1 * *',   target:'3264994429', desc:'每月1日读取上月复盘会议纪要，更新三大策略',         status:'running', next:'4月1日10:00' },
 ];
 
 function loadTasks() {
@@ -1251,7 +1255,7 @@ function render() {
   y = drawQuickBar(y);
 
   // 模块卡片（2列 x 2行）
-  const modOrder = [['kpi','rt'],['visit','zr']];
+  const modOrder = [['kpi','rt'],['visit','zr'],['strategy','price']];
   modOrder.forEach(row => {
     let maxH = 0;
     row.forEach((modId, col) => {
