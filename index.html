@@ -244,6 +244,7 @@ canvas#cvs {
   <button class="tabn" onclick="switchTab('rt')" id="tab-rt">📈 实时业绩进展</button>
   <button class="tabn" onclick="switchTab('zr')" id="tab-zr">🎫 职人码看板</button>
   <button class="tabn" onclick="switchTab('zrrt')" id="tab-zrrt">⚡ 职人码实时</button>
+  <button class="tabn" onclick="switchTab('policy')" id="tab-policy">📋 机制管理</button>
   <button class="tabn" onclick="switchTab('visit')" id="tab-visit">🚶 拜访统计</button>
   <button class="tabn" onclick="switchTab('price')" id="tab-price">💰 价格带分析</button>
 </div>
@@ -442,6 +443,185 @@ canvas#cvs {
   <div style="margin-top:12px;font-size:11px;color:#8a9ab8;text-align:right;">
     数据来源：Apollo 策略数据 · 自动刷新 30 分钟 · 下次刷新：<span id="zrrt-next-refresh">—</span>
   </div>
+</div>
+
+<!-- 机制管理面板 -->
+<div id="panel-policy" style="display:none; padding:20px 24px;">
+<!-- 机制管理面板内容 -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+  <div style="font-size:18px;font-weight:700;color:#1976d2;">📋 粤闽浙城市群管理机制</div>
+  <div style="font-size:12px;color:#8a9ab8;">基于《粤闽浙销售拜访机制》整理 · 适用代运营商及销售团队</div>
+</div>
+
+<!-- 快捷跳转 -->
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+  <a href="https://km.sankuai.com/collabpage/2751720449" target="_blank"
+     style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1a2f40;border:1px solid #1976d2;border-radius:6px;color:#60c8ff;text-decoration:none;font-size:13px;">
+    📄 粤闽浙销售拜访机制
+  </a>
+  <a href="https://apollo.sankuai.com" target="_blank"
+     style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1a2f40;border:1px solid #555;border-radius:6px;color:#c8d8e8;text-decoration:none;font-size:13px;">
+    🔗 Apollo拜访看板
+  </a>
+</div>
+
+<!-- 一、拜访考核机制 -->
+<div style="background:#0f1825;border-radius:8px;border-left:4px solid #1976d2;padding:18px;margin-bottom:14px;">
+  <div style="font-size:15px;font-weight:700;color:#ffd060;margin-bottom:12px;">📍 一、拜访考核机制</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:12px;color:#8a9ab8;margin-bottom:6px;">频次要求</div>
+      <div style="font-size:13px;color:#e0e8f0;line-height:1.8;">
+        • 普通城市：每日有效拜访 <b style="color:#4ade80">≥ 6 次</b><br>
+        • 新城（开拓期）：每日有效拜访 <b style="color:#4ade80">≥ 8 次</b><br>
+        • 与奖金系数强挂钩
+      </div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:12px;color:#8a9ab8;margin-bottom:6px;">签到要求</div>
+      <div style="font-size:13px;color:#e0e8f0;line-height:1.8;">
+        • 签到率：<b style="color:#f87171">100%（强制）</b><br>
+        • 无签到录入的拜访 = 虚假拜访<br>
+        • 500米内有效签到
+      </div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:12px;color:#8a9ab8;margin-bottom:6px;">过程追踪</div>
+      <div style="font-size:13px;color:#e0e8f0;line-height:1.8;">
+        • 操盘手每日 <b style="color:#ffd060">14:00 / 16:00 / 18:00</b><br>
+        &nbsp;&nbsp;查看 Apollo 拜访看板<br>
+        • 实时监控覆盖数量和明细
+      </div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:12px;color:#8a9ab8;margin-bottom:6px;">质量评估</div>
+      <div style="font-size:13px;color:#e0e8f0;line-height:1.8;">
+        • KP洽谈有效动作<br>
+        • 物料铺设完成情况<br>
+        • 数据提升（绑码/GTV）
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 二、奖金挂钩机制 -->
+<div style="background:#0f1825;border-radius:8px;border-left:4px solid #4ade80;padding:18px;margin-bottom:14px;">
+  <div style="font-size:15px;font-weight:700;color:#ffd060;margin-bottom:12px;">💰 二、奖金系数挂钩机制（代运营商适用）</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px;">
+    <thead>
+      <tr style="background:#1a2f40;">
+        <th style="padding:10px;text-align:left;color:#8a9ab8;border-bottom:1px solid #2a3f55;">维度</th>
+        <th style="padding:10px;text-align:center;color:#8a9ab8;border-bottom:1px solid #2a3f55;">达标标准</th>
+        <th style="padding:10px;text-align:center;color:#4ade80;border-bottom:1px solid #2a3f55;">系数加成</th>
+        <th style="padding:10px;text-align:center;color:#f87171;border-bottom:1px solid #2a3f55;">未达标扣减</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #1a2f40;">
+        <td style="padding:10px;color:#c8d8e8;">拜访量达标天数</td>
+        <td style="padding:10px;text-align:center;color:#e0e8f0;">月有效拜访≥4次天数 ≥ 20天</td>
+        <td style="padding:10px;text-align:center;color:#4ade80;">+20%</td>
+        <td style="padding:10px;text-align:center;color:#f87171;">&lt;15天 扣20%</td>
+      </tr>
+      <tr style="border-bottom:1px solid #1a2f40;background:#0d1522;">
+        <td style="padding:10px;color:#c8d8e8;">职人码绑码率</td>
+        <td style="padding:10px;text-align:center;color:#e0e8f0;">绑码率 ≥ 35%</td>
+        <td style="padding:10px;text-align:center;color:#4ade80;">+15%</td>
+        <td style="padding:10px;text-align:center;color:#f87171;">&lt;20% 扣15%</td>
+      </tr>
+      <tr style="border-bottom:1px solid #1a2f40;">
+        <td style="padding:10px;color:#c8d8e8;">店转GTV渗透率</td>
+        <td style="padding:10px;text-align:center;color:#e0e8f0;">月店转GTV渗透率 ≥ 30%</td>
+        <td style="padding:10px;text-align:center;color:#4ade80;">+20%</td>
+        <td style="padding:10px;text-align:center;color:#f87171;">&lt;20% 扣20%</td>
+      </tr>
+      <tr style="background:#0d1522;">
+        <td style="padding:10px;color:#c8d8e8;">签到合规率</td>
+        <td style="padding:10px;text-align:center;color:#e0e8f0;">签到率 = 100%</td>
+        <td style="padding:10px;text-align:center;color:#4ade80;">—</td>
+        <td style="padding:10px;text-align:center;color:#f87171;">每次虚假拜访 -500元</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:10px;font-size:11px;color:#8a9ab8;">⚠️ 以上系数为参考方向，最终以当月正式通知为准</div>
+</div>
+
+<!-- 三、城市公约 -->
+<div style="background:#0f1825;border-radius:8px;border-left:4px solid #ffd060;padding:18px;margin-bottom:14px;">
+  <div style="font-size:15px;font-weight:700;color:#ffd060;margin-bottom:12px;">🤝 三、城市公约（代运营商共识）</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="color:#60c8ff;font-weight:700;margin-bottom:8px;">📌 每日行前准备</div>
+      <div style="color:#c8d8e8;line-height:1.8;">
+        • 通过 Apollo/wiki 梳理今日拜访计划<br>
+        • 明确每家门店需拿回的结果<br>
+        • 职人码绑码率目标：<b style="color:#ffd060">60%</b><br>
+        • 重点关注：旺铺通/经营评分/CPC
+      </div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="color:#60c8ff;font-weight:700;margin-bottom:8px;">🌙 每日晚会复盘</div>
+      <div style="color:#c8d8e8;line-height:1.8;">
+        • 复盘当日拜访完成情况<br>
+        • 总结问题 → 优化次日策略<br>
+        • 操盘手抽查拜访记录<br>
+        • 未完成目标需提交说明
+      </div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="color:#60c8ff;font-weight:700;margin-bottom:8px;">📊 职人码核心指标</div>
+      <div style="color:#c8d8e8;line-height:1.8;">
+        • 绑码率基准线：<b style="color:#4ade80">25%~35%</b><br>
+        • 日拜访绑码率目标：<b style="color:#4ade80">60%</b><br>
+        • 每次拜访必须透传权益
+      </div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="color:#60c8ff;font-weight:700;margin-bottom:8px;">🔄 店转标准路径</div>
+      <div style="color:#c8d8e8;line-height:1.8;">
+        • 当天完成KP沟通确认意向<br>
+        • 建立专项微信群跟进<br>
+        • 快速签协议，立即拆解日/周目标<br>
+        • 框架质量：费率/风控/客单价健康
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 四、虚假拜访处理 -->
+<div style="background:#1a0000;border-radius:8px;border-left:4px solid #f87171;padding:18px;margin-bottom:14px;">
+  <div style="font-size:15px;font-weight:700;color:#f87171;margin-bottom:10px;">🚫 四、违规处理标准</div>
+  <div style="font-size:13px;color:#e0e8f0;line-height:2;">
+    • <b>虚假拜访</b>（无签到录入）：每次扣罚 500 元，记录在案<br>
+    • <b>连续3日拜访量&lt;4次</b>：操盘手发警告，当月奖金系数降档<br>
+    • <b>月签到率&lt;95%</b>：次月重点关注名单，暂停资源倾斜<br>
+    • <b>绑码率连续2月&lt;20%</b>：启动代运营商评估程序
+  </div>
+</div>
+
+<!-- 五、关键数据看板 -->
+<div style="background:#0f1825;border-radius:8px;border-left:4px solid #60c8ff;padding:18px;">
+  <div style="font-size:15px;font-weight:700;color:#ffd060;margin-bottom:12px;">📊 五、关键指标基准线</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:22px;font-weight:700;color:#4ade80;">6次</div>
+      <div style="font-size:12px;color:#8a9ab8;margin-top:4px;">日有效拜访目标</div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:22px;font-weight:700;color:#ffd060;">35%</div>
+      <div style="font-size:12px;color:#8a9ab8;margin-top:4px;">职人码绑码率目标</div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:22px;font-weight:700;color:#60c8ff;">30%</div>
+      <div style="font-size:12px;color:#8a9ab8;margin-top:4px;">月店转GTV渗透率</div>
+    </div>
+    <div style="background:#1a2f40;border-radius:6px;padding:14px;">
+      <div style="font-size:22px;font-weight:700;color:#f87171;">100%</div>
+      <div style="font-size:12px;color:#8a9ab8;margin-top:4px;">拜访签到率要求</div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <!-- 拜访统计面板 -->
@@ -1124,6 +1304,7 @@ function switchTab(t) {
   document.getElementById('panel-rt').style.display = t==='rt' ? '' : 'none';
   document.getElementById('panel-zr').style.display = t==='zr' ? '' : 'none';
   document.getElementById('panel-zrrt').style.display = t==='zrrt' ? '' : 'none';
+  document.getElementById('panel-policy').style.display = t==='policy' ? '' : 'none';
   document.getElementById('panel-visit').style.display = t==='visit' ? '' : 'none';
   document.getElementById('panel-price').style.display = t==='price' ? '' : 'none';
   if(t==='zrrt') loadZrRt();
