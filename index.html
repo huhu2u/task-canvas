@@ -6,32 +6,32 @@
 <title>粤闽浙渠道 任务管理中心</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { background:#0d1117; color:#e0e6f0; font-family:'PingFang SC','Microsoft YaHei',sans-serif; overflow-x:hidden; }
+body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft YaHei',sans-serif; overflow-x:hidden; }
 
 /* ── 顶部 ── */
 #topbar {
-  background:linear-gradient(90deg,#0f1923 0%,#1a2540 100%);
-  border-bottom:1px solid #1e3050;
+  background:linear-gradient(90deg,#ffffff 0%,#eef2f7 100%);
+  border-bottom:1px solid #e0e6ef;
   height:52px; display:flex; align-items:center; justify-content:space-between;
   padding:0 20px; position:sticky; top:0; z-index:100;
 }
 #topbar-left { display:flex; flex-direction:column; }
-#topbar-title { font-size:17px; font-weight:700; color:#ffd060; letter-spacing:.5px; }
+#topbar-title { font-size:17px; font-weight:700; color:#1976d2; letter-spacing:.5px; }
 #topbar-sub { font-size:11px; color:#4a6a8a; margin-top:1px; }
 #topbar-right { text-align:right; }
-#clock { font-size:20px; font-weight:700; color:#60c8ff; font-variant-numeric:tabular-nums; }
+#clock { font-size:20px; font-weight:700; color:#1976d2; font-variant-numeric:tabular-nums; }
 #clockdate { font-size:10px; color:#4a6a8a; margin-top:1px; }
 
 /* ── 状态栏 ── */
 #statusbar {
-  background:#0f1923; border-bottom:1px solid #1a2840;
+  background:#f7f9fc; border-bottom:1px solid #e0e6ef;
   height:34px; display:flex; align-items:center; padding:0 18px; gap:16px; overflow-x:auto;
 }
-.si { display:flex; align-items:center; gap:5px; font-size:11px; color:#6a8aaa; white-space:nowrap; }
-.si-val { color:#e0e6f0; font-weight:600; }
-.si-hi { color:#ffd060; font-weight:700; }
-.si-danger { color:#f87171; font-weight:700; }
-.si-div { width:1px; height:12px; background:#1e3050; flex-shrink:0; }
+.si { display:flex; align-items:center; gap:5px; font-size:11px; color:#4a6a8a; white-space:nowrap; }
+.si-val { color:#1a2a3a; font-weight:600; }
+.si-hi { color:#1976d2; font-weight:700; }
+.si-danger { color:#ef4444; font-weight:700; }
+.si-div { width:1px; height:12px; background:#d0d8e8; flex-shrink:0; }
 .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
 .dg { background:#22c55e; box-shadow:0 0 4px #22c55e80; }
 .dy { background:#f59e0b; }
@@ -53,154 +53,161 @@ canvas#cvs {
 /* ── 悬浮面板（编辑/新建） ── */
 .overlay {
   display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,0.65); z-index:200;
+  background:rgba(0,0,0,0.35); z-index:200;
   align-items:center; justify-content:center;
 }
 .overlay.show { display:flex; }
 .panel {
-  background:#131c2e; border:1px solid #2a3a5a;
+  background:#ffffff; border:1px solid #d0d8e8;
   border-radius:12px; padding:24px; width:460px; max-width:95vw;
-  box-shadow:0 8px 40px rgba(0,0,0,0.6);
+  box-shadow:0 8px 40px rgba(0,0,0,0.15);
 }
-.panel-title { font-size:15px; font-weight:700; color:#ffd060; margin-bottom:16px; }
+.panel-title { font-size:15px; font-weight:700; color:#1976d2; margin-bottom:16px; }
 .fg { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
-.fl { font-size:11px; color:#7a9aba; }
+.fl { font-size:11px; color:#4a6a8a; }
 .fi, .fsel, .fta {
-  background:#0d1117; border:1px solid #2a3a5a; border-radius:6px;
-  color:#e0e6f0; padding:7px 10px; font-size:13px; font-family:inherit;
+  background:#f0f4f8; border:1px solid #d0d8e8; border-radius:6px;
+  color:#1a2a3a; padding:7px 10px; font-size:13px; font-family:inherit;
 }
 .fta { resize:vertical; min-height:60px; }
-.fi:focus,.fsel:focus,.fta:focus { outline:none; border-color:#3b82f6; }
+.fi:focus,.fsel:focus,.fta:focus { outline:none; border-color:#1976d2; }
 .pacts { display:flex; gap:8px; justify-content:flex-end; margin-top:6px; }
 .pbtn {
   padding:6px 16px; border-radius:6px; border:none;
   font-size:12px; font-weight:600; cursor:pointer; font-family:inherit;
 }
-.pbtn-ok { background:#1e3a5f; color:#60c8ff; }
-.pbtn-ok:hover { background:#2a4a7f; }
-.pbtn-save { background:#14372a; color:#4ade80; }
-.pbtn-save:hover { background:#1a4a35; }
-.pbtn-cancel { background:#1a2236; color:#8a9ab8; }
-.pbtn-cancel:hover { background:#222c42; }
-.pbtn-danger { background:#3a1a1a; color:#f87171; }
-.pbtn-danger:hover { background:#4a2020; }
+.pbtn-ok { background:#1976d2; color:#ffffff; }
+.pbtn-ok:hover { background:#1565b8; }
+.pbtn-save { background:#dcfce7; color:#166534; border:1px solid #bbf7d0; }
+.pbtn-save:hover { background:#bbf7d0; }
+.pbtn-cancel { background:#f0f4f8; color:#4a6a8a; border:1px solid #d0d8e8; }
+.pbtn-cancel:hover { background:#e3eaf5; }
+.pbtn-danger { background:#fee2e2; color:#991b1b; border:1px solid #fecaca; }
+.pbtn-danger:hover { background:#fecaca; }
 
 /* ── Tab Nav ── */
 #tabnav {
-  background:#0f1923; border-bottom:1px solid #1a2840;
-  display:flex; padding:0 18px; gap:4px;
+  background:#ffffff; border-bottom:1px solid #e0e6ef;
+  display:flex; padding:0 18px; gap:4px; align-items:flex-end;
 }
 .tabn {
-  background:none; border:none; border-bottom:2px solid transparent;
-  color:#6a8aaa; font-size:13px; font-weight:600; font-family:inherit;
-  padding:9px 18px; cursor:pointer; transition:all .2s;
+  background:#f0f4f8; border:1px solid #d0d8e8; border-bottom:none; border-radius:4px 4px 0 0;
+  color:#4a6a8a; font-size:13px; font-weight:600; font-family:inherit;
+  padding:9px 18px; cursor:pointer; transition:all .2s; margin-bottom:-1px;
 }
-.tabn:hover { color:#e0e6f0; }
-.tabn.active { color:#ffd060; border-bottom-color:#ffd060; }
+.tabn:hover { background:#e3eaf5; color:#1a2a3a; }
+.tabn.active { background:#1976d2; color:#ffffff; border-color:#1976d2; }
+
 
 /* ── 业绩进度表 ── */
-.btable-wrap { border-radius:8px; overflow:hidden; border:1px solid #1e2d45; }
+.btable-wrap { border-radius:8px; overflow:hidden; border:1px solid #d0d8e8; }
 .btitle {
-  padding:10px 16px; font-size:13px; font-weight:700; color:#fff;
-  letter-spacing:.3px;
+  padding:10px 16px; font-size:13px; font-weight:700; color:#2a4a6a;
+  letter-spacing:.3px; background:#eef2f7; border-bottom:1px solid #d0d8e8;
 }
 .btable {
   width:100%; border-collapse:collapse; font-size:13px;
-  background:#0d1117;
+  background:#ffffff;
 }
-.btable thead tr { background:#131c2e; }
+.btable thead tr { background:#eef2f7; }
 .btable th {
-  padding:8px 12px; text-align:center; color:#8a9ab8;
-  font-weight:600; font-size:12px; border-bottom:1px solid #1e2d45;
+  padding:8px 12px; text-align:center; color:#2a4a6a;
+  font-weight:600; font-size:12px; border-bottom:1px solid #d0d8e8;
 }
-.btable tbody tr:nth-child(odd)  { background:#0f1825; }
-.btable tbody tr:nth-child(even) { background:#131c2e; }
+.btable tbody tr:nth-child(odd)  { background:#ffffff; }
+.btable tbody tr:nth-child(even) { background:#f7f9fc; }
 .btable td {
-  padding:9px 12px; text-align:center; color:#e0e6f0;
-  border-bottom:1px solid #151f30;
+  padding:9px 12px; text-align:center; color:#1a2a3a;
+  border-bottom:1px solid #e8edf5;
 }
-.btable tfoot tr { background:#1a2a40; }
+.btable tfoot tr { background:#eef2f7; }
 .btable tfoot td {
   padding:9px 12px; text-align:center;
-  font-weight:700; color:#ffd060;
-  border-top:1px solid #2a3a5a;
+  font-weight:700; color:#2a4a6a;
+  border-top:1px solid #d0d8e8;
 }
 .bbar-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; }
 .bbar-pct { font-size:12px; font-weight:700; }
-.bbar { height:10px; background:#1e2d45; border-radius:5px; width:120px; overflow:hidden; }
+.bbar { height:10px; background:#e0e6ef; border-radius:5px; width:120px; overflow:hidden; }
 .bbar-fill { height:10px; border-radius:5px; }
 /* 职人码子Tab */
 .zr-subtab {
   padding:6px 16px; font-size:12px; border-radius:4px 4px 0 0;
-  border:none; cursor:pointer; background:#131c2e; color:#8a9ab8;
+  border:1px solid #d0d8e8; cursor:pointer; background:#f0f4f8; color:#4a6a8a;
   font-family:inherit; transition:all .2s;
 }
-.zr-subtab.active { background:#1a2f50; color:#60c8ff; font-weight:700; }
-.zr-subtab:hover:not(.active) { background:#1a2535; color:#c0d8f0; }
+.zr-subtab.active { background:#1976d2; color:#ffffff; font-weight:700; border-color:#1976d2; }
+.zr-subtab:hover:not(.active) { background:#e3eaf5; color:#1a2a3a; }
 /* 职人码色阶 */
-.zr-green  { color:#4ade80; font-weight:700; }
-.zr-yellow { color:#fbbf24; font-weight:700; }
-.zr-orange { color:#fb923c; font-weight:700; }
-.zr-red    { color:#f87171; font-weight:700; }
-.zr-warn   { color:#fb923c; font-size:12px; }
-.zr-ok     { color:#4ade80; font-size:12px; }
+.zr-green  { color:#166534; font-weight:700; }
+.zr-yellow { color:#854d0e; font-weight:700; }
+.zr-orange { color:#9a3412; font-weight:700; }
+.zr-red    { color:#991b1b; font-weight:700; }
+.zr-warn   { color:#9a3412; font-size:12px; }
+.zr-ok     { color:#166534; font-size:12px; }
 /* 职人码机构行 */
-.zr-agency-row td { background:#1a2f50 !important; color:#ffd060 !important; font-weight:700; text-align:left !important; }
-.c-green { color:#4ade80; }
-.c-yellow { color:#fbbf24; }
-.c-orange { color:#fb923c; }
-.c-red { color:#f87171; }
-.c-cyan { color:#60c8ff; }
+.zr-agency-row td { background:#eef2f7 !important; color:#1976d2 !important; font-weight:700; text-align:left !important; }
+.c-green { color:#166534; }
+.c-yellow { color:#854d0e; }
+.c-orange { color:#9a3412; }
+.c-red { color:#991b1b; }
+.c-cyan { color:#1976d2; }
 
 /* ── 分析归因 ── */
 .analysis-section {
-  background:#131c2e; border:1px solid #1e2d45; border-radius:8px;
+  background:#ffffff; border:1px solid #e0e6ef; border-radius:8px;
   margin-bottom:12px; overflow:hidden;
 }
 .analysis-section-hdr {
   padding:10px 16px; font-size:13px; font-weight:700;
   display:flex; align-items:center; gap:8px;
-  border-bottom:1px solid #1e2d45;
+  border-bottom:1px solid #e0e6ef;
 }
 .analysis-section-body { padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
 .analysis-item {
   display:flex; gap:10px; align-items:flex-start;
-  padding:10px 14px; border-radius:6px; background:#0d1117;
+  padding:10px 14px; border-radius:6px; background:#f7f9fc;
   border-left:3px solid transparent;
 }
-.analysis-item.warn  { border-left-color:#f59e0b; background:#1a1500; }
-.analysis-item.danger{ border-left-color:#f87171; background:#1a0a0a; }
-.analysis-item.good  { border-left-color:#4ade80; background:#0a1a0a; }
-.analysis-item.info  { border-left-color:#60c8ff; background:#0a1525; }
+.analysis-item.warn  { border-left-color:#f59e0b; background:#fffbeb; }
+.analysis-item.danger{ border-left-color:#ef4444; background:#fff5f5; }
+.analysis-item.good  { border-left-color:#22c55e; background:#f0fdf4; }
+.analysis-item.info  { border-left-color:#1976d2; background:#eff6ff; }
 .ai-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
 .ai-body {}
-.ai-title { font-size:13px; font-weight:700; color:#e0e6f0; margin-bottom:4px; }
-.ai-desc  { font-size:12px; color:#8a9ab8; line-height:1.6; }
-.ai-desc b { color:#e0e6f0; }
+.ai-title { font-size:13px; font-weight:700; color:#1a2a3a; margin-bottom:4px; }
+.ai-desc  { font-size:12px; color:#4a6a8a; line-height:1.6; }
+.ai-desc b { color:#1a2a3a; }
 .analysis-summary {
-  background:#1a2a40; border:1px solid #2a3a5a; border-radius:8px;
+  background:#f7f9fc; border:1px solid #e0e6ef; border-radius:8px;
   padding:14px 18px; margin-bottom:12px;
 }
-.analysis-summary-title { font-size:13px; font-weight:700; color:#60c8ff; margin-bottom:10px; }
+.analysis-summary-title { font-size:13px; font-weight:700; color:#1976d2; margin-bottom:10px; }
 .analysis-summary-grid {
   display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
 }
-.asg-item { background:#0d1117; border-radius:6px; padding:10px 12px; }
-.asg-label { font-size:11px; color:#6a8aaa; margin-bottom:4px; }
+.asg-item { background:#ffffff; border:1px solid #e0e6ef; border-radius:6px; padding:10px 12px; }
+.asg-label { font-size:11px; color:#4a6a8a; margin-bottom:4px; }
 .asg-val   { font-size:18px; font-weight:700; }
-.asg-sub   { font-size:11px; color:#6a8aaa; margin-top:3px; }
+.asg-sub   { font-size:11px; color:#4a6a8a; margin-top:3px; }
 
 /* ── Toast ── */
 #toast {
   position:fixed; bottom:18px; right:18px;
-  background:#131c2e; border:1px solid #2a5a8f; border-radius:8px;
-  padding:10px 16px; font-size:13px; color:#60c8ff;
+  background:#ffffff; border:1px solid #1976d2; border-radius:8px;
+  padding:10px 16px; font-size:13px; color:#1976d2;
   z-index:300; opacity:0; transition:opacity .3s; pointer-events:none;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  box-shadow:0 4px 20px rgba(0,0,0,.1);
 }
 #toast.show { opacity:1; }
-#toast.ok { border-color:#166534; color:#4ade80; }
-#toast.err { border-color:#5a2020; color:#f87171; }
+#toast.ok { border-color:#166534; color:#166534; background:#f0fdf4; }
+#toast.err { border-color:#991b1b; color:#991b1b; background:#fff5f5; }
+
+/* ── 滚动条亮色系 ── */
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background:#f0f4f8; }
+::-webkit-scrollbar-thumb { background:#d0d8e8; border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:#b0bdd4; }
 </style>
 </head>
 <body>
@@ -245,13 +252,13 @@ canvas#cvs {
 <!-- 业绩进度表 Panel -->
 <div id="panel-board" style="display:none; padding:20px 24px;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-    <div style="font-size:16px;font-weight:700;color:#ffd060;">📊 粤闽浙城市群 业绩进度表</div>
+    <div style="font-size:16px;font-weight:700;color:#1976d2;">📊 粤闽浙城市群 业绩进度表</div>
     <div style="font-size:12px;color:#4a6a8a;" id="board-upd-time">数据截至 2026-03-28 18:28 · 剩余 4 天</div>
   </div>
 
   <!-- GTV表 -->
   <div class="btable-wrap">
-    <div class="btitle" style="background:#1e3a5f;">📊 GTV 月度进度</div>
+    <div class="btitle" style="background:#dbeafe;">📊 GTV 月度进度</div>
     <table class="btable">
       <thead>
         <tr><th>代运营商</th><th>负责人</th><th>本月GTV(元)</th><th>月度目标(元)</th><th>进度</th><th>日缺口(元)</th><th>昨日GTV(元)</th><th>剔除率</th></tr>
@@ -263,7 +270,7 @@ canvas#cvs {
 
   <!-- CPC表 -->
   <div class="btable-wrap" style="margin-top:20px;">
-    <div class="btitle" style="background:#1a3a20;">📱 CPC 月度进度</div>
+    <div class="btitle" style="background:#dcfce7;">📱 CPC 月度进度</div>
     <table class="btable">
       <thead>
         <tr><th>代运营商</th><th>负责人</th><th>CPC&QCPS(元)</th><th>月度目标(元)</th><th>进度</th><th>日缺口(元)</th><th>有效新签</th><th>旺铺通(元)</th></tr>
@@ -275,7 +282,7 @@ canvas#cvs {
 
   <!-- MEM表 -->
   <div class="btable-wrap" style="margin-top:20px;">
-    <div class="btitle" style="background:#2a1a3a;">💰 MEM 收款与续约率</div>
+    <div class="btitle" style="background:#f5f3ff;">💰 MEM 收款与续约率</div>
     <table class="btable">
       <thead>
         <tr><th>代运营商</th><th>负责人</th><th>MEM收款额(元)</th><th>MEM续约率</th><th>续约率月环比</th></tr>
@@ -288,7 +295,7 @@ canvas#cvs {
   <!-- 分析归因区块 -->
   <div style="margin-top:28px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-      <div style="font-size:15px;font-weight:700;color:#ffd060;">📝 今日数据分析与归因</div>
+      <div style="font-size:15px;font-weight:700;color:#1976d2;">📝 今日数据分析与归因</div>
       <div style="font-size:11px;color:#4a6a8a;" id="analysis-time"></div>
     </div>
     <div id="analysis-body"></div>
@@ -298,46 +305,46 @@ canvas#cvs {
 <!-- 实时业绩进展 Panel -->
 <div id="panel-rt" style="display:none; padding:20px 24px;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-    <div style="font-size:16px;font-weight:700;color:#ffd060;">📈 今日实时业绩进展</div>
+    <div style="font-size:16px;font-weight:700;color:#1976d2;">📈 今日实时业绩进展</div>
     <div style="display:flex;align-items:center;gap:12px;">
       <span style="font-size:12px;color:#4a6a8a;" id="rt-upd-time">更新时间：--</span>
-      <button onclick="renderRtPanel()" style="background:#1a2f50;border:1px solid #2a4f80;color:#60c8ff;padding:4px 12px;border-radius:4px;font-size:11px;cursor:pointer;">🔄 刷新</button>
+      <button onclick="renderRtPanel()" style="background:#eff6ff;border:1px solid #bfdbfe;color:#1976d2;padding:4px 12px;border-radius:4px;font-size:11px;cursor:pointer;">🔄 刷新</button>
     </div>
   </div>
   <div class="btable-wrap">
-    <div class="btitle" style="background:#1a2a3a;">📈 GTV + CPC 实时进展（今日累计）</div>
+    <div class="btitle" style="background:#eef2f7;">📈 GTV + CPC 实时进展（今日累计）</div>
     <table class="btable">
       <thead>
         <tr>
           <th rowspan="2" style="vertical-align:middle;">代运营商</th>
-          <th colspan="3" style="border-bottom:1px solid #2a3a5a;color:#60c8ff;">GTV（元）</th>
-          <th colspan="3" style="border-bottom:1px solid #2a3a5a;color:#4ade80;">CPC（元）</th>
+          <th colspan="3" style="border-bottom:1px solid #d0d8e8;color:#1976d2;">GTV（元）</th>
+          <th colspan="3" style="border-bottom:1px solid #d0d8e8;color:#166534;">CPC（元）</th>
         </tr>
         <tr>
-          <th style="color:#60c8ff;">日目标</th>
-          <th style="color:#60c8ff;">今日</th>
-          <th style="color:#60c8ff;">完成率</th>
-          <th style="color:#4ade80;">日目标</th>
-          <th style="color:#4ade80;">今日</th>
-          <th style="color:#4ade80;">完成率</th>
+          <th style="color:#1976d2;">日目标</th>
+          <th style="color:#1976d2;">今日</th>
+          <th style="color:#1976d2;">完成率</th>
+          <th style="color:#166534;">日目标</th>
+          <th style="color:#166534;">今日</th>
+          <th style="color:#166534;">完成率</th>
         </tr>
       </thead>
       <tbody id="rt-tbody"></tbody>
       <tfoot id="rt-tfoot"></tfoot>
     </table>
   </div>
-  <div style="margin-top:10px;font-size:11px;color:#4a6a8a;padding:8px 12px;background:#0f1825;border-radius:6px;">
-    完成率：<span style="color:#4ade80;">■</span> ≥100%&nbsp;&nbsp;<span style="color:#fbbf24;">■</span> 60-99%&nbsp;&nbsp;<span style="color:#f87171;">■</span> &lt;60%&nbsp;&nbsp;|&nbsp;&nbsp;数据来源：Apollo，每半小时更新
+  <div style="margin-top:10px;font-size:11px;color:#4a6a8a;padding:8px 12px;background:#f0f4f8;border-radius:6px;border:1px solid #e0e6ef;">
+    完成率：<span style="color:#166534;">■</span> ≥100%&nbsp;&nbsp;<span style="color:#f59e0b;">■</span> 60-99%&nbsp;&nbsp;<span style="color:#ef4444;">■</span> &lt;60%&nbsp;&nbsp;|&nbsp;&nbsp;数据来源：Apollo，每半小时更新
   </div>
 </div>
 
 <!-- 职人码看板 Panel（独立Tab）-->
 <div id="panel-zr" style="display:none; padding:20px 24px;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-    <div style="font-size:16px;font-weight:700;color:#ffd060;">🎫 职人码数据看板</div>
+    <div style="font-size:16px;font-weight:700;color:#1976d2;">🎫 职人码数据看板</div>
     <div style="display:flex;align-items:center;gap:12px;">
       <span style="font-size:12px;color:#4a6a8a;" id="zr-upd-time">数据截至 2026-03-28 · 全月累计</span>
-      <button onclick="renderZrPanel()" style="background:#1a2f50;border:1px solid #2a4f80;color:#60c8ff;padding:4px 12px;border-radius:4px;font-size:11px;cursor:pointer;">🔄 刷新</button>
+      <button onclick="renderZrPanel()" style="background:#eff6ff;border:1px solid #bfdbfe;color:#1976d2;padding:4px 12px;border-radius:4px;font-size:11px;cursor:pointer;">🔄 刷新</button>
     </div>
   </div>
 
@@ -346,7 +353,7 @@ canvas#cvs {
 
   <!-- 城市维度汇总表 -->
   <div class="btable-wrap">
-    <div class="btitle" style="background:#1a3050;">🏙️ 城市汇总（今日累计）</div>
+    <div class="btitle" style="background:#dbeafe;">🏙️ 城市汇总（今日累计）</div>
     <table class="btable">
       <thead>
         <tr>
@@ -366,7 +373,7 @@ canvas#cvs {
 
   <!-- 代运营商汇总表 -->
   <div class="btable-wrap" style="margin-top:20px;">
-    <div class="btitle" style="background:#1a2a3a;">📊 代运营商汇总（今日累计）</div>
+    <div class="btitle" style="background:#eef2f7;">📊 代运营商汇总（今日累计）</div>
     <table class="btable">
       <thead>
         <tr>
@@ -389,7 +396,7 @@ canvas#cvs {
 
   <!-- 销售明细表 -->
   <div class="btable-wrap" style="margin-top:20px;">
-    <div class="btitle" style="background:#1a2a3a;">👤 销售明细（按城市分层）</div>
+    <div class="btitle" style="background:#eef2f7;">👤 销售明细（按城市分层）</div>
     <table class="btable">
       <thead>
         <tr>
@@ -413,18 +420,18 @@ canvas#cvs {
 
   <!-- 归因分析 -->
   <div style="margin-top:24px;">
-    <div style="font-size:15px;font-weight:700;color:#ffd060;margin-bottom:14px;">🔍 归因分析</div>
+    <div style="font-size:15px;font-weight:700;color:#1976d2;margin-bottom:14px;">🔍 归因分析</div>
 
     <!-- 城市维度归因 -->
     <div class="btable-wrap" style="margin-bottom:16px;">
-      <div class="btitle" style="background:#1a1e2a;">🏙️ 城市维度归因</div>
-      <div id="zr-attr-city" style="padding:14px 16px;font-size:13px;line-height:2;color:#c0d0e0;"></div>
+      <div class="btitle" style="background:#eef2f7;">🏙️ 城市维度归因</div>
+      <div id="zr-attr-city" style="padding:14px 16px;font-size:13px;line-height:2;color:#1a2a3a;"></div>
     </div>
 
     <!-- 销售维度归因 -->
     <div class="btable-wrap">
-      <div class="btitle" style="background:#1a1e2a;">👤 销售维度归因</div>
-      <div id="zr-attr-sales" style="padding:14px 16px;font-size:13px;line-height:2;color:#c0d0e0;"></div>
+      <div class="btitle" style="background:#eef2f7;">👤 销售维度归因</div>
+      <div id="zr-attr-sales" style="padding:14px 16px;font-size:13px;line-height:2;color:#1a2a3a;"></div>
     </div>
   </div>
 </div>
@@ -519,24 +526,24 @@ let tasks = loadTasks();
 
 // 快捷操作按钮定义
 const QUICK_BTNS = [
-  { id:'qb-board', label:'📊 立即生成看板', color:'#1e3a5f', fg:'#60c8ff', border:'#2a5a8f' },
-  { id:'qb-new',   label:'＋ 新建任务',     color:'#14372a', fg:'#4ade80', border:'#166534' },
-  { id:'qb-rt',    label:'● 实时进度',      color:'#14372a', fg:'#4ade80', border:'#166534', toggle:true, on:true },
-  { id:'qb-apollo',label:'🔗 打开Apollo',   color:'#3a2a10', fg:'#fbbf24', border:'#5a3a10' },
-  { id:'qb-refresh',label:'🔄 刷新',        color:'#1a2236', fg:'#8a9ab8', border:'#2a3a5a' },
+  { id:'qb-board', label:'📊 立即生成看板', color:'#eff6ff', fg:'#1976d2', border:'#bfdbfe' },
+  { id:'qb-new',   label:'＋ 新建任务',     color:'#dcfce7', fg:'#166534', border:'#bbf7d0' },
+  { id:'qb-rt',    label:'● 实时进度',      color:'#dcfce7', fg:'#166534', border:'#bbf7d0', toggle:true, on:true },
+  { id:'qb-apollo',label:'🔗 打开Apollo',   color:'#fef9c3', fg:'#854d0e', border:'#fef08a' },
+  { id:'qb-refresh',label:'🔄 刷新',        color:'#f0f4f8', fg:'#4a6a8a', border:'#d0d8e8' },
 ];
 
 // 工具卡片
 const TOOLS = [
-  { label:'Apollo数据源',  icon:'📡', desc:'财收分析，每半小时更新', btnLabel:'打开', color:'#1e3a5f', fg:'#60c8ff',
+  { label:'Apollo数据源',  icon:'📡', desc:'财收分析，每半小时更新', btnLabel:'打开', color:'#eff6ff', fg:'#1976d2',
     url:'https://apollo.meituan.com/crm-pc-data-bulletin-board/revenue-analysis/index.html#/data-overview' },
-  { label:'业绩看板·全月',  icon:'📊', desc:'全月业绩进展（GTV/CPC/MEM）', btnLabel:'打开', color:'#1e3a10', fg:'#4ade80',
+  { label:'业绩看板·全月',  icon:'📊', desc:'全月业绩进展（GTV/CPC/MEM）', btnLabel:'打开', color:'#dcfce7', fg:'#166534',
     url:'https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGY3JtLWRhdGEtYnVsbGV0aW4tYm9hcmQlMkZwZXJmb3JtYW5jZS1ib2FyZCUyRmluZGV4Lmh0bWwlMjMlMkZvcGVyYXRlU3RhdHVzJTJGYWRk&pageId=1697177864yq2dyl' },
-  { label:'业绩看板·单日',  icon:'📅', desc:'单日业绩进展（GTV/CPC/MEM）', btnLabel:'打开', color:'#2a1e3a', fg:'#c084fc',
+  { label:'业绩看板·单日',  icon:'📅', desc:'单日业绩进展（GTV/CPC/MEM）', btnLabel:'打开', color:'#f5f3ff', fg:'#5b21b6',
     url:'https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGY3JtLWRhdGEtYnVsbGV0aW4tYm9hcmQlMkZwZXJmb3JtYW5jZS1ib2FyZCUyRmluZGV4Lmh0bWwlMjMlMkZvcGVyYXRlU3RhdHVzJTJGYWRk&pageId=1697177864yq2dyl' },
-  { label:'拜访明细分析',  icon:'📋', desc:'发xlsx自动生成3Sheet报告', btnLabel:'发起分析', color:'#14372a', fg:'#4ade80', url:null },
-  { label:'看板生成器',    icon:'📊', desc:'立即生成并发送进度看板', btnLabel:'立即生成', color:'#3a2a10', fg:'#fbbf24', url:null },
-  { label:'任务管理',      icon:'📅', desc:'查看所有/停止定时任务', btnLabel:'查看所有', color:'#1a2236', fg:'#8a9ab8', url:null },
+  { label:'拜访明细分析',  icon:'📋', desc:'发xlsx自动生成3Sheet报告', btnLabel:'发起分析', color:'#dcfce7', fg:'#166534', url:null },
+  { label:'看板生成器',    icon:'📊', desc:'立即生成并发送进度看板', btnLabel:'立即生成', color:'#fef9c3', fg:'#854d0e', url:null },
+  { label:'任务管理',      icon:'📅', desc:'查看所有/停止定时任务', btnLabel:'查看所有', color:'#f0f4f8', fg:'#4a6a8a', url:null },
 ];
 
 // ═══════════════════════════════════════════════════
@@ -558,29 +565,29 @@ const PAD = 18;
 const CW = 1200; // canvas逻辑宽
 let CH = 900;    // 初始高，会动态计算
 
-// 色彩
+// 色彩（亮色系）
 const C = {
-  bg:       '#0d1117',
-  card:     '#131c2e',
-  cardHdr:  '#0f1825',
-  border:   '#1e2d45',
-  row_odd:  '#131c2e',
-  row_even: '#0f1825',
-  row_total:'#1a2a40',
-  text:     '#e0e6f0',
-  sub:      '#8a9ab8',
-  muted:    '#4a5a7a',
-  gold:     '#ffd060',
-  cyan:     '#60c8ff',
-  green:    '#4ade80',
-  yellow:   '#fbbf24',
-  orange:   '#fb923c',
-  red:      '#f87171',
-  purple:   '#c084fc',
+  bg:       '#f0f4f8',
+  card:     '#ffffff',
+  cardHdr:  '#f7f9fc',
+  border:   '#d0d8e8',
+  row_odd:  '#ffffff',
+  row_even: '#f7f9fc',
+  row_total:'#eef2f7',
+  text:     '#1a2a3a',
+  sub:      '#4a6a8a',
+  muted:    '#7a9ab8',
+  gold:     '#1976d2',
+  cyan:     '#1976d2',
+  green:    '#22c55e',
+  yellow:   '#f59e0b',
+  orange:   '#f97316',
+  red:      '#ef4444',
+  purple:   '#7c3aed',
   running:  '#22c55e',
   pending:  '#f59e0b',
-  disabled: '#4a5a7a',
-  quickBg:  '#111827',
+  disabled: '#9ab0c8',
+  quickBg:  '#f7f9fc',
 };
 
 function setFont(size, weight='normal') {
@@ -606,7 +613,7 @@ function roundRect(x, y, w, h, r, fill, stroke) {
   if(fill) { ctx.fillStyle=fill; ctx.fill(); }
   if(stroke) { ctx.strokeStyle=stroke; ctx.lineWidth=1; ctx.stroke(); }
 }
-function hline(x1, y, x2, color='#1e2d45') {
+function hline(x1, y, x2, color='#d0d8e8') {
   ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=1;
   ctx.moveTo(x1,y); ctx.lineTo(x2,y); ctx.stroke();
 }
@@ -638,7 +645,7 @@ function drawQuickBar(y) {
   const labels = QUICK_BTNS.map(b => b.label);
   const widths = labels.map(l => textW(l, 12) + 24);
 
-  roundRect(PAD, y, CW-PAD*2, bh+20, 6, '#111827', '#1a2840');
+  roundRect(PAD, y, CW-PAD*2, bh+20, 6, '#f7f9fc', '#d0d8e8');
   fillText('⚡ 快捷操作', PAD+12, y+15, C.muted, 11);
 
   let bx = PAD + 12;
@@ -693,9 +700,9 @@ function drawModuleCard(mod, tasks_in, x, y) {
 
   // Badge
   const badgeLabel = running>0 ? `${running} 运行中` : `${pending} 待配置`;
-  const badgeBg = running>0 ? '#14372a' : '#3a2a10';
-  const badgeFg = running>0 ? C.green : C.yellow;
-  const badgeBorder = running>0 ? '#166534' : '#5a3a10';
+  const badgeBg = running>0 ? '#dcfce7' : '#fef9c3';
+  const badgeFg = running>0 ? '#166534' : '#854d0e';
+  const badgeBorder = running>0 ? '#bbf7d0' : '#fef08a';
   const bw2 = textW(badgeLabel, 11) + 14;
   const bx2 = x + MODULE_W - bw2 - 36;
   roundRect(bx2, y+12, bw2, 16, 8, badgeBg, badgeBorder);
@@ -711,7 +718,7 @@ function drawModuleCard(mod, tasks_in, x, y) {
     const bg = i%2===0 ? C.row_odd : C.row_even;
     ctx.fillStyle = bg;
     ctx.fillRect(x+1, ty, MODULE_W-2, ROW_H);
-    hline(x+1, ty+ROW_H, x+MODULE_W-1, '#0f1825');
+    hline(x+1, ty+ROW_H, x+MODULE_W-1, '#e8edf5');
 
     // 状态点
     statusDot(x+14, ty+ROW_H/2, task.status);
@@ -733,19 +740,19 @@ function drawModuleCard(mod, tasks_in, x, y) {
     // 操作按钮
     const btnY = ty + (ROW_H-20)/2;
     if(task.status === 'pending') {
-      drawMiniBtn(x+MODULE_W-62, btnY, 54, 20, '启用', '#1e3a5f', C.cyan, '#2a5a8f', 'enable', task.id);
+      drawMiniBtn(x+MODULE_W-62, btnY, 54, 20, '启用', '#eff6ff', '#1976d2', '#bfdbfe', 'enable', task.id);
     } else {
-      drawMiniBtn(x+MODULE_W-62, btnY, 20, 20, '▶', '#14372a', C.green, '#166534', 'run', task.id);
-      drawMiniBtn(x+MODULE_W-38, btnY, 20, 20, '✎', '#1e3a5f', C.cyan, '#2a5a8f', 'edit', task.id);
-      drawMiniBtn(x+MODULE_W-14, btnY+1, 10, 18, '×', '#1a1a1a', C.red, '#3a1a1a', 'del', task.id);
+      drawMiniBtn(x+MODULE_W-62, btnY, 20, 20, '▶', '#dcfce7', '#166534', '#bbf7d0', 'run', task.id);
+      drawMiniBtn(x+MODULE_W-38, btnY, 20, 20, '✎', '#eff6ff', '#1976d2', '#bfdbfe', 'edit', task.id);
+      drawMiniBtn(x+MODULE_W-14, btnY+1, 10, 18, '×', '#fee2e2', '#991b1b', '#fecaca', 'del', task.id);
     }
   });
 
   // Footer
   const fy = y + HDR_H + n*ROW_H + 1;
-  ctx.fillStyle = '#0c1522';
+  ctx.fillStyle = '#eef2f7';
   ctx.fillRect(x+1, fy, MODULE_W-2, FOOT_H+2);
-  roundRect(x, y+cardH-FOOT_H, MODULE_W, FOOT_H, 8, '#0c1522', C.border);
+  roundRect(x, y+cardH-FOOT_H, MODULE_W, FOOT_H, 8, '#eef2f7', C.border);
   fillText('＋ 新增任务', x+14, y+cardH-FOOT_H/2+4, '#3b82f6', 12);
   addHit(x+1, y+cardH-FOOT_H, MODULE_W-2, FOOT_H, 'new_task', mod.id);
 
@@ -764,7 +771,7 @@ function drawTools(y) {
   roundRect(PAD, y, CW-PAD*2, totalH, 8, C.card, C.border);
   fillText('⚙️ 系统工具 & 快捷链接', PAD+14, y+24, C.text, 14, '700');
   const ubw = textW('Apollo', 11)+14;
-  roundRect(CW-PAD-ubw-8, y+10, ubw, 16, 8, '#1e3a5f', '#2a5a8f');
+  roundRect(CW-PAD-ubw-8, y+10, ubw, 16, 8, '#eff6ff', '#bfdbfe');
   fillText('Apollo', CW-PAD-ubw-8+7, y+22, C.cyan, 11);
   hline(PAD+1, y+headerH, CW-PAD-1, C.border);
 
@@ -773,7 +780,7 @@ function drawTools(y) {
     const row = Math.floor(i / COLS);
     const tx = PAD + col*(toolW+12) + 1;
     const ty2 = y + headerH + PAD/2 + row*(toolH+10);
-    roundRect(tx, ty2, toolW, toolH, 6, '#0d1117', tool.url ? '#1e3a5f' : '#1e2d45');
+    roundRect(tx, ty2, toolW, toolH, 6, '#ffffff', tool.url ? '#bfdbfe' : '#d0d8e8');
     fillText(tool.icon, tx+12, ty2+24, C.text, 18);
     fillText(tool.label, tx+12, ty2+46, C.text, 13, '700');
     // desc换行截断
@@ -1159,19 +1166,28 @@ const ZR_SALES = [
 ];
 
 // 实时业绩进展静态数据
-const RT_DATA = {
-  time: '2026-03-28 22:00',
-  ops: [
-    // [代运营商, GTV日目标, GTV今日, GTV昨日, CPC日目标, CPC今日, CPC昨日]
-    ['惠州巨浪',  85000, 72500, 65800, 1500, 1820, 1650],
-    ['惠州柏万',  72000, 58900, 54200, 1800, 1540, 1720],
-    ['泉州小花猫',70000, 61300, 57400, 2200, 1980, 2100],
-    ['惠安广通',  55000, 43800, 40100, 1200, 1050,  980],
-    ['义乌汐洋',  50000, 39200, 36700, 1600, 1380, 1290],
-    ['慈溪哲光',  52000, 41600, 38900, 2000, 1710, 1850],
-    ['宁夏灵创',  60000, 52400, 49800, 2200, 2180, 2050],
-  ]
+// 实时数据：今日实付验证GTV（从Apollo实时抓取，每次更新此处）
+// 更新时间：2026-03-28 23:10
+// 数据来源：Apollo财收分析 - 今日实付验证GTV
+const RT_TODAY = {
+  time: '2026-03-28 23:10',
+  // [代运营商, GTV今日, CPC今日]  — 与 BOARD_DATA.ops 顺序对应
+  gtv:  [137820, 127014, 142181, 45984, 99019, 85649, 104917],
+  cpc:  [  1274,   2332,   5069,  2900,  1619,  5721,   1898],
 };
+
+// RT_DATA 由函数动态生成，日目标来自 BOARD_DATA（月度缺口÷剩余天数）
+function buildRtData() {
+  const bd = BOARD_DATA;
+  return {
+    time: RT_TODAY.time,
+    ops: bd.ops.map((o, i) => {
+      const gtvDayTarget = Math.round((o[3] - o[2]) / bd.daysLeft);
+      const cpcDayTarget = Math.round((o[7] - o[6]) / bd.daysLeft);
+      return [o[0], gtvDayTarget, RT_TODAY.gtv[i], cpcDayTarget, RT_TODAY.cpc[i]];
+    })
+  };
+}
 
 // 色阶
 function zrBindColor(r)  { return r>=0.35?'zr-green':r>=0.25?'zr-yellow':r>=0.15?'zr-orange':'zr-red'; }
@@ -1181,7 +1197,7 @@ function zrGtvColor(r)   { return r>=0.30?'zr-green':r>=0.22?'zr-yellow':r>=0.15
 function zrIncrColor(n)  { return (n>50)?'zr-green':(n>20)?'zr-yellow':(n>0)?'zr-orange':'zr-red'; }
 
 function renderRtPanel() {
-  const d = RT_DATA;
+  const d = buildRtData();
   document.getElementById('rt-upd-time').textContent = '更新时间：' + d.time;
   function fmtK(v) { return v.toLocaleString('zh-CN', {maximumFractionDigits:0}); }
   function rateBadge(r) {
@@ -1194,7 +1210,7 @@ function renderRtPanel() {
     const chg = (today-yest)/yest;
     const pct = (Math.abs(chg)*100).toFixed(1)+'%';
     return chg>=0
-      ? `<span style="color:#4ade80;">↑${pct}</span>`
+      ? `<span style="color:#166534;">↑${pct}</span>`
       : `<span style="color:#f87171;">↓${pct}</span>`;
   }
   function gapCell(today, target) {
@@ -1206,27 +1222,27 @@ function renderRtPanel() {
   let rows = '';
   let tGtvT=0, tGtvNow=0, tCpcT=0, tCpcNow=0;
   d.ops.forEach(o => {
-    const [name, gtvT, gtvNow, gtvY, cpcT, cpcNow, cpcY] = o;
+    const [name, gtvT, gtvNow, cpcT, cpcNow] = o;
     tGtvT+=gtvT; tGtvNow+=gtvNow;
     tCpcT+=cpcT; tCpcNow+=cpcNow;
     rows += `<tr>
-      <td style="font-weight:700;color:#e0e6f0;">${name}</td>
-      <td style="color:#60c8ff;">${fmtK(gtvT)}</td>
-      <td style="color:#e0e6f0;font-weight:600;">${fmtK(gtvNow)}</td>
+      <td style="font-weight:700;">${name}</td>
+      <td style="color:#1976d2;">${fmtK(gtvT)}</td>
+      <td style="font-weight:600;">${fmtK(gtvNow)}</td>
       <td>${rateBadge(gtvNow/gtvT)}</td>
-      <td style="color:#4ade80;">${fmtK(cpcT)}</td>
-      <td style="color:#e0e6f0;font-weight:600;">${fmtK(cpcNow)}</td>
+      <td style="color:#1976d2;">${fmtK(cpcT)}</td>
+      <td style="font-weight:600;">${fmtK(cpcNow)}</td>
       <td>${rateBadge(cpcNow/cpcT)}</td>
     </tr>`;
   });
   document.getElementById('rt-tbody').innerHTML = rows;
   document.getElementById('rt-tfoot').innerHTML = `<tr>
-    <td>合计</td>
-    <td style="color:#60c8ff;">${fmtK(tGtvT)}</td>
-    <td>${fmtK(tGtvNow)}</td>
+    <td style="font-weight:700;">合计</td>
+    <td style="color:#1976d2;">${fmtK(tGtvT)}</td>
+    <td style="font-weight:700;">${fmtK(tGtvNow)}</td>
     <td>${rateBadge(tGtvNow/tGtvT)}</td>
-    <td style="color:#4ade80;">${fmtK(tCpcT)}</td>
-    <td>${fmtK(tCpcNow)}</td>
+    <td style="color:#1976d2;">${fmtK(tCpcT)}</td>
+    <td style="font-weight:700;">${fmtK(tCpcNow)}</td>
     <td>${rateBadge(tCpcNow/tCpcT)}</td>
   </tr>`;
 }
@@ -1241,10 +1257,10 @@ function renderZrPanel() {
     { label:'月绑码商户数', val: t.bind.toLocaleString(),   sub:`绑码率 ${(t.bind/t.stores*100).toFixed(1)}%`, color: t.bind/t.stores>=0.35?'#4ade80':'#fbbf24' },
   ];
   document.getElementById('zr-kpi-cards').innerHTML = kpis.map(k=>`
-    <div style="background:#0f1825;border:1px solid #1e3050;border-radius:8px;padding:14px 16px;">
+    <div style="background:#ffffff;border:1px solid #e0e6ef;border-radius:8px;padding:14px 16px;">
       <div style="font-size:11px;color:#4a6a8a;margin-bottom:6px;">${k.label}</div>
       <div style="font-size:24px;font-weight:700;color:${k.color};">${k.val}</div>
-      <div style="font-size:11px;color:#6a8aaa;margin-top:4px;">${k.sub}</div>
+      <div style="font-size:11px;color:#4a6a8a;margin-top:4px;">${k.sub}</div>
     </div>`).join('');
 
   // ── 城市维度汇总表 ──
@@ -1302,7 +1318,7 @@ function renderZrPanel() {
     const yRateClass = yRateAvg!=null ? zrGtvColor(yRateAvg) : '';
 
     cityRows += `<tr>
-      <td style="font-weight:700;color:#e0e6f0;">📍 ${city}</td>
+      <td style="font-weight:700;color:#1a2a3a;">📍 ${city}</td>
       <td>${cd.stores.toLocaleString()}</td>
       <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
       <td class="${incrClass}" style="font-weight:700;">${incrStr}</td>
@@ -1335,13 +1351,13 @@ function renderZrPanel() {
     const monthIncrClass = o[11] != null ? zrIncrColor(o[11]) : '';
     const dayIncr   = o[12] != null ? `+${o[12]}`  : '—';
     rows += `<tr>
-      <td style="font-weight:700;color:#e0e6f0;">${o[0]}</td>
+      <td style="font-weight:700;color:#1a2a3a;">${o[0]}</td>
       <td>${o[1].toLocaleString()}</td>
       <td class="${zrBindColor(bindRate)}" style="font-weight:700;">${(bindRate*100).toFixed(1)}%</td>
       <td style="color:#4ade80;font-weight:600;">${dayIncr}</td>
       <td class="${monthIncrClass}" style="font-weight:700;">${monthIncr}</td>
       <td style="color:#8a9ab8;">—</td>
-      <td style="color:#60c8ff;">${yGtv}</td>
+      <td style="color:#1976d2;">${yGtv}</td>
       <td class="${yRateClass}" style="font-weight:700;">${yRate}</td>
       <td>${o[8].toLocaleString()}</td>
       <td class="${zrGtvColor(o[7])}">${(o[7]*100).toFixed(1)}%</td>
@@ -1356,7 +1372,7 @@ function renderZrPanel() {
     <td style="color:#4ade80;font-weight:600;">—</td>
     <td class="${zrIncrColor(totalMonthIncr)}" style="font-weight:700;">+${totalMonthIncr}</td>
     <td>—</td>
-    <td style="color:#60c8ff;">—</td>
+    <td style="color:#1976d2;">—</td>
     <td>—</td>
     <td>${t.month_gtv.toLocaleString()}</td>
     <td class="${zrGtvColor(t.gtv_rate)}">${(t.gtv_rate*100).toFixed(1)}%</td>
@@ -1377,7 +1393,7 @@ function renderZrPanel() {
   const totalCols = 12;
   cityOrder.forEach(city => {
     // 城市标题行
-    salesRows += `<tr><td colspan="${totalCols}" style="background:#1a2f40;color:#ffd060;font-weight:700;text-align:left;padding:8px 14px;">📍 ${city}</td></tr>`;
+    salesRows += `<tr><td colspan="${totalCols}" style="background:#dbeafe;color:#1976d2;font-weight:700;text-align:left;padding:8px 14px;">📍 ${city}</td></tr>`;
     // 该城市销售按月店转GTV渗透率(s[8])升序
     const ss = salesByCityMap[city].slice().sort((a,b) => a[8]-b[8]);
     ss.forEach(s => {
@@ -1388,14 +1404,14 @@ function renderZrPanel() {
       const syRateClass = s[10] != null ? zrGtvColor(s[10]) : '';
       salesRows += `<tr>
         <td style="color:#7a9ab8;">${s[0]}</td>
-        <td style="color:#8ab0c8;">${s[1]}</td>
-        <td style="font-weight:600;color:#e0e6f0;">${s[2]}</td>
+        <td style="color:#4a6a8a;">${s[1]}</td>
+        <td style="font-weight:600;color:#1a2a3a;">${s[2]}</td>
         <td>${s[5].toLocaleString()}</td>
         <td class="${zrBindColor(bindR)}" style="font-weight:700;">${(bindR*100).toFixed(1)}%</td>
         <td style="color:#4ade80;font-weight:600;">—</td>
         <td style="color:#60c8ff;font-weight:600;">—</td>
         <td style="color:#8a9ab8;">—</td>
-        <td style="color:#60c8ff;">${syGtv}</td>
+        <td style="color:#1976d2;">${syGtv}</td>
         <td class="${syRateClass}">${syRate}</td>
         <td>${s[3].toLocaleString()}</td>
         <td class="${zrGtvColor(gtvR)}">${(gtvR*100).toFixed(1)}%</td>
@@ -1430,15 +1446,15 @@ function renderZrPanel() {
   cityEntries.forEach(c => {
     const bindOk  = c.bindR  >= bindTarget;
     const gtvOk   = c.avgGtvR >= gtvRateTarget;
-    const bindTag = bindOk  ? `<span style="color:#4ade80;">✅ ${(c.bindR*100).toFixed(1)}%</span>`
+    const bindTag = bindOk  ? `<span style="color:#166534;">✅ ${(c.bindR*100).toFixed(1)}%</span>`
                             : `<span style="color:#f87171;">⚠️ ${(c.bindR*100).toFixed(1)}%（差${((bindTarget-c.bindR)*100).toFixed(1)}pct，需再绑${Math.ceil((bindTarget-c.bindR)*c.stores)}家）</span>`;
-    const gtvTag  = gtvOk   ? `<span style="color:#4ade80;">✅ ${(c.avgGtvR*100).toFixed(1)}%</span>`
+    const gtvTag  = gtvOk   ? `<span style="color:#166534;">✅ ${(c.avgGtvR*100).toFixed(1)}%</span>`
                             : `<span style="color:#fbbf24;">⚠️ ${(c.avgGtvR*100).toFixed(1)}%（差${((gtvRateTarget-c.avgGtvR)*100).toFixed(1)}pct）</span>`;
     const todos = [];
     if(!bindOk)  todos.push(`📌 TODO：重点推进 ${c.city} 门店绑码，门店基数 ${c.stores}，当前绑码 ${c.bind}，缺口 ${Math.ceil((bindTarget-c.bindR)*c.stores)} 家`);
     if(!gtvOk)   todos.push(`📌 TODO：加强 ${c.city} 核销活动引导，提升店转GTV渗透率`);
-    cityHtml += `<div style="margin-bottom:14px;padding:10px 14px;background:#0f1825;border-left:3px solid ${bindOk&&gtvOk?'#22c55e':'#f87171'};border-radius:0 6px 6px 0;">
-      <div style="font-weight:700;color:#e0e6f0;margin-bottom:6px;">📍 ${c.city}</div>
+    cityHtml += `<div style="margin-bottom:14px;padding:10px 14px;background:#f7f9fc;border:1px solid #e0e6ef;border-left:3px solid ${bindOk&&gtvOk?'#22c55e':'#ef4444'};border-radius:0 6px 6px 0;">
+      <div style="font-weight:700;color:#1a2a3a;margin-bottom:6px;">📍 ${c.city}</div>
       <div>绑码率：${bindTag}</div>
       <div>店转渗透率：${gtvTag}</div>
       ${todos.length ? `<div style="margin-top:8px;color:#fbbf24;font-size:12px;">${todos.join('<br>')}</div>` : `<div style="margin-top:6px;color:#4ade80;font-size:12px;">✅ 两项指标均达标</div>`}
@@ -1491,13 +1507,13 @@ function renderZrPanel() {
       } else {
         solution = `推送核销优惠活动，引导门店完成店转，提升GTV渗透率至16.5%以上`;
       }
-      salesAttrHtml += `<div style="padding:12px 16px;margin-bottom:8px;background:#0f1825;border-left:3px solid ${borderColor};border-radius:0 6px 6px 0;">
+      salesAttrHtml += `<div style="padding:12px 16px;margin-bottom:8px;background:#f7f9fc;border:1px solid #e0e6ef;border-left:3px solid ${borderColor};border-radius:0 6px 6px 0;">
         <div style="margin-bottom:5px;">
-          <span style="color:#e0e6f0;font-weight:700;font-size:14px;">${s[2]}</span>
-          <span style="color:#6a8aaa;margin:0 6px;font-size:12px;">${s[0]} · ${s[1]}</span>
+          <span style="color:#1a2a3a;font-weight:700;font-size:14px;">${s[2]}</span>
+          <span style="color:#4a6a8a;margin:0 6px;font-size:12px;">${s[0]} · ${s[1]}</span>
         </div>
         <div style="margin-bottom:4px;font-size:12px;">问题：${problems}</div>
-        <div style="font-size:12px;color:#8ab0c8;">方案：${solution}</div>
+        <div style="font-size:12px;color:#4a6a8a;">方案：${solution}</div>
       </div>`;
     });
   }
@@ -1703,7 +1719,7 @@ function renderAnalysis(d) {
 
   sections.push(`
   <div class="analysis-section">
-    <div class="analysis-section-hdr" style="background:#0f1e35;color:#60c8ff;">
+    <div class="analysis-section-hdr" style="background:#dbeafe;color:#1976d2;">
       📊 GTV 归因分析
     </div>
     <div class="analysis-section-body">${gtvAnalysisItems}</div>
@@ -1756,7 +1772,7 @@ function renderAnalysis(d) {
 
   sections.push(`
   <div class="analysis-section">
-    <div class="analysis-section-hdr" style="background:#0f201a;color:#4ade80;">
+    <div class="analysis-section-hdr" style="background:#dcfce7;color:#166534;">
       📱 CPC 归因分析
     </div>
     <div class="analysis-section-body">${cpcAnalysisItems}</div>
@@ -1811,7 +1827,7 @@ function renderAnalysis(d) {
 
   sections.push(`
   <div class="analysis-section">
-    <div class="analysis-section-hdr" style="background:#1a1030;color:#c084fc;">
+    <div class="analysis-section-hdr" style="background:#f5f3ff;color:#5b21b6;">
       💰 MEM 续约归因分析
     </div>
     <div class="analysis-section-body">${memAnalysisItems}</div>
@@ -1821,7 +1837,7 @@ function renderAnalysis(d) {
   const urgentOps = gtvRisk.slice(0,3).map(o=>o.name).join('、');
   sections.push(`
   <div class="analysis-section">
-    <div class="analysis-section-hdr" style="background:#1a1500;color:#fbbf24;">
+    <div class="analysis-section-hdr" style="background:#fef9c3;color:#854d0e;">
       🚀 月末冲刺行动建议（剩余${daysLeft}天）
     </div>
     <div class="analysis-section-body">
