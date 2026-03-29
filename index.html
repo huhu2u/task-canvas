@@ -1002,16 +1002,8 @@ canvas#cvs {
     </div>
   </div>
 
-  <!-- 月度汇总说明 -->
-  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 16px;font-size:11px;color:#0369a1;line-height:1.8;">
-    <strong>📌 指标说明</strong><br>
-    · CPS交易收入 = 中小发代运营高线城市_交易收入（剔除风控+退款）<br>
-    · CPC消耗 = 中小发_代运营_CPC&QCPS消耗额（不含区县）<br>
-    · 费率 = CPS交易收入 ÷ 实付验证GTV<br>
-    · 剔除率 = 中小发_代运营_高线城市GTV剔除率<br>
-    · 月度数据来源：Apollo奖金指标表格视图（城市群汇总）<br>
-    · 今日数据来源：Apollo财收分析实时数据（每半小时更新）
-  </div>
+  <!-- 归因总结 & TODO 区块，由 renderFinancePanel() 填充 -->
+  <div id="fc-analysis" style="margin-top:0;"></div>
 </div>
 
 <div id="toast"></div>
@@ -2584,8 +2576,6 @@ function renderFinancePanel() {
 
   function fmtMoney(v) {
     if (!v || v === 0) return '—';
-    if (v >= 1e8) return (v/1e8).toFixed(2) + '亿元';
-    if (v >= 1e4) return (v/1e4).toFixed(2) + '万元';
     return v.toLocaleString('zh-CN', {maximumFractionDigits:0}) + '元';
   }
   function fmtPct(v, digits=2) {
@@ -2669,6 +2659,73 @@ function renderFinancePanel() {
   </tr>`);
 
   document.getElementById('fc-daily-tbody').innerHTML = rows.join('');
+
+  // ── 归因总结 & TODO ──────────────────────────────
+  renderFinanceAnalysis(fc, ops);
+}
+
+function renderFinanceAnalysis(fc, ops) {
+  if (!ops || !ops.length) return;
+  const el = document.getElementById('fc-analysis');
+  if (!el) return;
+
+  // 按合计财收排序
+  const sorted = [...ops].map(op => ({
+    ...op,
+    total: (op.cps||0) + (op.cpc||0) + (op.mem||0)
+  })).sort((a,b) => b.total - a.total);
+
+  const fmt = v => v ? v.toLocaleString('zh-CN', {maximumFractionDigits:0}) + '元' : '—';
+  const fmtPct = v => v ? v.toFixed(2)+'%' : '—';
+
+  // TOP / BOTTOM
+  const top1 = sorted[0];
+  const bot1 = sorted[sorted.length-1];
+
+  // 费率异常（低于5%或高于7%）
+  const lowRate  = ops.filter(o => (o.fee_rate||0) < 5   && (o.fee_rate||0) > 0);
+  const highRate = ops.filter(o => (o.fee_rate||0) > 7);
+  // 剔除率高（>4%）
+  const highExcl = ops.filter(o => (o.excl||0) > 4);
+  // MEM薄弱（MEM占合计财收<10%）
+  const weakMem  = ops.filter(o => {
+    const total = (o.cps||0)+(o.cpc||0)+(o.mem||0);
+    return total > 0 && (o.mem||0)/total < 0.1;
+  });
+
+  // 归因条目
+  const insights = [];
+  insights.push(`📊 财收第一：<b>${top1.name}</b> 合计财收 ${fmt(top1.total)}（CPS ${fmt(top1.cps)} + CPC ${fmt(top1.cpc)} + MEM ${fmt(top1.mem)}）`);
+  insights.push(`📉 财收垫底：<b>${bot1.name}</b> 合计财收 ${fmt(bot1.total)}，重点跟进`);
+  if (highExcl.length) insights.push(`⚠️ GTV剔除率偏高（>4%）：${highExcl.map(o=>`<b>${o.name}</b> ${fmtPct(o.excl)}`).join('、')}，需排查风控/退款原因`);
+  if (lowRate.length)  insights.push(`🔴 综合费率偏低（<5%）：${lowRate.map(o=>`<b>${o.name}</b> ${fmtPct(o.fee_rate)}`).join('、')}，关注CPS取数口径或GTV水分`);
+  if (highRate.length) insights.push(`🟢 综合费率偏高（>7%）：${highRate.map(o=>`<b>${o.name}</b> ${fmtPct(o.fee_rate)}`).join('、')}，表现优秀`);
+  if (weakMem.length)  insights.push(`💡 MEM薄弱（占比<10%）：${weakMem.map(o=>`<b>${o.name}</b>`).join('、')}，续约/收款需加速`);
+
+  // TODO清单
+  const todos = [];
+  if (highExcl.length) todos.push(`跟进 ${highExcl.map(o=>o.name).join('/')} 的GTV剔除率，确认退款/风控明细`);
+  if (lowRate.length)  todos.push(`核查 ${lowRate.map(o=>o.name).join('/')} 费率偏低原因（CPS口径确认）`);
+  if (weakMem.length)  todos.push(`推动 ${weakMem.map(o=>o.name).join('/')} MEM续约收款，提升财收结构`);
+  todos.push(`月底冲刺：重点拉动 ${bot1.name} 财收，目标追上中位水平`);
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+      <!-- 归因总结 -->
+      <div style="background:#fff;border:1px solid #e0e6ef;border-radius:10px;overflow:hidden;">
+        <div style="background:#0f4c81;padding:9px 14px;font-size:13px;font-weight:700;color:#fff;">🔍 归因总结</div>
+        <div style="padding:12px 14px;font-size:12px;color:#374151;line-height:2;">
+          ${insights.map(i=>`<div style="border-bottom:1px dashed #f0f0f0;padding:3px 0;">${i}</div>`).join('')}
+        </div>
+      </div>
+      <!-- TODO -->
+      <div style="background:#fff;border:1px solid #e0e6ef;border-radius:10px;overflow:hidden;">
+        <div style="background:#b45309;padding:9px 14px;font-size:13px;font-weight:700;color:#fff;">✅ TODO 行动项</div>
+        <div style="padding:12px 14px;font-size:12px;color:#374151;line-height:2;">
+          ${todos.map((t,i)=>`<div style="border-bottom:1px dashed #f0f0f0;padding:3px 0;"><span style="color:#b45309;font-weight:700;">${i+1}.</span> ${t}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
 }
 
 window.addEventListener('resize', render);
