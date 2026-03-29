@@ -2693,21 +2693,48 @@ function renderFinanceAnalysis(fc, ops) {
     return total > 0 && (o.mem||0)/total < 0.1;
   });
 
+  // 财收总量
+  const totalAll = sorted.reduce((s,o)=>s+o.total,0);
+
+  // 合计财收最高/最低的MEM贡献率
+  const memRates = ops.map(o => {
+    const total = (o.cps||0)+(o.cpc||0)+(o.mem||0);
+    return { name: o.name, memRate: total>0?(o.mem||0)/total*100:0, mem: o.mem||0, total };
+  }).sort((a,b) => b.memRate - a.memRate);
+  const topMem = memRates[0];
+  const botMem = memRates[memRates.length-1];
+
+  // 剔除率最高
+  const maxExcl = [...ops].sort((a,b)=>(b.excl||0)-(a.excl||0))[0];
+
+  // CPC消耗占合计财收比最高（烧钱最多）
+  const cpcBurner = [...ops].sort((a,b)=>{
+    const ra = (a.cpc||0)/((a.cps||0)+(a.cpc||0)+(a.mem||0)||1);
+    const rb = (b.cpc||0)/((b.cps||0)+(b.cpc||0)+(b.mem||0)||1);
+    return rb - ra;
+  })[0];
+  const cpcBurnerRate = (cpcBurner.cpc||0) / (cpcBurner.total||1) * 100;
+
   // 归因条目
   const insights = [];
-  insights.push(`📊 财收第一：<b>${top1.name}</b> 合计财收 ${fmt(top1.total)}（CPS ${fmt(top1.cps)} + CPC ${fmt(top1.cpc)} + MEM ${fmt(top1.mem)}）`);
-  insights.push(`📉 财收垫底：<b>${bot1.name}</b> 合计财收 ${fmt(bot1.total)}，重点跟进`);
-  if (highExcl.length) insights.push(`⚠️ GTV剔除率偏高（>4%）：${highExcl.map(o=>`<b>${o.name}</b> ${fmtPct(o.excl)}`).join('、')}，需排查风控/退款原因`);
-  if (lowRate.length)  insights.push(`🔴 综合费率偏低（<5%）：${lowRate.map(o=>`<b>${o.name}</b> ${fmtPct(o.fee_rate)}`).join('、')}，关注CPS取数口径或GTV水分`);
-  if (highRate.length) insights.push(`🟢 综合费率偏高（>7%）：${highRate.map(o=>`<b>${o.name}</b> ${fmtPct(o.fee_rate)}`).join('、')}，表现优秀`);
+  insights.push(`📊 财收第一：<b>${top1.name}</b> ${fmt(top1.total)}（CPS ${fmt(top1.cps)} / CPC ${fmt(top1.cpc)} / MEM ${fmt(top1.mem)}）`);
+  insights.push(`📉 财收垫底：<b>${bot1.name}</b> ${fmt(bot1.total)}，与第一差距 ${fmt(top1.total - bot1.total)}，重点跟进`);
+  insights.push(`💰 MEM贡献最高：<b>${topMem.name}</b> ${topMem.memRate.toFixed(1)}%；最低：<b>${botMem.name}</b> ${botMem.memRate.toFixed(1)}%，续约需加速`);
+  insights.push(`🔥 CPC占比最高：<b>${cpcBurner.name}</b> CPC占合计财收 ${cpcBurnerRate.toFixed(1)}%，关注ROI`);
+  insights.push(`⚠️ 剔除率最高：<b>${maxExcl.name}</b> ${fmtPct(maxExcl.excl)}，${(maxExcl.excl||0)>4 ? '已超4%红线，需排查风控/退款' : '暂在正常范围'}`);
+  if (highExcl.length) insights.push(`🚨 剔除率预警（>4%）：${highExcl.map(o=>`<b>${o.name}</b> ${fmtPct(o.excl)}`).join('、')}，需排查风控/退款`);
+  if (lowRate.length)  insights.push(`🔴 费率偏低（<5%）：${lowRate.map(o=>`<b>${o.name}</b> ${fmtPct(o.fee_rate)}`).join('、')}，关注CPS口径或GTV水分`);
+  if (highRate.length) insights.push(`🟢 费率优秀（>7%）：${highRate.map(o=>`<b>${o.name}</b> ${fmtPct(o.fee_rate)}`).join('、')}`);
   if (weakMem.length)  insights.push(`💡 MEM薄弱（占比<10%）：${weakMem.map(o=>`<b>${o.name}</b>`).join('、')}，续约/收款需加速`);
 
   // TODO清单
   const todos = [];
-  if (highExcl.length) todos.push(`跟进 ${highExcl.map(o=>o.name).join('/')} 的GTV剔除率，确认退款/风控明细`);
-  if (lowRate.length)  todos.push(`核查 ${lowRate.map(o=>o.name).join('/')} 费率偏低原因（CPS口径确认）`);
-  if (weakMem.length)  todos.push(`推动 ${weakMem.map(o=>o.name).join('/')} MEM续约收款，提升财收结构`);
-  todos.push(`月底冲刺：重点拉动 ${bot1.name} 财收，目标追上中位水平`);
+  todos.push(`重点拉动 <b>${bot1.name}</b>，差距 ${fmt(top1.total - bot1.total)}，目标追上中位水平`);
+  todos.push(`推动 <b>${botMem.name}</b> MEM续约收款（当前MEM占比仅 ${botMem.memRate.toFixed(1)}%）`);
+  if (cpcBurnerRate > 25) todos.push(`关注 <b>${cpcBurner.name}</b> CPC投入ROI（占合计财收 ${cpcBurnerRate.toFixed(1)}%），确认带来的GTV是否达预期`);
+  if (highExcl.length) todos.push(`跟进 ${highExcl.map(o=>`<b>${o.name}</b>`).join('/')} 剔除率，排查退款/风控明细`);
+  if (lowRate.length)  todos.push(`核查 ${lowRate.map(o=>`<b>${o.name}</b>`).join('/')} 费率偏低原因`);
+  todos.push(`核对城市群财收总量 ${fmt(totalAll)}，与月度目标对齐，确认达成节奏`);
 
   el.innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
