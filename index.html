@@ -231,6 +231,7 @@ canvas#cvs {
   <div class="si"><span class="dot db"></span>月 GTV <span class="si-hi" id="s-gtv">87.2%</span></div>
   <div class="si-div"></div>
   <div class="si"><span class="dot dc"></span>剩余 <span class="si-danger" id="s-days">-天</span></div>
+  <div class="si"><span class="si-val" id="s-timepct" style="color:#6366f1;font-weight:700;">--%</span></div>
   <div class="si-div"></div>
   <div class="si"><span class="dot dp"></span>下次推送 <span class="si-val" id="s-next">今日18:00</span></div>
   <div class="si-div"></div>
@@ -2509,8 +2510,16 @@ function renderAnalysis(d) {
 //  启动
 // ═══════════════════════════════════════════════════
 window.addEventListener('resize', render);
-// 动态更新顶部状态栏剩余天数
-document.getElementById('s-days').textContent = (window._DAYS_LEFT || BOARD_DATA.daysLeft) + '天';
+// 动态更新顶部状态栏剩余天数 & 时间进度
+(function(){
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+  const lastDay = new Date(y, m+1, 0).getDate();
+  const today = now.getDate();
+  document.getElementById('s-days').textContent = (window._DAYS_LEFT || BOARD_DATA.daysLeft) + '天';
+  const pct = Math.round(today / lastDay * 100);
+  document.getElementById('s-timepct').textContent = today + '/' + lastDay + ' ' + pct + '%';
+})();
 render();
 </script>
 </body>
