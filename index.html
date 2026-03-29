@@ -990,6 +990,7 @@ canvas#cvs {
             <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">CPC消耗</th>
             <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">CPS交易收入</th>
             <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">MEM收款额</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">合计财收</th>
             <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">费率</th>
             <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">剔除率</th>
           </tr>
@@ -2583,9 +2584,9 @@ function renderFinancePanel() {
 
   function fmtMoney(v) {
     if (!v || v === 0) return '—';
-    if (v >= 1e6) return (v/1e6).toFixed(2) + 'M';
-    if (v >= 1e4) return (v/1e4).toFixed(1) + 'W';
-    return v.toLocaleString('zh-CN', {maximumFractionDigits:0});
+    if (v >= 1e8) return (v/1e8).toFixed(2) + '亿元';
+    if (v >= 1e4) return (v/1e4).toFixed(2) + '万元';
+    return v.toLocaleString('zh-CN', {maximumFractionDigits:0}) + '元';
   }
   function fmtPct(v, digits=2) {
     if (!v && v !== 0) return '—';
@@ -2613,7 +2614,7 @@ function renderFinancePanel() {
   const ops = fc.ops || [];
   if (!ops.length) {
     document.getElementById('fc-daily-tbody').innerHTML =
-      '<tr><td colspan="7" style="text-align:center;padding:20px;color:#9ca3af;">暂无各代运营商数据</td></tr>';
+      '<tr><td colspan="8" style="text-align:center;padding:20px;color:#9ca3af;">暂无各代运营商数据</td></tr>';
     return;
   }
 
@@ -2628,6 +2629,7 @@ function renderFinancePanel() {
     totalGtv += gtv; totalCpc += cpc; totalCps += cps; totalMem += mem;
 
     const bg = i % 2 === 0 ? '#ffffff' : '#f8fafc';
+    const totalFinance = cps + cpc + mem;
     const rateColor = rate >= 6 ? '#166534' : rate >= 4 ? '#92400e' : '#b91c1c';
     const rateBg    = rate >= 6 ? '#dcfce7' : rate >= 4 ? '#fef9c3' : '#fee2e2';
     const exclColor = excl >= 5 ? '#b91c1c' : excl >= 3.5 ? '#92400e' : '#166534';
@@ -2638,6 +2640,7 @@ function renderFinancePanel() {
       <td style="padding:8px 12px;text-align:right;color:#7c3aed;">${cpc ? fmtMoney(cpc) : '—'}</td>
       <td style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:600;">${cps ? fmtMoney(cps) : '—'}</td>
       <td style="padding:8px 12px;text-align:right;color:#059669;">${mem ? fmtMoney(mem) : '—'}</td>
+      <td style="padding:8px 12px;text-align:right;color:#dc2626;font-weight:700;">${totalFinance ? fmtMoney(totalFinance) : '—'}</td>
       <td style="padding:8px 12px;text-align:right;">
         <span style="background:${rateBg};color:${rateColor};padding:2px 7px;border-radius:4px;font-size:11px;font-weight:700;">
           ${rate > 0 ? rate.toFixed(2)+'%' : '—'}
@@ -2653,12 +2656,14 @@ function renderFinancePanel() {
 
   // 合计行
   const totalRate = totalGtv > 0 ? (totalCps / totalGtv * 100) : 0;
+  const totalFinanceAll = totalCps + totalCpc + totalMem;
   rows.push(`<tr style="background:#1d4ed8;">
     <td style="padding:8px 12px;font-weight:700;color:#fff;">合计</td>
     <td style="padding:8px 12px;text-align:right;color:#e0e7ff;font-weight:700;">${fmtMoney(totalGtv)}</td>
     <td style="padding:8px 12px;text-align:right;color:#c4b5fd;font-weight:700;">${fmtMoney(totalCpc)}</td>
     <td style="padding:8px 12px;text-align:right;color:#93c5fd;font-weight:700;">${fmtMoney(totalCps)}</td>
     <td style="padding:8px 12px;text-align:right;color:#6ee7b7;font-weight:700;">${fmtMoney(totalMem)}</td>
+    <td style="padding:8px 12px;text-align:right;color:#ffd4d4;font-weight:700;">${fmtMoney(totalFinanceAll)}</td>
     <td style="padding:8px 12px;text-align:right;color:#fde68a;font-weight:700;">${totalRate > 0 ? totalRate.toFixed(2)+'%' : '—'}</td>
     <td style="padding:8px 12px;text-align:right;color:#fca5a5;font-weight:700;">${fc.excl_r ? fc.excl_r.toFixed(2)+'%' : '—'}</td>
   </tr>`);
