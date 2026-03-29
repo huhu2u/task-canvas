@@ -986,11 +986,11 @@ canvas#cvs {
         <thead>
           <tr style="background:#dbeafe;">
             <th style="padding:8px 12px;text-align:left;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">代运营商</th>
-            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">实付验证GTV</th>
-            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">CPC消耗</th>
-            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">CPS交易收入</th>
-            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">MEM收款额</th>
-            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">合计财收</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">实付验证GTV（元）</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">CPC消耗（元）</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">CPS交易收入（元）</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">MEM收款额（元）</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">合计财收（元）</th>
             <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">费率</th>
             <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">剔除率</th>
           </tr>
@@ -2576,7 +2576,7 @@ function renderFinancePanel() {
 
   function fmtMoney(v) {
     if (!v || v === 0) return '—';
-    return v.toLocaleString('zh-CN', {maximumFractionDigits:0}) + '元';
+    return v.toLocaleString('zh-CN', {maximumFractionDigits:0});
   }
   function fmtPct(v, digits=2) {
     if (!v && v !== 0) return '—';
