@@ -249,6 +249,7 @@ canvas#cvs {
   <button class="tabn" onclick="switchTab('visit')" id="tab-visit">🚶 拜访统计</button>
   <button class="tabn" onclick="switchTab('strategy')" id="tab-strategy">🎯 核心策略</button>
   <button class="tabn" onclick="switchTab('price')" id="tab-price">💰 价格带分析</button>
+  <button class="tabn" onclick="switchTab('finance')" id="tab-finance">💵 财收看板</button>
 </div>
 
 <div id="canvas-wrap" data-panel="tasks">
@@ -961,9 +962,62 @@ canvas#cvs {
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════
+     财收看板
+══════════════════════════════════════════════════ -->
+<div id="panel-finance" style="display:none; padding:20px 24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+    <h2 style="font-size:16px;font-weight:700;color:#1976d2;margin:0;">💵 财收看板</h2>
+    <div style="font-size:11px;color:#6b7280;" id="fc-update-time">数据更新中...</div>
+  </div>
+
+  <!-- 月度城市群KPI卡片 -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;" id="fc-kpi-cards">
+    <!-- 由 renderFinancePanel() 填充 -->
+  </div>
+
+  <!-- 各代运营商今日明细表 -->
+  <div style="background:#fff;border-radius:10px;border:1px solid #e0e6ef;overflow:hidden;margin-bottom:20px;">
+    <div style="background:#1d4ed8;padding:10px 16px;font-size:13px;font-weight:700;color:#fff;">
+      📋 各代运营商今日财收明细
+    </div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;" id="fc-daily-table">
+        <thead>
+          <tr style="background:#dbeafe;">
+            <th style="padding:8px 12px;text-align:left;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">代运营商</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">今日实付验证GTV</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">今日CPC消耗</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">今日CPS交易收入</th>
+            <th style="padding:8px 12px;text-align:right;color:#1d4ed8;font-weight:700;border-bottom:1px solid #bfdbfe;">今日费率</th>
+          </tr>
+        </thead>
+        <tbody id="fc-daily-tbody">
+          <tr><td colspan="5" style="text-align:center;padding:20px;color:#9ca3af;">数据加载中...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 月度汇总说明 -->
+  <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 16px;font-size:11px;color:#0369a1;line-height:1.8;">
+    <strong>📌 指标说明</strong><br>
+    · CPS交易收入 = 中小发代运营高线城市_交易收入（剔除风控+退款）<br>
+    · CPC消耗 = 中小发_代运营_CPC&QCPS消耗额（不含区县）<br>
+    · 费率 = CPS交易收入 ÷ 实付验证GTV<br>
+    · 剔除率 = 中小发_代运营_高线城市GTV剔除率<br>
+    · 月度数据来源：Apollo奖金指标表格视图（城市群汇总）<br>
+    · 今日数据来源：Apollo财收分析实时数据（每半小时更新）
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <!-- ZR_RT_DATA: 由 fetch_zr_realtime.py 自动更新，勿手动修改此行 -->
+<script>
+// FC_DATA 由 fetch_finance_data.py 自动更新，勿手动修改
+const FC_DATA = {"time":"2026-03-29 实时","upd_date":"2026-03-28","cps_m":1043683,"cpc_m":516463,"mem_m":523788,"gtv_m":16567864,"excl_r":2.96,"fee_rate":6.30,"ops":[{"name":"惠州巨浪","gtv_today":168956.91,"cpc_today":1021.82,"cps_today":10689.30},{"name":"惠州柏万","gtv_today":127992.09,"cpc_today":2124.66,"cps_today":7948.18},{"name":"泉州小花猫","gtv_today":134950.04,"cpc_today":3716.00,"cps_today":7557.17},{"name":"宁夏灵创","gtv_today":57378.77,"cpc_today":2925.48,"cps_today":3947.07},{"name":"惠安广通","gtv_today":85289.51,"cpc_today":1225.82,"cps_today":5415.71},{"name":"慈溪哲光","gtv_today":115485.40,"cpc_today":5726.21,"cps_today":6716.60},{"name":"义乌汐洋","gtv_today":96574.35,"cpc_today":2259.73,"cps_today":6731.51}]};
+</script>
 <script>window.ZR_RT_FALLBACK={"update_time":"2026-03-29 22:10","date":"2026-03-29","total":{"name":"高线粤闽浙城市群","today_gtv":202791.43,"today_orders":767,"shops":11223,"bind_cnt":3032,"material_cnt":681,"sale_shop_cnt":495,"bind_rate":"22.5%","month_sale_orders":18119,"month_sale_gtv":4916706.06,"month_sale_gtv_rate":"29.4%","month_gtv":16699573.81,"month_orders":254606,"daily_bind_inc":6,"daily_sale_gtv":4916706.06,"daily_sale_orders":18119,"daily_sale_gtv_rate":"2424.5%"},"orgs":[{"name":"泉州市小花猫-泉州乐生活组","today_gtv":51356.86,"today_orders":123,"shops":1824,"bind_cnt":491,"material_cnt":142,"sale_shop_cnt":97,"bind_rate":"28.9%","month_sale_orders":2865,"month_sale_gtv":761027.22,"month_sale_gtv_rate":"30.4%","month_gtv":2499672.21,"month_orders":35673,"daily_bind_inc":2,"daily_sale_gtv":761027.22,"daily_sale_orders":2865,"daily_sale_gtv_rate":"1481.8%"},{"name":"义乌市汐洋-金华义乌乐生活组","today_gtv":36414.74,"today_orders":101,"shops":1136,"bind_cnt":406,"material_cnt":86,"sale_shop_cnt":59,"bind_rate":"21.2%","month_sale_orders":1601,"month_sale_gtv":442595.63,"month_sale_gtv_rate":"24.0%","month_gtv":1842582.9,"month_orders":25744,"daily_bind_inc":0,"daily_sale_gtv":442595.63,"daily_sale_orders":1601,"daily_sale_gtv_rate":"1215.4%"},{"name":"惠州市巨浪-惠州乐生活组","today_gtv":31840.32,"today_orders":152,"shops":2554,"bind_cnt":581,"material_cnt":110,"sale_shop_cnt":91,"bind_rate":"18.9%","month_sale_orders":3359,"month_sale_gtv":677506.25,"month_sale_gtv_rate":"21.0%","month_gtv":3229169.6,"month_orders":59773,"daily_bind_inc":-1,"daily_sale_gtv":677506.25,"daily_sale_orders":3359,"daily_sale_gtv_rate":"2127.8%"},{"name":"惠州市柏万-惠阳乐生活组","today_gtv":31819.28,"today_orders":177,"shops":1685,"bind_cnt":444,"material_cnt":118,"sale_shop_cnt":84,"bind_rate":"26.6%","month_sale_orders":3845,"month_sale_gtv":771350.94,"month_sale_gtv_rate":"27.0%","month_gtv":2860281.27,"month_orders":48894,"daily_bind_inc":3,"daily_sale_gtv":771350.94,"daily_sale_orders":3845,"daily_sale_gtv_rate":"2424.2%"},{"name":"慈溪哲光-金华义乌乐生活组","today_gtv":26588.63,"today_orders":86,"shops":1148,"bind_cnt":294,"material_cnt":45,"sale_shop_cnt":35,"bind_rate":"15.3%","month_sale_orders":1805,"month_sale_gtv":489846.9,"month_sale_gtv_rate":"26.8%","month_gtv":1825508.35,"month_orders":25706,"daily_bind_inc":1,"daily_sale_gtv":489846.9,"daily_sale_orders":1805,"daily_sale_gtv_rate":"1842.3%"},{"name":"惠安广通-晋江乐生活组","today_gtv":22917.8,"today_orders":110,"shops":1615,"bind_cnt":391,"material_cnt":121,"sale_shop_cnt":75,"bind_rate":"30.9%","month_sale_orders":2447,"month_sale_gtv":571596.82,"month_sale_gtv_rate":"28.2%","month_gtv":2025670.57,"month_orders":34617,"daily_bind_inc":0,"daily_sale_gtv":571596.82,"daily_sale_orders":2447,"daily_sale_gtv_rate":"2494.1%"},{"name":"宁夏灵创-金华义乌乐生活组","today_gtv":1853.8,"today_orders":18,"shops":1261,"bind_cnt":425,"material_cnt":59,"sale_shop_cnt":54,"bind_rate":"13.9%","month_sale_orders":2197,"month_sale_gtv":1202782.3,"month_sale_gtv_rate":"49.8%","month_gtv":2416688.91,"month_orders":24199,"daily_bind_inc":1,"daily_sale_gtv":1202782.3,"daily_sale_orders":2197,"daily_sale_gtv_rate":"64882.0%"}]};</script>
 
 <script>
@@ -1541,6 +1595,7 @@ function switchTab(t) {
   document.getElementById('panel-visit').style.display = t==='visit' ? '' : 'none';
   document.getElementById('panel-strategy').style.display = t==='strategy' ? '' : 'none';
   document.getElementById('panel-price').style.display = t==='price' ? '' : 'none';
+  document.getElementById('panel-finance').style.display = t==='finance' ? '' : 'none';
   if(t==='zrrt') loadZrRt();
   document.querySelectorAll('.tabn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
@@ -1548,6 +1603,7 @@ function switchTab(t) {
   if(t==='rt') renderRtPanel();
   if(t==='zr') renderZrPanel();
   if(t==='visit') renderVisitPanel();
+  if(t==='finance') renderFinancePanel();
 }
 
 // ═══════════════════════════════════════════════════
@@ -2509,6 +2565,92 @@ function renderAnalysis(d) {
 // ═══════════════════════════════════════════════════
 //  启动
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  财收看板渲染
+// ═══════════════════════════════════════════════════
+function renderFinancePanel() {
+  const fc = window.FC_DATA;
+  if (!fc) {
+    document.getElementById('fc-kpi-cards').innerHTML =
+      '<div style="grid-column:1/-1;text-align:center;color:#9ca3af;padding:20px;">暂无数据，请等待每日09:30自动更新</div>';
+    return;
+  }
+
+  // 更新时间
+  document.getElementById('fc-update-time').textContent = '数据更新：' + (fc.time || '--');
+
+  function fmtMoney(v) {
+    if (!v || v === 0) return '—';
+    if (v >= 1e6) return (v/1e6).toFixed(2) + 'M';
+    if (v >= 1e4) return (v/1e4).toFixed(1) + 'W';
+    return v.toLocaleString('zh-CN', {maximumFractionDigits:0});
+  }
+  function fmtPct(v, digits=2) {
+    if (!v && v !== 0) return '—';
+    return v.toFixed(digits) + '%';
+  }
+
+  // KPI卡片
+  const kpis = [
+    { label:'CPS交易收入(月)', value: fmtMoney(fc.cps_m), sub:'月累计', color:'#1d4ed8', bg:'#eff6ff' },
+    { label:'CPC消耗(月)',     value: fmtMoney(fc.cpc_m), sub:'月累计', color:'#7c3aed', bg:'#f5f3ff' },
+    { label:'MEM收款额(月)',   value: fmtMoney(fc.mem_m), sub:'月累计', color:'#059669', bg:'#f0fdf4' },
+    { label:'综合费率',        value: fmtPct(fc.fee_rate), sub:'CPS÷GTV', color:'#d97706', bg:'#fffbeb' },
+    { label:'GTV剔除率',       value: fmtPct(fc.excl_r),  sub:'月度口径', color: fc.excl_r >= 20 ? '#b91c1c' : fc.excl_r >= 15 ? '#92400e' : '#166534',
+      bg: fc.excl_r >= 20 ? '#fee2e2' : fc.excl_r >= 15 ? '#fef9c3' : '#dcfce7' },
+  ];
+
+  document.getElementById('fc-kpi-cards').innerHTML = kpis.map(k => `
+    <div style="background:${k.bg};border:1px solid ${k.color}33;border-radius:10px;padding:14px 16px;">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:6px;">${k.label}</div>
+      <div style="font-size:22px;font-weight:800;color:${k.color};letter-spacing:-0.5px;">${k.value}</div>
+      <div style="font-size:10px;color:#9ca3af;margin-top:4px;">${k.sub}</div>
+    </div>`).join('');
+
+  // 各代运营商今日明细
+  const ops = fc.ops || [];
+  if (!ops.length) {
+    document.getElementById('fc-daily-tbody').innerHTML =
+      '<tr><td colspan="5" style="text-align:center;padding:20px;color:#9ca3af;">暂无各代运营商数据</td></tr>';
+    return;
+  }
+
+  let totalGtv = 0, totalCpc = 0, totalCps = 0;
+  const rows = ops.map((op, i) => {
+    const gtv = op.gtv_today || 0;
+    const cpc = op.cpc_today || 0;
+    const cps = op.cps_today || 0;
+    const rate = gtv > 0 ? (cps / gtv * 100) : 0;
+    totalGtv += gtv; totalCpc += cpc; totalCps += cps;
+    const bg = i % 2 === 0 ? '#ffffff' : '#f8fafc';
+    const rateColor = rate >= 6 ? '#166534' : rate >= 4 ? '#92400e' : '#b91c1c';
+    const rateBg    = rate >= 6 ? '#dcfce7' : rate >= 4 ? '#fef9c3' : '#fee2e2';
+    return `<tr style="background:${bg};">
+      <td style="padding:8px 12px;font-weight:600;color:#1a2a3a;">${op.name}</td>
+      <td style="padding:8px 12px;text-align:right;color:#1a2a3a;">${gtv ? fmtMoney(gtv) : '—'}</td>
+      <td style="padding:8px 12px;text-align:right;color:#7c3aed;">${cpc ? fmtMoney(cpc) : '—'}</td>
+      <td style="padding:8px 12px;text-align:right;color:#1d4ed8;">${cps ? fmtMoney(cps) : '—'}</td>
+      <td style="padding:8px 12px;text-align:right;">
+        <span style="background:${rateBg};color:${rateColor};padding:2px 7px;border-radius:4px;font-size:11px;font-weight:700;">
+          ${rate > 0 ? rate.toFixed(2)+'%' : '—'}
+        </span>
+      </td>
+    </tr>`;
+  });
+
+  // 合计行
+  const totalRate = totalGtv > 0 ? (totalCps / totalGtv * 100) : 0;
+  rows.push(`<tr style="background:#1d4ed8;">
+    <td style="padding:8px 12px;font-weight:700;color:#fff;">合计</td>
+    <td style="padding:8px 12px;text-align:right;color:#fff;font-weight:700;">${fmtMoney(totalGtv)}</td>
+    <td style="padding:8px 12px;text-align:right;color:#c4b5fd;font-weight:700;">${fmtMoney(totalCpc)}</td>
+    <td style="padding:8px 12px;text-align:right;color:#93c5fd;font-weight:700;">${fmtMoney(totalCps)}</td>
+    <td style="padding:8px 12px;text-align:right;color:#fde68a;font-weight:700;">${totalRate > 0 ? totalRate.toFixed(2)+'%' : '—'}</td>
+  </tr>`);
+
+  document.getElementById('fc-daily-tbody').innerHTML = rows.join('');
+}
+
 window.addEventListener('resize', render);
 // 动态更新顶部状态栏剩余天数 & 时间进度
 (function(){
