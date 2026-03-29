@@ -2707,10 +2707,10 @@ function renderFinanceAnalysis(fc, ops) {
   // 剔除率最高
   const maxExcl = [...ops].sort((a,b)=>(b.excl||0)-(a.excl||0))[0];
 
-  // CPC消耗占合计财收比最高（烧钱最多）
-  const cpcBurner = [...ops].sort((a,b)=>{
-    const ra = (a.cpc||0)/((a.cps||0)+(a.cpc||0)+(a.mem||0)||1);
-    const rb = (b.cpc||0)/((b.cps||0)+(b.cpc||0)+(b.mem||0)||1);
+  // CPC消耗占合计财收比最高（烧钱最多）—— 用 sorted（已含total字段）
+  const cpcBurner = [...sorted].sort((a,b)=>{
+    const ra = (a.cpc||0) / (a.total||1);
+    const rb = (b.cpc||0) / (b.total||1);
     return rb - ra;
   })[0];
   const cpcBurnerRate = (cpcBurner.cpc||0) / (cpcBurner.total||1) * 100;
