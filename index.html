@@ -861,38 +861,38 @@ canvas#cvs {
 <!-- 价格带分析面板 -->
 <div id="panel-price" style="display:none; padding:20px 24px;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-    <div style="font-size:18px;font-weight:700;color:#1976d2;">💰 超价格带分析</div>
-    <div style="font-size:11px;color:#8a9ab8;">数据截止：2026-03-28 &nbsp;|&nbsp; <a href="https://apollo.sankuai.com/data/report/list?reportId=864" target="_blank" style="color:#60c8ff;">Apollo #864</a></div>
+    <div style="font-size:18px;font-weight:700;color:#1d4ed8;">💰 超价格带分析</div>
+    <div style="font-size:11px;color:#6b7280;">数据截止：2026-03-28 &nbsp;|&nbsp; <a href="https://apollo.sankuai.com/data/report/list?reportId=864" target="_blank" style="color:#2563eb;">Apollo #864</a></div>
   </div>
 
   <!-- 阈值说明 -->
-  <div style="background:#0d1f2d;border-radius:6px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#8a9ab8;display:flex;gap:16px;flex-wrap:wrap;">
-    <span>阈值：</span>
-    <span style="color:#c8d8e8;">品类A(≤300元) <b style="color:#ffd060;">17%</b></span>
-    <span style="color:#c8d8e8;">品类B(≤500元) <b style="color:#ffd060;">34%</b></span>
-    <span style="color:#c8d8e8;">品类C(≤1000元) <b style="color:#ffd060;">6%</b></span>
+  <div style="background:#f0f4ff;border:1px solid #dbeafe;border-radius:6px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#374151;display:flex;gap:16px;flex-wrap:wrap;">
+    <span style="color:#6b7280;">阈值：</span>
+    <span>品类A(≤300元) <b style="color:#1d4ed8;">17%</b></span>
+    <span>品类B(≤500元) <b style="color:#1d4ed8;">34%</b></span>
+    <span>品类C(≤1000元) <b style="color:#1d4ed8;">6%</b></span>
   </div>
 
   <!-- 汇总表 -->
   <div style="overflow-x:auto;margin-bottom:14px;">
-    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
       <thead>
-        <tr style="background:#1565c0;color:#fff;">
-          <th style="padding:7px 10px;text-align:left;">代运营商</th>
-          <th style="padding:7px 8px;text-align:center;">品类A<br><span style="font-weight:400;font-size:11px;">≤300 阈值17%</span></th>
-          <th style="padding:7px 8px;text-align:center;">品类B<br><span style="font-weight:400;font-size:11px;">≤500 阈值34%</span></th>
-          <th style="padding:7px 8px;text-align:center;">品类C<br><span style="font-weight:400;font-size:11px;">≤1000 阈值6%</span></th>
+        <tr style="background:#1d4ed8;color:#fff;">
+          <th style="padding:10px 12px;text-align:left;font-weight:600;">代运营商</th>
+          <th style="padding:10px 10px;text-align:center;font-weight:600;">品类A<br><span style="font-weight:400;font-size:11px;">≤300 阈值17%</span></th>
+          <th style="padding:10px 10px;text-align:center;font-weight:600;">品类B<br><span style="font-weight:400;font-size:11px;">≤500 阈值34%</span></th>
+          <th style="padding:10px 10px;text-align:center;font-weight:600;">品类C<br><span style="font-weight:400;font-size:11px;">≤1000 阈值6%</span></th>
         </tr>
       </thead>
       <tbody id="price-tbody">
 <!-- PRICE_BAND_TBODY_START -->
-<tr style="border-bottom:1px solid #1a3040;"><td style="padding:7px 10px;color:#c8d8e8;font-weight:600;">宁夏灵创</td><td style="padding:7px 8px;text-align:center;background:#7f1d1d;color:#f87171;">27.0%<br><small>+10.0pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">21.8%<br><small>-12.2pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">0.2%<br><small>-5.8pp</small></td></tr>
-<tr style="border-bottom:1px solid #1a3040;"><td style="padding:7px 10px;color:#c8d8e8;font-weight:600;">惠州市巨浪</td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">13.6%<br><small>-3.4pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">24.4%<br><small>-9.6pp</small></td><td style="padding:7px 8px;text-align:center;background:#78350f;color:#fbbf24;">5.1%<br><small>-0.9pp</small></td></tr>
-<tr style="border-bottom:1px solid #1a3040;"><td style="padding:7px 10px;color:#c8d8e8;font-weight:600;">慈溪哲光</td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">13.3%<br><small>-3.7pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">27.4%<br><small>-6.6pp</small></td><td style="padding:7px 8px;text-align:center;background:#78350f;color:#fbbf24;">4.5%<br><small>-1.5pp</small></td></tr>
-<tr style="border-bottom:1px solid #1a3040;"><td style="padding:7px 10px;color:#c8d8e8;font-weight:600;">泉州市小花猫</td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">13.2%<br><small>-3.8pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">9.9%<br><small>-24.1pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">2.4%<br><small>-3.6pp</small></td></tr>
-<tr style="border-bottom:1px solid #1a3040;"><td style="padding:7px 10px;color:#c8d8e8;font-weight:600;">义乌市汐洋</td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">5.5%<br><small>-11.5pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">20.3%<br><small>-13.7pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">1.9%<br><small>-4.1pp</small></td></tr>
-<tr style="border-bottom:1px solid #1a3040;"><td style="padding:7px 10px;color:#c8d8e8;font-weight:600;">惠州市柏万</td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">5.0%<br><small>-12.0pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">14.1%<br><small>-19.9pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">1.3%<br><small>-4.7pp</small></td></tr>
-<tr style="border-bottom:1px solid #1a3040;"><td style="padding:7px 10px;color:#c8d8e8;font-weight:600;">惠安广通</td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">2.2%<br><small>-14.8pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">16.4%<br><small>-17.6pp</small></td><td style="padding:7px 8px;text-align:center;background:#14532d;color:#4ade80;">0.6%<br><small>-5.4pp</small></td></tr>
+<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">宁夏灵创</td><td style="padding:8px 10px;text-align:center;background:#fee2e2;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#b91c1c;">27.0%</span><br><span style="font-size:11px;color:#ef4444;">+10.0pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">21.8%</span><br><span style="font-size:11px;color:#22c55e;">-12.2pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">0.2%</span><br><span style="font-size:11px;color:#22c55e;">-5.8pp</span></td></tr>
+<tr><td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠州市巨浪</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">13.6%</span><br><span style="font-size:11px;color:#22c55e;">-3.4pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">24.4%</span><br><span style="font-size:11px;color:#22c55e;">-9.6pp</span></td><td style="padding:8px 10px;text-align:center;background:#fef9c3;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#92400e;">5.1%</span><br><span style="font-size:11px;color:#f59e0b;">-0.9pp</span></td></tr>
+<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">慈溪哲光</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">13.3%</span><br><span style="font-size:11px;color:#22c55e;">-3.7pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">27.4%</span><br><span style="font-size:11px;color:#22c55e;">-6.6pp</span></td><td style="padding:8px 10px;text-align:center;background:#fef9c3;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#92400e;">4.5%</span><br><span style="font-size:11px;color:#f59e0b;">-1.5pp</span></td></tr>
+<tr><td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">泉州市小花猫</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">13.2%</span><br><span style="font-size:11px;color:#22c55e;">-3.8pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">9.9%</span><br><span style="font-size:11px;color:#22c55e;">-24.1pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">2.4%</span><br><span style="font-size:11px;color:#22c55e;">-3.6pp</span></td></tr>
+<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">义乌市汐洋</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">5.5%</span><br><span style="font-size:11px;color:#22c55e;">-11.5pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">20.3%</span><br><span style="font-size:11px;color:#22c55e;">-13.7pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">1.9%</span><br><span style="font-size:11px;color:#22c55e;">-4.1pp</span></td></tr>
+<tr><td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠州市柏万</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">5.0%</span><br><span style="font-size:11px;color:#22c55e;">-12.0pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">14.1%</span><br><span style="font-size:11px;color:#22c55e;">-19.9pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">1.3%</span><br><span style="font-size:11px;color:#22c55e;">-4.7pp</span></td></tr>
+<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠安广通</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">2.2%</span><br><span style="font-size:11px;color:#22c55e;">-14.8pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">16.4%</span><br><span style="font-size:11px;color:#22c55e;">-17.6pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">0.6%</span><br><span style="font-size:11px;color:#22c55e;">-5.4pp</span></td></tr>
 
 <!-- PRICE_BAND_TBODY_END -->
       </tbody>
@@ -900,13 +900,13 @@ canvas#cvs {
   </div>
 
   <!-- 归因 -->
-  <div style="background:#1a2f40;border-radius:8px;padding:14px 16px;font-size:12px;color:#c8d8e8;line-height:1.9;">
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.9;">
     <!-- PRICE_BAND_SUMMARY_START -->
-    <div style="font-weight:700;color:#ffd060;margin-bottom:8px;">📋 整体归因（2026-03-28）</div>
-    <ul style="margin:0;padding-left:16px;list-style:none;">
-<li>❌ <b>宁夏灵创</b> 品类A(≤300元) <span style='color:#f87171'>超标+10.0pp</span>（实际27.0% vs 阈值17%）</li>
-<li>⚠️ <b>惠州市巨浪</b> 品类C(≤1000元) 余量仅剩0.9pp</li>
-<li>⚠️ <b>慈溪哲光</b> 品类C(≤1000元) 余量仅剩1.5pp</li>
+    <div style="font-weight:700;color:#1e40af;margin-bottom:8px;">📋 整体归因（2026-03-28）</div>
+    <ul style="margin:0;padding-left:16px;list-style:none;line-height:2;">
+<li style='color:#374151;'>❌ <b>宁夏灵创</b> 品类A(≤300元) <span style='color:#dc2626;font-weight:600;'>超标+10.0pp</span>（实际27.0% vs 阈值17%）</li>
+<li style='color:#374151;'>⚠️ <b>惠州市巨浪</b> 品类C(≤1000元) 余量仅剩<span style='color:#d97706;font-weight:600;'>0.9pp</span></li>
+<li style='color:#374151;'>⚠️ <b>慈溪哲光</b> 品类C(≤1000元) 余量仅剩<span style='color:#d97706;font-weight:600;'>1.5pp</span></li>
     </ul>
     <!-- PRICE_BAND_SUMMARY_END -->
   </div>
