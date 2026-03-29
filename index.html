@@ -230,7 +230,7 @@ canvas#cvs {
   <div class="si-div"></div>
   <div class="si"><span class="dot db"></span>月 GTV <span class="si-hi" id="s-gtv">87.2%</span></div>
   <div class="si-div"></div>
-  <div class="si"><span class="dot dc"></span>剩余 <span class="si-danger" id="s-days">4天</span></div>
+  <div class="si"><span class="dot dc"></span>剩余 <span class="si-danger" id="s-days">-天</span></div>
   <div class="si-div"></div>
   <div class="si"><span class="dot dp"></span>下次推送 <span class="si-val" id="s-next">今日18:00</span></div>
   <div class="si-div"></div>
@@ -258,7 +258,7 @@ canvas#cvs {
 <div id="panel-board" style="display:none; padding:20px 24px;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
     <div style="font-size:16px;font-weight:700;color:#1976d2;">📊 粤闽浙城市群 业绩进度表</div>
-    <div style="font-size:12px;color:#4a6a8a;" id="board-upd-time">数据截至 2026-03-28 18:28 · 剩余 4 天</div>
+    <div style="font-size:12px;color:#4a6a8a;" id="board-upd-time">数据截至 加载中...</div>
   </div>
 
   <!-- GTV表 -->
@@ -1584,9 +1584,20 @@ function switchTab(t) {
 // ═══════════════════════════════════════════════════
 //  业绩进度表数据与渲染
 // ═══════════════════════════════════════════════════
+// 动态计算剩余天数（今日到月末）
+(function(){
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth(); // m是0-based
+  const lastDay = new Date(y, m+1, 0).getDate();   // 本月最后一天
+  const today = now.getDate();
+  window._DAYS_LEFT = lastDay - today + 1;          // 含今天
+  const pad = n => String(n).padStart(2,'0');
+  window._TODAY_STR = `${y}-${pad(m+1)}-${pad(today)}`;
+})();
+
 const BOARD_DATA = {
-  time: '2026-03-28 18:28',
-  daysLeft: 4,
+  time: window._TODAY_STR + ' 实时',
+  daysLeft: window._DAYS_LEFT,
   // name, owner, gtv_m, gtv_t, gtv_y, excl, cpc_m, cpc_t, cpc_y, new_done, new_tgt, wpu, mem_m, renewal, mom
   ops: [
     ['惠州巨浪',  '肖立铭', 3089866, 3566000, 129149, 0.0273, 51966,  53400,  733, 11, 18, 22062, 119082, 0.5179,  1.1454],
@@ -2519,6 +2530,8 @@ function renderAnalysis(d) {
 //  启动
 // ═══════════════════════════════════════════════════
 window.addEventListener('resize', render);
+// 动态更新顶部状态栏剩余天数
+document.getElementById('s-days').textContent = (window._DAYS_LEFT || BOARD_DATA.daysLeft) + '天';
 render();
 </script>
 </body>
