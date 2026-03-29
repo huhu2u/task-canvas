@@ -2571,7 +2571,7 @@ function renderAnalysis(d) {
 //  财收看板渲染
 // ═══════════════════════════════════════════════════
 function renderFinancePanel() {
-  const fc = window.FC_DATA;
+  const fc = (typeof FC_DATA !== 'undefined' ? FC_DATA : null) || window.FC_DATA;
   if (!fc) {
     document.getElementById('fc-kpi-cards').innerHTML =
       '<div style="grid-column:1/-1;text-align:center;color:#9ca3af;padding:20px;">暂无数据，请等待每日09:30自动更新</div>';
