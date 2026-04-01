@@ -374,6 +374,7 @@ canvas#cvs {
           <th>昨日店转GTV渗透率</th>
           <th>月店转GTV(元)</th>
           <th>月店转GTV渗透率</th>
+          <th title="月累计优惠码订单≥4单且金额≥10元的门店数">有效铺码动销门店</th>
         </tr>
       </thead>
       <tbody id="zr-summary-tbody2"></tbody>
@@ -399,6 +400,7 @@ canvas#cvs {
           <th>昨日店转GTV渗透率</th>
           <th>月店转GTV(元)</th>
           <th>月店转GTV渗透率</th>
+          <th title="月累计优惠码订单≥4单且金额≥10元的门店数">有效铺码动销门店</th>
         </tr>
       </thead>
       <tbody id="zr-sales-tbody"></tbody>
@@ -1681,13 +1683,15 @@ const VISIT_DATA = {
 //           昨日店转GTV(9), 昨日店转GTV渗透率(10), 月净增绑码数(11), 日净增绑码数(12), 昨日店转订单数(13)]
 // 月净增 = 今日累计 - 3月1日基准; 日净增 = 今日 - 昨日（明天9点抓3月29日后自动有值）
 const ZR_LIVE = [
-  ['惠州巨浪', 2556, 582, 103, 93, 0.177, 0.903, 0.218, 783663, 46823.22, null, 81, 0, 116],
-  ['泉州小花猫', 1820, 492, 138, 111, 0.28, 0.804, 0.332, 946530, 78693.68, null, 94, 2, 137],
-  ['惠州柏万', 1681, 442, 105, 80, 0.238, 0.762, 0.256, 792404, 13205.66, 1.61, 78, -3, 97],
-  ['义乌汐洋', 1136, 411, 88, 63, 0.214, 0.716, 0.256, 526909, 8550.83, 1.357, 46, 1, 50],
-  ['宁夏灵创', 1249, 419, 56, 42, 0.134, 0.75, 0.348, 715579, 3954.6, 0.769, -4, 0, 16],
-  ['惠安广通', 1609, 396, 115, 72, 0.29, 0.626, 0.28800000000000003, 650519, 22758.7, null, 70, 5, 63],
-  ['慈溪哲光', 1140, 292, 44, 34, 0.151, 0.773, 0.27699999999999997, 540671, -50848.76, -15.099, 13, -1, -141],
+  // [简称, 合作门店(1), 绑码数(2), 有效铺设(3), 有效动销(4), 铺设率(5), 动销率(6), 月店转渗透率(7), 月店转GTV(8),
+  //  昨日店转GTV(9), 昨日店转渗透率(10), 月净增绑码(11), 日净增绑码(12), 昨日店转订单数(13), 有效铺码动销门店(14)]
+  ['惠州巨浪', 2556, 582, 103, 93, 0.177, 0.903, 0.218, 783663, 46823.22, null, 81, 0, 116, null],
+  ['泉州小花猫', 1820, 492, 138, 111, 0.28, 0.804, 0.332, 946530, 78693.68, null, 94, 2, 137, null],
+  ['惠州柏万', 1681, 442, 105, 80, 0.238, 0.762, 0.256, 792404, 13205.66, 1.61, 78, -3, 97, null],
+  ['义乌汐洋', 1136, 411, 88, 63, 0.214, 0.716, 0.256, 526909, 8550.83, 1.357, 46, 1, 50, null],
+  ['宁夏灵创', 1249, 419, 56, 42, 0.134, 0.75, 0.348, 715579, 3954.6, 0.769, -4, 0, 16, null],
+  ['惠安广通', 1609, 396, 115, 72, 0.29, 0.626, 0.28800000000000003, 650519, 22758.7, null, 70, 5, 63, null],
+  ['慈溪哲光', 1140, 292, 44, 34, 0.151, 0.773, 0.27699999999999997, 540671, -50848.76, -15.099, 13, -1, -141, null],
 ];
 const ZR_TOTAL = { stores:11191, bind:3034, valid:649, dx:495, pave_rate:0.214, dx_rate:0.763, gtv_rate:0.27699999999999997, month_gtv:4956275 };
 const ZR_DATE  = '2026-04-01';
@@ -2005,6 +2009,7 @@ function renderZrPanel() {
     const monthIncrClass = o[11] != null ? zrMonthIncrColor(o[11]) : '';
     const dayIncr   = o[12] != null ? `${o[12]>=0?'+':''}${o[12]}`  : '—';
     const yOrders  = o[13] != null ? o[13].toLocaleString()+'单'     : '—';
+    const validTech = o[14] != null ? o[14].toLocaleString()         : '<span style="color:#8a9ab8;font-size:11px;">加载中...</span>';
     rows += `<tr>
       <td style="font-weight:700;color:#1a2a3a;">${o[0]}</td>
       <td>${o[1].toLocaleString()}</td>
@@ -2016,6 +2021,7 @@ function renderZrPanel() {
       <td class="${yRateClass}" style="font-weight:700;">${yRate}</td>
       <td>${o[8].toLocaleString()}</td>
       <td class="${zrGtvColor(o[7])}">${(o[7]*100).toFixed(1)}%</td>
+      <td style="font-weight:700;color:#6d28d9;" id="valid-tech-org-${o[0]}">${validTech}</td>
     </tr>`;
   });
   document.getElementById('zr-summary-tbody2').innerHTML = rows;
@@ -2031,6 +2037,7 @@ function renderZrPanel() {
     <td>—</td>
     <td>${t.month_gtv.toLocaleString()}</td>
     <td class="${zrGtvColor(t.gtv_rate)}">${(t.gtv_rate*100).toFixed(1)}%</td>
+    <td style="font-weight:700;color:#6d28d9;" id="valid-tech-total">—</td>
   </tr>`;
 
   // ── 销售明细表（按代运营商分层）──
@@ -2045,7 +2052,7 @@ function renderZrPanel() {
     salesByAgencyMap[ag].push(s);
   });
   // 总列数 = 12
-  const totalCols = 12;
+  const totalCols = 13;
   ZR_LIVE.forEach(o => {
     const ag = o[0];
     const agSales = salesByAgencyMap[ag] || [];
@@ -2063,6 +2070,9 @@ function renderZrPanel() {
       const mIncrVal = s[11] != null ? s[11] : null;
       const mIncrStr = mIncrVal!=null ? `+${mIncrVal}` : '—';
       const mIncrClass = mIncrVal!=null ? zrMonthIncrColor(mIncrVal) : '';
+      // s[12] = 有效铺码动销门店数（销售个人维度，由fetchValidTechShops填充）
+      // 用姓名作为 DOM id key（替代login_id，因ZR_SALES无login_id字段）
+      const salesNameKey = s[2].replace(/\s/g, '_');
       salesRows += `<tr>
         <td style="color:#7a9ab8;">${s[0]}</td>
         <td style="color:#4a6a8a;">${s[1]}</td>
@@ -2076,6 +2086,7 @@ function renderZrPanel() {
         <td class="${syRateClass}" style="font-weight:700;">${syRate}</td>
         <td>${s[3].toLocaleString()}</td>
         <td class="${zrGtvColor(gtvR)}" style="font-weight:700;">${(gtvR*100).toFixed(1)}%</td>
+        <td style="font-weight:700;color:#6d28d9;" id="valid-tech-name-${salesNameKey}"><span style="color:#8a9ab8;font-size:11px;">加载中...</span></td>
       </tr>`;
     });
   });
@@ -2167,6 +2178,155 @@ function renderZrPanel() {
   });
 
   document.getElementById('zr-attr-agency').innerHTML = agencyHtml;
+
+  // 异步拉取有效铺码动销门店数（不阻塞渲染）
+  fetchValidTechShops();
+}
+
+// ── 有效铺码动销门店：Apollo 实时拉取 ──
+// 口径：月累计优惠码核销订单数 > 4 AND 月累计GTV > 10元
+// 数据来源：moduleCode=F0799C46（策略管理-PC-职人码（商户明细））
+const ZR_ORG_ID_MAP = {
+  '惠州巨浪': {level:'org_id_l9', id:20898759},
+  '泉州小花猫': {level:'org_id_l9', id:20898779},
+  '惠州柏万': {level:'org_id_l9', id:20898758},
+  '义乌汐洋': {level:'org_id_l9', id:20921277},
+  '宁夏灵创': {level:'org_id_l9', id:20262599},
+  '惠安广通': {level:'org_id_l9', id:20898777},
+  '慈溪哲光': {level:'org_id_l9', id:20262600},
+};
+
+async function fetchAllShopsForOrg(orgName) {
+  const orgInfo = ZR_ORG_ID_MAP[orgName];
+  if (!orgInfo) return { org: orgName, validCount: 0, bySalesLoginId: {} };
+
+  let allRows = [];
+  let page = 1;
+  const pageSize = 300;
+
+  while (true) {
+    const body = {
+      tenantId: 1,
+      dateType: 'daily',
+      params: {
+        partition_date: [ZR_DATE],
+        [orgInfo.level]: orgInfo.id,
+        dp_front_city_id: [-999],
+        cat1_code: [-999],
+        indicator_value_filter: []
+      },
+      indicatorList: ['cullrisk_consume_order_cnt_m', 'cullrisk_actual_pay_consume_gtv_m'],
+      moduleCode: 'F0799C46',
+      pageNum: page,
+      pageSize: pageSize
+    };
+
+    let data;
+    try {
+      const resp = await fetch('https://apollo.meituan.com/datafetcher/component/table/query', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+      });
+      data = await resp.json();
+    } catch(e) {
+      break;
+    }
+
+    const rows = (data.data && data.data.indicatorDisplay) || [];
+    const total = (data.data && data.data.total) || 0;
+    allRows = allRows.concat(rows);
+    if (allRows.length >= total || rows.length < pageSize) break;
+    page++;
+  }
+
+  // 筛选：月订单 > 4 且 GTV > 10
+  const result = { org: orgName, validCount: 0, bySalesLoginId: {} };
+  allRows.forEach(r => {
+    const orders = parseInt((r.cullrisk_consume_order_cnt_m || '0').replace(/,/g, ''), 10) || 0;
+    const gtv = parseFloat((r.cullrisk_actual_pay_consume_gtv_m || '0').replace(/,/g, '')) || 0;
+    if (orders > 4 && gtv > 10) {
+      result.validCount++;
+      const loginId = r.login_id || '';
+      if (loginId) {
+        result.bySalesLoginId[loginId] = (result.bySalesLoginId[loginId] || 0) + 1;
+      }
+    }
+  });
+  return result;
+}
+
+// 从 Apollo 获取销售员 login_id → 姓名 映射（员工维度）
+let _loginIdNameMap = null;
+async function getLoginIdNameMap() {
+  if (_loginIdNameMap) return _loginIdNameMap;
+  _loginIdNameMap = {};
+  try {
+    const body = {
+      tenantId: 1, dateType: 'daily',
+      params: { partition_date: [ZR_DATE], org_id_l8: 20903327, indicator_value_filter: [] },
+      indicatorList: ['cullrisk_consume_order_cnt_m'],
+      dimCodeList: ['employee_id', 'employee_name'],
+      moduleCode: '3D643815',
+      pageNum: 1, pageSize: 200
+    };
+    const resp = await fetch('https://apollo.meituan.com/datafetcher/component/table/query', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    const rows = (data.data && data.data.indicatorDisplay) || [];
+    rows.forEach(r => {
+      if (r.login_id && r.employee_name) {
+        _loginIdNameMap[r.login_id] = r.employee_name;
+      }
+    });
+  } catch(e) {}
+  return _loginIdNameMap;
+}
+
+async function fetchValidTechShops() {
+  const orgNames = ZR_LIVE.map(o => o[0]);
+  let grandTotal = 0;
+
+  // 先初始化所有销售格为0
+  document.querySelectorAll('[id^="valid-tech-name-"]').forEach(el => {
+    el.textContent = '0';
+  });
+
+  // 获取 login_id → 姓名 映射
+  const loginIdNameMap = await getLoginIdNameMap();
+
+  for (const orgName of orgNames) {
+    try {
+      const result = await fetchAllShopsForOrg(orgName);
+      grandTotal += result.validCount;
+
+      // 更新代运营商汇总表单元格
+      const orgCell = document.getElementById('valid-tech-org-' + orgName);
+      if (orgCell) orgCell.textContent = result.validCount.toLocaleString();
+
+      // 更新销售个人单元格（login_id → 姓名 → DOM id）
+      Object.entries(result.bySalesLoginId).forEach(([loginId, cnt]) => {
+        const salesName = loginIdNameMap[loginId] || '';
+        if (salesName) {
+          const nameKey = salesName.replace(/\s/g, '_');
+          const salesCell = document.getElementById('valid-tech-name-' + nameKey);
+          if (salesCell) {
+            const existing = parseInt(salesCell.textContent) || 0;
+            salesCell.textContent = (existing + cnt).toLocaleString();
+          }
+        }
+      });
+    } catch(e) {
+      const orgCell = document.getElementById('valid-tech-org-' + orgName);
+      if (orgCell) orgCell.textContent = '—';
+    }
+  }
+
+  // 更新合计行
+  const totalCell = document.getElementById('valid-tech-total');
+  if (totalCell) totalCell.textContent = grandTotal.toLocaleString();
 }
 
 function renderBoard() {
