@@ -1666,7 +1666,18 @@ function renewalClass(r) {
 // ═══════════════════════════════════════════════════
 // 数据结构: [简称, 合作门店, 绑码数, 有效铺设数, 有效动销数, 铺设率, 动销率, 店转GTV渗透率, 月店转GTV,
 // VISIT_DATA_START — 每日09:00由fetch_visit_analysis.py自动更新
-const VISIT_DATA = {"date": "2026-04-01", "rows": [{"org": "惠州巨浪", "hc": 9, "ge4": 8, "lack": -1, "unsigned": 1, "rate": "88%"}, {"org": "惠州柏万", "hc": 7, "ge4": 5, "lack": -2, "unsigned": 0, "rate": "71%"}, {"org": "泉州小花猫", "hc": 7, "ge4": 5, "lack": -2, "unsigned": 0, "rate": "71%"}, {"org": "宁夏灵创", "hc": 0, "ge4": 0, "lack": 0, "unsigned": 0, "rate": "—"}, {"org": "惠安广通", "hc": 5, "ge4": 6, "lack": 1, "unsigned": 0, "rate": "120%"}, {"org": "慈溪哲光", "hc": 6, "ge4": 1, "lack": -5, "unsigned": 0, "rate": "16%"}, {"org": "义乌汐洋", "hc": 6, "ge4": 6, "lack": 0, "unsigned": 0, "rate": "100%"}], "total": {"hc": 40, "ge4": 31, "lack": -9, "unsigned": 1, "rate": "77%"}};
+const VISIT_DATA = {
+  date: '2026-04-01',
+  // [代运营商简称, HC编制, 日拜访>4人数, 未签到人数]
+  rows: [
+    ['义乌汐洋', 6, 5, 0],
+    ['惠安广通', 5, 5, 0],
+    ['惠州巨浪', 9, 6, 1],
+    ['惠州柏万', 7, 5, 0],
+    ['慈溪哲光', 6, 1, 0],
+    ['泉州小花猫', 7, 3, 0],
+  ]
+};
 // VISIT_DATA_END
 
 //           昨日店转GTV(9), 昨日店转GTV渗透率(10), 月净增绑码数(11), 日净增绑码数(12), 昨日店转订单数(13)]
