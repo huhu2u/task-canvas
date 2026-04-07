@@ -1990,13 +1990,28 @@ function renderZrPanel() {
   ZR_LIVE.forEach(o => {
     const bindRate = o[2]/o[1];
     // o[9]=昨日店转GTV, o[10]=昨日店转GTV渗透率(旧/废弃), o[11]=月净增绑码数, o[12]=日净增绑码数, o[13]=昨日店转订单数
-    // 重新计算昨日店转渗透率 = 昨日店转GTV / 昨日GTV（来自BOARD_DATA）
-    const ydGtv = ydGtvMap[o[0]] || null;
+    // 昨日店转渗透率：优先从ZR_RT_FALLBACK.orgs[].daily_sale_gtv_rate获取（已由后台计算好）
     const yGtvVal = o[9];
     let yRateVal = null;
-    if (yGtvVal != null && ydGtv != null && ydGtv > 0) {
-      yRateVal = yGtvVal / ydGtv;
-      if (yRateVal > 1) yRateVal = null; // 渗透率>100%明显异常
+    // 从ZR_RT_FALLBACK匹配代运营商名（简称 vs 全名，模糊匹配）
+    if (window.ZR_RT_FALLBACK && window.ZR_RT_FALLBACK.orgs) {
+      const shortName = o[0]; // e.g. '惠州柏万'
+      const matchOrg = window.ZR_RT_FALLBACK.orgs.find(org =>
+        org.name && org.name.indexOf(shortName) >= 0
+      );
+      if (matchOrg && matchOrg.daily_sale_gtv_rate != null) {
+        const rateStr = String(matchOrg.daily_sale_gtv_rate).replace('%','');
+        const rateNum = parseFloat(rateStr);
+        if (!isNaN(rateNum)) yRateVal = rateNum / 100;
+      }
+    }
+    // 备用：用BOARD_DATA昨日GTV计算
+    if (yRateVal === null) {
+      const ydGtv = ydGtvMap[o[0]] || null;
+      if (yGtvVal != null && ydGtv != null && ydGtv > 0) {
+        yRateVal = yGtvVal / ydGtv;
+        if (yRateVal > 1) yRateVal = null;
+      }
     }
     const yGtv  = yGtvVal != null ? yGtvVal.toLocaleString()   : '—';
     const yRate = yRateVal != null ? (yRateVal*100).toFixed(1)+'%' : '—';
