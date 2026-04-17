@@ -262,10 +262,10 @@ table.dt tbody tr:last-child td{border-bottom:none}
 <!-- Tab8: 月考 -->
 <div id="panel-exam" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">📝 月考</div><div class="panel-sub">点击代运营商按钮切换完成状态</div></div>
+    <div><div class="panel-title">📝 月考</div><div class="panel-sub">点击状态单元格切换完成/未完成</div></div>
     <div id="exam-summary" style="font-size:13px;color:#4a6a8a;font-weight:600"></div>
   </div>
-  <div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px 0" id="exam-cards"></div>
+  <div id="exam-table-wrap"></div>
 </div>
 
 <!-- Tab9: 职人码进度看板 -->
@@ -796,28 +796,29 @@ function renderAurora(){
 function renderExam(){
   const key='exam_status';
   let doneCount=0;
-  let cards='';
+  let rows='';
   AGENTS.forEach(a=>{
     const status=g(a.name,key)||'未完成';
     const isDone=status==='完成';
     if(isDone) doneCount++;
-    cards+=`<button type="button" onclick="toggleExam('${a.name}')" style="
-      cursor:pointer;user-select:none;border:none;font-family:inherit;
-      background:${isDone?'#dcfce7':'#fee2e2'};
-      outline:2px solid ${isDone?'#16a34a':'#ef4444'};
-      border-radius:12px;padding:16px 22px;
-      min-width:140px;text-align:center;
-      position:relative;z-index:999;
-      transition:all .15s;box-shadow:0 2px 6px rgba(0,0,0,.07)
-    ">
-      <div style="font-size:28px;margin-bottom:6px">${isDone?'✅':'❌'}</div>
-      <div style="font-size:14px;font-weight:700;color:${isDone?'#15803d':'#b91c1c'}">${a.name}</div>
-      <div style="font-size:11px;color:${isDone?'#166534':'#991b1b'};margin-top:4px">${isDone?'已完成':'未完成'}</div>
-    </button>`;
+    const bg=isDone?'#dcfce7':'#fee2e2';
+    const clr=isDone?'#15803d':'#b91c1c';
+    rows+=`<tr>
+      <td style="padding:10px 16px;font-weight:700;color:#1a2a3a">${a.name}</td>
+      <td style="padding:10px 16px;background:${bg};color:${clr};font-weight:700;font-size:15px;cursor:pointer;text-align:center;user-select:none"
+          onclick="toggleExam('${a.name}')">${isDone?'✅ 已完成':'❌ 未完成'}</td>
+    </tr>`;
   });
-  document.getElementById('exam-cards').innerHTML=cards;
   const total=AGENTS.length;
   const pend=total-doneCount;
+  const wrap=document.getElementById('exam-table-wrap');
+  if(wrap) wrap.innerHTML=`<table class="dt" style="min-width:320px">
+    <thead><tr>
+      <th style="padding:8px 16px;background:#065F46;color:#fff">代运营商</th>
+      <th style="padding:8px 16px;background:#065F46;color:#fff;min-width:140px">月考状态（点击切换）</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
   const sumEl=document.getElementById('exam-summary');
   if(sumEl) sumEl.innerHTML=`<span style="color:#16a34a">✅ ${doneCount} 已完成</span>&nbsp;&nbsp;<span style="color:#dc2626">❌ ${pend} 未完成</span>`;
 }
