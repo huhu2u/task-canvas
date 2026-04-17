@@ -142,7 +142,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">月CPC消耗</th><th class="ht">月目标</th>
       <th class="hp">完成进度</th><th class="hg">日缺口</th>
-      <th class="hd">昨日消耗</th><th class="hd">有效新签</th><th class="hd">旺铺通</th>
+      <th class="hd">昨日消耗</th><th class="hd">有效新签(当前/目标)</th><th class="hd">旺铺通</th>
     </tr></thead><tbody id="cpc-tbody"></tbody></table></div>
   </div>
   <div class="sec">
@@ -317,12 +317,12 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // 配置：代运营商基础数据
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
-  {name:'惠州巨浪',  gtv_tgt:3804112, cpc_tgt:74222,  score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:88,  memrate_tgt:60, order_pool:329},
-  {name:'惠州柏万',  gtv_tgt:3124634, cpc_tgt:95454,  score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:54,  memrate_tgt:60, order_pool:201},
-  {name:'泉州小花猫',gtv_tgt:2598259, cpc_tgt:113144, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:60,  memrate_tgt:60, order_pool:226},
-  {name:'惠安广通',  gtv_tgt:2236565, cpc_tgt:57886,  score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:38,  memrate_tgt:60, order_pool:141},
-  {name:'慈溪哲光',  gtv_tgt:3137253, cpc_tgt:146180, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:67,  memrate_tgt:60, order_pool:251},
-  {name:'义乌汐洋',  gtv_tgt:2893879, cpc_tgt:139466, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:51,  memrate_tgt:60, order_pool:191},
+  {name:'惠州巨浪',  gtv_tgt:3804112, cpc_tgt:74222,  cpc_newsgn_tgt:13, score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:88,  memrate_tgt:60, order_pool:329},
+  {name:'惠州柏万',  gtv_tgt:3124634, cpc_tgt:95454,  cpc_newsgn_tgt:12, score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:54,  memrate_tgt:60, order_pool:201},
+  {name:'泉州小花猫',gtv_tgt:2598259, cpc_tgt:113144, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:60,  memrate_tgt:60, order_pool:226},
+  {name:'惠安广通',  gtv_tgt:2236565, cpc_tgt:57886,  cpc_newsgn_tgt:8,  score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:38,  memrate_tgt:60, order_pool:141},
+  {name:'慈溪哲光',  gtv_tgt:3137253, cpc_tgt:146180, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:67,  memrate_tgt:60, order_pool:251},
+  {name:'义乌汐洋',  gtv_tgt:2893879, cpc_tgt:139466, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:51,  memrate_tgt:60, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
@@ -455,6 +455,8 @@ function renderCpc(){
     const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
     const dailyGap=tgt>0?Math.ceil((tgt-cur)/Math.max(remain,1)):0;
     const yCpc=g(a.name,'cpc_y'), newSgn=g(a.name,'cpc_newsgn'), wpu=g(a.name,'cpc_wpu');
+    const sgnTgt=a.cpc_newsgn_tgt||0;
+    const sgnCls=sgnTgt>0?(newSgn>=sgnTgt?'sg':newSgn>=sgnTgt*0.7?'sy':'sr'):'sb';
     totCur+=cur; totTgt+=tgt;
     html+=`<tr>
       <td class="tn">${a.name}</td>
@@ -463,7 +465,11 @@ function renderCpc(){
       <td>${pctCell(pct,cls)}</td>
       <td>${gapHtml(cur,tgt,false)}<div style="font-size:10px;color:#9ca3af;margin-top:2px">日需≥${fmtMoney(dailyGap)}</div></td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y')">${yCpc?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yCpc)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
-      <td style="cursor:pointer;font-weight:700;color:#059669" onclick="openEdit('${a.name}','cpc_newsgn')">${newSgn||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_newsgn')">
+        <span style="font-weight:700;color:${colorText(sgnCls)}">${newSgn||0}</span>
+        <span style="color:#9ca3af;font-size:11px"> / ${sgnTgt}</span>
+        ${newSgn<sgnTgt?`<span class="${sgnCls==='sr'?'gap-r':'gap-y'}" style="font-size:10px;margin-left:2px">差${sgnTgt-newSgn}</span>`:'<span style="font-size:10px;color:#16a34a;margin-left:2px">✅</span>'}
+      </td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_wpu')">${wpu?fmtMoney(wpu):'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
@@ -857,7 +863,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-17c') return;
+  if(ex._dataDate==='2026-04-17d') return;
   const D={
     '惠州巨浪':  {gtv:1986507, gtv_y:104910, gtv_excl:3.24,
                   cpc:55840,   cpc_y:964,    cpc_newsgn:10, cpc_wpu:913,
@@ -890,7 +896,7 @@ function renderAll(){
                   score:138, score_near:0, dongxiao:0, visit:0, order:15,
                   memrenew:0, memexpire:0},
   };
-  const ns={_updated:'17:55',_dataDate:'2026-04-17c'};
+  const ns={_updated:'18:05',_dataDate:'2026-04-17d'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
