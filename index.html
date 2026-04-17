@@ -16,6 +16,30 @@ body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft Y
 #topbar-title { font-size:17px; font-weight:700; color:#fff; letter-spacing:.5px; }
 #clock { font-size:18px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; text-align:right; }
 #clockdate { font-size:10px; color:rgba(255,255,255,.75); text-align:right; margin-top:1px; }
+#statusbar {
+  background:#fff; border-bottom:1px solid #e0e6ef;
+  padding:6px 22px; display:flex; align-items:center; gap:0; flex-wrap:wrap;
+  font-size:12px; color:#374151; line-height:1.5;
+}
+.sb-item {
+  display:flex; align-items:center; gap:5px;
+  padding:0 14px; border-right:1px solid #e0e6ef;
+  white-space:nowrap;
+}
+.sb-item:first-child { padding-left:0; }
+.sb-item:last-child  { border-right:none; }
+.sb-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.sb-dot.green  { background:#22c55e; }
+.sb-dot.yellow { background:#f59e0b; }
+.sb-dot.blue   { background:#3b82f6; }
+.sb-dot.purple { background:#a855f7; }
+.sb-dot.gray   { background:#9ca3af; }
+.sb-label { color:#6b7280; }
+.sb-val   { font-weight:700; color:#1a2a3a; }
+.sb-val.green  { color:#16a34a; }
+.sb-val.yellow { color:#d97706; }
+.sb-val.blue   { color:#2563eb; }
+.sb-val.red    { color:#dc2626; }
 #tabnav {
   background:#fff; border-bottom:2px solid #e0e6ef;
   display:flex; padding:0 18px; gap:4px; align-items:flex-end; flex-wrap:wrap;
@@ -127,6 +151,33 @@ body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft Y
 <div id="topbar">
   <div id="topbar-title">🗂 粤闽浙渠道 管理看板</div>
   <div><div id="clock">--:--:--</div><div id="clockdate">--</div></div>
+</div>
+<div id="statusbar">
+  <div class="sb-item">
+    <span class="sb-dot green"></span>
+    <span class="sb-label">时间进度</span>
+    <span class="sb-val blue" id="sb-timepct">--</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-dot blue"></span>
+    <span class="sb-label">剩余</span>
+    <span class="sb-val" id="sb-remain">--</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-dot green"></span>
+    <span class="sb-label">GTV综合进度</span>
+    <span class="sb-val" id="sb-gtv">--</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-dot yellow"></span>
+    <span class="sb-label">CPC综合进度</span>
+    <span class="sb-val" id="sb-cpc">--</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-dot purple"></span>
+    <span class="sb-label">数据更新</span>
+    <span class="sb-val" id="sb-updated">--</span>
+  </div>
 </div>
 <div id="tabnav">
   <button class="tabn active" id="tab-perf"     onclick="switchTab('perf')">📊 核心业绩看板</button>
@@ -322,4 +373,352 @@ body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft Y
         </tr>
         <tr>
           <td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠州市柏万</td>
-          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">6.0%</span>
+          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">6.0%</span>  <div style="overflow-x:auto;margin-bottom:14px;">
+    <table class="price-table" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
+      <thead>
+        <tr style="background:#1d4ed8;color:#fff;">
+          <th style="text-align:left;padding:10px 12px;">代运营商</th>
+          <th style="padding:10px 12px;">品类A<br><span style="font-weight:400;font-size:11px;">≤300 阈值17%</span></th>
+          <th style="padding:10px 12px;">品类B<br><span style="font-weight:400;font-size:11px;">≤500 阈值34%</span></th>
+          <th style="padding:10px 12px;">品类C<br><span style="font-weight:400;font-size:11px;">≤1000 阈值6%</span></th>
+        </tr>
+      </thead>
+      <tbody id="price-tbody">
+        <tr><td colspan="4" style="text-align:center;padding:20px;color:#9ca3af;">数据加载中，请运行自动更新脚本</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="price-summary" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 18px;">
+    <div style="font-weight:700;color:#1e40af;margin-bottom:8px;">📋 归因摘要</div>
+    <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.8;color:#374151;">
+      <li>数据待更新，上次更新：<span id="price-date" style="color:#6b7280;">—</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 弹窗编辑框 -->
+<div id="pj-overlay">
+  <div id="pj-panel">
+    <h3 id="pj-panel-title">编辑数据</h3>
+    <div class="pj-field"><label>当前值</label><input type="number" id="pj-cur" placeholder="输入当前值"></div>
+    <div class="pj-field"><label>目标值</label><input type="number" id="pj-tgt" placeholder="输入目标值（可选）"></div>
+    <div class="pj-actions">
+      <button class="btn-cancel" onclick="closeEdit()">取消</button>
+      <button class="btn-save"   onclick="saveEdit()">保存</button>
+    </div>
+  </div>
+</div>
+<div id="toast">✅ 已保存</div>
+
+<script>
+// ── 数据 ──────────────────────────────────────────────────────
+const AGENTS_DEF = [
+  {name:'惠州巨浪',  gtv_tgt:3804112, cpc_tgt:74222,  mem_tgt:0, score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:0, memrate_tgt:60},
+  {name:'惠州柏万',  gtv_tgt:3124634, cpc_tgt:95454,  mem_tgt:0, score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:0, memrate_tgt:60},
+  {name:'泉州小花猫',gtv_tgt:2598259, cpc_tgt:113144, mem_tgt:0, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:0, memrate_tgt:60},
+  {name:'惠安广通',  gtv_tgt:2236565, cpc_tgt:57886,  mem_tgt:0, score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:0, memrate_tgt:60},
+  {name:'慈溪哲光',  gtv_tgt:3137253, cpc_tgt:146180, mem_tgt:0, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:0, memrate_tgt:60},
+  {name:'义乌汐洋',  gtv_tgt:2893879, cpc_tgt:139466, mem_tgt:0, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:0, memrate_tgt:60},
+];
+
+const LS_KEY = 'pjdashboard_v2';
+let STATE = {};
+
+function loadState() {
+  try { STATE = JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch(e) { STATE={}; }
+}
+function saveState() { localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }
+
+function getVal(name, field) {
+  return (STATE[name] && STATE[name][field] !== undefined) ? STATE[name][field] : 0;
+}
+function getTgt(name, field) {
+  const defAgent = AGENTS_DEF.find(a=>a.name===name);
+  if (STATE[name] && STATE[name][field+'_tgt'] !== undefined) return STATE[name][field+'_tgt'];
+  return defAgent ? defAgent[field+'_tgt'] : 0;
+}
+function setVal(name, field, val, tgt) {
+  if (!STATE[name]) STATE[name]={};
+  STATE[name][field] = val;
+  if (tgt !== undefined) STATE[name][field+'_tgt'] = tgt;
+  saveState();
+}
+
+// ── 时间进度 ──────────────────────────────────────────────────
+function getTimePct() {
+  const now = new Date();
+  const y=now.getFullYear(), m=now.getMonth();
+  const day=now.getDate();
+  const total=new Date(y,m+1,0).getDate();
+  return {pct: day/total, day, total};
+}
+
+function colorClass(pct, timePct) {
+  if (pct >= timePct) return 'green';
+  if (pct >= timePct-0.05) return 'yellow';
+  return 'red';
+}
+
+// ── 格式化 ────────────────────────────────────────────────────
+function fmtVal(v, field) {
+  if ((field==='gtv'||field==='cpc'||field==='mem') && v>=10000)
+    return (v/10000).toFixed(1)+'万';
+  return v.toLocaleString();
+}
+
+// ── 进度条 ────────────────────────────────────────────────────
+function barHtml(pct, cls) {
+  const w=Math.min(100,pct*100).toFixed(1);
+  return `<div class="cell-bar-wrap"><div class="cell-bar bar-fill s-${cls}" style="width:${w}%"></div></div>
+          <div class="cell-pct" style="color:var(--c-${cls},inherit)">${(pct*100).toFixed(1)}%</div>`;
+}
+function colorVar(c){return c==='green'?'#16a34a':c==='yellow'?'#d97706':'#dc2626';}
+
+// ── 通用 Tab 渲染 ─────────────────────────────────────────────
+function renderTab(field, tbodyId, cardsId, badgeId, label) {
+  const {pct:timePct,day,total} = getTimePct();
+  let totCur=0, totTgt=0;
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  let html='';
+  AGENTS_DEF.forEach(a=>{
+    const cur=getVal(a.name,field), tgt=getTgt(a.name,field);
+    const pct=tgt>0?cur/tgt:0;
+    const cls=colorClass(pct,timePct);
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td>${a.name}</td>
+      <td class="editable" onclick="openEdit('${a.name}','${field}','${label}')" style="color:${colorVar(cls)};font-weight:700;">${fmtVal(cur,field)}</td>
+      <td style="color:#6b7280;">${fmtVal(tgt,field)}</td>
+      <td>${barHtml(pct,cls)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML=html;
+
+  // 汇总卡片
+  const cards=document.getElementById(cardsId);
+  if (cards) {
+    const totPct=totTgt>0?totCur/totTgt:0;
+    const cls=colorClass(totPct,timePct);
+    cards.innerHTML=`<div class="sum-card s-${cls}">
+      <div class="sum-card-name">综合达成率</div>
+      <div class="sum-card-pct s-${cls}">${(totPct*100).toFixed(1)}%</div>
+      <div class="bar-wrap"><div class="bar-fill s-${cls}" style="width:${Math.min(100,totPct*100).toFixed(1)}%"></div></div>
+      <div class="sum-card-sub">${fmtVal(totCur,field)} / ${fmtVal(totTgt,field)}</div>
+    </div>
+    <div class="sum-card s-blue" style="--s-blue:#3b82f6;">
+      <div class="sum-card-name">时间进度</div>
+      <div class="sum-card-pct" style="color:#2563eb;">${(timePct*100).toFixed(1)}%</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${(timePct*100).toFixed(1)}%;background:#3b82f6;"></div></div>
+      <div class="sum-card-sub">${day}/${total}天</div>
+    </div>`;
+  }
+
+  // badge
+  const badge=document.getElementById(badgeId);
+  if(badge){
+    const totPct=totTgt>0?totCur/totTgt:0;
+    badge.textContent=`时间进度 ${(timePct*100).toFixed(0)}% | 综合达成 ${(totPct*100).toFixed(1)}%`;
+  }
+}
+
+// ── 核心业绩看板 (perf) ────────────────────────────────────────
+function renderPerf() {
+  const {pct:timePct,day,total}=getTimePct();
+  ['gtv','cpc','mem'].forEach(field=>{
+    const tid=field+'-tbody', cid=field+'-cards';
+    const tbody=document.getElementById(tid);
+    if(!tbody)return;
+    let html='', totCur=0, totTgt=0;
+    AGENTS_DEF.forEach(a=>{
+      const cur=getVal(a.name,field), tgt=getTgt(a.name,field);
+      const pct=tgt>0?cur/tgt:0;
+      const cls=colorClass(pct,timePct);
+      totCur+=cur; totTgt+=tgt;
+      html+=`<tr>
+        <td>${a.name}</td>
+        <td class="editable" onclick="openEdit('${a.name}','${field}','${field.toUpperCase()}')" style="color:${colorVar(cls)};font-weight:700;">${fmtVal(cur,field)}</td>
+        <td style="color:#6b7280;">${fmtVal(tgt,field)}</td>
+        <td>${barHtml(pct,cls)}</td>
+      </tr>`;
+    });
+    tbody.innerHTML=html;
+    const cards=document.getElementById(cid);
+    if(cards){
+      const totPct=totTgt>0?totCur/totTgt:0;
+      const cls=colorClass(totPct,timePct);
+      cards.innerHTML=`<div class="sum-card s-${cls}">
+        <div class="sum-card-name">综合达成率</div>
+        <div class="sum-card-pct s-${cls}">${(totPct*100).toFixed(1)}%</div>
+        <div class="bar-wrap"><div class="bar-fill s-${cls}" style="width:${Math.min(100,totPct*100).toFixed(1)}%"></div></div>
+        <div class="sum-card-sub">${fmtVal(totCur,field)} / ${fmtVal(totTgt,field)}</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-card-name">时间进度</div>
+        <div class="sum-card-pct" style="color:#2563eb;">${(timePct*100).toFixed(1)}%</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:${(timePct*100).toFixed(1)}%;background:#3b82f6;"></div></div>
+        <div class="sum-card-sub">${day}/${total}天</div>
+      </div>`;
+    }
+  });
+  const badge=document.getElementById('perf-badge');
+  if(badge){
+    const {pct:tp}=getTimePct();
+    badge.textContent=`时间进度 ${(tp*100).toFixed(0)}%`;
+  }
+}
+
+// ── 欧若拉 & 月考 ─────────────────────────────────────────────
+function renderAurora() {
+  ['aurora','exam'].forEach(type=>{
+    const tbody=document.getElementById('pj-'+type+'-tbody');
+    if(!tbody)return;
+    let html='';
+    AGENTS_DEF.forEach(a=>{
+      const key=type+'_'+a.name;
+      const val=STATE[key]||false;
+      html+=`<tr>
+        <td style="text-align:left;font-weight:600;color:#374151;">${a.name}</td>
+        <td><button class="toggle-btn" onclick="toggleAurora('${type}','${a.name}')">${val?'✅':'❌'}</button></td>
+      </tr>`;
+    });
+    tbody.innerHTML=html;
+  });
+}
+function toggleAurora(type,name){
+  const key=type+'_'+name;
+  STATE[key]=!STATE[key];
+  saveState(); renderAurora(); showToast();
+}
+
+// ── 状态栏更新 ────────────────────────────────────────────────
+function updateStatusBar() {
+  const {pct:timePct,day,total}=getTimePct();
+  const remain=total-day;
+
+  // 时间进度
+  const sbTime=document.getElementById('sb-timepct');
+  if(sbTime){
+    sbTime.textContent=`${(timePct*100).toFixed(1)}%`;
+    sbTime.className='sb-val blue';
+  }
+  // 剩余天数
+  const sbRem=document.getElementById('sb-remain');
+  if(sbRem) sbRem.textContent=`${remain}天 (${day}/${total})`;
+
+  // GTV综合进度
+  const sbGtv=document.getElementById('sb-gtv');
+  if(sbGtv){
+    let totCur=0,totTgt=0;
+    AGENTS_DEF.forEach(a=>{totCur+=getVal(a.name,'gtv');totTgt+=getTgt(a.name,'gtv');});
+    const pct=totTgt>0?totCur/totTgt:0;
+    const cls=colorClass(pct,timePct);
+    sbGtv.textContent=`${(pct*100).toFixed(1)}%`;
+    sbGtv.className='sb-val '+cls;
+  }
+  // CPC综合进度
+  const sbCpc=document.getElementById('sb-cpc');
+  if(sbCpc){
+    let totCur=0,totTgt=0;
+    AGENTS_DEF.forEach(a=>{totCur+=getVal(a.name,'cpc');totTgt+=getTgt(a.name,'cpc');});
+    const pct=totTgt>0?totCur/totTgt:0;
+    const cls=colorClass(pct,timePct);
+    sbCpc.textContent=`${(pct*100).toFixed(1)}%`;
+    sbCpc.className='sb-val '+cls;
+  }
+  // 数据更新时间
+  const sbUpdated=document.getElementById('sb-updated');
+  if(sbUpdated){
+    const t=STATE._updated||'未更新';
+    sbUpdated.textContent=t;
+  }
+}
+
+// ── 编辑弹窗 ─────────────────────────────────────────────────
+let _editCtx=null;
+function openEdit(name,field,label){
+  _editCtx={name,field};
+  document.getElementById('pj-panel-title').textContent=`编辑 ${name} · ${label}`;
+  document.getElementById('pj-cur').value=getVal(name,field)||'';
+  document.getElementById('pj-tgt').value=getTgt(name,field)||'';
+  document.getElementById('pj-overlay').classList.add('show');
+  setTimeout(()=>document.getElementById('pj-cur').focus(),50);
+}
+function closeEdit(){
+  document.getElementById('pj-overlay').classList.remove('show');
+  _editCtx=null;
+}
+function saveEdit(){
+  if(!_editCtx)return;
+  const cur=parseFloat(document.getElementById('pj-cur').value)||0;
+  const tgt=parseFloat(document.getElementById('pj-tgt').value)||0;
+  setVal(_editCtx.name,_editCtx.field,cur,tgt||undefined);
+  // 记录更新时间
+  const now=new Date();
+  STATE._updated=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  saveState();
+  closeEdit(); renderAll(); showToast();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('pj-overlay').classList.contains('show'))saveEdit();
+  if(e.key==='Escape')closeEdit();
+});
+document.getElementById('pj-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeEdit();});
+
+// ── 重置 ──────────────────────────────────────────────────────
+function pjReset(){
+  if(!confirm('确认重置所有项目数据？')) return;
+  localStorage.removeItem(LS_KEY);
+  STATE={};
+  renderAll(); showToast('已重置');
+}
+
+// ── Tab切换 ───────────────────────────────────────────────────
+function switchTab(id){
+  document.querySelectorAll('.tabn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToast(msg='已保存'){
+  const t=document.getElementById('toast');
+  t.textContent='✅ '+msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+// ── 时钟 ──────────────────────────────────────────────────────
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent=`${h}:${m}:${s}`;
+  const days=['日','一','二','三','四','五','六'];
+  const dateStr=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
+  document.getElementById('clockdate').textContent=dateStr;
+}
+
+// ── 全量渲染 ──────────────────────────────────────────────────
+function renderAll(){
+  renderPerf();
+  renderTab('score','score-tbody','score-cards','score-badge','好店经营评分');
+  renderTab('dongxiao','dongxiao-tbody','dongxiao-cards','dongxiao-badge','职人码动销');
+  renderTab('visit','visit-tbody','visit-cards','visit-badge','有效作业人数');
+  renderTab('order','order-tbody','order-cards','order-badge','物料工单');
+  renderTab('memrate','memrate-tbody','memrate-cards','memrate-badge','MEM续约率');
+  renderAurora();
+  updateStatusBar();
+}
+
+// ── 初始化 ────────────────────────────────────────────────────
+loadState();
+renderAll();
+updateClock();
+setInterval(updateClock, 1000);
+// 每分钟刷新状态栏（时间进度变化）
+setInterval(()=>{ updateStatusBar(); }, 60000);
+</script>
+</body>
+</html>
