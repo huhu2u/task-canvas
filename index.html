@@ -7,8 +7,6 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft YaHei',sans-serif; }
-
-/* ── 顶部导航 ── */
 #topbar {
   background:linear-gradient(90deg,#1976d2 0%,#1565b8 100%);
   height:52px; display:flex; align-items:center; justify-content:space-between;
@@ -18,83 +16,67 @@ body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft Y
 #topbar-title { font-size:17px; font-weight:700; color:#fff; letter-spacing:.5px; }
 #clock { font-size:18px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; text-align:right; }
 #clockdate { font-size:10px; color:rgba(255,255,255,.75); text-align:right; margin-top:1px; }
-
-/* ── Tab Nav ── */
 #tabnav {
   background:#fff; border-bottom:2px solid #e0e6ef;
-  display:flex; padding:0 18px; gap:4px; align-items:flex-end;
+  display:flex; padding:0 18px; gap:4px; align-items:flex-end; flex-wrap:wrap;
 }
 .tabn {
   background:#f0f4f8; border:1px solid #d0d8e8; border-bottom:none;
-  border-radius:6px 6px 0 0; color:#4a6a8a; font-size:13px; font-weight:600;
-  font-family:inherit; padding:10px 20px; cursor:pointer; transition:all .15s;
+  border-radius:6px 6px 0 0; color:#4a6a8a; font-size:12px; font-weight:600;
+  font-family:inherit; padding:10px 14px; cursor:pointer; transition:all .15s;
   margin-bottom:-2px; white-space:nowrap;
 }
-.tabn:hover  { background:#e3eaf5; color:#1a2a3a; }
+.tabn:hover { background:#e3eaf5; color:#1a2a3a; }
 .tabn.active { background:#1976d2; color:#fff; border-color:#1976d2; }
-
-/* ── Panel ── */
 .tab-panel { display:none; padding:20px 24px; }
 .tab-panel.active { display:block; }
-
-/* ══ 汇总卡片 ══ */
-#pj-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
-.pj-card {
+.summary-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:18px; }
+.sum-card {
   background:#fff; border-radius:10px; padding:14px 16px;
   border:1px solid #e0e6ef; box-shadow:0 2px 8px rgba(0,0,0,.06);
   position:relative; overflow:hidden;
 }
-.pj-card::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
-}
-.pj-card.s-green::before  { background:#22c55e; }
-.pj-card.s-yellow::before { background:#f59e0b; }
-.pj-card.s-red::before    { background:#ef4444; }
-.pj-card.s-gray::before   { background:#94a3b8; }
-.pj-card-name { font-size:11px; color:#6b7280; font-weight:600; margin-bottom:5px; }
-.pj-card-pct  { font-size:23px; font-weight:800; margin-bottom:5px; line-height:1.1; }
-.pj-card-pct.s-green  { color:#16a34a; }
-.pj-card-pct.s-yellow { color:#d97706; }
-.pj-card-pct.s-red    { color:#dc2626; }
-.pj-card-pct.s-gray   { color:#64748b; }
-.pj-card-sub { font-size:11px; color:#9ca3af; margin-top:3px; }
-
-/* ══ 进度条 ══ */
+.sum-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; }
+.sum-card.s-green::before  { background:#22c55e; }
+.sum-card.s-yellow::before { background:#f59e0b; }
+.sum-card.s-red::before    { background:#ef4444; }
+.sum-card.s-gray::before   { background:#94a3b8; }
+.sum-card-name { font-size:11px; color:#6b7280; font-weight:600; margin-bottom:5px; }
+.sum-card-pct  { font-size:26px; font-weight:800; margin-bottom:5px; line-height:1.1; }
+.sum-card-pct.s-green  { color:#16a34a; }
+.sum-card-pct.s-yellow { color:#d97706; }
+.sum-card-pct.s-red    { color:#dc2626; }
+.sum-card-pct.s-gray   { color:#64748b; }
+.sum-card-sub { font-size:11px; color:#9ca3af; margin-top:3px; }
 .bar-wrap { height:8px; background:#e5e7eb; border-radius:4px; overflow:hidden; margin-bottom:5px; }
 .bar-fill { height:8px; border-radius:4px; transition:width .4s; min-width:2px; }
 .bar-fill.s-green  { background:#22c55e; }
 .bar-fill.s-yellow { background:#f59e0b; }
 .bar-fill.s-red    { background:#ef4444; }
 .bar-fill.s-gray   { background:#94a3b8; }
-
-/* ══ 明细表格 ══ */
-#pj-detail-wrap { overflow-x:auto; background:#fff; border-radius:10px; border:1px solid #d0d8e8; margin-bottom:20px; }
-#pj-detail-table { width:100%; border-collapse:collapse; min-width:960px; }
-#pj-detail-table thead th {
+.detail-wrap { overflow-x:auto; background:#fff; border-radius:10px; border:1px solid #d0d8e8; margin-bottom:20px; }
+.detail-table { width:100%; border-collapse:collapse; min-width:480px; }
+.detail-table thead th {
   background:linear-gradient(90deg,#1976d2,#1565b8);
-  color:#fff; padding:10px 8px; font-size:11px; font-weight:700;
+  color:#fff; padding:10px 8px; font-size:12px; font-weight:700;
   text-align:center; white-space:nowrap; border-right:1px solid rgba(255,255,255,.15);
 }
-#pj-detail-table thead th:first-child { text-align:left; padding-left:14px; min-width:90px; }
-#pj-detail-table tbody tr:nth-child(even) td { background:#f7f9fc; }
-#pj-detail-table tbody tr:hover td { background:#eff6ff !important; }
-#pj-detail-table td {
+.detail-table thead th:first-child { text-align:left; padding-left:14px; min-width:100px; }
+.detail-table tbody tr:nth-child(even) td { background:#f7f9fc; }
+.detail-table tbody tr:hover td { background:#eff6ff !important; }
+.detail-table td {
   padding:8px 8px; text-align:center; border-bottom:1px solid #e8edf5;
   border-right:1px solid #e8edf5; font-size:12px; color:#1a2a3a; vertical-align:middle;
 }
-#pj-detail-table td:first-child {
-  text-align:left; font-weight:700; color:#1976d2; white-space:nowrap;
-  padding-left:14px; cursor:default;
-}
-#pj-detail-table td.editable { cursor:pointer; }
-#pj-detail-table td.editable:hover { background:#dbeafe !important; }
-
+.detail-table td:first-child { text-align:left; font-weight:700; color:#1976d2; white-space:nowrap; padding-left:14px; }
+.detail-table td.editable { cursor:pointer; }
+.detail-table td.editable:hover { background:#dbeafe !important; }
 .cell-bar-wrap { height:5px; background:#e5e7eb; border-radius:3px; overflow:hidden; margin-bottom:3px; }
 .cell-bar { height:5px; border-radius:3px; min-width:2px; }
 .cell-pct { font-size:12px; font-weight:700; }
 .cell-val { font-size:10px; color:#9ca3af; }
-
-/* ══ 底部小模块 ══ */
+.sub-wrap { background:#fff; border-radius:10px; border:1px solid #d0d8e8; overflow:hidden; margin-bottom:18px; }
+.sub-hdr { padding:10px 16px; font-size:13px; font-weight:700; color:#fff; background:linear-gradient(90deg,#1976d2,#1565b8); }
 .bottom-modules { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 .mini-module { background:#fff; border-radius:10px; border:1px solid #d0d8e8; overflow:hidden; }
 .mini-module-hdr { padding:10px 16px; font-size:13px; font-weight:700; color:#fff; }
@@ -106,476 +88,238 @@ body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft Y
 .mini-module tr:last-child td { border-bottom:none; }
 .toggle-btn { font-size:22px; cursor:pointer; background:none; border:none; padding:2px 6px; border-radius:4px; line-height:1; }
 .toggle-btn:hover { background:#f3f4f6; }
-
-/* ══ 编辑弹窗 ══ */
 #pj-overlay {
   display:none; position:fixed; inset:0;
   background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center;
 }
 #pj-overlay.show { display:flex; }
-#pj-panel {
-  background:#fff; border-radius:12px; padding:24px; width:360px;
-  max-width:94vw; box-shadow:0 8px 40px rgba(0,0,0,.18);
-}
+#pj-panel { background:#fff; border-radius:12px; padding:24px; width:360px; max-width:94vw; box-shadow:0 8px 40px rgba(0,0,0,.18); }
 #pj-panel h3 { font-size:15px; font-weight:700; color:#1976d2; margin-bottom:16px; }
 .pj-field { margin-bottom:12px; }
 .pj-field label { font-size:11px; color:#6b7280; display:block; margin-bottom:4px; }
-.pj-field input {
-  width:100%; background:#f0f4f8; border:1px solid #d0d8e8; border-radius:6px;
-  padding:8px 12px; font-size:14px; font-family:inherit; color:#1a2a3a;
-}
+.pj-field input { width:100%; background:#f0f4f8; border:1px solid #d0d8e8; border-radius:6px; padding:8px 12px; font-size:14px; font-family:inherit; color:#1a2a3a; }
 .pj-field input:focus { outline:none; border-color:#1976d2; }
 .pj-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:6px; }
 .btn-cancel { padding:7px 18px; background:#f0f4f8; border:1px solid #d0d8e8; border-radius:6px; color:#4a6a8a; font-size:13px; cursor:pointer; font-family:inherit; }
 .btn-save   { padding:7px 20px; background:#1976d2; border:none; border-radius:6px; color:#fff; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
 .btn-cancel:hover { background:#e3eaf5; }
 .btn-save:hover   { background:#1565b8; }
-
-/* ══ Toast ══ */
-#toast {
-  position:fixed; bottom:18px; right:18px; background:#fff;
-  border:1px solid #22c55e; border-radius:8px; padding:10px 18px;
-  font-size:13px; color:#166534; z-index:600; opacity:0;
-  transition:opacity .3s; pointer-events:none;
-  box-shadow:0 4px 16px rgba(0,0,0,.1);
-}
+#toast { position:fixed; bottom:18px; right:18px; background:#fff; border:1px solid #22c55e; border-radius:8px; padding:10px 18px; font-size:13px; color:#166534; z-index:600; opacity:0; transition:opacity .3s; pointer-events:none; box-shadow:0 4px 16px rgba(0,0,0,.1); }
 #toast.show { opacity:1; }
-
-/* ══ 价格带表格 ══ */
 .price-table { width:100%; border-collapse:collapse; font-size:13px; }
 .price-table th { padding:10px 12px; text-align:center; }
 .price-table td { padding:8px 10px; border-bottom:1px solid #e5e7eb; }
-
-/* ══ 滚动条 ══ */
+.timepct-badge { background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; padding:5px 14px; font-size:12px; font-weight:700; color:#1976d2; }
+.panel-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
+.panel-title { font-size:17px; font-weight:700; color:#1976d2; }
+.panel-sub { font-size:11px; color:#6b7280; margin-top:3px; }
 ::-webkit-scrollbar { width:6px; height:6px; }
 ::-webkit-scrollbar-track { background:#f0f4f8; }
 ::-webkit-scrollbar-thumb { background:#d0d8e8; border-radius:3px; }
-
-/* ══ 响应式 ══ */
 @media(max-width:800px){
-  #pj-cards { grid-template-columns:repeat(2,1fr); }
+  .summary-cards { grid-template-columns:repeat(2,1fr); }
   .bottom-modules { grid-template-columns:1fr; }
   .tab-panel { padding:12px; }
 }
 </style>
 </head>
 <body>
-
-<!-- 顶部导航 -->
 <div id="topbar">
   <div id="topbar-title">🗂 粤闽浙渠道 管理看板</div>
-  <div>
-    <div id="clock">--:--:--</div>
-    <div id="clockdate">--</div>
+  <div><div id="clock">--:--:--</div><div id="clockdate">--</div></div>
+</div>
+<div id="tabnav">
+  <button class="tabn active" id="tab-perf"     onclick="switchTab('perf')">📊 核心业绩看板</button>
+  <button class="tabn"        id="tab-score"    onclick="switchTab('score')">⭐ 好店经营评分</button>
+  <button class="tabn"        id="tab-dongxiao" onclick="switchTab('dongxiao')">🔖 好店职人码动销</button>
+  <button class="tabn"        id="tab-visit"    onclick="switchTab('visit')">🧑 有效作业人数</button>
+  <button class="tabn"        id="tab-order"    onclick="switchTab('order')">📦 职人码物料工单</button>
+  <button class="tabn"        id="tab-memrate"  onclick="switchTab('memrate')">🔄 MEM续约率</button>
+  <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单&amp;月考</button>
+  <button class="tabn"        id="tab-price"    onclick="switchTab('price')">💰 价格带分析</button>
+</div>
+
+<!-- Tab1: 核心业绩看板 -->
+<div id="panel-perf" class="tab-panel active">
+  <div class="panel-topbar">
+    <div><div class="panel-title">📊 核心业绩看板</div><div class="panel-sub">GTV · CPC消耗 · MEM收款 | 6家代运营商 · 点击数值单元格可编辑</div></div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <div id="perf-badge" class="timepct-badge"></div>
+      <button onclick="pjReset()" style="background:#fee2e2;border:1px solid #fecaca;color:#991b1b;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 重置数据</button>
+    </div>
+  </div>
+  <div class="sub-wrap">
+    <div class="sub-hdr">💰 GTV（成交总额）</div>
+    <div style="padding:14px 16px 0;"><div id="gtv-cards" class="summary-cards"></div></div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th>代运营商</th><th>当前GTV</th><th>目标GTV</th><th>达成率</th>
+      </tr></thead><tbody id="gtv-tbody"></tbody></table>
+    </div>
+  </div>
+  <div class="sub-wrap">
+    <div class="sub-hdr" style="background:linear-gradient(90deg,#0288d1,#0277bd);">📈 CPC消耗</div>
+    <div style="padding:14px 16px 0;"><div id="cpc-cards" class="summary-cards"></div></div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">代运营商</th>
+        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">当前消耗</th>
+        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">目标消耗</th>
+        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">达成率</th>
+      </tr></thead><tbody id="cpc-tbody"></tbody></table>
+    </div>
+  </div>
+  <div class="sub-wrap">
+    <div class="sub-hdr" style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">💳 MEM收款</div>
+    <div style="padding:14px 16px 0;"><div id="mem-cards" class="summary-cards"></div></div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">代运营商</th>
+        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">当前收款</th>
+        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">目标收款</th>
+        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">达成率</th>
+      </tr></thead><tbody id="mem-tbody"></tbody></table>
+    </div>
   </div>
 </div>
 
-<!-- Tab 导航 -->
-<div id="tabnav">
-  <button class="tabn active" id="tab-price"  onclick="switchTab('price')">💰 价格带分析</button>
-  <button class="tabn"        id="tab-pjmgmt" onclick="switchTab('pjmgmt')">📌 项目管理看板</button>
+<!-- Tab2: 好店经营评分 -->
+<div id="panel-score" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">⭐ 好店经营评分</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
+    <div style="display:flex;align-items:center;gap:10px;"><div id="score-badge" class="timepct-badge"></div></div>
+  </div>
+  <div id="score-cards" class="summary-cards"></div>
+  <div class="sub-wrap">
+    <div class="sub-hdr">⭐ 好店经营评分明细</div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th>代运营商</th><th>当前评分</th><th>目标评分</th><th>达成率</th>
+      </tr></thead><tbody id="score-tbody"></tbody></table>
+    </div>
+  </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     Tab 1：价格带分析（原样保留）
-══════════════════════════════════════════════════ -->
-<div id="panel-price" class="tab-panel active">
+<!-- Tab3: 好店职人码动销 -->
+<div id="panel-dongxiao" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">🔖 好店职人码动销</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
+    <div style="display:flex;align-items:center;gap:10px;"><div id="dongxiao-badge" class="timepct-badge"></div></div>
+  </div>
+  <div id="dongxiao-cards" class="summary-cards"></div>
+  <div class="sub-wrap">
+    <div class="sub-hdr">🔖 职人码动销明细</div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th>代运营商</th><th>当前动销数</th><th>目标动销数</th><th>达成率</th>
+      </tr></thead><tbody id="dongxiao-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab4: 有效作业人数 -->
+<div id="panel-visit" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">🧑 有效作业人数</div><div class="panel-sub">拜访达标天数，目标20天 · 6家代运营商 · 点击数值单元格可编辑</div></div>
+    <div style="display:flex;align-items:center;gap:10px;"><div id="visit-badge" class="timepct-badge"></div></div>
+  </div>
+  <div id="visit-cards" class="summary-cards"></div>
+  <div class="sub-wrap">
+    <div class="sub-hdr">🧑 有效作业人数明细（拜访达标天数）</div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th>代运营商</th><th>当前达标天数</th><th>目标天数</th><th>达成率</th>
+      </tr></thead><tbody id="visit-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab5: 职人码物料工单 -->
+<div id="panel-order" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">📦 职人码物料工单</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
+    <div style="display:flex;align-items:center;gap:10px;"><div id="order-badge" class="timepct-badge"></div></div>
+  </div>
+  <div id="order-cards" class="summary-cards"></div>
+  <div class="sub-wrap">
+    <div class="sub-hdr">📦 职人码物料工单明细</div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th>代运营商</th><th>当前工单数</th><th>目标工单数</th><th>达成率</th>
+      </tr></thead><tbody id="order-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab6: MEM续约率 -->
+<div id="panel-memrate" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">🔄 MEM续约率</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
+    <div style="display:flex;align-items:center;gap:10px;"><div id="memrate-badge" class="timepct-badge"></div></div>
+  </div>
+  <div id="memrate-cards" class="summary-cards"></div>
+  <div class="sub-wrap">
+    <div class="sub-hdr">🔄 MEM续约率明细</div>
+    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
+      <table class="detail-table"><thead><tr>
+        <th>代运营商</th><th>当前续约率(%)</th><th>目标续约率(%)</th><th>达成率</th>
+      </tr></thead><tbody id="memrate-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab7: 欧若拉工单&月考 -->
+<div id="panel-aurora" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">🔧 欧若拉工单 &amp; 月考</div><div class="panel-sub">点击 ✅/❌ 切换状态</div></div>
+  </div>
+  <div class="bottom-modules">
+    <div class="mini-module">
+      <div class="mini-module-hdr" style="background:linear-gradient(90deg,#059669,#047857);">🔧 欧若拉工单</div>
+      <table><thead><tr style="background:#ecfdf5;">
+        <th style="color:#065f46;">代运营商</th><th style="color:#065f46;">是否全员闭环</th>
+      </tr></thead><tbody id="pj-aurora-tbody"></tbody></table>
+    </div>
+    <div class="mini-module">
+      <div class="mini-module-hdr" style="background:linear-gradient(90deg,#7c3aed,#6d28d9);">📝 月考</div>
+      <table><thead><tr style="background:#f5f3ff;">
+        <th style="color:#4c1d95;">代运营商</th><th style="color:#4c1d95;">是否全员闭环</th>
+      </tr></thead><tbody id="pj-exam-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab8: 价格带分析（原样保留） -->
+<div id="panel-price" class="tab-panel">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
     <div style="font-size:18px;font-weight:700;color:#1d4ed8;">💰 超价格带分析</div>
     <div style="font-size:11px;color:#6b7280;">数据截止：2026-04-06 &nbsp;|&nbsp;
       <a href="https://apollo.sankuai.com/data/report/list?reportId=864" target="_blank" style="color:#2563eb;">Apollo #864</a>
     </div>
   </div>
-
   <div style="background:#f0f4ff;border:1px solid #dbeafe;border-radius:6px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#374151;display:flex;gap:16px;flex-wrap:wrap;">
     <span style="color:#6b7280;">阈值：</span>
-    <span>品类A(≤300元) <b style="color:#1d4ed8;">17%</b></span>
-    <span>品类B(≤500元) <b style="color:#1d4ed8;">34%</b></span>
-    <span>品类C(≤1000元) <b style="color:#1d4ed8;">6%</b></span>
+    <span>品类A(&le;300元) <b style="color:#1d4ed8;">17%</b></span>
+    <span>品类B(&le;500元) <b style="color:#1d4ed8;">34%</b></span>
+    <span>品类C(&le;1000元) <b style="color:#1d4ed8;">6%</b></span>
   </div>
-
   <div style="overflow-x:auto;margin-bottom:14px;">
     <table class="price-table" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
       <thead>
         <tr style="background:#1d4ed8;color:#fff;">
           <th style="text-align:left;">代运营商</th>
-          <th>品类A<br><span style="font-weight:400;font-size:11px;">≤300 阈值17%</span></th>
-          <th>品类B<br><span style="font-weight:400;font-size:11px;">≤500 阈值34%</span></th>
-          <th>品类C<br><span style="font-weight:400;font-size:11px;">≤1000 阈值6%</span></th>
+          <th>品类A<br><span style="font-weight:400;font-size:11px;">&le;300 阈值17%</span></th>
+          <th>品类B<br><span style="font-weight:400;font-size:11px;">&le;500 阈值34%</span></th>
+          <th>品类C<br><span style="font-weight:400;font-size:11px;">&le;1000 阈值6%</span></th>
         </tr>
       </thead>
       <tbody>
-<!-- PRICE_BAND_TBODY_START -->
-<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">宁夏灵创</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">2.2%</span><br><span style="font-size:11px;color:#22c55e;">-14.8pp</span></td><td style="padding:8px 10px;text-align:center;background:#fee2e2;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#b91c1c;">38.7%</span><br><span style="font-size:11px;color:#ef4444;">+4.7pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">0.0%</span><br><span style="font-size:11px;color:#22c55e;">-6.0pp</span></td></tr>
-<tr><td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠州市柏万</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">6.0%</span><br><span style="font-size:11px;color:#22c55e;">-11.0pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">6.0%</span><br><span style="font-size:11px;color:#22c55e;">-28.0pp</span></td><td style="padding:8px 10px;text-align:center;background:#fee2e2;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#b91c1c;">6.6%</span><br><span style="font-size:11px;color:#ef4444;">+0.6pp</span></td></tr>
-<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">慈溪哲光</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">9.1%</span><br><span style="font-size:11px;color:#22c55e;">-7.9pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">21.1%</span><br><span style="font-size:11px;color:#22c55e;">-12.9pp</span></td><td style="padding:8px 10px;text-align:center;background:#fef9c3;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#92400e;">5.6%</span><br><span style="font-size:11px;color:#f59e0b;">-0.4pp</span></td></tr>
-<tr><td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">泉州市小花猫</td><td style="padding:8px 10px;text-align:center;background:#fef9c3;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#92400e;">15.7%</span><br><span style="font-size:11px;color:#f59e0b;">-1.3pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">13.9%</span><br><span style="font-size:11px;color:#22c55e;">-20.1pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">2.1%</span><br><span style="font-size:11px;color:#22c55e;">-3.9pp</span></td></tr>
-<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠安广通</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">1.1%</span><br><span style="font-size:11px;color:#22c55e;">-15.9pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">6.2%</span><br><span style="font-size:11px;color:#22c55e;">-27.8pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">2.2%</span><br><span style="font-size:11px;color:#22c55e;">-3.8pp</span></td></tr>
-<tr><td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠州市巨浪</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">4.4%</span><br><span style="font-size:11px;color:#22c55e;">-12.6pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">28.9%</span><br><span style="font-size:11px;color:#22c55e;">-5.1pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">1.9%</span><br><span style="font-size:11px;color:#22c55e;">-4.1pp</span></td></tr>
-<tr><td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;">义乌市汐洋</td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">4.1%</span><br><span style="font-size:11px;color:#22c55e;">-12.9pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">19.1%</span><br><span style="font-size:11px;color:#22c55e;">-14.9pp</span></td><td style="padding:8px 10px;text-align:center;background:#dcfce7;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">0.0%</span><br><span style="font-size:11px;color:#22c55e;">-6.0pp</span></td></tr>
-<!-- PRICE_BAND_TBODY_END -->
-      </tbody>
-    </table>
-  </div>
-
-  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.9;">
-    <!-- PRICE_BAND_SUMMARY_START -->
-    <div style="font-weight:700;color:#1e40af;margin-bottom:8px;">📋 整体归因（2026-04-06）</div>
-    <ul style="margin:0;padding-left:0;list-style:none;line-height:2.2;">
-      <li style="color:#374151;">❌ <b>宁夏灵创</b> 品类B(≤500元) <span style="color:#dc2626;font-weight:600;">超标+4.7pp</span>（实际38.7% vs 阈值34%）</li>
-      <li style="color:#374151;">❌ <b>惠州市柏万</b> 品类C(≤1000元) <span style="color:#dc2626;font-weight:600;">超标+0.6pp</span>（实际6.6% vs 阈值6%）</li>
-      <li style="color:#374151;">⚠️ <b>慈溪哲光</b> 品类C(≤1000元) 余量仅剩<span style="color:#d97706;font-weight:600;">0.4pp</span></li>
-      <li style="color:#374151;">⚠️ <b>泉州市小花猫</b> 品类A(≤300元) 余量仅剩<span style="color:#d97706;font-weight:600;">1.3pp</span></li>
-    </ul>
-    <!-- PRICE_BAND_SUMMARY_END -->
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════
-     Tab 2：项目管理看板
-══════════════════════════════════════════════════ -->
-<div id="panel-pjmgmt" class="tab-panel">
-
-  <!-- 顶部信息栏 -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
-    <div>
-      <div style="font-size:17px;font-weight:700;color:#1976d2;">📌 粤闽浙渠道 项目管理看板</div>
-      <div style="font-size:11px;color:#6b7280;margin-top:3px;">6家代运营商 · 8大项目模块 · 点击单元格可编辑数据</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <div id="pj-timepct-badge" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;color:#1976d2;"></div>
-      <button onclick="pjReset()" style="background:#fee2e2;border:1px solid #fecaca;color:#991b1b;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 重置数据</button>
-    </div>
-  </div>
-
-  <!-- 汇总卡片（2×4） -->
-  <div id="pj-cards"></div>
-
-  <!-- 明细表格 -->
-  <div id="pj-detail-wrap">
-    <div style="background:linear-gradient(90deg,#1976d2,#1565b8);padding:10px 16px;font-size:13px;font-weight:700;color:#fff;">
-      📋 代运营商项目进度明细 <span style="font-size:11px;font-weight:400;opacity:.8;">— 点击数值单元格可编辑</span>
-    </div>
-    <table id="pj-detail-table">
-      <thead>
         <tr>
-          <th>代运营商</th>
-          <th>GTV</th>
-          <th>CPC消耗</th>
-          <th>MEM收款</th>
-          <th>好店评分</th>
-          <th>职人码动销</th>
-          <th>有效作业<br>人数</th>
-          <th>职人码<br>物料工单</th>
-          <th>MEM续约率</th>
+          <td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">宁夏灵创</td>
+          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">2.2%</span><br><span style="font-size:11px;color:#22c55e;">-14.8pp</span></td>
+          <td style="padding:8px 10px;text-align:center;background:#fee2e2;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#b91c1c;">38.7%</span><br><span style="font-size:11px;color:#ef4444;">+4.7pp</span></td>
+          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">0.0%</span><br><span style="font-size:11px;color:#22c55e;">-6.0pp</span></td>
         </tr>
-      </thead>
-      <tbody id="pj-tbody"></tbody>
-    </table>  </div>
-
-  <!-- 底部两小模块 -->
-  <div class="bottom-modules">
-    <!-- 欧若拉工单 -->
-    <div class="mini-module">
-      <div class="mini-module-hdr" style="background:linear-gradient(90deg,#059669,#047857);">🔧 欧若拉工单</div>
-      <table>
-        <thead>
-          <tr style="background:#ecfdf5;">
-            <th style="color:#065f46;">代运营商</th>
-            <th style="color:#065f46;">是否全员闭环</th>
-          </tr>
-        </thead>
-        <tbody id="pj-aurora-tbody"></tbody>
-      </table>
-    </div>
-    <!-- 月考 -->
-    <div class="mini-module">
-      <div class="mini-module-hdr" style="background:linear-gradient(90deg,#7c3aed,#6d28d9);">📝 月考</div>
-      <table>
-        <thead>
-          <tr style="background:#f5f3ff;">
-            <th style="color:#4c1d95;">代运营商</th>
-            <th style="color:#4c1d95;">是否全员闭环</th>
-          </tr>
-        </thead>
-        <tbody id="pj-exam-tbody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- 编辑弹窗 -->
-<div id="pj-overlay">
-  <div id="pj-panel">
-    <h3 id="pj-modal-title">编辑数据</h3>
-    <div class="pj-field">
-      <label>当前值</label>
-      <input id="pj-modal-cur" type="number" min="0" step="any" />
-    </div>
-    <div class="pj-field">
-      <label>目标值</label>
-      <input id="pj-modal-tgt" type="number" min="0" step="any" />
-    </div>
-    <div class="pj-actions">
-      <button class="btn-cancel" onclick="pjModalClose()">取消</button>
-      <button class="btn-save"   onclick="pjModalSave()">✓ 保存</button>
-    </div>
-  </div>
-</div>
-
-<div id="toast"></div>
-
-<script>
-// ═══════════════════════════════════════════════════
-//  时钟
-// ═══════════════════════════════════════════════════
-(function tick(){
-  const now = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  document.getElementById('clock').textContent =
-    pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
-  const days=['日','一','二','三','四','五','六'];
-  document.getElementById('clockdate').textContent =
-    now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 周'+days[now.getDay()];
-  setTimeout(tick,1000);
-})();
-
-// ═══════════════════════════════════════════════════
-//  Tab 切换
-// ═══════════════════════════════════════════════════
-function switchTab(t){
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tabn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+t).classList.add('active');
-  document.getElementById('tab-'+t).classList.add('active');
-  if(t==='pjmgmt') renderPjMgmt();
-}
-
-// ═══════════════════════════════════════════════════
-//  项目管理看板 数据 & 渲染
-// ═══════════════════════════════════════════════════
-const LS_KEY = 'pjdashboard_v2';
-
-// 6家代运营商默认目标
-const AGENTS_DEFAULT = [
-  { name:'惠州巨浪',  gtv_t:3804112, cpc_t:74222,  mem_t:0, score_t:246, dongxiao_t:153, visit_t:20, order_t:0, mem_rate_t:60 },
-  { name:'惠州柏万',  gtv_t:3124634, cpc_t:95454,  mem_t:0, score_t:156, dongxiao_t:119, visit_t:20, order_t:0, mem_rate_t:60 },
-  { name:'泉州小花猫',gtv_t:2598259, cpc_t:113144, mem_t:0, score_t:175, dongxiao_t:124, visit_t:20, order_t:0, mem_rate_t:60 },
-  { name:'惠安广通',  gtv_t:2236565, cpc_t:57886,  mem_t:0, score_t:116, dongxiao_t:91,  visit_t:20, order_t:0, mem_rate_t:60 },
-  { name:'慈溪哲光',  gtv_t:3137253, cpc_t:146180, mem_t:0, score_t:161, dongxiao_t:96,  visit_t:20, order_t:0, mem_rate_t:60 },
-  { name:'义乌汐洋',  gtv_t:2893879, cpc_t:139466, mem_t:0, score_t:161, dongxiao_t:99,  visit_t:20, order_t:0, mem_rate_t:60 },
-];
-
-// 8个项目列定义
-const COLS = [
-  { key:'gtv',      label:'GTV',         unit:'万',  isRate:false, isMoney:true  },
-  { key:'cpc',      label:'CPC消耗',      unit:'万',  isRate:false, isMoney:true  },
-  { key:'mem',      label:'MEM收款',      unit:'万',  isRate:false, isMoney:true  },
-  { key:'score',    label:'好店评分',      unit:'',    isRate:false, isMoney:false },
-  { key:'dongxiao', label:'职人码动销',    unit:'',    isRate:false, isMoney:false },
-  { key:'visit',    label:'有效作业人数',  unit:'天',  isRate:false, isMoney:false },
-  { key:'order',    label:'职人码物料工单',unit:'',    isRate:false, isMoney:false },
-  { key:'mem_rate', label:'MEM续约率',     unit:'%',   isRate:true,  isMoney:false },
-];
-
-// 初始化/读取 localStorage
-function loadData(){
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if(raw) return JSON.parse(raw);
-  } catch(e){}
-  return buildDefault();
-}
-function buildDefault(){
-  const agents = AGENTS_DEFAULT.map(a=>{
-    const obj = { name:a.name, aurora:false, exam:false };
-    COLS.forEach(c=>{
-      obj[c.key+'_cur'] = 0;
-      obj[c.key+'_tgt'] = a[c.key+'_t'];
-    });
-    return obj;
-  });
-  return { agents };
-}
-function saveData(data){ localStorage.setItem(LS_KEY, JSON.stringify(data)); }
-
-// 计算本月时间进度
-function timePct(){
-  const now = new Date();
-  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-  return now.getDate() / lastDay * 100;
-}
-
-// 色阶判断
-function scoreClass(pct, tp){
-  if(pct >= tp)        return 's-green';
-  if(pct >= tp - 5)    return 's-yellow';
-  return 's-red';
-}
-
-// 数值格式化
-function fmt(val, col){
-  if(col.isRate) return val.toFixed(1)+'%';
-  if(col.isMoney){
-    if(val >= 10000) return (val/10000).toFixed(1)+'万';
-    return val.toFixed(0);
-  }
-  return val.toFixed(0);
-}
-function fmtShort(val, col){
-  if(col.isRate) return val.toFixed(1)+'%';
-  if(col.isMoney && val >= 10000) return (val/10000).toFixed(1)+'万';
-  return val % 1 === 0 ? val.toFixed(0) : val.toFixed(1);
-}
-
-// ── 主渲染函数 ──
-function renderPjMgmt(){
-  const data = loadData();
-  const tp   = timePct();
-
-  // 顶部时间进度徽章
-  const now = new Date();
-  const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-  document.getElementById('pj-timepct-badge').textContent =
-    '本月时间进度 '+now.getDate()+'/'+lastDay+' = '+tp.toFixed(1)+'%';
-
-  // ── 汇总卡片 ──
-  const cardsEl = document.getElementById('pj-cards');
-  cardsEl.innerHTML = '';
-  COLS.forEach(col=>{
-    let sumCur=0, sumTgt=0;
-    data.agents.forEach(a=>{
-      sumCur += Number(a[col.key+'_cur'])||0;
-      sumTgt += Number(a[col.key+'_tgt'])||0;
-    });
-    let pct = sumTgt > 0 ? sumCur/sumTgt*100 : 0;
-    if(col.isRate){ // 续约率：取平均
-      sumCur = data.agents.reduce((s,a)=>s+(Number(a[col.key+'_cur'])||0),0)/data.agents.length;
-      sumTgt = data.agents.reduce((s,a)=>s+(Number(a[col.key+'_tgt'])||0),0)/data.agents.length;
-      pct = sumTgt > 0 ? sumCur/sumTgt*100 : 0;
-    }
-    const sc = sumTgt===0 ? 's-gray' : scoreClass(pct, tp);
-    const pctDisp = col.isRate ? sumCur.toFixed(1)+'%' : pct.toFixed(1)+'%';
-    const subText = col.isRate
-      ? fmtShort(sumCur,col)+' / '+fmtShort(sumTgt,col)
-      : fmtShort(sumCur,col)+' / '+fmtShort(sumTgt,col);
-    const fillW = Math.min(pct,100).toFixed(1);
-    cardsEl.innerHTML += `
-      <div class="pj-card ${sc}">
-        <div class="pj-card-name">${col.label}</div>
-        <div class="pj-card-pct ${sc}">${pctDisp}</div>
-        <div class="bar-wrap"><div class="bar-fill ${sc}" style="width:${fillW}%"></div></div>
-        <div class="pj-card-sub">合计 ${subText}</div>
-      </div>`;
-  });
-
-  // ── 明细表格 ──
-  const tbody = document.getElementById('pj-tbody');
-  tbody.innerHTML = '';
-  data.agents.forEach((agent, ai)=>{
-    let cells = `<td>${agent.name}</td>`;
-    COLS.forEach(col=>{
-      const cur = Number(agent[col.key+'_cur'])||0;
-      const tgt = Number(agent[col.key+'_tgt'])||0;
-      let pct = tgt > 0 ? cur/tgt*100 : 0;
-      if(col.isRate) pct = tgt > 0 ? cur/tgt*100 : 0;
-      const sc = tgt===0 ? 's-gray' : scoreClass(pct, tp);
-      const fillW = Math.min(pct,100).toFixed(1);
-      const pctTxt = tgt===0 ? '--' : pct.toFixed(1)+'%';
-      const valTxt = fmtShort(cur,col)+' / '+fmtShort(tgt,col);
-      cells += `<td class="editable" onclick="pjEdit(${ai},'${col.key}')"
-        title="点击编辑 ${col.label}：${agent.name}">
-        <div class="cell-bar-wrap"><div class="cell-bar ${sc}" style="width:${fillW}%"></div></div>
-        <div class="cell-pct ${sc}">${pctTxt}</div>
-        <div class="cell-val">${valTxt}</div>
-      </td>`;
-    });
-    tbody.innerHTML += `<tr>${cells}</tr>`;
-  });
-
-  // ── 欧若拉工单 ──
-  const aBody = document.getElementById('pj-aurora-tbody');
-  aBody.innerHTML = '';
-  data.agents.forEach((a,i)=>{
-    aBody.innerHTML += `<tr>
-      <td>${a.name}</td>
-      <td><button class="toggle-btn" onclick="pjToggle(${i},'aurora')">${a.aurora?'✅':'❌'}</button></td>
-    </tr>`;
-  });
-
-  // ── 月考 ──
-  const eBody = document.getElementById('pj-exam-tbody');
-  eBody.innerHTML = '';
-  data.agents.forEach((a,i)=>{
-    eBody.innerHTML += `<tr>
-      <td>${a.name}</td>
-      <td><button class="toggle-btn" onclick="pjToggle(${i},'exam')">${a.exam?'✅':'❌'}</button></td>
-    </tr>`;
-  });
-}
-
-// ── 切换欧若拉/月考 ──
-function pjToggle(idx, field){
-  const data = loadData();
-  data.agents[idx][field] = !data.agents[idx][field];
-  saveData(data);
-  renderPjMgmt();
-}
-
-// ── 编辑弹窗 ──
-let _editIdx=null, _editKey=null;
-function pjEdit(idx, key){
-  const data  = loadData();
-  const agent = data.agents[idx];
-  const col   = COLS.find(c=>c.key===key);
-  _editIdx = idx; _editKey = key;
-  document.getElementById('pj-modal-title').textContent = '编辑：'+agent.name+' · '+col.label;
-  document.getElementById('pj-modal-cur').value = agent[key+'_cur']||0;
-  document.getElementById('pj-modal-tgt').value = agent[key+'_tgt']||0;
-  document.getElementById('pj-overlay').classList.add('show');
-  setTimeout(()=>document.getElementById('pj-modal-cur').focus(),50);
-}
-function pjModalClose(){
-  document.getElementById('pj-overlay').classList.remove('show');
-  _editIdx=null; _editKey=null;
-}
-function pjModalSave(){
-  if(_editIdx===null) return;
-  const data = loadData();
-  data.agents[_editIdx][_editKey+'_cur'] = parseFloat(document.getElementById('pj-modal-cur').value)||0;
-  data.agents[_editIdx][_editKey+'_tgt'] = parseFloat(document.getElementById('pj-modal-tgt').value)||0;
-  saveData(data);
-  pjModalClose();
-  renderPjMgmt();
-  showToast('✓ 已保存');
-}
-// Enter / Esc
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('pj-overlay').classList.contains('show')) return;
-  if(e.key==='Enter')  pjModalSave();
-  if(e.key==='Escape') pjModalClose();
-});
-// 点击遮罩关闭
-document.getElementById('pj-overlay').addEventListener('click',function(e){
-  if(e.target===this) pjModalClose();
-});
-
-// ── 重置 ──
-function pjReset(){
-  if(!confirm('确认清空所有项目管理数据并恢复默认值？')) return;
-  localStorage.removeItem(LS_KEY);
-  renderPjMgmt();
-  showToast('已重置');
-}
-
-// ── Toast ──
-let _toastTimer=null;
-function showToast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
-  if(_toastTimer) clearTimeout(_toastTimer);
-  _toastTimer=setTimeout(()=>el.classList.remove('show'),2000);
-}
-</script>
-</body>
-</html>
+        <tr>
+          <td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠州市柏万</td>
+          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">6.0%</span>
