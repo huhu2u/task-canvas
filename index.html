@@ -7,757 +7,891 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft YaHei',sans-serif; }
-#topbar {
-  background:linear-gradient(90deg,#1976d2 0%,#1565b8 100%);
-  height:52px; display:flex; align-items:center; justify-content:space-between;
-  padding:0 22px; position:sticky; top:0; z-index:100;
-  box-shadow:0 2px 8px rgba(25,118,210,.3);
-}
-#topbar-title { font-size:17px; font-weight:700; color:#fff; letter-spacing:.5px; }
-#clock { font-size:18px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; text-align:right; }
-#clockdate { font-size:10px; color:rgba(255,255,255,.75); text-align:right; margin-top:1px; }
-#statusbar {
-  background:#fff; border-bottom:1px solid #e0e6ef;
-  padding:6px 22px; display:flex; align-items:center; gap:0; flex-wrap:wrap;
-  font-size:12px; color:#374151; line-height:1.5;
-}
-.sb-item {
-  display:flex; align-items:center; gap:5px;
-  padding:0 14px; border-right:1px solid #e0e6ef;
-  white-space:nowrap;
-}
-.sb-item:first-child { padding-left:0; }
-.sb-item:last-child  { border-right:none; }
+#topbar { background:linear-gradient(90deg,#1976d2,#1565b8); height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(25,118,210,.3); }
+#topbar-title { font-size:16px; font-weight:700; color:#fff; }
+#clock { font-size:17px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; }
+#clockdate { font-size:10px; color:rgba(255,255,255,.75); text-align:right; }
+#statusbar { background:#fff; border-bottom:2px solid #e0e6ef; padding:5px 20px; display:flex; align-items:center; flex-wrap:wrap; font-size:12px; }
+.sb-item { display:flex; align-items:center; gap:5px; padding:3px 14px; border-right:1px solid #e0e6ef; white-space:nowrap; }
+.sb-item:first-child { padding-left:0; } .sb-item:last-child { border-right:none; }
 .sb-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.sb-dot.green  { background:#22c55e; }
-.sb-dot.yellow { background:#f59e0b; }
-.sb-dot.blue   { background:#3b82f6; }
-.sb-dot.purple { background:#a855f7; }
-.sb-dot.gray   { background:#9ca3af; }
-.sb-label { color:#6b7280; }
-.sb-val   { font-weight:700; color:#1a2a3a; }
-.sb-val.green  { color:#16a34a; }
-.sb-val.yellow { color:#d97706; }
-.sb-val.blue   { color:#2563eb; }
-.sb-val.red    { color:#dc2626; }
-#tabnav {
-  background:#fff; border-bottom:2px solid #e0e6ef;
-  display:flex; padding:0 18px; gap:4px; align-items:flex-end; flex-wrap:wrap;
-}
-.tabn {
-  background:#f0f4f8; border:1px solid #d0d8e8; border-bottom:none;
-  border-radius:6px 6px 0 0; color:#4a6a8a; font-size:12px; font-weight:600;
-  font-family:inherit; padding:10px 14px; cursor:pointer; transition:all .15s;
-  margin-bottom:-2px; white-space:nowrap;
-}
-.tabn:hover { background:#e3eaf5; color:#1a2a3a; }
-.tabn.active { background:#1976d2; color:#fff; border-color:#1976d2; }
-.tab-panel { display:none; padding:20px 24px; }
-.tab-panel.active { display:block; }
-.summary-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:18px; }
-.sum-card {
-  background:#fff; border-radius:10px; padding:14px 16px;
-  border:1px solid #e0e6ef; box-shadow:0 2px 8px rgba(0,0,0,.06);
-  position:relative; overflow:hidden;
-}
-.sum-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; }
-.sum-card.s-green::before  { background:#22c55e; }
-.sum-card.s-yellow::before { background:#f59e0b; }
-.sum-card.s-red::before    { background:#ef4444; }
-.sum-card.s-gray::before   { background:#94a3b8; }
-.sum-card-name { font-size:11px; color:#6b7280; font-weight:600; margin-bottom:5px; }
-.sum-card-pct  { font-size:26px; font-weight:800; margin-bottom:5px; line-height:1.1; }
-.sum-card-pct.s-green  { color:#16a34a; }
-.sum-card-pct.s-yellow { color:#d97706; }
-.sum-card-pct.s-red    { color:#dc2626; }
-.sum-card-pct.s-gray   { color:#64748b; }
-.sum-card-sub { font-size:11px; color:#9ca3af; margin-top:3px; }
-.bar-wrap { height:8px; background:#e5e7eb; border-radius:4px; overflow:hidden; margin-bottom:5px; }
-.bar-fill { height:8px; border-radius:4px; transition:width .4s; min-width:2px; }
-.bar-fill.s-green  { background:#22c55e; }
-.bar-fill.s-yellow { background:#f59e0b; }
-.bar-fill.s-red    { background:#ef4444; }
-.bar-fill.s-gray   { background:#94a3b8; }
-.detail-wrap { overflow-x:auto; background:#fff; border-radius:10px; border:1px solid #d0d8e8; margin-bottom:20px; }
-.detail-table { width:100%; border-collapse:collapse; min-width:480px; }
-.detail-table thead th {
-  background:linear-gradient(90deg,#1976d2,#1565b8);
-  color:#fff; padding:10px 8px; font-size:12px; font-weight:700;
-  text-align:center; white-space:nowrap; border-right:1px solid rgba(255,255,255,.15);
-}
-.detail-table thead th:first-child { text-align:left; padding-left:14px; min-width:100px; }
-.detail-table tbody tr:nth-child(even) td { background:#f7f9fc; }
-.detail-table tbody tr:hover td { background:#eff6ff !important; }
-.detail-table td {
-  padding:8px 8px; text-align:center; border-bottom:1px solid #e8edf5;
-  border-right:1px solid #e8edf5; font-size:12px; color:#1a2a3a; vertical-align:middle;
-}
-.detail-table td:first-child { text-align:left; font-weight:700; color:#1976d2; white-space:nowrap; padding-left:14px; }
-.detail-table td.editable { cursor:pointer; }
-.detail-table td.editable:hover { background:#dbeafe !important; }
-.cell-bar-wrap { height:5px; background:#e5e7eb; border-radius:3px; overflow:hidden; margin-bottom:3px; }
-.cell-bar { height:5px; border-radius:3px; min-width:2px; }
-.cell-pct { font-size:12px; font-weight:700; }
-.cell-val { font-size:10px; color:#9ca3af; }
-.sub-wrap { background:#fff; border-radius:10px; border:1px solid #d0d8e8; overflow:hidden; margin-bottom:18px; }
-.sub-hdr { padding:10px 16px; font-size:13px; font-weight:700; color:#fff; background:linear-gradient(90deg,#1976d2,#1565b8); }
-.bottom-modules { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.mini-module { background:#fff; border-radius:10px; border:1px solid #d0d8e8; overflow:hidden; }
-.mini-module-hdr { padding:10px 16px; font-size:13px; font-weight:700; color:#fff; }
-.mini-module table { width:100%; border-collapse:collapse; font-size:13px; }
-.mini-module th { padding:9px 14px; font-weight:700; border-bottom:1px solid #e5e7eb; font-size:12px; text-align:center; }
-.mini-module th:first-child { text-align:left; }
-.mini-module td { padding:9px 14px; border-bottom:1px solid #f0f0f0; text-align:center; }
-.mini-module td:first-child { text-align:left; font-weight:600; color:#374151; }
-.mini-module tr:last-child td { border-bottom:none; }
-.toggle-btn { font-size:22px; cursor:pointer; background:none; border:none; padding:2px 6px; border-radius:4px; line-height:1; }
-.toggle-btn:hover { background:#f3f4f6; }
-#pj-overlay {
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center;
-}
-#pj-overlay.show { display:flex; }
-#pj-panel { background:#fff; border-radius:12px; padding:24px; width:360px; max-width:94vw; box-shadow:0 8px 40px rgba(0,0,0,.18); }
-#pj-panel h3 { font-size:15px; font-weight:700; color:#1976d2; margin-bottom:16px; }
-.pj-field { margin-bottom:12px; }
-.pj-field label { font-size:11px; color:#6b7280; display:block; margin-bottom:4px; }
-.pj-field input { width:100%; background:#f0f4f8; border:1px solid #d0d8e8; border-radius:6px; padding:8px 12px; font-size:14px; font-family:inherit; color:#1a2a3a; }
-.pj-field input:focus { outline:none; border-color:#1976d2; }
-.pj-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:6px; }
-.btn-cancel { padding:7px 18px; background:#f0f4f8; border:1px solid #d0d8e8; border-radius:6px; color:#4a6a8a; font-size:13px; cursor:pointer; font-family:inherit; }
-.btn-save   { padding:7px 20px; background:#1976d2; border:none; border-radius:6px; color:#fff; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
-.btn-cancel:hover { background:#e3eaf5; }
-.btn-save:hover   { background:#1565b8; }
-#toast { position:fixed; bottom:18px; right:18px; background:#fff; border:1px solid #22c55e; border-radius:8px; padding:10px 18px; font-size:13px; color:#166534; z-index:600; opacity:0; transition:opacity .3s; pointer-events:none; box-shadow:0 4px 16px rgba(0,0,0,.1); }
-#toast.show { opacity:1; }
-.price-table { width:100%; border-collapse:collapse; font-size:13px; }
-.price-table th { padding:10px 12px; text-align:center; }
-.price-table td { padding:8px 10px; border-bottom:1px solid #e5e7eb; }
-.timepct-badge { background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; padding:5px 14px; font-size:12px; font-weight:700; color:#1976d2; }
-.panel-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
-.panel-title { font-size:17px; font-weight:700; color:#1976d2; }
-.panel-sub { font-size:11px; color:#6b7280; margin-top:3px; }
-::-webkit-scrollbar { width:6px; height:6px; }
-::-webkit-scrollbar-track { background:#f0f4f8; }
-::-webkit-scrollbar-thumb { background:#d0d8e8; border-radius:3px; }
-@media(max-width:800px){
-  .summary-cards { grid-template-columns:repeat(2,1fr); }
-  .bottom-modules { grid-template-columns:1fr; }
-  .tab-panel { padding:12px; }
-}
+.sb-dot.green{background:#22c55e} .sb-dot.yellow{background:#f59e0b} .sb-dot.blue{background:#3b82f6} .sb-dot.purple{background:#a855f7}
+.sb-label{color:#6b7280} .sb-val{font-weight:700;color:#1a2a3a}
+.sb-val.green{color:#16a34a} .sb-val.yellow{color:#d97706} .sb-val.blue{color:#2563eb} .sb-val.red{color:#dc2626}
+#tabnav { background:#fff; border-bottom:2px solid #e0e6ef; display:flex; padding:0 16px; gap:3px; align-items:flex-end; flex-wrap:wrap; position:sticky; top:48px; z-index:90; }
+.tabn { background:#f0f4f8; border:1px solid #d0d8e8; border-bottom:none; border-radius:6px 6px 0 0; color:#4a6a8a; font-size:12px; font-weight:600; font-family:inherit; padding:8px 13px; cursor:pointer; transition:all .15s; margin-bottom:-2px; white-space:nowrap; }
+.tabn:hover{background:#e3eaf5;color:#1a2a3a} .tabn.active{background:#1976d2;color:#fff;border-color:#1976d2}
+.tab-panel{display:none;padding:16px 20px} .tab-panel.active{display:block}
+.panel-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.panel-title{font-size:16px;font-weight:700;color:#1976d2} .panel-sub{font-size:11px;color:#6b7280;margin-top:2px}
+.timepct-badge{background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:700;color:#1976d2}
+.sum-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.scard{background:#fff;border-radius:10px;padding:12px 14px;border:1px solid #e0e6ef;box-shadow:0 2px 6px rgba(0,0,0,.05);position:relative;overflow:hidden}
+.scard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.scard.sg::before{background:#22c55e} .scard.sy::before{background:#f59e0b} .scard.sr::before{background:#ef4444} .scard.sb::before{background:#3b82f6}
+.scard-name{font-size:10px;color:#6b7280;font-weight:600;margin-bottom:4px}
+.scard-pct{font-size:24px;font-weight:800;margin-bottom:4px;line-height:1.1}
+.scard-pct.sg{color:#16a34a} .scard-pct.sy{color:#d97706} .scard-pct.sr{color:#dc2626} .scard-pct.sb{color:#2563eb}
+.scard-sub{font-size:10px;color:#9ca3af}
+.bw{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin:4px 0}
+.bf{height:6px;border-radius:3px;transition:width .4s;min-width:2px}
+.bf.sg{background:#22c55e} .bf.sy{background:#f59e0b} .bf.sr{background:#ef4444} .bf.sb{background:#3b82f6}
+.sec{background:#fff;border-radius:10px;border:1px solid #d0d8e8;overflow:hidden;margin-bottom:16px}
+.sec-hdr{padding:10px 16px;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(90deg,#1976d2,#1565b8);display:flex;align-items:center;justify-content:space-between}
+.sec-hdr.c-cpc{background:linear-gradient(90deg,#0288d1,#0277bd)}
+.sec-hdr.c-mem{background:linear-gradient(90deg,#7b1fa2,#6a1b9a)}
+.sec-hdr.c-score{background:linear-gradient(90deg,#d97706,#b45309)}
+.sec-hdr.c-dong{background:linear-gradient(90deg,#059669,#047857)}
+.sec-hdr.c-visit{background:linear-gradient(90deg,#0891b2,#0e7490)}
+.sec-hdr.c-order{background:linear-gradient(90deg,#7c3aed,#6d28d9)}
+.sec-hdr.c-mem2{background:linear-gradient(90deg,#be185d,#9d174d)}
+.sec-hdr.c-exam{background:linear-gradient(90deg,#7c3aed,#6d28d9)}
+.sec-hdr.c-aurora{background:linear-gradient(90deg,#059669,#047857)}
+.tw{overflow-x:auto}
+table.dt{width:100%;border-collapse:collapse;min-width:520px}
+table.dt thead th{background:#f7f9fc;color:#374151;padding:9px 10px;font-size:11px;font-weight:700;text-align:center;white-space:nowrap;border-bottom:2px solid #e0e6ef;border-right:1px solid #e8edf5}
+table.dt thead th.hn{text-align:left;padding-left:14px;min-width:95px;background:#f0f4f8}
+table.dt thead th.hc{background:#fff8e1} table.dt thead th.ht{background:#f0fdf4}
+table.dt thead th.hp{background:#eff6ff} table.dt thead th.hg{background:#fff5f5} table.dt thead th.hd{background:#fdf4ff}
+table.dt tbody tr:hover td{background:#f0f7ff!important}
+table.dt td{padding:9px 10px;text-align:center;border-bottom:1px solid #e8edf5;border-right:1px solid #e8edf5;font-size:13px;color:#1a2a3a;vertical-align:middle}
+table.dt td:last-child{border-right:none}
+table.dt td.tn{text-align:left;font-weight:700;color:#1976d2;white-space:nowrap;padding-left:14px}
+table.dt td.tc{font-weight:700;font-size:14px}
+table.dt tbody tr:last-child td{border-bottom:none}
+.cg{color:#16a34a} .cy{color:#d97706} .cr{color:#dc2626} .cb{color:#2563eb} .cgr{color:#9ca3af}
+.pct-cell{min-width:90px}
+.pb{height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-bottom:3px}
+.pf{height:5px;border-radius:3px;min-width:2px}
+.pf.sg{background:#22c55e} .pf.sy{background:#f59e0b} .pf.sr{background:#ef4444}
+.pnum{font-size:13px;font-weight:700}
+.dup{color:#16a34a;font-size:12px} .dzero{color:#9ca3af;font-size:12px} .ddown{color:#dc2626;font-size:12px}
+.gap-r{background:#fef2f2;color:#dc2626;padding:2px 7px;border-radius:4px;font-weight:700;font-size:12px;display:inline-block}
+.gap-y{background:#fffbeb;color:#d97706;padding:2px 7px;border-radius:4px;font-weight:700;font-size:12px;display:inline-block}
+.gap-g{background:#f0fdf4;color:#16a34a;padding:2px 7px;border-radius:4px;font-weight:700;font-size:12px;display:inline-block}
+#pj-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;align-items:center;justify-content:center}
+#pj-overlay.show{display:flex}
+#pj-panel{background:#fff;border-radius:12px;padding:24px;width:420px;max-width:94vw;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+#pj-panel h3{font-size:15px;font-weight:700;color:#1976d2;margin-bottom:14px}
+.pj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.pj-f label{font-size:11px;color:#6b7280;display:block;margin-bottom:4px}
+.pj-f input{width:100%;background:#f0f4f8;border:1px solid #d0d8e8;border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;color:#1a2a3a}
+.pj-f input:focus{outline:none;border-color:#1976d2}
+.pj-f-full{grid-column:1/-1}
+.pj-act{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.btn-x{padding:7px 18px;background:#f0f4f8;border:1px solid #d0d8e8;border-radius:6px;color:#4a6a8a;font-size:13px;cursor:pointer;font-family:inherit}
+.btn-s{padding:7px 20px;background:#1976d2;border:none;border-radius:6px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-x:hover{background:#e3eaf5} .btn-s:hover{background:#1565b8}
+#toast{position:fixed;bottom:18px;right:18px;background:#fff;border:1px solid #22c55e;border-radius:8px;padding:10px 18px;font-size:13px;color:#166534;z-index:600;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+#toast.show{opacity:1}
+::-webkit-scrollbar{width:5px;height:5px} ::-webkit-scrollbar-track{background:#f0f4f8} ::-webkit-scrollbar-thumb{background:#d0d8e8;border-radius:3px}
+@media(max-width:800px){.sum-cards{grid-template-columns:repeat(2,1fr)}.tab-panel{padding:10px 12px}}
 </style>
 </head>
 <body>
+
 <div id="topbar">
   <div id="topbar-title">🗂 粤闽浙渠道 管理看板</div>
-  <div><div id="clock">--:--:--</div><div id="clockdate">--</div></div>
+  <div style="text-align:right">
+    <div id="clock">--:--:--</div>
+    <div id="clockdate">--</div>
+  </div>
 </div>
+
 <div id="statusbar">
-  <div class="sb-item">
-    <span class="sb-dot green"></span>
-    <span class="sb-label">时间进度</span>
-    <span class="sb-val blue" id="sb-timepct">--</span>
-  </div>
-  <div class="sb-item">
-    <span class="sb-dot blue"></span>
-    <span class="sb-label">剩余</span>
-    <span class="sb-val" id="sb-remain">--</span>
-  </div>
-  <div class="sb-item">
-    <span class="sb-dot green"></span>
-    <span class="sb-label">GTV综合进度</span>
-    <span class="sb-val" id="sb-gtv">--</span>
-  </div>
-  <div class="sb-item">
-    <span class="sb-dot yellow"></span>
-    <span class="sb-label">CPC综合进度</span>
-    <span class="sb-val" id="sb-cpc">--</span>
-  </div>
-  <div class="sb-item">
-    <span class="sb-dot purple"></span>
-    <span class="sb-label">数据更新</span>
-    <span class="sb-val" id="sb-updated">--</span>
+  <div class="sb-item"><span class="sb-dot blue"></span><span class="sb-label">时间进度</span><span class="sb-val blue" id="sb-timepct">--</span></div>
+  <div class="sb-item"><span class="sb-dot blue"></span><span class="sb-label">剩余</span><span class="sb-val" id="sb-remain">--</span></div>
+  <div class="sb-item"><span class="sb-dot green"></span><span class="sb-label">GTV综合</span><span class="sb-val" id="sb-gtv">--</span></div>
+  <div class="sb-item"><span class="sb-dot yellow"></span><span class="sb-label">CPC综合</span><span class="sb-val" id="sb-cpc">--</span></div>
+  <div class="sb-item"><span class="sb-dot purple"></span><span class="sb-label">数据更新</span><span class="sb-val" id="sb-updated">--</span></div>
+  <div class="sb-item" style="margin-left:auto;border-right:none">
+    <button onclick="pjReset()" style="background:#fee2e2;border:1px solid #fecaca;color:#991b1b;padding:4px 12px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit">🗑 重置</button>
   </div>
 </div>
+
 <div id="tabnav">
-  <button class="tabn active" id="tab-perf"     onclick="switchTab('perf')">📊 核心业绩看板</button>
-  <button class="tabn"        id="tab-score"    onclick="switchTab('score')">⭐ 好店经营评分</button>
-  <button class="tabn"        id="tab-dongxiao" onclick="switchTab('dongxiao')">🔖 好店职人码动销</button>
-  <button class="tabn"        id="tab-visit"    onclick="switchTab('visit')">🧑 有效作业人数</button>
-  <button class="tabn"        id="tab-order"    onclick="switchTab('order')">📦 职人码物料工单</button>
-  <button class="tabn"        id="tab-memrate"  onclick="switchTab('memrate')">🔄 MEM续约率</button>
+  <button class="tabn active" id="tab-perf"     onclick="switchTab('perf')">📊 核心业绩</button>
+  <button class="tabn"        id="tab-score"    onclick="switchTab('score')">⭐ 好店评分</button>
+  <button class="tabn"        id="tab-dongxiao" onclick="switchTab('dongxiao')">🔖 职人码动销</button>
+  <button class="tabn"        id="tab-visit"    onclick="switchTab('visit')">🧑 有效作业</button>
+  <button class="tabn"        id="tab-order"    onclick="switchTab('order')">📦 物料工单</button>
+  <button class="tabn"        id="tab-memrate"  onclick="switchTab('memrate')">🔄 MEM续约</button>
   <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单</button>
   <button class="tabn"        id="tab-exam"     onclick="switchTab('exam')">📝 月考</button>
-  <button class="tabn"        id="tab-price"    onclick="switchTab('price')">💰 价格带分析</button>
+  <button class="tabn"        id="tab-price"    onclick="switchTab('price')">💰 价格带</button>
 </div>
 
-<!-- Tab1: 核心业绩看板 -->
+<!-- Tab1: 核心业绩 -->
 <div id="panel-perf" class="tab-panel active">
   <div class="panel-topbar">
-    <div><div class="panel-title">📊 核心业绩看板</div><div class="panel-sub">GTV · CPC消耗 · MEM收款 | 6家代运营商 · 点击数值单元格可编辑</div></div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <div id="perf-badge" class="timepct-badge"></div>
-      <button onclick="pjReset()" style="background:#fee2e2;border:1px solid #fecaca;color:#991b1b;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;">🗑 重置数据</button>
-    </div>
+    <div><div class="panel-title">📊 核心业绩看板</div><div class="panel-sub">月累计 · 目标 · 进度 · 日缺口 · 日变化 | 点击数值可编辑</div></div>
+    <div id="perf-badge" class="timepct-badge"></div>
   </div>
-  <div class="sub-wrap">
-    <div class="sub-hdr">💰 GTV（成交总额）</div>
-    <div style="padding:14px 16px 0;"><div id="gtv-cards" class="summary-cards"></div></div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th>代运营商</th><th>当前GTV</th><th>目标GTV</th><th>达成率</th>
-      </tr></thead><tbody id="gtv-tbody"></tbody></table>
-    </div>
+  <div class="sec">
+    <div class="sec-hdr"><span>💰 GTV（成交总额）</span><span id="gtv-hdr-sum" style="font-size:12px;opacity:.85"></span></div>
+    <div id="gtv-cards" class="sum-cards" style="padding:12px 14px 4px"></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">月累计GTV</th><th class="ht">月目标</th>
+      <th class="hp">完成进度</th><th class="hg">日缺口</th>
+      <th class="hd">昨日GTV</th><th class="hd">GTV剔除率</th>
+    </tr></thead><tbody id="gtv-tbody"></tbody></table></div>
   </div>
-  <div class="sub-wrap">
-    <div class="sub-hdr" style="background:linear-gradient(90deg,#0288d1,#0277bd);">📈 CPC消耗</div>
-    <div style="padding:14px 16px 0;"><div id="cpc-cards" class="summary-cards"></div></div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">代运营商</th>
-        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">当前消耗</th>
-        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">目标消耗</th>
-        <th style="background:linear-gradient(90deg,#0288d1,#0277bd);">达成率</th>
-      </tr></thead><tbody id="cpc-tbody"></tbody></table>
-    </div>
+  <div class="sec">
+    <div class="sec-hdr c-cpc"><span>📈 CPC消耗</span><span id="cpc-hdr-sum" style="font-size:12px;opacity:.85"></span></div>
+    <div id="cpc-cards" class="sum-cards" style="padding:12px 14px 4px"></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">月CPC消耗</th><th class="ht">月目标</th>
+      <th class="hp">完成进度</th><th class="hg">日缺口</th>
+      <th class="hd">昨日消耗</th><th class="hd">有效新签</th><th class="hd">旺铺通</th>
+    </tr></thead><tbody id="cpc-tbody"></tbody></table></div>
   </div>
-  <div class="sub-wrap">
-    <div class="sub-hdr" style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">💳 MEM收款</div>
-    <div style="padding:14px 16px 0;"><div id="mem-cards" class="summary-cards"></div></div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">代运营商</th>
-        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">当前收款</th>
-        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">目标收款</th>
-        <th style="background:linear-gradient(90deg,#7b1fa2,#6a1b9a);">达成率</th>
-      </tr></thead><tbody id="mem-tbody"></tbody></table>
-    </div>
+  <div class="sec">
+    <div class="sec-hdr c-mem"><span>💳 MEM收款</span><span id="mem-hdr-sum" style="font-size:12px;opacity:.85"></span></div>
+    <div id="mem-cards" class="sum-cards" style="padding:12px 14px 4px"></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">月收款额</th><th class="ht">CPS收入</th>
+      <th class="hp">续约率</th><th class="hd">日变化</th>
+    </tr></thead><tbody id="mem-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- Tab2: 好店经营评分 -->
+<!-- Tab2: 好店评分 -->
 <div id="panel-score" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">⭐ 好店经营评分</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
-    <div style="display:flex;align-items:center;gap:10px;"><div id="score-badge" class="timepct-badge"></div></div>
+    <div><div class="panel-title">⭐ 好店经营评分</div><div class="panel-sub">达标≥70分 · 优先做工50~69分 | 点击可编辑</div></div>
+    <div id="score-badge" class="timepct-badge"></div>
   </div>
-  <div id="score-cards" class="summary-cards"></div>
-  <div class="sub-wrap">
-    <div class="sub-hdr">⭐ 好店经营评分明细</div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th>代运营商</th><th>当前评分</th><th>目标评分</th><th>达成率</th>
-      </tr></thead><tbody id="score-tbody"></tbody></table>
-    </div>
+  <div id="score-cards" class="sum-cards"></div>
+  <div class="sec">
+    <div class="sec-hdr c-score"><span>⭐ 经营评分明细</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">当前达标数</th><th class="ht">4月目标</th>
+      <th class="hp">完成进度</th><th class="hg">目标缺口</th>
+      <th class="hd">日变化</th><th class="hd">50~69分门店</th>
+    </tr></thead><tbody id="score-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- Tab3: 好店职人码动销 -->
+<!-- Tab3: 职人码动销 -->
 <div id="panel-dongxiao" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">🔖 好店职人码动销</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
-    <div style="display:flex;align-items:center;gap:10px;"><div id="dongxiao-badge" class="timepct-badge"></div></div>
+    <div><div class="panel-title">🔖 好店职人码动销</div><div class="panel-sub">达标=码核销订单≥4 | 点击可编辑</div></div>
+    <div id="dongxiao-badge" class="timepct-badge"></div>
   </div>
-  <div id="dongxiao-cards" class="summary-cards"></div>
-  <div class="sub-wrap">
-    <div class="sub-hdr">🔖 职人码动销明细</div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th>代运营商</th><th>当前动销数</th><th>目标动销数</th><th>达成率</th>
-      </tr></thead><tbody id="dongxiao-tbody"></tbody></table>
-    </div>
+  <div id="dongxiao-cards" class="sum-cards"></div>
+  <div class="sec">
+    <div class="sec-hdr c-dong"><span>🔖 职人码动销明细</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">已达标门店</th><th class="ht">4月目标</th>
+      <th class="hp">完成进度</th><th class="hg">目标缺口</th>
+      <th class="hd">昨日净增</th><th class="hd">好店店转GTV</th>
+    </tr></thead><tbody id="dongxiao-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- Tab4: 有效作业人数 -->
+<!-- Tab4: 有效作业 -->
 <div id="panel-visit" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">🧑 有效作业人数</div><div class="panel-sub">拜访达标天数，目标20天 · 6家代运营商 · 点击数值单元格可编辑</div></div>
-    <div style="display:flex;align-items:center;gap:10px;"><div id="visit-badge" class="timepct-badge"></div></div>
+    <div><div class="panel-title">🧑 有效作业人数</div><div class="panel-sub">拜访达标天数 · 月目标20天 | 点击可编辑</div></div>
+    <div id="visit-badge" class="timepct-badge"></div>
   </div>
-  <div id="visit-cards" class="summary-cards"></div>
-  <div class="sub-wrap">
-    <div class="sub-hdr">🧑 有效作业人数明细（拜访达标天数）</div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th>代运营商</th><th>当前达标天数</th><th>目标天数</th><th>达成率</th>
-      </tr></thead><tbody id="visit-tbody"></tbody></table>
-    </div>
+  <div id="visit-cards" class="sum-cards"></div>
+  <div class="sec">
+    <div class="sec-hdr c-visit"><span>🧑 有效作业明细</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">达标天数</th><th class="ht">月目标</th>
+      <th class="hp">完成进度</th><th class="hg">缺口</th>
+      <th class="hd">昨日有效拜访</th><th class="hd">昨日好店拜访</th>
+    </tr></thead><tbody id="visit-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- Tab5: 职人码物料工单 -->
+<!-- Tab5: 物料工单 -->
 <div id="panel-order" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">📦 职人码物料工单</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
-    <div style="display:flex;align-items:center;gap:10px;"><div id="order-badge" class="timepct-badge"></div></div>
+    <div><div class="panel-title">📦 职人码物料工单</div><div class="panel-sub">铺设合格数 · 点击可编辑</div></div>
+    <div id="order-badge" class="timepct-badge"></div>
   </div>
-  <div id="order-cards" class="summary-cards"></div>
-  <div class="sub-wrap">
-    <div class="sub-hdr">📦 职人码物料工单明细</div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th>代运营商</th><th>当前工单数</th><th>目标工单数</th><th>达成率</th>
-      </tr></thead><tbody id="order-tbody"></tbody></table>
-    </div>
+  <div id="order-cards" class="sum-cards"></div>
+  <div class="sec">
+    <div class="sec-hdr c-order"><span>📦 物料铺设明细</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">已铺设合格</th><th class="ht">单月目标</th>
+      <th class="hp">完成进度</th><th class="hg">缺口</th>
+      <th class="hd">日新增</th><th class="hd">作业池</th>
+    </tr></thead><tbody id="order-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- Tab6: MEM续约率 -->
+<!-- Tab6: MEM续约 -->
 <div id="panel-memrate" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">🔄 MEM续约率</div><div class="panel-sub">6家代运营商 · 点击数值单元格可编辑</div></div>
-    <div style="display:flex;align-items:center;gap:10px;"><div id="memrate-badge" class="timepct-badge"></div></div>
+    <div><div class="panel-title">🔄 MEM续约率</div><div class="panel-sub">续约率 · 已续约/到期总数 | 点击可编辑</div></div>
+    <div id="memrate-badge" class="timepct-badge"></div>
   </div>
-  <div id="memrate-cards" class="summary-cards"></div>
-  <div class="sub-wrap">
-    <div class="sub-hdr">🔄 MEM续约率明细</div>
-    <div class="detail-wrap" style="border-radius:0;border-left:none;border-right:none;border-bottom:none;margin-bottom:0;">
-      <table class="detail-table"><thead><tr>
-        <th>代运营商</th><th>当前续约率(%)</th><th>目标续约率(%)</th><th>达成率</th>
-      </tr></thead><tbody id="memrate-tbody"></tbody></table>
-    </div>
+  <div id="memrate-cards" class="sum-cards"></div>
+  <div class="sec">
+    <div class="sec-hdr c-mem2"><span>🔄 MEM续约明细</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">已续约</th><th class="ht">到期总数</th>
+      <th class="hp">续约率</th><th class="hg">目标缺口</th>
+      <th class="hd">昨日新增</th><th class="hd">紧急未续(&le;30天)</th>
+    </tr></thead><tbody id="memrate-tbody"></tbody></table></div>
   </div>
 </div>
 
 <!-- Tab7: 欧若拉工单 -->
 <div id="panel-aurora" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">🔧 欧若拉工单</div><div class="panel-sub">点击 ✅/❌ 切换状态</div></div>
+    <div><div class="panel-title">🔧 欧若拉工单</div><div class="panel-sub">动作完成率 · 结果完成率 | 点击可编辑</div></div>
   </div>
-  <div class="bottom-modules">
-    <div class="mini-module" style="max-width:480px;">
-      <div class="mini-module-hdr" style="background:linear-gradient(90deg,#059669,#047857);">🔧 欧若拉工单</div>
-      <table><thead><tr style="background:#ecfdf5;">
-        <th style="color:#065f46;">代运营商</th><th style="color:#065f46;">是否全员闭环</th>
-      </tr></thead><tbody id="pj-aurora-tbody"></tbody></table>
-    </div>
+  <div class="sec">
+    <div class="sec-hdr c-aurora"><span>🔧 欧若拉工单完成情况</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th>
+      <th class="hc">待办总数</th>
+      <th style="background:#dbeafe">📋 动作-已完成</th>
+      <th style="background:#dbeafe">📋 动作-待处理</th>
+      <th style="background:#dbeafe">📋 动作完成率</th>
+      <th style="background:#d1fae5">✅ 结果-已完成</th>
+      <th style="background:#d1fae5">✅ 结果-待处理</th>
+      <th style="background:#d1fae5">✅ 结果完成率</th>
+    </tr></thead><tbody id="aurora-tbody"></tbody></table></div>
   </div>
 </div>
 
 <!-- Tab8: 月考 -->
 <div id="panel-exam" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">📝 月考</div><div class="panel-sub">点击 ✅/❌ 切换状态</div></div>
+    <div><div class="panel-title">📝 月考</div><div class="panel-sub">点击数值可编辑</div></div>
   </div>
-  <div class="bottom-modules">
-    <div class="mini-module" style="max-width:480px;">
-      <div class="mini-module-hdr" style="background:linear-gradient(90deg,#7c3aed,#6d28d9);">📝 月考</div>
-      <table><thead><tr style="background:#f5f3ff;">
-        <th style="color:#4c1d95;">代运营商</th><th style="color:#4c1d95;">是否全员闭环</th>
-      </tr></thead><tbody id="pj-exam-tbody"></tbody></table>
-    </div>
+  <div class="sec">
+    <div class="sec-hdr c-exam"><span>📝 月考完成情况</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">应参加人数</th><th class="ht">已完成</th>
+      <th class="hp">完成率</th><th class="hg">未完成</th><th class="hd">日变化</th>
+    </tr></thead><tbody id="exam-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- Tab8: 价格带分析（原样保留） -->
+<!-- Tab9: 价格带 -->
 <div id="panel-price" class="tab-panel">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-    <div style="font-size:18px;font-weight:700;color:#1d4ed8;">💰 超价格带分析</div>
-    <div style="font-size:11px;color:#6b7280;">数据截止：2026-04-06 &nbsp;|&nbsp;
-      <a href="https://apollo.sankuai.com/data/report/list?reportId=864" target="_blank" style="color:#2563eb;">Apollo #864</a>
-    </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div style="font-size:18px;font-weight:700;color:#1d4ed8">💰 超价格带分析</div>
+    <div style="font-size:11px;color:#6b7280"><a href="https://apollo.sankuai.com/data/report/list?reportId=864" target="_blank" style="color:#2563eb">Apollo #864</a></div>
   </div>
-  <div style="background:#f0f4ff;border:1px solid #dbeafe;border-radius:6px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#374151;display:flex;gap:16px;flex-wrap:wrap;">
-    <span style="color:#6b7280;">阈值：</span>
-    <span>品类A(&le;300元) <b style="color:#1d4ed8;">17%</b></span>
-    <span>品类B(&le;500元) <b style="color:#1d4ed8;">34%</b></span>
-    <span>品类C(&le;1000元) <b style="color:#1d4ed8;">6%</b></span>
+  <div style="background:#f0f4ff;border:1px solid #dbeafe;border-radius:6px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#374151;display:flex;gap:16px;flex-wrap:wrap">
+    <span style="color:#6b7280">阈值：</span>
+    <span>品类A(≤300元) <b style="color:#1d4ed8">17%</b></span>
+    <span>品类B(≤500元) <b style="color:#1d4ed8">34%</b></span>
+    <span>品类C(≤1000元) <b style="color:#1d4ed8">6%</b></span>
   </div>
-  <div style="overflow-x:auto;margin-bottom:14px;">
-    <table class="price-table" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      <thead>
-        <tr style="background:#1d4ed8;color:#fff;">
-          <th style="text-align:left;">代运营商</th>
-          <th>品类A<br><span style="font-weight:400;font-size:11px;">&le;300 阈值17%</span></th>
-          <th>品类B<br><span style="font-weight:400;font-size:11px;">&le;500 阈值34%</span></th>
-          <th>品类C<br><span style="font-weight:400;font-size:11px;">&le;1000 阈值6%</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="padding:8px 12px;background:#f9fafb;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">宁夏灵创</td>
-          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">2.2%</span><br><span style="font-size:11px;color:#22c55e;">-14.8pp</span></td>
-          <td style="padding:8px 10px;text-align:center;background:#fee2e2;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#b91c1c;">38.7%</span><br><span style="font-size:11px;color:#ef4444;">+4.7pp</span></td>
-          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">0.0%</span><br><span style="font-size:11px;color:#22c55e;">-6.0pp</span></td>
-        </tr>
-        <tr>
-          <td style="padding:8px 12px;background:#ffffff;color:#111827;font-weight:600;border-bottom:1px solid #e5e7eb;">惠州市柏万</td>
-          <td style="padding:8px 10px;text-align:center;background:#dcfce7;border-bottom:1px solid #e5e7eb;border-left:1px solid #e5e7eb;"><span style="font-size:14px;font-weight:700;color:#166534;">6.0%</span>  <div style="overflow-x:auto;margin-bottom:14px;">
-    <table class="price-table" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
-      <thead>
-        <tr style="background:#1d4ed8;color:#fff;">
-          <th style="text-align:left;padding:10px 12px;">代运营商</th>
-          <th style="padding:10px 12px;">品类A<br><span style="font-weight:400;font-size:11px;">≤300 阈值17%</span></th>
-          <th style="padding:10px 12px;">品类B<br><span style="font-weight:400;font-size:11px;">≤500 阈值34%</span></th>
-          <th style="padding:10px 12px;">品类C<br><span style="font-weight:400;font-size:11px;">≤1000 阈值6%</span></th>
-        </tr>
-      </thead>
-      <tbody id="price-tbody">
-        <tr><td colspan="4" style="text-align:center;padding:20px;color:#9ca3af;">数据加载中，请运行自动更新脚本</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div id="price-summary" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 18px;">
-    <div style="font-weight:700;color:#1e40af;margin-bottom:8px;">📋 归因摘要</div>
-    <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.8;color:#374151;">
-      <li>数据待更新，上次更新：<span id="price-date" style="color:#6b7280;">—</span></li>
-    </ul>
+  <div class="sec">
+    <div class="sec-hdr" style="background:linear-gradient(90deg,#1d4ed8,#1e3a8a)"><span>💰 价格带达标情况</span><span id="price-date-text" style="font-size:12px;opacity:.8"></span></div>
+    <div class="tw"><table id="price-table" class="dt"><thead><tr>
+      <th class="hn">代运营商</th>
+      <th class="hc">品类A ≤300 (阈值17%)</th>
+      <th class="ht">品类B ≤500 (阈值34%)</th>
+      <th class="hp">品类C ≤1000 (阈值6%)</th>
+    </tr></thead><tbody id="price-tbody">
+      <tr><td colspan="4" style="text-align:center;padding:20px;color:#9ca3af">暂无数据，运行更新脚本后刷新</td></tr>
+    </tbody></table></div>
   </div>
 </div>
 
-<!-- 弹窗编辑框 -->
+<!-- 弹窗 -->
 <div id="pj-overlay">
   <div id="pj-panel">
-    <h3 id="pj-panel-title">编辑数据</h3>
-    <div class="pj-field"><label>当前值</label><input type="number" id="pj-cur" placeholder="输入当前值"></div>
-    <div class="pj-field"><label>目标值</label><input type="number" id="pj-tgt" placeholder="输入目标值（可选）"></div>
-    <div class="pj-actions">
-      <button class="btn-cancel" onclick="closeEdit()">取消</button>
-      <button class="btn-save"   onclick="saveEdit()">保存</button>
+    <h3 id="pj-title">编辑数据</h3>
+    <div class="pj-grid" id="pj-fields"></div>
+    <div class="pj-act">
+      <button class="btn-x" onclick="closeEdit()">取消</button>
+      <button class="btn-s" onclick="saveEdit()">保存</button>
     </div>
   </div>
 </div>
 <div id="toast">✅ 已保存</div>
 
 <script>
-// ── 数据 ──────────────────────────────────────────────────────
-const AGENTS_DEF = [
-  {name:'惠州巨浪',  gtv_tgt:3804112, cpc_tgt:74222,  mem_tgt:0, score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:0, memrate_tgt:60},
-  {name:'惠州柏万',  gtv_tgt:3124634, cpc_tgt:95454,  mem_tgt:0, score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:0, memrate_tgt:60},
-  {name:'泉州小花猫',gtv_tgt:2598259, cpc_tgt:113144, mem_tgt:0, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:0, memrate_tgt:60},
-  {name:'惠安广通',  gtv_tgt:2236565, cpc_tgt:57886,  mem_tgt:0, score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:0, memrate_tgt:60},
-  {name:'慈溪哲光',  gtv_tgt:3137253, cpc_tgt:146180, mem_tgt:0, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:0, memrate_tgt:60},
-  {name:'义乌汐洋',  gtv_tgt:2893879, cpc_tgt:139466, mem_tgt:0, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:0, memrate_tgt:60},
+// ────────────────────────────────────────────────────────────
+// 配置：代运营商基础数据
+// ────────────────────────────────────────────────────────────
+const AGENTS = [
+  {name:'惠州巨浪',  gtv_tgt:3804112, cpc_tgt:74222,  score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:88,  memrate_tgt:60, order_pool:329},
+  {name:'惠州柏万',  gtv_tgt:3124634, cpc_tgt:95454,  score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:54,  memrate_tgt:60, order_pool:201},
+  {name:'泉州小花猫',gtv_tgt:2598259, cpc_tgt:113144, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:60,  memrate_tgt:60, order_pool:226},
+  {name:'惠安广通',  gtv_tgt:2236565, cpc_tgt:57886,  score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:38,  memrate_tgt:60, order_pool:141},
+  {name:'慈溪哲光',  gtv_tgt:3137253, cpc_tgt:146180, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:67,  memrate_tgt:60, order_pool:251},
+  {name:'义乌汐洋',  gtv_tgt:2893879, cpc_tgt:139466, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:51,  memrate_tgt:60, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
-let STATE = {};
+let S = {};
 
-function loadState() {
-  try { STATE = JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch(e) { STATE={}; }
-}
-function saveState() { localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }
+function ls(){ try{ S=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){ S={}; } }
+function ss(){ localStorage.setItem(LS_KEY, JSON.stringify(S)); }
 
-function getVal(name, field) {
-  return (STATE[name] && STATE[name][field] !== undefined) ? STATE[name][field] : 0;
+// 取值/设值
+function g(name, f){ return S[name]&&S[name][f]!==undefined ? S[name][f] : 0; }
+function gt(name, f){
+  const a=AGENTS.find(x=>x.name===name);
+  if(S[name]&&S[name][f+'_tgt']!==undefined) return S[name][f+'_tgt'];
+  return a ? (a[f+'_tgt']||0) : 0;
 }
-function getTgt(name, field) {
-  const defAgent = AGENTS_DEF.find(a=>a.name===name);
-  if (STATE[name] && STATE[name][field+'_tgt'] !== undefined) return STATE[name][field+'_tgt'];
-  return defAgent ? defAgent[field+'_tgt'] : 0;
-}
-function setVal(name, field, val, tgt) {
-  if (!STATE[name]) STATE[name]={};
-  STATE[name][field] = val;
-  if (tgt !== undefined) STATE[name][field+'_tgt'] = tgt;
-  saveState();
+function sv(name,f,v,t){
+  if(!S[name]) S[name]={};
+  S[name][f]=v;
+  if(t!==undefined) S[name][f+'_tgt']=t;
+  ss();
 }
 
-// ── 时间进度 ──────────────────────────────────────────────────
-function getTimePct() {
-  const now = new Date();
-  const y=now.getFullYear(), m=now.getMonth();
-  const day=now.getDate();
+// ── 时间进度 ─────────────────────────────────────────────────
+function timePct(){
+  const now=new Date(), y=now.getFullYear(), m=now.getMonth(), d=now.getDate();
   const total=new Date(y,m+1,0).getDate();
-  return {pct: day/total, day, total};
+  return {pct:d/total, day:d, total};
 }
-
-function colorClass(pct, timePct) {
-  if (pct >= timePct) return 'green';
-  if (pct >= timePct-0.05) return 'yellow';
-  return 'red';
+function colorOf(pct, tp){
+  if(pct>=tp) return 'sg';
+  if(pct>=tp-0.05) return 'sy';
+  return 'sr';
 }
+function colorText(c){ return c==='sg'?'#16a34a':c==='sy'?'#d97706':'#dc2626'; }
 
-// ── 格式化 ────────────────────────────────────────────────────
-function fmtVal(v, field) {
-  if ((field==='gtv'||field==='cpc'||field==='mem') && v>=10000)
-    return (v/10000).toFixed(1)+'万';
+// ── 格式化 ───────────────────────────────────────────────────
+function fmtMoney(v){
+  if(v===0||v===null||v===undefined) return '—';
+  if(Math.abs(v)>=10000) return (v/10000).toFixed(1)+'万';
   return v.toLocaleString();
 }
+function fmtNum(v){ return v===0?'—':v.toLocaleString(); }
+function fmtPct(v){ return (v*100).toFixed(1)+'%'; }
 
-// ── 进度条 ────────────────────────────────────────────────────
-function barHtml(pct, cls) {
+// ── 进度条单元格 ──────────────────────────────────────────────
+function pctCell(pct, cls){
   const w=Math.min(100,pct*100).toFixed(1);
-  return `<div class="cell-bar-wrap"><div class="cell-bar bar-fill s-${cls}" style="width:${w}%"></div></div>
-          <div class="cell-pct" style="color:var(--c-${cls},inherit)">${(pct*100).toFixed(1)}%</div>`;
+  const col = cls==='sg'?'#22c55e':cls==='sy'?'#f59e0b':'#ef4444';
+  return `<div class="pct-cell"><div class="pb"><div class="pf" style="width:${w}%;background:${col}"></div></div><span class="pnum" style="color:${colorText(cls)}">${fmtPct(pct)}</span></div>`;
 }
-function colorVar(c){return c==='green'?'#16a34a':c==='yellow'?'#d97706':'#dc2626';}
 
-// ── 通用 Tab 渲染 ─────────────────────────────────────────────
-function renderTab(field, tbodyId, cardsId, badgeId, label) {
-  const {pct:timePct,day,total} = getTimePct();
-  let totCur=0, totTgt=0;
-  const tbody = document.getElementById(tbodyId);
-  if (!tbody) return;
-  let html='';
-  AGENTS_DEF.forEach(a=>{
-    const cur=getVal(a.name,field), tgt=getTgt(a.name,field);
-    const pct=tgt>0?cur/tgt:0;
-    const cls=colorClass(pct,timePct);
+// ── 缺口标签 ─────────────────────────────────────────────────
+function gapTag(gap, isNeg){
+  // gap为正=还差 gap为负=已超
+  if(isNeg||gap<=0) return `<span class="gap-g">+${Math.abs(gap).toLocaleString()} 超额</span>`;
+  const cls = gap>gap*2?'gap-r':'gap-y'; // 简化：有缺口就用红/黄
+  const pct=gap>500?'gap-r':'gap-y';
+  return `<span class="${pct}">-${gap.toLocaleString()}</span>`;
+}
+function numGap(cur, tgt){ return tgt - cur; }
+function gapHtml(cur, tgt, isCount){
+  const gap = tgt - cur;
+  if(gap <= 0) return `<span class="gap-g">超额 +${Math.abs(gap).toLocaleString()}</span>`;
+  const cls = isCount ? (gap>10?'gap-r':'gap-y') : (gap/tgt>0.1?'gap-r':'gap-y');
+  return `<span class="${cls}">差 ${gap.toLocaleString()}</span>`;
+}
+
+// ── 日变化 ───────────────────────────────────────────────────
+function dayHtml(v, unit){
+  if(v===0||v===null||v===undefined) return `<span class="dzero">—</span>`;
+  const u = unit||'';
+  if(v>0) return `<span class="dup">▲ ${fmtMoney(v)}${u}</span>`;
+  return `<span class="ddown">▼ ${fmtMoney(Math.abs(v))}${u}</span>`;
+}
+
+// ── 汇总卡片 ─────────────────────────────────────────────────
+function makeCards(containerId, items){
+  const el=document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = items.map(item=>`
+    <div class="scard ${item.cls}">
+      <div class="scard-name">${item.name}</div>
+      <div class="scard-pct ${item.cls}">${item.pct}</div>
+      <div class="bw"><div class="bf ${item.cls}" style="width:${item.barW}%"></div></div>
+      <div class="scard-sub">${item.sub||''}</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：核心业绩 GTV
+// ════════════════════════════════════════════════════════════
+function renderGtv(){
+  const {pct:tp,day,total}=timePct();
+  const remain=total-day;
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'gtv'), tgt=gt(a.name,'gtv');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dailyGap = tgt>0 ? Math.ceil((tgt-cur)/Math.max(remain,1)) : 0;
+    const yGtv=g(a.name,'gtv_y'), excl=g(a.name,'gtv_excl');
     totCur+=cur; totTgt+=tgt;
     html+=`<tr>
-      <td>${a.name}</td>
-      <td class="editable" onclick="openEdit('${a.name}','${field}','${label}')" style="color:${colorVar(cls)};font-weight:700;">${fmtVal(cur,field)}</td>
-      <td style="color:#6b7280;">${fmtVal(tgt,field)}</td>
-      <td>${barHtml(pct,cls)}</td>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','gtv')">${fmtMoney(cur)}</td>
+      <td style="color:#6b7280">${fmtMoney(tgt)}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,false)}<div style="font-size:10px;color:#9ca3af;margin-top:2px">日需≥${fmtMoney(dailyGap)}</div></td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_y')">${yGtv?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yGtv)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_excl')">${excl?`<span style="${excl>15?'color:#dc2626':'color:#16a34a'};font-weight:700">${excl.toFixed(1)}%</span>`:'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
-  tbody.innerHTML=html;
-
-  // 汇总卡片
-  const cards=document.getElementById(cardsId);
-  if (cards) {
-    const totPct=totTgt>0?totCur/totTgt:0;
-    const cls=colorClass(totPct,timePct);
-    cards.innerHTML=`<div class="sum-card s-${cls}">
-      <div class="sum-card-name">综合达成率</div>
-      <div class="sum-card-pct s-${cls}">${(totPct*100).toFixed(1)}%</div>
-      <div class="bar-wrap"><div class="bar-fill s-${cls}" style="width:${Math.min(100,totPct*100).toFixed(1)}%"></div></div>
-      <div class="sum-card-sub">${fmtVal(totCur,field)} / ${fmtVal(totTgt,field)}</div>
-    </div>
-    <div class="sum-card s-blue" style="--s-blue:#3b82f6;">
-      <div class="sum-card-name">时间进度</div>
-      <div class="sum-card-pct" style="color:#2563eb;">${(timePct*100).toFixed(1)}%</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${(timePct*100).toFixed(1)}%;background:#3b82f6;"></div></div>
-      <div class="sum-card-sub">${day}/${total}天</div>
-    </div>`;
-  }
-
-  // badge
-  const badge=document.getElementById(badgeId);
-  if(badge){
-    const totPct=totTgt>0?totCur/totTgt:0;
-    badge.textContent=`时间进度 ${(timePct*100).toFixed(0)}% | 综合达成 ${(totPct*100).toFixed(1)}%`;
-  }
+  document.getElementById('gtv-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, totCls=colorOf(totPct,tp);
+  makeCards('gtv-cards',[
+    {name:'GTV综合达成',pct:fmtPct(totPct),cls:totCls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${fmtMoney(totCur)} / ${fmtMoney(totTgt)}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天 剩${remain}天`},
+  ]);
+  const s=document.getElementById('gtv-hdr-sum');
+  if(s) s.textContent=`综合 ${fmtPct(totPct)} | 累计 ${fmtMoney(totCur)} | 时间 ${fmtPct(tp)}`;
 }
 
-// ── 核心业绩看板 (perf) ────────────────────────────────────────
-function renderPerf() {
-  const {pct:timePct,day,total}=getTimePct();
-  ['gtv','cpc','mem'].forEach(field=>{
-    const tid=field+'-tbody', cid=field+'-cards';
-    const tbody=document.getElementById(tid);
-    if(!tbody)return;
-    let html='', totCur=0, totTgt=0;
-    AGENTS_DEF.forEach(a=>{
-      const cur=getVal(a.name,field), tgt=getTgt(a.name,field);
-      const pct=tgt>0?cur/tgt:0;
-      const cls=colorClass(pct,timePct);
-      totCur+=cur; totTgt+=tgt;
-      html+=`<tr>
-        <td>${a.name}</td>
-        <td class="editable" onclick="openEdit('${a.name}','${field}','${field.toUpperCase()}')" style="color:${colorVar(cls)};font-weight:700;">${fmtVal(cur,field)}</td>
-        <td style="color:#6b7280;">${fmtVal(tgt,field)}</td>
-        <td>${barHtml(pct,cls)}</td>
-      </tr>`;
-    });
-    tbody.innerHTML=html;
-    const cards=document.getElementById(cid);
-    if(cards){
-      const totPct=totTgt>0?totCur/totTgt:0;
-      const cls=colorClass(totPct,timePct);
-      cards.innerHTML=`<div class="sum-card s-${cls}">
-        <div class="sum-card-name">综合达成率</div>
-        <div class="sum-card-pct s-${cls}">${(totPct*100).toFixed(1)}%</div>
-        <div class="bar-wrap"><div class="bar-fill s-${cls}" style="width:${Math.min(100,totPct*100).toFixed(1)}%"></div></div>
-        <div class="sum-card-sub">${fmtVal(totCur,field)} / ${fmtVal(totTgt,field)}</div>
-      </div>
-      <div class="sum-card">
-        <div class="sum-card-name">时间进度</div>
-        <div class="sum-card-pct" style="color:#2563eb;">${(timePct*100).toFixed(1)}%</div>
-        <div class="bar-wrap"><div class="bar-fill" style="width:${(timePct*100).toFixed(1)}%;background:#3b82f6;"></div></div>
-        <div class="sum-card-sub">${day}/${total}天</div>
-      </div>`;
-    }
-  });
-  const badge=document.getElementById('perf-badge');
-  if(badge){
-    const {pct:tp}=getTimePct();
-    badge.textContent=`时间进度 ${(tp*100).toFixed(0)}%`;
-  }
-}
-
-// ── 欧若拉 & 月考 ─────────────────────────────────────────────
-function renderAurora() {
-  ['aurora','exam'].forEach(type=>{
-    const tbody=document.getElementById('pj-'+type+'-tbody');
-    if(!tbody)return;
-    let html='';
-    AGENTS_DEF.forEach(a=>{
-      const key=type+'_'+a.name;
-      const val=STATE[key]||false;
-      html+=`<tr>
-        <td style="text-align:left;font-weight:600;color:#374151;">${a.name}</td>
-        <td><button class="toggle-btn" onclick="toggleAurora('${type}','${a.name}')">${val?'✅':'❌'}</button></td>
-      </tr>`;
-    });
-    tbody.innerHTML=html;
-  });
-}
-function toggleAurora(type,name){
-  const key=type+'_'+name;
-  STATE[key]=!STATE[key];
-  saveState(); renderAurora(); showToast();
-}
-
-// ── 状态栏更新 ────────────────────────────────────────────────
-function updateStatusBar() {
-  const {pct:timePct,day,total}=getTimePct();
+// ════════════════════════════════════════════════════════════
+// 渲染：CPC
+// ════════════════════════════════════════════════════════════
+function renderCpc(){
+  const {pct:tp,day,total}=timePct();
   const remain=total-day;
-
-  // 时间进度
-  const sbTime=document.getElementById('sb-timepct');
-  if(sbTime){
-    sbTime.textContent=`${(timePct*100).toFixed(1)}%`;
-    sbTime.className='sb-val blue';
-  }
-  // 剩余天数
-  const sbRem=document.getElementById('sb-remain');
-  if(sbRem) sbRem.textContent=`${remain}天 (${day}/${total})`;
-
-  // GTV综合进度
-  const sbGtv=document.getElementById('sb-gtv');
-  if(sbGtv){
-    let totCur=0,totTgt=0;
-    AGENTS_DEF.forEach(a=>{totCur+=getVal(a.name,'gtv');totTgt+=getTgt(a.name,'gtv');});
-    const pct=totTgt>0?totCur/totTgt:0;
-    const cls=colorClass(pct,timePct);
-    sbGtv.textContent=`${(pct*100).toFixed(1)}%`;
-    sbGtv.className='sb-val '+cls;
-  }
-  // CPC综合进度
-  const sbCpc=document.getElementById('sb-cpc');
-  if(sbCpc){
-    let totCur=0,totTgt=0;
-    AGENTS_DEF.forEach(a=>{totCur+=getVal(a.name,'cpc');totTgt+=getTgt(a.name,'cpc');});
-    const pct=totTgt>0?totCur/totTgt:0;
-    const cls=colorClass(pct,timePct);
-    sbCpc.textContent=`${(pct*100).toFixed(1)}%`;
-    sbCpc.className='sb-val '+cls;
-  }
-  // 数据更新时间
-  const sbUpdated=document.getElementById('sb-updated');
-  if(sbUpdated){
-    const t=STATE._updated||'未更新';
-    sbUpdated.textContent=t;
-  }
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'cpc'), tgt=gt(a.name,'cpc');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dailyGap=tgt>0?Math.ceil((tgt-cur)/Math.max(remain,1)):0;
+    const yCpc=g(a.name,'cpc_y'), newSgn=g(a.name,'cpc_newsgn'), wpu=g(a.name,'cpc_wpu');
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','cpc')">${fmtMoney(cur)}</td>
+      <td style="color:#6b7280">${fmtMoney(tgt)}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,false)}<div style="font-size:10px;color:#9ca3af;margin-top:2px">日需≥${fmtMoney(dailyGap)}</div></td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y')">${yCpc?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yCpc)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer;font-weight:700;color:#059669" onclick="openEdit('${a.name}','cpc_newsgn')">${newSgn||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_wpu')">${wpu?fmtMoney(wpu):'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('cpc-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, totCls=colorOf(totPct,tp);
+  makeCards('cpc-cards',[
+    {name:'CPC综合达成',pct:fmtPct(totPct),cls:totCls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${fmtMoney(totCur)} / ${fmtMoney(totTgt)}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const s=document.getElementById('cpc-hdr-sum');
+  if(s) s.textContent=`综合 ${fmtPct(totPct)} | 累计 ${fmtMoney(totCur)}`;
 }
 
-// ── 编辑弹窗 ─────────────────────────────────────────────────
-let _editCtx=null;
-function openEdit(name,field,label){
-  _editCtx={name,field};
-  document.getElementById('pj-panel-title').textContent=`编辑 ${name} · ${label}`;
-  document.getElementById('pj-cur').value=getVal(name,field)||'';
-  document.getElementById('pj-tgt').value=getTgt(name,field)||'';
+// ════════════════════════════════════════════════════════════
+// 渲染：MEM
+// ════════════════════════════════════════════════════════════
+function renderMem(){
+  const {pct:tp}=timePct();
+  let html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'mem'), cps=g(a.name,'cps');
+    const rate=g(a.name,'memrate'), rateDay=g(a.name,'memrate_day');
+    const tgt=gt(a.name,'memrate');
+    const ratePct=tgt>0?rate/tgt:0, rateCls=rate>=50?'sg':rate>=40?'sy':'sr';
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="cursor:pointer;color:#7c3aed" onclick="openEdit('${a.name}','mem')">${fmtMoney(cur)}</td>
+      <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','cps')">${cps?fmtMoney(cps):'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memrate')"><span style="font-weight:700;color:${colorText(rateCls)}">${rate?rate.toFixed(1)+'%':'—'}</span></td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memrate_day')">${dayHtml(rateDay,'pp')}</td>
+    </tr>`;
+  });
+  document.getElementById('mem-tbody').innerHTML=html;
+  const totMem=AGENTS.reduce((s,a)=>s+g(a.name,'mem'),0);
+  const avgRate=AGENTS.reduce((s,a)=>s+g(a.name,'memrate'),0)/AGENTS.length;
+  makeCards('mem-cards',[
+    {name:'MEM总收款',pct:fmtMoney(totMem),cls:'sb',barW:60,sub:'月累计收款额'},
+    {name:'平均续约率',pct:avgRate?avgRate.toFixed(1)+'%':'—',cls:avgRate>=50?'sg':avgRate>=35?'sy':'sr',barW:avgRate||0,sub:'6家均值'},
+  ]);
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：好店评分
+// ════════════════════════════════════════════════════════════
+function renderScore(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'score'), tgt=gt(a.name,'score');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dayChg=g(a.name,'score_day'), near=g(a.name,'score_near');
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','score')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','score_day')">${dayHtml(dayChg,'')}</td>
+      <td style="cursor:pointer;color:#d97706;font-weight:700" onclick="openEdit('${a.name}','score_near')">${near||'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('score-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('score-cards',[
+    {name:'评分综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('score-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：职人码动销
+// ════════════════════════════════════════════════════════════
+function renderDongxiao(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'dongxiao'), tgt=gt(a.name,'dongxiao');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dayChg=g(a.name,'dongxiao_day'), gtvShop=g(a.name,'dongxiao_gtv');
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','dongxiao')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','dongxiao_day')">${dayHtml(dayChg,'')}</td>
+      <td style="cursor:pointer;color:#059669;font-weight:700" onclick="openEdit('${a.name}','dongxiao_gtv')">${gtvShop?fmtMoney(gtvShop):'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('dongxiao-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('dongxiao-cards',[
+    {name:'动销综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('dongxiao-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：有效作业
+// ════════════════════════════════════════════════════════════
+function renderVisit(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'visit'), tgt=gt(a.name,'visit');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const yVisit=g(a.name,'visit_y'), yHaodian=g(a.name,'visit_haodian');
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','visit')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}天</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','visit_y')">${yVisit?`<span style="font-weight:700;color:#0891b2">${yVisit}次</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','visit_haodian')">${yHaodian?`<span style="font-weight:700;color:${yHaodian>=3?'#16a34a':'#dc2626'}">${yHaodian}次 ${yHaodian>=3?'✅':'⚠️'}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('visit-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('visit-cards',[
+    {name:'作业综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}天`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('visit-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：物料工单
+// ════════════════════════════════════════════════════════════
+function renderOrder(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'order'), tgt=gt(a.name,'order');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dayChg=g(a.name,'order_day'), pool=a.order_pool||0;
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','order')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','order_day')">${dayHtml(dayChg,'')}</td>
+      <td style="color:#6b7280">${pool}</td>
+    </tr>`;
+  });
+  document.getElementById('order-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('order-cards',[
+    {name:'工单综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('order-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：MEM续约率
+// ════════════════════════════════════════════════════════════
+function renderMemrate(){
+  const {pct:tp}=timePct();
+  let totRenewed=0, totExpire=0, html='';
+  AGENTS.forEach(a=>{
+    const renewed=g(a.name,'memrenew'), expire=g(a.name,'memexpire');
+    const rate=expire>0?renewed/expire:0, cls=rate>=0.5?'sg':rate>=0.35?'sy':'sr';
+    const dayChg=g(a.name,'memrenew_day'), urgent=g(a.name,'memurgent');
+    const tgt=gt(a.name,'memrate');
+    totRenewed+=renewed; totExpire+=expire;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','memrenew')">${renewed||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','memexpire')">${expire||'—'}</td>
+      <td><span style="font-weight:700;color:${colorText(cls)}">${expire>0?fmtPct(rate):'—'}</span></td>
+      <td>${expire>0?gapHtml(renewed,Math.ceil(expire*tgt/100),true):'—'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memrenew_day')">${dayHtml(dayChg,'')}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memurgent')">${urgent?`<span style="color:#dc2626;font-weight:700">⚠️ ${urgent}家</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('memrate-tbody').innerHTML=html;
+  const totRate=totExpire>0?totRenewed/totExpire:0, cls=totRate>=0.5?'sg':totRate>=0.35?'sy':'sr';
+  makeCards('memrate-cards',[
+    {name:'综合续约率',pct:totExpire>0?fmtPct(totRate):'—',cls,barW:totExpire>0?(totRate*100).toFixed(1):0,sub:`${totRenewed}/${totExpire}`},
+  ]);
+  const b=document.getElementById('memrate-badge');
+  if(b) b.textContent=`综合续约率 ${totExpire>0?fmtPct(totRate):'—'}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：欧若拉工单
+// ════════════════════════════════════════════════════════════
+function renderAurora(){
+  let html='';
+  AGENTS.forEach(a=>{
+    const total=g(a.name,'aurora_total');
+    const actDone=g(a.name,'aurora_act_done'), actPend=g(a.name,'aurora_act_pend');
+    const resDone=g(a.name,'aurora_res_done'), resPend=g(a.name,'aurora_res_pend');
+    const actTotal=actDone+actPend, resTotal=resDone+resPend;
+    const actRate=actTotal>0?actDone/actTotal:0;
+    const resRate=resTotal>0?resDone/resTotal:0;
+    const actCls=actRate>=0.8?'#16a34a':actRate>=0.6?'#d97706':'#dc2626';
+    const resCls=resRate>=0.6?'#16a34a':resRate>=0.4?'#d97706':'#dc2626';
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td style="color:#6b7280;cursor:pointer" onclick="openEdit('${a.name}','aurora_total')">${total||'—'}</td>
+      <td style="background:#eff6ff;cursor:pointer;font-weight:700;color:#2563eb" onclick="openEdit('${a.name}','aurora_act_done')">${actDone||'—'}</td>
+      <td style="background:#eff6ff;cursor:pointer;${actPend>0?'color:#dc2626;font-weight:700':''}" onclick="openEdit('${a.name}','aurora_act_pend')">${actPend||'0'}</td>
+      <td style="background:#eff6ff;min-width:90px;cursor:pointer" onclick="openEdit('${a.name}','aurora_act_done')">
+        <div class="pb"><div class="pf" style="width:${(actRate*100).toFixed(1)}%;background:${actCls}"></div></div>
+        <span style="font-weight:700;color:${actCls}">${actTotal>0?fmtPct(actRate):'—'}</span>
+      </td>
+      <td style="background:#f0fdf4;cursor:pointer;font-weight:700;color:#16a34a" onclick="openEdit('${a.name}','aurora_res_done')">${resDone||'—'}</td>
+      <td style="background:#f0fdf4;cursor:pointer;${resPend>0?'color:#dc2626;font-weight:700':''}" onclick="openEdit('${a.name}','aurora_res_pend')">${resPend||'0'}</td>
+      <td style="background:#f0fdf4;min-width:90px;cursor:pointer" onclick="openEdit('${a.name}','aurora_res_done')">
+        <div class="pb"><div class="pf" style="width:${(resRate*100).toFixed(1)}%;background:${resCls}"></div></div>
+        <span style="font-weight:700;color:${resCls}">${resTotal>0?fmtPct(resRate):'—'}</span>
+      </td>
+    </tr>`;
+  });
+  document.getElementById('aurora-tbody').innerHTML=html;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：月考
+// ════════════════════════════════════════════════════════════
+function renderExam(){
+  let html='';
+  AGENTS.forEach(a=>{
+    const total=g(a.name,'exam_total'), done=g(a.name,'exam_done');
+    const pend=Math.max(0,total-done);
+    const rate=total>0?done/total:0;
+    const cls=rate>=1?'sg':rate>=0.8?'sy':'sr';
+    const dayChg=g(a.name,'exam_day');
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','exam_total')">${total||'—'}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','exam_done')">${done||'—'}</td>
+      <td>${total>0?pctCell(rate,cls):'—'}</td>
+      <td>${pend>0?`<span class="gap-r">${pend}人未完成</span>`:'<span class="gap-g">全员完成 ✅</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','exam_day')">${dayHtml(dayChg,'')}</td>
+    </tr>`;
+  });
+  document.getElementById('exam-tbody').innerHTML=html;
+}
+
+// ════════════════════════════════════════════════════════════
+// 状态栏
+// ════════════════════════════════════════════════════════════
+function updateStatusBar(){
+  const {pct:tp,day,total}=timePct();
+  const remain=total-day;
+  const sbT=document.getElementById('sb-timepct');
+  if(sbT){ sbT.textContent=fmtPct(tp); sbT.className='sb-val blue'; }
+  const sbR=document.getElementById('sb-remain');
+  if(sbR) sbR.textContent=`${remain}天 (${day}/${total})`;
+  const sbG=document.getElementById('sb-gtv');
+  if(sbG){
+    let c=0,t=0; AGENTS.forEach(a=>{c+=g(a.name,'gtv');t+=gt(a.name,'gtv');});
+    const p=t>0?c/t:0, cl=colorOf(p,tp);
+    sbG.textContent=fmtPct(p); sbG.className='sb-val '+(cl==='sg'?'green':cl==='sy'?'yellow':'red');
+  }
+  const sbC=document.getElementById('sb-cpc');
+  if(sbC){
+    let c=0,t=0; AGENTS.forEach(a=>{c+=g(a.name,'cpc');t+=gt(a.name,'cpc');});
+    const p=t>0?c/t:0, cl=colorOf(p,tp);
+    sbC.textContent=fmtPct(p); sbC.className='sb-val '+(cl==='sg'?'green':cl==='sy'?'yellow':'red');
+  }
+  const sbU=document.getElementById('sb-updated');
+  if(sbU) sbU.textContent=S._updated||'未更新';
+}
+
+// ════════════════════════════════════════════════════════════
+// 编辑弹窗 — 字段定义
+// ════════════════════════════════════════════════════════════
+const FIELD_META = {
+  gtv:         {label:'月累计GTV'},
+  gtv_y:       {label:'昨日GTV'},
+  gtv_excl:    {label:'GTV剔除率(%)'},
+  cpc:         {label:'月CPC消耗'},
+  cpc_y:       {label:'昨日CPC消耗'},
+  cpc_newsgn:  {label:'CPC有效新签'},
+  cpc_wpu:     {label:'旺铺通消耗'},
+  mem:         {label:'MEM收款额'},
+  cps:         {label:'CPS交易收入'},
+  memrate:     {label:'MEM续约率(%)'},
+  memrate_day: {label:'续约率日变化(pp)'},
+  score:       {label:'当前评分达标数'},
+  score_day:   {label:'评分日净增'},
+  score_near:  {label:'50~69分门店数'},
+  dongxiao:    {label:'已达标动销门店'},
+  dongxiao_day:{label:'昨日净增动销'},
+  dongxiao_gtv:{label:'好店店转GTV'},
+  visit:       {label:'拜访达标天数'},
+  visit_y:     {label:'昨日有效拜访次数'},
+  visit_haodian:{label:'昨日好店拜访次数'},
+  order:       {label:'已铺设合格数'},
+  order_day:   {label:'日新增合格'},
+  memrenew:    {label:'已续约数'},
+  memexpire:   {label:'到期总数'},
+  memrenew_day:{label:'昨日新增续约'},
+  memurgent:   {label:'紧急未续约(≤30天)'},
+  aurora_total:{label:'待办总数'},
+  aurora_act_done:{label:'动作-已完成'},
+  aurora_act_pend:{label:'动作-待处理'},
+  aurora_res_done:{label:'结果-已完成'},
+  aurora_res_pend:{label:'结果-待处理'},
+  exam_total:  {label:'应参加人数'},
+  exam_done:   {label:'已完成人数'},
+  exam_day:    {label:'日新增完成'},
+};
+
+let _ctx=null;
+function openEdit(name, field){
+  _ctx={name,field};
+  const meta=FIELD_META[field]||{label:field};
+  document.getElementById('pj-title').textContent=`编辑：${name} · ${meta.label}`;
+  document.getElementById('pj-fields').innerHTML=`
+    <div class="pj-f pj-f-full">
+      <label>${meta.label}</label>
+      <input type="number" id="pj-val" value="${g(name,field)||''}" placeholder="输入数值" autofocus>
+    </div>`;
   document.getElementById('pj-overlay').classList.add('show');
-  setTimeout(()=>document.getElementById('pj-cur').focus(),50);
+  setTimeout(()=>{ const i=document.getElementById('pj-val'); if(i){i.focus();i.select();} },50);
 }
 function closeEdit(){
   document.getElementById('pj-overlay').classList.remove('show');
-  _editCtx=null;
+  _ctx=null;
 }
 function saveEdit(){
-  if(!_editCtx)return;
-  const cur=parseFloat(document.getElementById('pj-cur').value)||0;
-  const tgt=parseFloat(document.getElementById('pj-tgt').value)||0;
-  setVal(_editCtx.name,_editCtx.field,cur,tgt||undefined);
-  // 记录更新时间
-  const now=new Date();
-  STATE._updated=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-  saveState();
-  closeEdit(); renderAll(); showToast();
+  if(!_ctx) return;
+  const val=parseFloat(document.getElementById('pj-val').value)||0;
+  sv(_ctx.name,_ctx.field,val);
+  S._updated=new Date().toTimeString().slice(0,5);
+  ss(); closeEdit(); renderAll(); showToast();
 }
 document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&document.getElementById('pj-overlay').classList.contains('show'))saveEdit();
-  if(e.key==='Escape')closeEdit();
+  if(e.key==='Enter'&&document.getElementById('pj-overlay').classList.contains('show')) saveEdit();
+  if(e.key==='Escape') closeEdit();
 });
-document.getElementById('pj-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeEdit();});
+document.getElementById('pj-overlay').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeEdit(); });
 
-// ── 重置 ──────────────────────────────────────────────────────
-function pjReset(){
-  if(!confirm('确认重置所有项目数据？')) return;
-  localStorage.removeItem(LS_KEY);
-  STATE={};
-  renderAll(); showToast('已重置');
-}
-
-// ── Tab切换 ───────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════
+// Tab / Reset / Toast / Clock
+// ════════════════════════════════════════════════════════════
 function switchTab(id){
   document.querySelectorAll('.tabn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   document.getElementById('panel-'+id).classList.add('active');
 }
-
-// ── Toast ─────────────────────────────────────────────────────
-function showToast(msg='已保存'){
+function pjReset(){
+  if(!confirm('确认重置所有数据？')) return;
+  localStorage.removeItem(LS_KEY); S={};
+  renderAll(); showToast('已重置');
+}
+function showToast(msg){
   const t=document.getElementById('toast');
-  t.textContent='✅ '+msg; t.classList.add('show');
+  t.textContent='✅ '+(msg||'已保存'); t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),1800);
 }
-
-// ── 时钟 ──────────────────────────────────────────────────────
 function updateClock(){
   const now=new Date();
-  const h=String(now.getHours()).padStart(2,'0');
-  const m=String(now.getMinutes()).padStart(2,'0');
-  const s=String(now.getSeconds()).padStart(2,'0');
-  document.getElementById('clock').textContent=`${h}:${m}:${s}`;
+  const h=String(now.getHours()).padStart(2,'0'), m=String(now.getMinutes()).padStart(2,'0'), sec=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent=`${h}:${m}:${sec}`;
   const days=['日','一','二','三','四','五','六'];
-  const dateStr=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
-  document.getElementById('clockdate').textContent=dateStr;
+  document.getElementById('clockdate').textContent=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
 }
 
-// ── 全量渲染 ──────────────────────────────────────────────────
 function renderAll(){
-  renderPerf();
-  renderTab('score','score-tbody','score-cards','score-badge','好店经营评分');
-  renderTab('dongxiao','dongxiao-tbody','dongxiao-cards','dongxiao-badge','职人码动销');
-  renderTab('visit','visit-tbody','visit-cards','visit-badge','有效作业人数');
-  renderTab('order','order-tbody','order-cards','order-badge','物料工单');
-  renderTab('memrate','memrate-tbody','memrate-cards','memrate-badge','MEM续约率');
-  renderAurora();
+  renderGtv(); renderCpc(); renderMem();
+  renderScore(); renderDongxiao();
+  renderVisit(); renderOrder(); renderMemrate();
+  renderAurora(); renderExam();
   updateStatusBar();
+  const {pct:tp}=timePct();
+  const b=document.getElementById('perf-badge');
+  if(b) b.textContent=`时间进度 ${fmtPct(tp)}`;
 }
 
-// ── 初始化 ────────────────────────────────────────────────────
-// ── 预置数据（2026-04-17 17:24 英杰发图更新）──────────────────
+// ════════════════════════════════════════════════════════════
+// 预置数据（2026-04-17 17:24）
+// ════════════════════════════════════════════════════════════
 (function seedData(){
-  const PRESET = {
-    '惠州巨浪':   {gtv:1986507,gtv_tgt:3804112, cpc:55840,cpc_tgt:74222,  mem:80058,mem_tgt:0, score:225,score_tgt:246, dongxiao:0,dongxiao_tgt:153, visit:0,visit_tgt:20, order:74,order_tgt:88,  memrate:42.9,memrate_tgt:60},
-    '义乌汐洋':   {gtv:1481955,gtv_tgt:2893879, cpc:51210,cpc_tgt:139466, mem:63400,mem_tgt:0, score:131,score_tgt:161, dongxiao:0,dongxiao_tgt:99,  visit:0,visit_tgt:20, order:22,order_tgt:51,  memrate:61.1,memrate_tgt:60},
-    '惠安广通':   {gtv:1132149,gtv_tgt:2236565, cpc:41180,cpc_tgt:57886,  mem:39729,mem_tgt:0, score:100,score_tgt:116, dongxiao:0,dongxiao_tgt:91,  visit:0,visit_tgt:20, order:39,order_tgt:38,  memrate:36.4,memrate_tgt:60},
-    '惠州柏万':   {gtv:1732922,gtv_tgt:3124634, cpc:51560,cpc_tgt:95454,  mem:95929,mem_tgt:0, score:141,score_tgt:156, dongxiao:0,dongxiao_tgt:119, visit:0,visit_tgt:20, order:41,order_tgt:54,  memrate:44.4,memrate_tgt:60},
-    '泉州小花猫': {gtv:1383833,gtv_tgt:2598259, cpc:38550,cpc_tgt:113144, mem:49729,mem_tgt:0, score:148,score_tgt:175, dongxiao:0,dongxiao_tgt:124, visit:0,visit_tgt:20, order:68,order_tgt:60,  memrate:29.8,memrate_tgt:60},
-    '慈溪哲光':   {gtv:1450980,gtv_tgt:3137253, cpc:45360,cpc_tgt:146180, mem:44297,mem_tgt:0, score:138,score_tgt:161, dongxiao:0,dongxiao_tgt:96,  visit:0,visit_tgt:20, order:15,order_tgt:67,  memrate:34.1,memrate_tgt:60},
+  let ex={};
+  try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
+  if(ex._dataDate==='2026-04-17') return;
+  const D={
+    '惠州巨浪':  {gtv:1986507, cpc:55840, mem:80058, cps:0, memrate:42.9,
+                  score:225, score_near:0, dongxiao:0, visit:0, order:74,
+                  memrenew:0, memexpire:0},
+    '义乌汐洋':  {gtv:1481955, cpc:51210, mem:63400, cps:0, memrate:61.1,
+                  score:131, score_near:0, dongxiao:0, visit:0, order:22,
+                  memrenew:0, memexpire:0},
+    '惠安广通':  {gtv:1132149, cpc:41180, mem:39729, cps:0, memrate:36.4,
+                  score:100, score_near:0, dongxiao:0, visit:0, order:39,
+                  memrenew:0, memexpire:0},
+    '惠州柏万':  {gtv:1732922, cpc:51560, mem:95929, cps:0, memrate:44.4,
+                  score:141, score_near:0, dongxiao:0, visit:0, order:41,
+                  memrenew:0, memexpire:0},
+    '泉州小花猫':{gtv:1383833, cpc:38550, mem:49729, cps:0, memrate:29.8,
+                  score:148, score_near:0, dongxiao:0, visit:0, order:68,
+                  memrenew:0, memexpire:0},
+    '慈溪哲光':  {gtv:1450980, cpc:45360, mem:44297, cps:0, memrate:34.1,
+                  score:138, score_near:0, dongxiao:0, visit:0, order:15,
+                  memrenew:0, memexpire:0},
   };
-  // 欧若拉：动作组全100%，结果组各家完成率
-  const AURORA_RESULT = {
-    '惠州巨浪':44,'惠州柏万':50,'泉州小花猫':50,'惠安广通':40,'慈溪哲光':43,'义乌汐洋':60
-  };
-  // 只在没有数据或数据是旧的时候写入
-  let existing = {};
-  try { existing = JSON.parse(localStorage.getItem(LS_KEY)||'{}'); } catch(e){}
-  if (!existing._dataDate || existing._dataDate !== '2026-04-17') {
-    const newState = {'_updated':'17:24','_dataDate':'2026-04-17'};
-    Object.entries(PRESET).forEach(([name,v])=>{ newState[name]=v; });
-    // 欧若拉状态（结果组达成=true表示完成率>=50%）
-    Object.entries(AURORA_RESULT).forEach(([name,pct])=>{
-      newState['aurora_'+name] = false; // 动作组另存
-      newState['exam_'+name]   = false;
-    });
-    localStorage.setItem(LS_KEY, JSON.stringify(newState));
-  }
+  const ns={_updated:'17:24',_dataDate:'2026-04-17'};
+  Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
+  localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
 
-loadState();
+// ════════════════════════════════════════════════════════════
+// 启动
+// ════════════════════════════════════════════════════════════
+ls();
 renderAll();
 updateClock();
-setInterval(updateClock, 1000);
-// 每分钟刷新状态栏（时间进度变化）
-setInterval(()=>{ updateStatusBar(); }, 60000);
+setInterval(updateClock,1000);
+setInterval(updateStatusBar,60000);
 </script>
 </body>
 </html>
