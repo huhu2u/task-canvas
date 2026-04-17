@@ -186,7 +186,8 @@ body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft Y
   <button class="tabn"        id="tab-visit"    onclick="switchTab('visit')">🧑 有效作业人数</button>
   <button class="tabn"        id="tab-order"    onclick="switchTab('order')">📦 职人码物料工单</button>
   <button class="tabn"        id="tab-memrate"  onclick="switchTab('memrate')">🔄 MEM续约率</button>
-  <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单&amp;月考</button>
+  <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单</button>
+  <button class="tabn"        id="tab-exam"     onclick="switchTab('exam')">📝 月考</button>
   <button class="tabn"        id="tab-price"    onclick="switchTab('price')">💰 价格带分析</button>
 </div>
 
@@ -319,19 +320,28 @@ body { background:#f0f4f8; color:#1a2a3a; font-family:'PingFang SC','Microsoft Y
   </div>
 </div>
 
-<!-- Tab7: 欧若拉工单&月考 -->
+<!-- Tab7: 欧若拉工单 -->
 <div id="panel-aurora" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">🔧 欧若拉工单 &amp; 月考</div><div class="panel-sub">点击 ✅/❌ 切换状态</div></div>
+    <div><div class="panel-title">🔧 欧若拉工单</div><div class="panel-sub">点击 ✅/❌ 切换状态</div></div>
   </div>
   <div class="bottom-modules">
-    <div class="mini-module">
+    <div class="mini-module" style="max-width:480px;">
       <div class="mini-module-hdr" style="background:linear-gradient(90deg,#059669,#047857);">🔧 欧若拉工单</div>
       <table><thead><tr style="background:#ecfdf5;">
         <th style="color:#065f46;">代运营商</th><th style="color:#065f46;">是否全员闭环</th>
       </tr></thead><tbody id="pj-aurora-tbody"></tbody></table>
     </div>
-    <div class="mini-module">
+  </div>
+</div>
+
+<!-- Tab8: 月考 -->
+<div id="panel-exam" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">📝 月考</div><div class="panel-sub">点击 ✅/❌ 切换状态</div></div>
+  </div>
+  <div class="bottom-modules">
+    <div class="mini-module" style="max-width:480px;">
       <div class="mini-module-hdr" style="background:linear-gradient(90deg,#7c3aed,#6d28d9);">📝 月考</div>
       <table><thead><tr style="background:#f5f3ff;">
         <th style="color:#4c1d95;">代运营商</th><th style="color:#4c1d95;">是否全员闭环</th>
