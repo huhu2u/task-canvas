@@ -361,8 +361,7 @@ function colorText(c){ return c==='sg'?'#16a34a':c==='sy'?'#d97706':'#dc2626'; }
 // ── 格式化 ───────────────────────────────────────────────────
 function fmtMoney(v){
   if(v===0||v===null||v===undefined) return '—';
-  if(Math.abs(v)>=10000) return (v/10000).toFixed(1)+'万';
-  return v.toLocaleString();
+  return Math.round(v).toLocaleString();
 }
 function fmtNum(v){ return v===0?'—':v.toLocaleString(); }
 function fmtPct(v){ return (v*100).toFixed(1)+'%'; }
@@ -431,7 +430,7 @@ function renderGtv(){
       <td>${pctCell(pct,cls)}</td>
       <td>${gapHtml(cur,tgt,false)}<div style="font-size:10px;color:#9ca3af;margin-top:2px">日需≥${fmtMoney(dailyGap)}</div></td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_y')">${yGtv?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yGtv)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
-      <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_excl')">${excl?`<span style="${excl>15?'color:#dc2626':'color:#16a34a'};font-weight:700">${excl.toFixed(1)}%</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_excl')">${excl?`<span style="${excl>5?'color:#dc2626':'color:#16a34a'};font-weight:700">${excl.toFixed(1)}%</span>`:'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
   document.getElementById('gtv-tbody').innerHTML=html;
@@ -858,7 +857,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-17b') return;
+  if(ex._dataDate==='2026-04-17c') return;
   const D={
     '惠州巨浪':  {gtv:1986507, gtv_y:104910, gtv_excl:3.24,
                   cpc:55840,   cpc_y:964,    cpc_newsgn:10, cpc_wpu:913,
@@ -891,7 +890,7 @@ function renderAll(){
                   score:138, score_near:0, dongxiao:0, visit:0, order:15,
                   memrenew:0, memexpire:0},
   };
-  const ns={_updated:'17:55',_dataDate:'2026-04-17b'};
+  const ns={_updated:'17:55',_dataDate:'2026-04-17c'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
