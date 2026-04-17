@@ -713,6 +713,35 @@ function renderAll(){
 }
 
 // ── 初始化 ────────────────────────────────────────────────────
+// ── 预置数据（2026-04-17 17:24 英杰发图更新）──────────────────
+(function seedData(){
+  const PRESET = {
+    '惠州巨浪':   {gtv:1986507,gtv_tgt:3804112, cpc:55840,cpc_tgt:74222,  mem:80058,mem_tgt:0, score:225,score_tgt:246, dongxiao:0,dongxiao_tgt:153, visit:0,visit_tgt:20, order:74,order_tgt:88,  memrate:42.9,memrate_tgt:60},
+    '义乌汐洋':   {gtv:1481955,gtv_tgt:2893879, cpc:51210,cpc_tgt:139466, mem:63400,mem_tgt:0, score:131,score_tgt:161, dongxiao:0,dongxiao_tgt:99,  visit:0,visit_tgt:20, order:22,order_tgt:51,  memrate:61.1,memrate_tgt:60},
+    '惠安广通':   {gtv:1132149,gtv_tgt:2236565, cpc:41180,cpc_tgt:57886,  mem:39729,mem_tgt:0, score:100,score_tgt:116, dongxiao:0,dongxiao_tgt:91,  visit:0,visit_tgt:20, order:39,order_tgt:38,  memrate:36.4,memrate_tgt:60},
+    '惠州柏万':   {gtv:1732922,gtv_tgt:3124634, cpc:51560,cpc_tgt:95454,  mem:95929,mem_tgt:0, score:141,score_tgt:156, dongxiao:0,dongxiao_tgt:119, visit:0,visit_tgt:20, order:41,order_tgt:54,  memrate:44.4,memrate_tgt:60},
+    '泉州小花猫': {gtv:1383833,gtv_tgt:2598259, cpc:38550,cpc_tgt:113144, mem:49729,mem_tgt:0, score:148,score_tgt:175, dongxiao:0,dongxiao_tgt:124, visit:0,visit_tgt:20, order:68,order_tgt:60,  memrate:29.8,memrate_tgt:60},
+    '慈溪哲光':   {gtv:1450980,gtv_tgt:3137253, cpc:45360,cpc_tgt:146180, mem:44297,mem_tgt:0, score:138,score_tgt:161, dongxiao:0,dongxiao_tgt:96,  visit:0,visit_tgt:20, order:15,order_tgt:67,  memrate:34.1,memrate_tgt:60},
+  };
+  // 欧若拉：动作组全100%，结果组各家完成率
+  const AURORA_RESULT = {
+    '惠州巨浪':44,'惠州柏万':50,'泉州小花猫':50,'惠安广通':40,'慈溪哲光':43,'义乌汐洋':60
+  };
+  // 只在没有数据或数据是旧的时候写入
+  let existing = {};
+  try { existing = JSON.parse(localStorage.getItem(LS_KEY)||'{}'); } catch(e){}
+  if (!existing._dataDate || existing._dataDate !== '2026-04-17') {
+    const newState = {'_updated':'17:24','_dataDate':'2026-04-17'};
+    Object.entries(PRESET).forEach(([name,v])=>{ newState[name]=v; });
+    // 欧若拉状态（结果组达成=true表示完成率>=50%）
+    Object.entries(AURORA_RESULT).forEach(([name,pct])=>{
+      newState['aurora_'+name] = false; // 动作组另存
+      newState['exam_'+name]   = false;
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify(newState));
+  }
+})();
+
 loadState();
 renderAll();
 updateClock();
