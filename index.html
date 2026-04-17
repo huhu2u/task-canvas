@@ -801,19 +801,19 @@ function renderExam(){
     const status=g(a.name,key)||'未完成';
     const isDone=status==='完成';
     if(isDone) doneCount++;
-    cards+=`<div onclick="event.stopPropagation();toggleExam('${a.name}')" style="
-      cursor:pointer;user-select:none;
+    cards+=`<button type="button" onclick="toggleExam('${a.name}')" style="
+      cursor:pointer;user-select:none;border:none;font-family:inherit;
       background:${isDone?'#dcfce7':'#fee2e2'};
-      border:2px solid ${isDone?'#16a34a':'#ef4444'};
+      outline:2px solid ${isDone?'#16a34a':'#ef4444'};
       border-radius:12px;padding:16px 22px;
       min-width:140px;text-align:center;
-      position:relative;z-index:600;
+      position:relative;z-index:999;
       transition:all .15s;box-shadow:0 2px 6px rgba(0,0,0,.07)
     ">
       <div style="font-size:28px;margin-bottom:6px">${isDone?'✅':'❌'}</div>
       <div style="font-size:14px;font-weight:700;color:${isDone?'#15803d':'#b91c1c'}">${a.name}</div>
       <div style="font-size:11px;color:${isDone?'#166534':'#991b1b'};margin-top:4px">${isDone?'已完成':'未完成'}</div>
-    </div>`;
+    </button>`;
   });
   document.getElementById('exam-cards').innerHTML=cards;
   const total=AGENTS.length;
