@@ -118,7 +118,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <button class="tabn"        id="tab-memrate"  onclick="switchTab('memrate')">🔄 MEM续约</button>
   <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单</button>
   <button class="tabn"        id="tab-exam"     onclick="switchTab('exam')">📝 月考</button>
-  <button class="tabn"        id="tab-price"    onclick="switchTab('price')">💰 价格带</button>
+
   <button class="tabn"        id="tab-week"     onclick="switchTab('week')">🎯 周目标追踪</button>
 </div>
 
@@ -272,31 +272,6 @@ table.dt tbody tr:last-child td{border-bottom:none}
       <th class="hn">代运营商</th><th class="hc">应参加人数</th><th class="ht">已完成</th>
       <th class="hp">完成率</th><th class="hg">未完成</th><th class="hd">日变化</th>
     </tr></thead><tbody id="exam-tbody"></tbody></table></div>
-  </div>
-</div>
-
-<!-- Tab9: 价格带 -->
-<div id="panel-price" class="tab-panel">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-    <div style="font-size:18px;font-weight:700;color:#1d4ed8">💰 超价格带分析</div>
-    <div style="font-size:11px;color:#6b7280"><a href="https://apollo.sankuai.com/data/report/list?reportId=864" target="_blank" style="color:#2563eb">Apollo #864</a></div>
-  </div>
-  <div style="background:#f0f4ff;border:1px solid #dbeafe;border-radius:6px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#374151;display:flex;gap:16px;flex-wrap:wrap">
-    <span style="color:#6b7280">阈值：</span>
-    <span>品类A(≤300元) <b style="color:#1d4ed8">17%</b></span>
-    <span>品类B(≤500元) <b style="color:#1d4ed8">34%</b></span>
-    <span>品类C(≤1000元) <b style="color:#1d4ed8">6%</b></span>
-  </div>
-  <div class="sec">
-    <div class="sec-hdr" style="background:linear-gradient(90deg,#1d4ed8,#1e3a8a)"><span>💰 价格带达标情况</span><span id="price-date-text" style="font-size:12px;opacity:.8"></span></div>
-    <div class="tw"><table id="price-table" class="dt"><thead><tr>
-      <th class="hn">代运营商</th>
-      <th class="hc">品类A ≤300 (阈值17%)</th>
-      <th class="ht">品类B ≤500 (阈值34%)</th>
-      <th class="hp">品类C ≤1000 (阈值6%)</th>
-    </tr></thead><tbody id="price-tbody">
-      <tr><td colspan="4" style="text-align:center;padding:20px;color:#9ca3af">暂无数据，运行更新脚本后刷新</td></tr>
-    </tbody></table></div>
   </div>
 </div>
 
