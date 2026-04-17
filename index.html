@@ -142,7 +142,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">月CPC消耗</th><th class="ht">月目标</th>
       <th class="hp">完成进度</th><th class="hg">日缺口</th>
-      <th class="hd">昨日消耗</th><th class="hd">有效新签(当前/目标)</th><th class="hd">旺铺通</th>
+      <th class="hd">昨日CPC&amp;QCPS</th><th class="hd">有效新签(当前/目标)</th><th class="hd">旺铺通</th>
     </tr></thead><tbody id="cpc-tbody"></tbody></table></div>
   </div>
   <div class="sec">
@@ -757,7 +757,7 @@ const FIELD_META = {
   gtv_y:       {label:'昨日GTV'},
   gtv_excl:    {label:'GTV剔除率(%)'},
   cpc:         {label:'月CPC消耗'},
-  cpc_y:       {label:'昨日CPC消耗'},
+  cpc_y:       {label:'昨日CPC&QCPS消耗'},
   cpc_newsgn:  {label:'CPC有效新签'},
   cpc_wpu:     {label:'旺铺通消耗'},
   mem:         {label:'MEM收款额'},
@@ -863,7 +863,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-17d') return;
+  if(ex._dataDate==='2026-04-17e') return;
   const D={
     '惠州巨浪':  {gtv:1986507, gtv_y:104910, gtv_excl:3.24,
                   cpc:55840,   cpc_y:964,    cpc_newsgn:10, cpc_wpu:913,
@@ -896,7 +896,7 @@ function renderAll(){
                   score:138, score_near:0, dongxiao:0, visit:0, order:15,
                   memrenew:0, memexpire:0},
   };
-  const ns={_updated:'18:05',_dataDate:'2026-04-17d'};
+  const ns={_updated:'18:06',_dataDate:'2026-04-17e'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
