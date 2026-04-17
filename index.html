@@ -119,6 +119,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单</button>
   <button class="tabn"        id="tab-exam"     onclick="switchTab('exam')">📝 月考</button>
   <button class="tabn"        id="tab-price"    onclick="switchTab('price')">💰 价格带</button>
+  <button class="tabn"        id="tab-week"     onclick="switchTab('week')">🎯 周目标追踪</button>
 </div>
 
 <!-- Tab1: 核心业绩 -->
@@ -296,6 +297,64 @@ table.dt tbody tr:last-child td{border-bottom:none}
     </tr></thead><tbody id="price-tbody">
       <tr><td colspan="4" style="text-align:center;padding:20px;color:#9ca3af">暂无数据，运行更新脚本后刷新</td></tr>
     </tbody></table></div>
+  </div>
+</div>
+
+<!-- Tab10: 周目标追踪 -->
+<div id="panel-week" class="tab-panel">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div>
+      <div style="font-size:18px;font-weight:700;color:#1976d2">🎯 周目标追踪</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:2px">4月第三周（4/14-4/20）&nbsp;·&nbsp;<a href="https://km.sankuai.com/collabpage/2757166498" target="_blank" style="color:#2563eb">学城文档</a></div>
+    </div>
+    <div style="font-size:11px;color:#9ca3af">点击数值单元格可编辑</div>
+  </div>
+
+  <!-- GTV周目标 -->
+  <div class="sec">
+    <div class="sec-hdr"><span>📈 GTV周目标（元）</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">操盘手</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b">本周目标</th>
+      <th class="hd">本周累计</th>
+      <th class="hp">达成进度</th>
+      <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
+    </tr></thead><tbody id="week-gtv-tbody"></tbody></table></div>
+  </div>
+
+  <!-- CPC周目标 -->
+  <div class="sec">
+    <div class="sec-hdr c-cpc"><span>📊 CPC周目标（元）</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">操盘手</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b">本周目标</th>
+      <th class="hd">本周累计</th>
+      <th class="hp">达成进度</th>
+      <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
+    </tr></thead><tbody id="week-cpc-tbody"></tbody></table></div>
+  </div>
+
+  <!-- 优惠码周目标 -->
+  <div class="sec">
+    <div class="sec-hdr c-dong"><span>🎫 优惠码周目标（元）</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">操盘手</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b">本周目标</th>
+      <th class="hd">本周累计</th>
+      <th class="hp">达成进度</th>
+      <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
+    </tr></thead><tbody id="week-coupon-tbody"></tbody></table></div>
+  </div>
+
+  <!-- CPC有效新签 -->
+  <div class="sec">
+    <div class="sec-hdr c-cpc"><span>✅ CPC有效新签周目标</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th><th class="hc">操盘手</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b">周目标</th>
+      <th class="hd">当前完成</th>
+      <th class="hp">达成进度</th>
+    </tr></thead><tbody id="week-newsgn-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -808,13 +867,7 @@ function closeEdit(){
   document.getElementById('pj-overlay').classList.remove('show');
   _ctx=null;
 }
-function saveEdit(){
-  if(!_ctx) return;
-  const val=parseFloat(document.getElementById('pj-val').value)||0;
-  sv(_ctx.name,_ctx.field,val);
-  S._updated=new Date().toTimeString().slice(0,5);
-  ss(); closeEdit(); renderAll(); showToast();
-}
+// saveEdit 合并到下方 renderWeek 区块
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&document.getElementById('pj-overlay').classList.contains('show')) saveEdit();
   if(e.key==='Escape') closeEdit();
@@ -848,11 +901,152 @@ function updateClock(){
   document.getElementById('clockdate').textContent=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
 }
 
+// ── 周目标数据（4月第三周 4/14-4/20，手动填入）──
+const WEEK_DATA = {
+  gtv: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:720000, days:[95000,95000,95000,95000,110000,110000,120000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:800000, days:[90000,110000,110000,115000,120000,125000,130000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:750000, days:[90000,90000,90000,90000,110000,140000,140000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:900000, days:[115000,115000,115000,115000,140000,160000,140000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:580000, days:[79000,79000,79000,79000,88000,88000,88000]},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:655000, days:[80000,85000,85000,85000,100000,120000,100000]},
+  ],
+  cpc: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:33000,  days:[4200,4200,4200,4200,5000,5700,5500]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:33000,  days:[4200,4200,4200,4200,5000,5700,5500]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:23000,  days:[2800,2800,2800,2800,3800,4000,4000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:20000,  days:[2500,2500,2500,2500,3000,4000,3000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:12300,  days:[1500,1500,1800,1800,1900,1900,1900]},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:58387,  days:[2000,2000,2000,4000,5000,5500,5500]},
+  ],
+  coupon: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:210000, days:[26000,26000,26000,26000,36000,30000,30000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:0,      days:[30000,30000,35000,35000,40000,45000,45000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:210000, days:[30000,30000,30000,30000,30000,30000,30000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:220000, days:[31000,31000,31000,31000,31000,35000,30000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:175000, days:[25000,25000,25000,25000,25000,25000,25000]},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:195000, days:[25000,25000,25000,25000,25000,40000,30000]},
+  ],
+  newsgn: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:15, cur:12},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:15, cur:6},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:0,  cur:0},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:15, cur:17},
+    {name:'惠安广通',  mgr:'尤云生', tgt:8,  cur:5},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:12, cur:15},
+  ],
+};
+
+function renderWeek(){
+  const DAY_LABELS = ['周一','周二','周三','周四','周五','周六','周日'];
+
+  function weekRow(d, tbodyId, isMoney){
+    const pct = d.tgt>0 ? d.cur/d.tgt : null;
+    const pctStr = pct!==null ? (pct*100).toFixed(1)+'%' : '—';
+    const cls = pct!==null ? (pct>=1?'sg':pct>=0.7?'sy':'sr') : 'sb';
+    const curVal = d.cur!=null ? (isMoney?fmtMoney(d.cur):d.cur) : '<span style="color:#9ca3af">—</span>';
+    const tgtVal = isMoney ? fmtMoney(d.tgt) : d.tgt;
+    let dayCells = d.days.map((v,i)=>`<td style="cursor:pointer;color:#374151" onclick="openWeekEdit('${tbodyId}','${d.name}',${i})">${isMoney?fmtMoney(v):v}</td>`).join('');
+    return `<tr>
+      <td class="tn">${d.name}</td>
+      <td style="color:#6b7280">${d.mgr}</td>
+      <td style="font-weight:700;color:#dc2626">${tgtVal}</td>
+      <td style="cursor:pointer;color:#2563eb;font-weight:600" onclick="openWeekEdit('${tbodyId}','${d.name}','cur')">${curVal}</td>
+      <td>${pct!==null?`<div style="font-size:12px;font-weight:700;color:${colorText(cls)}">${pctStr}</div><div class="bw"><div class="bf ${cls}" style="width:${Math.min(100,pct*100).toFixed(1)}%"></div></div>`:'—'}</td>
+      ${dayCells}
+    </tr>`;
+  }
+
+  function newSgnRow(d){
+    const pct = d.tgt>0 ? d.cur/d.tgt : null;
+    const pctStr = pct!==null ? (pct*100).toFixed(1)+'%' : '—';
+    const cls = pct!==null ? (pct>=1?'sg':pct>=0.7?'sy':'sr') : 'sb';
+    return `<tr>
+      <td class="tn">${d.name}</td>
+      <td style="color:#6b7280">${d.mgr}</td>
+      <td style="font-weight:700;color:#dc2626">${d.tgt||'—'}</td>
+      <td style="font-weight:700;color:${colorText(cls)}">${d.cur!=null?d.cur:'—'}</td>
+      <td>${pct!==null?`<div style="font-size:12px;font-weight:700;color:${colorText(cls)}">${pctStr}</div><div class="bw"><div class="bf ${cls}" style="width:${Math.min(100,pct*100).toFixed(1)}%"></div></div>`:'—'}</td>
+    </tr>`;
+  }
+
+  // 从 localStorage 读取本周已填数据
+  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+
+  ['gtv','cpc','coupon'].forEach(type=>{
+    const tbodyId = 'week-'+type+'-tbody';
+    const tbody = document.getElementById(tbodyId);
+    if(!tbody) return;
+    tbody.innerHTML = WEEK_DATA[type].map(d=>{
+      const saved = (ws[type]||{})[d.name]||{};
+      const cur = saved.cur!=null ? saved.cur : null;
+      const days = d.days.map((v,i)=> saved['d'+i]!=null ? saved['d'+i] : v);
+      return weekRow({...d, cur, days}, tbodyId, true);
+    }).join('');
+  });
+
+  const ns = document.getElementById('week-newsgn-tbody');
+  if(ns) ns.innerHTML = WEEK_DATA.newsgn.map(d=>{
+    const saved = ((ws.newsgn||{})[d.name])||{};
+    return newSgnRow({...d, cur: saved.cur!=null?saved.cur:d.cur});
+  }).join('');
+}
+
+function openWeekEdit(tbodyId, name, field){
+  const type = tbodyId.replace('week-','').replace('-tbody','');
+  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+  if(!ws[type]) ws[type]={};
+  if(!ws[type][name]) ws[type][name]={};
+  const key = field==='cur'?'cur':('d'+field);
+  const cur = ws[type][name][key];
+  const label = field==='cur'?'本周累计':`第${Number(field)+1}天（${'一二三四五六日'[Number(field)]}）`;
+
+  document.getElementById('pj-overlay').classList.add('show');
+  document.getElementById('pj-title').textContent=`${name} · ${label}`;
+  document.getElementById('pj-fields').innerHTML=`
+    <div class="pj-row">
+      <label>${label}</label>
+      <input type="number" id="pj-val" value="${cur!=null?cur:''}" placeholder="输入数值" autofocus>
+    </div>`;
+  setTimeout(()=>{const i=document.getElementById('pj-val');if(i){i.focus();i.select();}},50);
+
+  // 临时挂 save 回调
+  document.getElementById('pj-fields').dataset.weekType = type;
+  document.getElementById('pj-fields').dataset.weekName = name;
+  document.getElementById('pj-fields').dataset.weekKey = key;
+  document.getElementById('pj-fields').dataset.weekMode = '1';
+}
+
+function saveEdit(){
+  const fields = document.getElementById('pj-fields');
+  if(fields.dataset.weekMode==='1'){
+    // 周目标编辑模式
+    const {weekType:type,weekName:name,weekKey:key} = fields.dataset;
+    const val = parseFloat(document.getElementById('pj-val').value);
+    if(isNaN(val)){closeEdit();return;}
+    const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+    if(!ws[type]) ws[type]={};
+    if(!ws[type][name]) ws[type][name]={};
+    ws[type][name][key]=val;
+    localStorage.setItem('week_data_v1', JSON.stringify(ws));
+    delete fields.dataset.weekMode;
+    closeEdit(); renderWeek();
+    return;
+  }
+  // 原有保存逻辑（核心业绩数据编辑）
+  if(!_ctx) return;
+  const val=parseFloat(document.getElementById('pj-val').value)||0;
+  sv(_ctx.name,_ctx.field,val);
+  S._updated=new Date().toTimeString().slice(0,5);
+  ss(); closeEdit(); renderAll(); showToast();
+}
+
 function renderAll(){
   renderGtv(); renderCpc(); renderMem();
   renderScore(); renderDongxiao();
   renderVisit(); renderOrder(); renderMemrate();
   renderAurora(); renderExam();
+  renderWeek();
   updateStatusBar();
   const {pct:tp}=timePct();
   const b=document.getElementById('perf-badge');
@@ -865,7 +1059,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-17i') return;
+  if(ex._dataDate==='2026-04-17j') return;
   const D={
     '惠州巨浪':  {gtv:1986507, gtv_y:104910, gtv_excl:3.24,
                   cpc:41446,   cpc_y:964,    cpc_y2:1877,  cpc_newsgn:10, cpc_wpu:913,
@@ -898,7 +1092,7 @@ function renderAll(){
                   score:138, score_near:0, dongxiao:0, visit:0, order:15,
                   memrenew:0, memexpire:0},
   };
-  const ns={_updated:'18:24',_dataDate:'2026-04-17i'};
+  const ns={_updated:'18:30',_dataDate:'2026-04-17j'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
