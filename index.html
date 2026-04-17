@@ -858,28 +858,40 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-17') return;
+  if(ex._dataDate==='2026-04-17b') return;
   const D={
-    '惠州巨浪':  {gtv:1986507, cpc:55840, mem:80058, cps:0, memrate:42.9,
+    '惠州巨浪':  {gtv:1986507, gtv_y:104910, gtv_excl:3.24,
+                  cpc:55840,   cpc_y:964,    cpc_newsgn:10, cpc_wpu:913,
+                  mem:80058, cps:0, memrate:42.9,
                   score:225, score_near:0, dongxiao:0, visit:0, order:74,
                   memrenew:0, memexpire:0},
-    '义乌汐洋':  {gtv:1481955, cpc:51210, mem:63400, cps:0, memrate:61.1,
+    '义乌汐洋':  {gtv:1481955, gtv_y:100989, gtv_excl:1.15,
+                  cpc:51210,   cpc_y:4617,   cpc_newsgn:2,  cpc_wpu:937,
+                  mem:63400, cps:0, memrate:61.1,
                   score:131, score_near:0, dongxiao:0, visit:0, order:22,
                   memrenew:0, memexpire:0},
-    '惠安广通':  {gtv:1132149, cpc:41180, mem:39729, cps:0, memrate:36.4,
+    '惠安广通':  {gtv:1132149, gtv_y:71505,  gtv_excl:3.26,
+                  cpc:41180,   cpc_y:1109,   cpc_newsgn:1,  cpc_wpu:586,
+                  mem:39729, cps:0, memrate:36.4,
                   score:100, score_near:0, dongxiao:0, visit:0, order:39,
                   memrenew:0, memexpire:0},
-    '惠州柏万':  {gtv:1732922, cpc:51560, mem:95929, cps:0, memrate:44.4,
+    '惠州柏万':  {gtv:1732922, gtv_y:88164,  gtv_excl:2.65,
+                  cpc:51560,   cpc_y:2167,   cpc_newsgn:5,  cpc_wpu:729,
+                  mem:95929, cps:0, memrate:44.4,
                   score:141, score_near:0, dongxiao:0, visit:0, order:41,
                   memrenew:0, memexpire:0},
-    '泉州小花猫':{gtv:1383833, cpc:38550, mem:49729, cps:0, memrate:29.8,
+    '泉州小花猫':{gtv:1383833, gtv_y:85504,  gtv_excl:2.92,
+                  cpc:38550,   cpc_y:2398,   cpc_newsgn:1,  cpc_wpu:827,
+                  mem:49729, cps:0, memrate:29.8,
                   score:148, score_near:0, dongxiao:0, visit:0, order:68,
                   memrenew:0, memexpire:0},
-    '慈溪哲光':  {gtv:1450980, cpc:45360, mem:44297, cps:0, memrate:34.1,
+    '慈溪哲光':  {gtv:1450980, gtv_y:91847,  gtv_excl:2.79,
+                  cpc:45360,   cpc_y:3664,   cpc_newsgn:6,  cpc_wpu:348,
+                  mem:44297, cps:0, memrate:34.1,
                   score:138, score_near:0, dongxiao:0, visit:0, order:15,
                   memrenew:0, memexpire:0},
   };
-  const ns={_updated:'17:24',_dataDate:'2026-04-17'};
+  const ns={_updated:'17:55',_dataDate:'2026-04-17b'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
