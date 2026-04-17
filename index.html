@@ -116,7 +116,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <button class="tabn"        id="tab-memrate"  onclick="switchTab('memrate')">🔄 MEM续约</button>
   <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单</button>
   <button class="tabn"        id="tab-exam"     onclick="switchTab('exam')">📝 月考</button>
-
+  <button class="tabn"        id="tab-zrq"      onclick="switchTab('zrq')">📌 职人码进度</button>
   <button class="tabn"        id="tab-week"     onclick="switchTab('week')">🎯 周目标追踪</button>
 </div>
 
@@ -266,6 +266,40 @@ table.dt tbody tr:last-child td{border-bottom:none}
     <div id="exam-summary" style="font-size:13px;color:#4a6a8a;font-weight:600"></div>
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px 0" id="exam-cards"></div>
+</div>
+
+<!-- Tab9: 职人码进度看板 -->
+<div id="panel-zrq" class="tab-panel">
+  <div class="panel-topbar">
+    <div><div class="panel-title">📌 职人码进度看板</div><div class="panel-sub">点击数值可编辑 · 数据来源：策略管理-PC-职人码（组织明细）</div></div>
+    <div id="zrq-badge" class="timepct-badge"></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr c-dong"><span>📌 职人码分析表</span></div>
+    <div class="tw"><table class="dt"><thead>
+      <tr>
+        <th class="hn" rowspan="2">代运营商</th>
+        <th class="hc" rowspan="2">负责人</th>
+        <th class="hc" rowspan="2">合作门店数</th>
+        <th class="hc" rowspan="2">绑码商户数</th>
+        <th class="hc" rowspan="2">绑码率</th>
+        <th class="hc" rowspan="2">月净增绑码数<br><span style="font-weight:400;font-size:10px">vs 4月1日</span></th>
+        <th class="hc" rowspan="2">日净增绑码数<br><span style="font-weight:400;font-size:10px">vs昨日</span></th>
+        <th class="hc" rowspan="2">有效动销门店数</th>
+        <th class="hc" rowspan="2">动销率</th>
+        <th class="hc" rowspan="2">店转GTV（元）</th>
+        <th class="hc" rowspan="2">昨日店转GTV</th>
+        <th colspan="2" style="text-align:center;background:#065f46;color:#fff;padding:4px 8px">店转GTV渗透率</th>
+        <th class="hc" rowspan="2">昨日实付GTV</th>
+        <th class="hc" rowspan="2">实付GTV（元）</th>
+        <th class="hc" rowspan="2">店转客单均价</th>
+      </tr>
+      <tr>
+        <th class="hc">当前</th>
+        <th class="hc">昨日</th>
+      </tr>
+    </thead><tbody id="zrq-tbody"></tbody></table></div>
+  </div>
 </div>
 
 <!-- Tab10: 周目标追踪 -->
@@ -856,6 +890,20 @@ const FIELD_META = {
   aurora_res_done:{label:'结果-已完成'},
   aurora_res_pend:{label:'结果-待处理'},
   exam_status: {label:'月考状态'},
+  zrq_shops:      {label:'合作门店数'},
+  zrq_bind:       {label:'绑码商户数'},
+  zrq_bindrate:   {label:'绑码率(%)'},
+  zrq_bind_inc_m: {label:'月净增绑码数(vs 4月1日)'},
+  zrq_bind_inc_d: {label:'日净增绑码数(vs昨日)'},
+  zrq_dong:       {label:'有效动销门店数'},
+  zrq_dongrate:   {label:'动销率(%)'},
+  zrq_gtv:        {label:'店转GTV(元)'},
+  zrq_gtv_y:      {label:'昨日店转GTV'},
+  zrq_pct:        {label:'店转GTV渗透率(%)'},
+  zrq_pct_y:      {label:'昨日渗透率(%)'},
+  zrq_pay_y:      {label:'昨日实付GTV'},
+  zrq_pay:        {label:'实付GTV(元)'},
+  zrq_aov:        {label:'店转客单均价'},
 };
 
 let _ctx=null;
@@ -875,6 +923,82 @@ function closeEdit(){
   document.getElementById('pj-overlay').classList.remove('show');
   _ctx=null;
 }
+// 渲染：职人码进度看板
+// ════════════════════════════════════════════════════════════
+function renderZrq(){
+  const fields=[
+    'zrq_shops','zrq_bind','zrq_bindrate',
+    'zrq_bind_inc_m','zrq_bind_inc_d',
+    'zrq_dong','zrq_dongrate',
+    'zrq_gtv','zrq_gtv_y',
+    'zrq_pct','zrq_pct_y',
+    'zrq_pay_y','zrq_pay','zrq_aov'
+  ];
+  // 汇总行
+  const sumRow=()=>{
+    let cols='<td class="tn" style="font-weight:700">粤闽浙汇总</td><td class="tc">胡英杰</td>';
+    const sumFields=['zrq_shops','zrq_bind',null,'zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong',null,'zrq_gtv','zrq_gtv_y',null,null,'zrq_pay_y','zrq_pay',null];
+    const numFields=['zrq_shops','zrq_bind','zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong','zrq_gtv','zrq_gtv_y','zrq_pay_y','zrq_pay'];
+    let sums={};
+    numFields.forEach(f=>{
+      sums[f]=AGENTS.reduce((acc,a)=>acc+(parseFloat(g(a.name,f))||0),0);
+    });
+    const fmtSum=f=>sums[f]?fmtNum(Math.round(sums[f])):'—';
+    cols+=`<td class="tc">${fmtSum('zrq_shops')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_bind')}</td>`;
+    cols+=`<td class="tc">—</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_bind_inc_m')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_bind_inc_d')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_dong')}</td>`;
+    cols+=`<td class="tc">—</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_gtv')}</td>`;
+    const gtvY=sums['zrq_gtv_y'];
+    cols+=`<td class="tc" style="color:${gtvY>0?'#16a34a':'#dc2626'}">${gtvY>0?'+':''}${fmtNum(Math.round(gtvY))}</td>`;
+    cols+=`<td class="tc">—</td><td class="tc">—</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_pay_y')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_pay')}</td>`;
+    cols+=`<td class="tc">—</td>`;
+    return `<tr style="background:#dcfce7;font-weight:700">${cols}</tr>`;
+  };
+
+  let html=sumRow();
+  AGENTS.forEach(a=>{
+    const shops=g(a.name,'zrq_shops'), bind=g(a.name,'zrq_bind');
+    const bindrate=g(a.name,'zrq_bindrate');
+    const bindIncM=g(a.name,'zrq_bind_inc_m'), bindIncD=g(a.name,'zrq_bind_inc_d');
+    const dong=g(a.name,'zrq_dong'), dongrate=g(a.name,'zrq_dongrate');
+    const gtv=g(a.name,'zrq_gtv'), gtvY=g(a.name,'zrq_gtv_y');
+    const pct=g(a.name,'zrq_pct'), pctY=g(a.name,'zrq_pct_y');
+    const payY=g(a.name,'zrq_pay_y'), pay=g(a.name,'zrq_pay'), aov=g(a.name,'zrq_aov');
+    const gtvYNum=parseFloat(gtvY)||0;
+    const bindIncDNum=parseFloat(bindIncD)||0;
+    const pctNum=parseFloat(pct)||0;
+    const pctYNum=parseFloat(pctY)||0;
+    const editTd=(field,val,extra='')=>`<td class="tc" style="cursor:pointer${extra}" onclick="openEdit('${a.name}','${field}')">${val||'—'}</td>`;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc">${a.mgr||'—'}</td>
+      ${editTd('zrq_shops', shops?fmtNum(shops):'')}
+      ${editTd('zrq_bind', bind?fmtNum(bind):'')}
+      ${editTd('zrq_bindrate', bindrate?bindrate+'%':'')}
+      <td class="tc" style="cursor:pointer;color:${bindIncM>=0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_bind_inc_m')">${bindIncM?(bindIncM>0?'+':'')+bindIncM:'—'}</td>
+      <td class="tc" style="cursor:pointer;color:${bindIncDNum>0?'#16a34a':bindIncDNum<0?'#dc2626':'#6b7280'}" onclick="openEdit('${a.name}','zrq_bind_inc_d')">${bindIncD?(bindIncDNum>0?'+':'')+bindIncD:'—'}</td>
+      ${editTd('zrq_dong', dong?fmtNum(dong):'')}
+      ${editTd('zrq_dongrate', dongrate?dongrate+'%':'')}
+      ${editTd('zrq_gtv', gtv?fmtNum(gtv):'')}
+      <td class="tc" style="cursor:pointer;color:${gtvYNum>0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_gtv_y')">${gtvY?(gtvYNum>0?'+':'')+fmtNum(gtvY):'—'}</td>
+      <td class="tc" style="cursor:pointer;color:${pctNum>=16.5?'#16a34a':pctNum>=14?'#d97706':'#dc2626'}" onclick="openEdit('${a.name}','zrq_pct')">${pct?pct+'%':'—'}</td>
+      <td class="tc" style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','zrq_pct_y')">${pctY?pctY+'%':'—'}</td>
+      ${editTd('zrq_pay_y', payY?fmtNum(payY):'')}
+      ${editTd('zrq_pay', pay?fmtNum(pay):'')}
+      ${editTd('zrq_aov', aov?aov:'')}
+    </tr>`;
+  });
+  document.getElementById('zrq-tbody').innerHTML=html;
+  const badge=document.getElementById('zrq-badge');
+  if(badge){const{pct:tp}=timePct();badge.textContent=`时间进度 ${fmtPct(tp)}`;}
+}
+
 // saveEdit 合并到下方 renderWeek 区块
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&document.getElementById('pj-overlay').classList.contains('show')) saveEdit();
@@ -1064,7 +1188,7 @@ function renderAll(){
   renderGtv(); renderCpc(); renderMem();
   renderScore(); renderDongxiao();
   renderVisit(); renderOrder(); renderMemrate();
-  renderAurora(); renderExam();
+  renderAurora(); renderExam(); renderZrq();
   renderWeek();
   updateStatusBar();
   const {pct:tp}=timePct();
