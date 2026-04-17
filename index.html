@@ -262,15 +262,10 @@ table.dt tbody tr:last-child td{border-bottom:none}
 <!-- Tab8: 月考 -->
 <div id="panel-exam" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">📝 月考</div><div class="panel-sub">点击数值可编辑</div></div>
+    <div><div class="panel-title">📝 月考</div><div class="panel-sub">点击代运营商按钮切换完成状态</div></div>
+    <div id="exam-summary" style="font-size:13px;color:#4a6a8a;font-weight:600"></div>
   </div>
-  <div class="sec">
-    <div class="sec-hdr c-exam"><span>📝 月考完成情况</span></div>
-    <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">应参加人数</th><th class="ht">已完成</th>
-      <th class="hp">完成率</th><th class="hg">未完成</th><th class="hd">日变化</th>
-    </tr></thead><tbody id="exam-tbody"></tbody></table></div>
-  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:12px;padding:8px 0" id="exam-cards"></div>
 </div>
 
 <!-- Tab10: 周目标追踪 -->
@@ -765,23 +760,37 @@ function renderAurora(){
 // 渲染：月考
 // ════════════════════════════════════════════════════════════
 function renderExam(){
-  let html='';
+  const key='exam_status';
+  let doneCount=0;
+  let cards='';
   AGENTS.forEach(a=>{
-    const total=g(a.name,'exam_total'), done=g(a.name,'exam_done');
-    const pend=Math.max(0,total-done);
-    const rate=total>0?done/total:0;
-    const cls=rate>=1?'sg':rate>=0.8?'sy':'sr';
-    const dayChg=g(a.name,'exam_day');
-    html+=`<tr>
-      <td class="tn">${a.name}</td>
-      <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','exam_total')">${total||'—'}</td>
-      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','exam_done')">${done||'—'}</td>
-      <td>${total>0?pctCell(rate,cls):'—'}</td>
-      <td>${pend>0?`<span class="gap-r">${pend}人未完成</span>`:'<span class="gap-g">全员完成 ✅</span>'}</td>
-      <td style="cursor:pointer" onclick="openEdit('${a.name}','exam_day')">${dayHtml(dayChg,'')}</td>
-    </tr>`;
+    const status=g(a.name,key)||'未完成';
+    const isDone=status==='完成';
+    if(isDone) doneCount++;
+    cards+=`<div onclick="toggleExam('${a.name}')" style="
+      cursor:pointer;user-select:none;
+      background:${isDone?'#dcfce7':'#fee2e2'};
+      border:2px solid ${isDone?'#16a34a':'#ef4444'};
+      border-radius:12px;padding:16px 22px;
+      min-width:140px;text-align:center;
+      transition:all .15s;box-shadow:0 2px 6px rgba(0,0,0,.07)
+    ">
+      <div style="font-size:28px;margin-bottom:6px">${isDone?'✅':'❌'}</div>
+      <div style="font-size:14px;font-weight:700;color:${isDone?'#15803d':'#b91c1c'}">${a.name}</div>
+      <div style="font-size:11px;color:${isDone?'#166534':'#991b1b'};margin-top:4px">${isDone?'已完成':'未完成'}</div>
+    </div>`;
   });
-  document.getElementById('exam-tbody').innerHTML=html;
+  document.getElementById('exam-cards').innerHTML=cards;
+  const total=AGENTS.length;
+  const pend=total-doneCount;
+  const sumEl=document.getElementById('exam-summary');
+  if(sumEl) sumEl.innerHTML=`<span style="color:#16a34a">✅ ${doneCount} 已完成</span>&nbsp;&nbsp;<span style="color:#dc2626">❌ ${pend} 未完成</span>`;
+}
+function toggleExam(name){
+  const key='exam_status';
+  const cur=g(name,key)||'未完成';
+  s(name,key,cur==='完成'?'未完成':'完成');
+  renderExam();
 }
 
 // ════════════════════════════════════════════════════════════
@@ -846,9 +855,7 @@ const FIELD_META = {
   aurora_act_pend:{label:'动作-待处理'},
   aurora_res_done:{label:'结果-已完成'},
   aurora_res_pend:{label:'结果-待处理'},
-  exam_total:  {label:'应参加人数'},
-  exam_done:   {label:'已完成人数'},
-  exam_day:    {label:'日新增完成'},
+  exam_status: {label:'月考状态'},
 };
 
 let _ctx=null;
