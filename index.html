@@ -292,7 +292,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
       <th class="hn">代运营商</th><th class="hc">操盘手</th>
       <th class="ht" style="background:#fee2e2;color:#991b1b" title="= 周一~周日之和（自动）">本周目标🔢</th>
       <th class="hd">本周累计</th>
-      <th class="hp">达成进度</th>
+      <th class="hp">预计完成进度</th>
       <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
     </tr></thead><tbody id="week-gtv-tbody"></tbody></table></div>
   </div>
@@ -304,7 +304,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
       <th class="hn">代运营商</th><th class="hc">操盘手</th>
       <th class="ht" style="background:#fee2e2;color:#991b1b" title="= 周一~周日之和（自动）">本周目标🔢</th>
       <th class="hd">本周累计</th>
-      <th class="hp">达成进度</th>
+      <th class="hp">预计完成进度</th>
       <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
     </tr></thead><tbody id="week-cpc-tbody"></tbody></table></div>
   </div>
@@ -326,7 +326,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
       <th class="hn">代运营商</th><th class="hc">操盘手</th>
       <th class="ht" style="background:#fee2e2;color:#991b1b">周目标</th>
       <th class="hd">当前完成</th>
-      <th class="hp">达成进度</th>
+      <th class="hp">预计完成进度</th>
     </tr></thead><tbody id="week-newsgn-tbody"></tbody></table></div>
   </div>
 </div>
@@ -916,15 +916,17 @@ function renderWeek(){
   function weekRow(d, tbodyId, isMoney, noCur){
     // 本周目标 = 周一~周日填入值之和（自动求和）
     const tgt = d.days.reduce((s,v)=>s+(v||0), 0);
-    const pct = tgt>0 ? d.cur/tgt : null;
-    const pctStr = pct!==null ? (pct*100).toFixed(1)+'%' : '—';
-    const cls = pct!==null ? (pct>=1?'sg':pct>=0.7?'sy':'sr') : 'sb';
-    const curVal = d.cur!=null ? (isMoney?fmtMoney(d.cur):d.cur) : '<span style="color:#9ca3af">—</span>';
     const tgtVal = isMoney ? fmtMoney(tgt) : tgt;
+    const curVal = d.cur!=null ? (isMoney?fmtMoney(d.cur):d.cur) : '<span style="color:#9ca3af">—</span>';
+    // 预计完成进度：手动填写，存 forecast 字段
+    const fc = d.forecast;
+    const fcCls = fc!=null ? (fc>=1?'sg':fc>=0.7?'sy':'sr') : '';
+    const fcStr = fc!=null ? (fc*100).toFixed(1)+'%' : '<span style="color:#9ca3af;font-size:11px">点击填写</span>';
+    const fcCell = `<td style="cursor:pointer" onclick="openWeekEdit('${tbodyId}','${d.name}','forecast')">${fc!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(fcCls)}">${(fc*100).toFixed(1)}%</div><div class="bw"><div class="bf ${fcCls}" style="width:${Math.min(100,fc*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af;font-size:11px">点击填写</span>'}</td>`;
     let dayCells = d.days.map((v,i)=>`<td style="cursor:pointer;color:#374151" onclick="openWeekEdit('${tbodyId}','${d.name}',${i})">${isMoney?fmtMoney(v):v}</td>`).join('');
     const curCells = noCur ? '' : `
       <td style="cursor:pointer;color:#2563eb;font-weight:600" onclick="openWeekEdit('${tbodyId}','${d.name}','cur')">${curVal}</td>
-      <td>${pct!==null?`<div style="font-size:12px;font-weight:700;color:${colorText(cls)}">${pctStr}</div><div class="bw"><div class="bf ${cls}" style="width:${Math.min(100,pct*100).toFixed(1)}%"></div></div>`:'—'}</td>`;
+      ${fcCell}`;
     return `<tr>
       <td class="tn">${d.name}</td>
       <td style="color:#6b7280">${d.mgr}</td>
@@ -935,15 +937,14 @@ function renderWeek(){
   }
 
   function newSgnRow(d){
-    const pct = d.tgt>0 ? d.cur/d.tgt : null;
-    const pctStr = pct!==null ? (pct*100).toFixed(1)+'%' : '—';
-    const cls = pct!==null ? (pct>=1?'sg':pct>=0.7?'sy':'sr') : 'sb';
+    const fc = d.forecast;
+    const fcCls = fc!=null ? (fc>=1?'sg':fc>=0.7?'sy':'sr') : '';
     return `<tr>
       <td class="tn">${d.name}</td>
       <td style="color:#6b7280">${d.mgr}</td>
       <td style="font-weight:700;color:#dc2626">${d.tgt||'—'}</td>
-      <td style="font-weight:700;color:${colorText(cls)}">${d.cur!=null?d.cur:'—'}</td>
-      <td>${pct!==null?`<div style="font-size:12px;font-weight:700;color:${colorText(cls)}">${pctStr}</div><div class="bw"><div class="bf ${cls}" style="width:${Math.min(100,pct*100).toFixed(1)}%"></div></div>`:'—'}</td>
+      <td style="font-weight:700;color:#374151">${d.cur!=null?d.cur:'—'}</td>
+      <td style="cursor:pointer" onclick="openWeekEdit('week-newsgn-tbody','${d.name}','forecast')">${fc!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(fcCls)}">${(fc*100).toFixed(1)}%</div><div class="bw"><div class="bf ${fcCls}" style="width:${Math.min(100,fc*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af;font-size:11px">点击填写</span>'}</td>
     </tr>`;
   }
 
@@ -957,15 +958,16 @@ function renderWeek(){
     tbody.innerHTML = WEEK_DATA[type].map(d=>{
       const saved = (ws[type]||{})[d.name]||{};
       const cur = saved.cur!=null ? saved.cur : null;
+      const forecast = saved.forecast!=null ? saved.forecast : null;
       const days = d.days.map((v,i)=> saved['d'+i]!=null ? saved['d'+i] : v);
-      return weekRow({...d, cur, days}, tbodyId, true, type==='coupon');
+      return weekRow({...d, cur, forecast, days}, tbodyId, true, type==='coupon');
     }).join('');
   });
 
   const ns = document.getElementById('week-newsgn-tbody');
   if(ns) ns.innerHTML = WEEK_DATA.newsgn.map(d=>{
     const saved = ((ws.newsgn||{})[d.name])||{};
-    return newSgnRow({...d, cur: saved.cur!=null?saved.cur:d.cur});
+    return newSgnRow({...d, cur: saved.cur!=null?saved.cur:d.cur, forecast: saved.forecast!=null?saved.forecast:null});
   }).join('');
 }
 
@@ -974,16 +976,19 @@ function openWeekEdit(tbodyId, name, field){
   const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
   if(!ws[type]) ws[type]={};
   if(!ws[type][name]) ws[type][name]={};
-  const key = field==='cur'?'cur':('d'+field);
+  const key = field==='cur'?'cur':(field==='forecast'?'forecast':('d'+field));
   const cur = ws[type][name][key];
-  const label = field==='cur'?'本周累计':`第${Number(field)+1}天（${'一二三四五六日'[Number(field)]}）`;
+  const label = field==='cur'?'本周累计':field==='forecast'?'预计完成进度（%）':`第${Number(field)+1}天（${'一二三四五六日'[Number(field)]}）`;
 
   document.getElementById('pj-overlay').classList.add('show');
   document.getElementById('pj-title').textContent=`${name} · ${label}`;
+  const isForecast = key==='forecast';
+  const displayVal = isForecast && cur!=null ? (cur*100).toFixed(1) : (cur!=null?cur:'');
   document.getElementById('pj-fields').innerHTML=`
     <div class="pj-row">
       <label>${label}</label>
-      <input type="number" id="pj-val" value="${cur!=null?cur:''}" placeholder="输入数值" autofocus>
+      <input type="number" id="pj-val" value="${displayVal}" placeholder="${isForecast?'输入百分比，如 85':'输入数值'}" autofocus>
+      ${isForecast?'<span style="font-size:12px;color:#6b7280;margin-top:4px">输入0-100的数字，代表百分比</span>':''}
     </div>`;
   setTimeout(()=>{const i=document.getElementById('pj-val');if(i){i.focus();i.select();}},50);
 
@@ -999,8 +1004,10 @@ function saveEdit(){
   if(fields.dataset.weekMode==='1'){
     // 周目标编辑模式
     const {weekType:type,weekName:name,weekKey:key} = fields.dataset;
-    const val = parseFloat(document.getElementById('pj-val').value);
+    let val = parseFloat(document.getElementById('pj-val').value);
     if(isNaN(val)){closeEdit();return;}
+    // forecast 输入的是百分比数字（如 85），存为小数（0.85）
+    if(key==='forecast') val = val/100;
     const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
     if(!ws[type]) ws[type]={};
     if(!ws[type][name]) ws[type][name]={};
