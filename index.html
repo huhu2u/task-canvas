@@ -134,7 +134,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">月累计GTV</th><th class="ht">月目标</th>
       <th class="hp">完成进度</th><th class="hg">日缺口</th>
-      <th class="hd">昨日GTV</th><th class="hd">GTV剔除率</th>
+      <th class="hd">昨日GTV</th><th class="hd">昨日日目标</th><th class="hd">单日达成率</th><th class="hd">GTV剔除率</th>
     </tr></thead><tbody id="gtv-tbody"></tbody></table></div>
   </div>
   <div class="sec">
@@ -143,7 +143,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">月CPC消耗</th><th class="ht">月目标</th>
       <th class="hp">完成进度</th><th class="hg">日缺口</th>
-      <th class="hd">有效新签(当前/目标)</th><th class="hd">旺铺通</th><th class="hd">昨日CPC消耗</th><th class="hd">昨日CPC&amp;QCPS</th>
+      <th class="hd">有效新签(当前/目标)</th><th class="hd">旺铺通</th><th class="hd">昨日CPC消耗</th><th class="hd">昨日CPC&amp;QCPS</th><th class="hd">昨日日目标</th><th class="hd">单日达成率</th>
     </tr></thead><tbody id="cpc-tbody"></tbody></table></div>
   </div>
   <div class="sec">
@@ -445,6 +445,26 @@ function makeCards(containerId, items){
 // ════════════════════════════════════════════════════════════
 // 渲染：核心业绩 GTV
 // ════════════════════════════════════════════════════════════
+// 获取昨日对应的周目标日值
+// type: 'gtv' | 'cpc'，name: 代运营商名
+// 返回昨日日目标数值（数字），若无则返回 0
+function getYesterdayDayTarget(type, name){
+  const now = new Date();
+  // 今天是周几？0=周日,1=周一...6=周六 → 转成周内索引 0=周一...6=周日
+  const jsDay = now.getDay(); // 0=Sun
+  // 昨天
+  const ydJsDay = jsDay === 0 ? 6 : jsDay - 1; // 0=Sun→昨天是Sat=6
+  // days 数组索引：0=周一...6=周日，即 ydJsDay===0→Sun→idx=6，否则 ydJsDay-1+1=ydJsDay... 
+  // 实际：jsDay 1(Mon)→昨天Sun→idx=6; jsDay 2(Tue)→昨天Mon→idx=0; ...
+  const dayIdx = jsDay === 1 ? 6 : jsDay - 2; // 0=周一
+  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+  const saved = (ws[type]||{})[name]||{};
+  const base = (WEEK_DATA[type]||[]).find(d=>d.name===name);
+  if(!base) return 0;
+  const val = saved['d'+dayIdx]!=null ? saved['d'+dayIdx] : (base.days[dayIdx]||0);
+  return val || 0;
+}
+
 function renderGtv(){
   const {pct:tp,day,total}=timePct();
   const remain=total-day;
@@ -454,6 +474,9 @@ function renderGtv(){
     const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
     const dailyGap = tgt>0 ? Math.ceil((tgt-cur)/Math.max(remain,1)) : 0;
     const yGtv=g(a.name,'gtv_y'), excl=g(a.name,'gtv_excl');
+    const yDayTgt = getYesterdayDayTarget('gtv', a.name);
+    const yDayRate = (yGtv && yDayTgt>0) ? yGtv/yDayTgt : null;
+    const yDayCls = yDayRate!=null ? (yDayRate>=1?'sg':yDayRate>=0.7?'sy':'sr') : '';
     totCur+=cur; totTgt+=tgt;
     html+=`<tr>
       <td class="tn">${a.name}</td>
@@ -462,6 +485,8 @@ function renderGtv(){
       <td>${pctCell(pct,cls)}</td>
       <td>${gapHtml(cur,tgt,false)}<div style="font-size:10px;color:#9ca3af;margin-top:2px">日需≥${fmtMoney(dailyGap)}</div></td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_y')">${yGtv?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yGtv)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280;font-size:12px">${yDayTgt?fmtMoney(yDayTgt):'<span style="color:#9ca3af">—</span>'}</td>
+      <td>${yDayRate!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(yDayCls)}">${(yDayRate*100).toFixed(1)}%</div><div class="bw"><div class="bf ${yDayCls}" style="width:${Math.min(100,yDayRate*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af">—</span>'}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_excl')">${excl?`<span style="${excl>5?'color:#dc2626':'color:#16a34a'};font-weight:700">${excl.toFixed(1)}%</span>`:'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
@@ -489,6 +514,9 @@ function renderCpc(){
     const yCpc=g(a.name,'cpc_y'), yCpcQ=g(a.name,'cpc_y2'), newSgn=g(a.name,'cpc_newsgn'), wpu=g(a.name,'cpc_wpu');
     const sgnTgt=a.cpc_newsgn_tgt||0;
     const sgnCls=sgnTgt>0?(newSgn>=sgnTgt?'sg':newSgn>=sgnTgt*0.7?'sy':'sr'):'sb';
+    const cDayTgt = getYesterdayDayTarget('cpc', a.name);
+    const cDayRate = (yCpcQ && cDayTgt>0) ? yCpcQ/cDayTgt : null;
+    const cDayCls = cDayRate!=null ? (cDayRate>=1?'sg':cDayRate>=0.7?'sy':'sr') : '';
     totCur+=cur; totTgt+=tgt;
     html+=`<tr>
       <td class="tn">${a.name}</td>
@@ -504,6 +532,8 @@ function renderCpc(){
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_wpu')">${wpu?fmtMoney(wpu):'<span style="color:#9ca3af">—</span>'}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y')">${yCpc?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yCpc)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y2')">${yCpcQ?`<span style="color:#7c3aed;font-weight:600">${fmtMoney(yCpcQ)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280;font-size:12px">${cDayTgt?fmtMoney(cDayTgt):'<span style="color:#9ca3af">—</span>'}</td>
+      <td>${cDayRate!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(cDayCls)}">${(cDayRate*100).toFixed(1)}%</div><div class="bw"><div class="bf ${cDayCls}" style="width:${Math.min(100,cDayRate*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
   document.getElementById('cpc-tbody').innerHTML=html;
