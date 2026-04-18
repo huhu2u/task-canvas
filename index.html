@@ -376,12 +376,12 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // 配置：代运营商基础数据
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
-  {name:'惠州巨浪',  gtv_tgt:3804112, cpc_tgt:74222,  cpc_newsgn_tgt:13, score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:88,  memrate_tgt:60, order_pool:329},
-  {name:'惠州柏万',  gtv_tgt:3124634, cpc_tgt:95454,  cpc_newsgn_tgt:12, score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:54,  memrate_tgt:60, order_pool:201},
-  {name:'泉州小花猫',gtv_tgt:2598259, cpc_tgt:113144, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:60,  memrate_tgt:60, order_pool:226},
-  {name:'惠安广通',  gtv_tgt:2236565, cpc_tgt:57886,  cpc_newsgn_tgt:8,  score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:38,  memrate_tgt:60, order_pool:141},
-  {name:'慈溪哲光',  gtv_tgt:3137253, cpc_tgt:146180, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:67,  memrate_tgt:60, order_pool:251},
-  {name:'义乌汐洋',  gtv_tgt:2893879, cpc_tgt:139466, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:51,  memrate_tgt:60, order_pool:191},
+  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3804112, cpc_tgt:74222,  cpc_newsgn_tgt:13, score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:88,  memrate_tgt:60, order_pool:329},
+  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3124634, cpc_tgt:95454,  cpc_newsgn_tgt:12, score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:54,  memrate_tgt:60, order_pool:201},
+  {name:'泉州小花猫',mgr:'陈彩凤', gtv_tgt:2598259, cpc_tgt:113144, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:60,  memrate_tgt:60, order_pool:226},
+  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2236565, cpc_tgt:57886,  cpc_newsgn_tgt:8,  score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:38,  memrate_tgt:60, order_pool:141},
+  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3137253, cpc_tgt:146180, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:67,  memrate_tgt:60, order_pool:251},
+  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:2893879, cpc_tgt:139466, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:51,  memrate_tgt:60, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
@@ -470,45 +470,810 @@ function makeCards(containerId, items){
 }
 
 // ════════════════════════════════════════════════════════════
-// 预置数据（2026-04-18 09:47）
+// 渲染：核心业绩 GTV
+// ════════════════════════════════════════════════════════════
+// 获取昨日对应的周目标日值
+// type: 'gtv' | 'cpc'，name: 代运营商名
+// 返回昨日日目标数值（数字），若无则返回 0
+function getYesterdayDayTarget(type, name){
+  const now = new Date();
+  // 今天是周几？0=周日,1=周一...6=周六 → 转成周内索引 0=周一...6=周日
+  const jsDay = now.getDay(); // 0=Sun
+  // 昨天
+  const ydJsDay = jsDay === 0 ? 6 : jsDay - 1; // 0=Sun→昨天是Sat=6
+  // days 数组索引：0=周一...6=周日，即 ydJsDay===0→Sun→idx=6，否则 ydJsDay-1+1=ydJsDay... 
+  // 实际：jsDay 1(Mon)→昨天Sun→idx=6; jsDay 2(Tue)→昨天Mon→idx=0; ...
+  const dayIdx = jsDay === 1 ? 6 : jsDay - 2; // 0=周一
+  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+  const saved = (ws[type]||{})[name]||{};
+  const base = (WEEK_DATA[type]||[]).find(d=>d.name===name);
+  if(!base) return 0;
+  const val = saved['d'+dayIdx]!=null ? saved['d'+dayIdx] : (base.days[dayIdx]||0);
+  return val || 0;
+}
+
+function renderGtv(){
+  const {pct:tp,day,total}=timePct();
+  const remain=total-day;
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'gtv'), tgt=gt(a.name,'gtv');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dailyGap = tgt>0 ? Math.ceil((tgt-cur)/Math.max(remain,1)) : 0;
+    const yGtv=g(a.name,'gtv_y'), excl=g(a.name,'gtv_excl');
+    const yDayTgt = getYesterdayDayTarget('gtv', a.name);
+    const yDayRate = (yGtv && yDayTgt>0) ? yGtv/yDayTgt : null;
+    const yDayCls = yDayRate!=null ? (yDayRate>=1?'sg':yDayRate>=0.7?'sy':'sr') : '';
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','gtv')">${fmtMoney(cur)}</td>
+      <td style="color:#6b7280">${fmtMoney(tgt)}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,false)}<div style="font-size:10px;color:#9ca3af;margin-top:2px">日需≥${fmtMoney(dailyGap)}</div></td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_y')">${yGtv?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yGtv)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280;font-size:12px">${yDayTgt?fmtMoney(yDayTgt):'<span style="color:#9ca3af">—</span>'}</td>
+      <td>${yDayRate!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(yDayCls)}">${(yDayRate*100).toFixed(1)}%</div><div class="bw"><div class="bf ${yDayCls}" style="width:${Math.min(100,yDayRate*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','gtv_excl')">${excl?`<span style="${excl>5?'color:#dc2626':'color:#16a34a'};font-weight:700">${excl.toFixed(1)}%</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('gtv-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, totCls=colorOf(totPct,tp);
+  makeCards('gtv-cards',[
+    {name:'GTV综合达成',pct:fmtPct(totPct),cls:totCls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${fmtMoney(totCur)} / ${fmtMoney(totTgt)}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天 剩${remain}天`},
+  ]);
+  const s=document.getElementById('gtv-hdr-sum');
+  if(s) s.textContent=`综合 ${fmtPct(totPct)} | 累计 ${fmtMoney(totCur)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：CPC
+// ════════════════════════════════════════════════════════════
+function renderCpc(){
+  const {pct:tp,day,total}=timePct();
+  const remain=total-day;
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'cpc'), tgt=gt(a.name,'cpc');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dailyGap=tgt>0?Math.ceil((tgt-cur)/Math.max(remain,1)):0;
+    const yCpc=g(a.name,'cpc_y'), yCpcQ=g(a.name,'cpc_y2'), newSgn=g(a.name,'cpc_newsgn'), wpu=g(a.name,'cpc_wpu');
+    const sgnTgt=a.cpc_newsgn_tgt||0;
+    const sgnCls=sgnTgt>0?(newSgn>=sgnTgt?'sg':newSgn>=sgnTgt*0.7?'sy':'sr'):'sb';
+    const cDayTgt = getYesterdayDayTarget('cpc', a.name);
+    const cDayRate = (yCpcQ && cDayTgt>0) ? yCpcQ/cDayTgt : null;
+    const cDayCls = cDayRate!=null ? (cDayRate>=1?'sg':cDayRate>=0.7?'sy':'sr') : '';
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','cpc')">${fmtMoney(cur)}</td>
+      <td style="color:#6b7280">${fmtMoney(tgt)}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,false)}<div style="font-size:10px;color:#9ca3af;margin-top:2px">日需≥${fmtMoney(dailyGap)}</div></td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_newsgn')">
+        <span style="font-weight:700;color:${colorText(sgnCls)}">${newSgn||0}</span>
+        <span style="color:#9ca3af;font-size:11px"> / ${sgnTgt}</span>
+        ${newSgn<sgnTgt?`<span class="${sgnCls==='sr'?'gap-r':'gap-y'}" style="font-size:10px;margin-left:2px">差${sgnTgt-newSgn}</span>`:'<span style="font-size:10px;color:#16a34a;margin-left:2px">✅</span>'}
+      </td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_wpu')">${wpu?fmtMoney(wpu):'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y')">${yCpc?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yCpc)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y2')">${yCpcQ?`<span style="color:#7c3aed;font-weight:600">${fmtMoney(yCpcQ)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280;font-size:12px">${cDayTgt?fmtMoney(cDayTgt):'<span style="color:#9ca3af">—</span>'}</td>
+      <td>${cDayRate!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(cDayCls)}">${(cDayRate*100).toFixed(1)}%</div><div class="bw"><div class="bf ${cDayCls}" style="width:${Math.min(100,cDayRate*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('cpc-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, totCls=colorOf(totPct,tp);
+  makeCards('cpc-cards',[
+    {name:'CPC综合达成',pct:fmtPct(totPct),cls:totCls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${fmtMoney(totCur)} / ${fmtMoney(totTgt)}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const s=document.getElementById('cpc-hdr-sum');
+  if(s) s.textContent=`综合 ${fmtPct(totPct)} | 累计 ${fmtMoney(totCur)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：MEM
+// ════════════════════════════════════════════════════════════
+function renderMem(){
+  const {pct:tp}=timePct();
+  let html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'mem'), cps=g(a.name,'cps');
+    const rate=g(a.name,'memrate'), rateDay=g(a.name,'memrate_day');
+    const tgt=gt(a.name,'memrate');
+    const ratePct=tgt>0?rate/tgt:0, rateCls=rate>=50?'sg':rate>=40?'sy':'sr';
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="cursor:pointer;color:#7c3aed" onclick="openEdit('${a.name}','mem')">${fmtMoney(cur)}</td>
+      <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','cps')">${cps?fmtMoney(cps):'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memrate')"><span style="font-weight:700;color:${colorText(rateCls)}">${rate?rate.toFixed(1)+'%':'—'}</span></td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memrate_day')">${dayHtml(rateDay,'pp')}</td>
+    </tr>`;
+  });
+  document.getElementById('mem-tbody').innerHTML=html;
+  const totMem=AGENTS.reduce((s,a)=>s+g(a.name,'mem'),0);
+  const avgRate=AGENTS.reduce((s,a)=>s+g(a.name,'memrate'),0)/AGENTS.length;
+  makeCards('mem-cards',[
+    {name:'MEM总收款',pct:fmtMoney(totMem),cls:'sb',barW:60,sub:'月累计收款额'},
+    {name:'平均续约率',pct:avgRate?avgRate.toFixed(1)+'%':'—',cls:avgRate>=50?'sg':avgRate>=35?'sy':'sr',barW:avgRate||0,sub:'6家均值'},
+  ]);
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：好店评分
+// ════════════════════════════════════════════════════════════
+function renderScore(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'score'), tgt=gt(a.name,'score');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dayChg=g(a.name,'score_day'), near=g(a.name,'score_near');
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','score')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','score_day')">${dayHtml(dayChg,'')}</td>
+      <td style="cursor:pointer;color:#d97706;font-weight:700" onclick="openEdit('${a.name}','score_near')">${near||'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('score-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('score-cards',[
+    {name:'评分综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('score-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：职人码动销
+// ════════════════════════════════════════════════════════════
+function renderDongxiao(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'dongxiao'), tgt=gt(a.name,'dongxiao');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dayChg=g(a.name,'dongxiao_day'), gtvShop=g(a.name,'dongxiao_gtv');
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','dongxiao')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','dongxiao_day')">${dayHtml(dayChg,'')}</td>
+      <td style="cursor:pointer;color:#059669;font-weight:700" onclick="openEdit('${a.name}','dongxiao_gtv')">${gtvShop?fmtMoney(gtvShop):'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('dongxiao-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('dongxiao-cards',[
+    {name:'动销综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('dongxiao-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：有效作业
+// ════════════════════════════════════════════════════════════
+function renderVisit(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'visit'), tgt=gt(a.name,'visit');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const yVisit=g(a.name,'visit_y'), yHaodian=g(a.name,'visit_haodian');
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','visit')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}天</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','visit_y')">${yVisit?`<span style="font-weight:700;color:#0891b2">${yVisit}次</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','visit_haodian')">${yHaodian?`<span style="font-weight:700;color:${yHaodian>=3?'#16a34a':'#dc2626'}">${yHaodian}次 ${yHaodian>=3?'✅':'⚠️'}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('visit-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('visit-cards',[
+    {name:'作业综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}天`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('visit-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：物料工单
+// ════════════════════════════════════════════════════════════
+function renderOrder(){
+  const {pct:tp,day,total}=timePct();
+  let totCur=0, totTgt=0, html='';
+  AGENTS.forEach(a=>{
+    const cur=g(a.name,'order'), tgt=gt(a.name,'order');
+    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const dayChg=g(a.name,'order_day'), pool=a.order_pool||0;
+    totCur+=cur; totTgt+=tgt;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','order')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${tgt}</td>
+      <td>${pctCell(pct,cls)}</td>
+      <td>${gapHtml(cur,tgt,true)}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','order_day')">${dayHtml(dayChg,'')}</td>
+      <td style="color:#6b7280">${pool}</td>
+    </tr>`;
+  });
+  document.getElementById('order-tbody').innerHTML=html;
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  makeCards('order-cards',[
+    {name:'工单综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
+    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+  ]);
+  const b=document.getElementById('order-badge');
+  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：MEM续约率
+// ════════════════════════════════════════════════════════════
+function renderMemrate(){
+  const {pct:tp}=timePct();
+  let totRenewed=0, totExpire=0, html='';
+  AGENTS.forEach(a=>{
+    const renewed=g(a.name,'memrenew'), expire=g(a.name,'memexpire');
+    const rate=expire>0?renewed/expire:0, cls=rate>=0.5?'sg':rate>=0.35?'sy':'sr';
+    const dayChg=g(a.name,'memrenew_day'), urgent=g(a.name,'memurgent');
+    const tgt=gt(a.name,'memrate');
+    totRenewed+=renewed; totExpire+=expire;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','memrenew')">${renewed||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','memexpire')">${expire||'—'}</td>
+      <td><span style="font-weight:700;color:${colorText(cls)}">${expire>0?fmtPct(rate):'—'}</span></td>
+      <td>${expire>0?gapHtml(renewed,Math.ceil(expire*tgt/100),true):'—'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memrenew_day')">${dayHtml(dayChg,'')}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','memurgent')">${urgent?`<span style="color:#dc2626;font-weight:700">⚠️ ${urgent}家</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('memrate-tbody').innerHTML=html;
+  const totRate=totExpire>0?totRenewed/totExpire:0, cls=totRate>=0.5?'sg':totRate>=0.35?'sy':'sr';
+  makeCards('memrate-cards',[
+    {name:'综合续约率',pct:totExpire>0?fmtPct(totRate):'—',cls,barW:totExpire>0?(totRate*100).toFixed(1):0,sub:`${totRenewed}/${totExpire}`},
+  ]);
+  const b=document.getElementById('memrate-badge');
+  if(b) b.textContent=`综合续约率 ${totExpire>0?fmtPct(totRate):'—'}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：欧若拉工单
+// ════════════════════════════════════════════════════════════
+function renderAurora(){
+  let html='';
+  AGENTS.forEach(a=>{
+    const total=g(a.name,'aurora_total');
+    const actDone=g(a.name,'aurora_act_done'), actPend=g(a.name,'aurora_act_pend');
+    const resDone=g(a.name,'aurora_res_done'), resPend=g(a.name,'aurora_res_pend');
+    const actTotal=actDone+actPend, resTotal=resDone+resPend;
+    const actRate=actTotal>0?actDone/actTotal:0;
+    const resRate=resTotal>0?resDone/resTotal:0;
+    const actCls=actRate>=0.8?'#16a34a':actRate>=0.6?'#d97706':'#dc2626';
+    const resCls=resRate>=0.6?'#16a34a':resRate>=0.4?'#d97706':'#dc2626';
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td style="color:#6b7280;cursor:pointer" onclick="openEdit('${a.name}','aurora_total')">${total||'—'}</td>
+      <td style="background:#eff6ff;cursor:pointer;font-weight:700;color:#2563eb" onclick="openEdit('${a.name}','aurora_act_done')">${actDone||'—'}</td>
+      <td style="background:#eff6ff;cursor:pointer;${actPend>0?'color:#dc2626;font-weight:700':''}" onclick="openEdit('${a.name}','aurora_act_pend')">${actPend||'0'}</td>
+      <td style="background:#eff6ff;min-width:90px;cursor:pointer" onclick="openEdit('${a.name}','aurora_act_done')">
+        <div class="pb"><div class="pf" style="width:${(actRate*100).toFixed(1)}%;background:${actCls}"></div></div>
+        <span style="font-weight:700;color:${actCls}">${actTotal>0?fmtPct(actRate):'—'}</span>
+      </td>
+      <td style="background:#f0fdf4;cursor:pointer;font-weight:700;color:#16a34a" onclick="openEdit('${a.name}','aurora_res_done')">${resDone||'—'}</td>
+      <td style="background:#f0fdf4;cursor:pointer;${resPend>0?'color:#dc2626;font-weight:700':''}" onclick="openEdit('${a.name}','aurora_res_pend')">${resPend||'0'}</td>
+      <td style="background:#f0fdf4;min-width:90px;cursor:pointer" onclick="openEdit('${a.name}','aurora_res_done')">
+        <div class="pb"><div class="pf" style="width:${(resRate*100).toFixed(1)}%;background:${resCls}"></div></div>
+        <span style="font-weight:700;color:${resCls}">${resTotal>0?fmtPct(resRate):'—'}</span>
+      </td>
+    </tr>`;
+  });
+  document.getElementById('aurora-tbody').innerHTML=html;
+}
+
+// ════════════════════════════════════════════════════════════
+// 渲染：月考
+// ════════════════════════════════════════════════════════════
+function renderExam(){
+  const key='exam_status';
+  let doneCount=0;
+  let rows='';
+  AGENTS.forEach(a=>{
+    const status=g(a.name,key)||'未完成';
+    const isDone=status==='完成';
+    if(isDone) doneCount++;
+    const bg=isDone?'#dcfce7':'#fee2e2';
+    const clr=isDone?'#15803d':'#b91c1c';
+    rows+=`<tr>
+      <td style="padding:10px 16px;font-weight:700;color:#1a2a3a">${a.name}</td>
+      <td style="padding:10px 16px;background:${bg};color:${clr};font-weight:700;font-size:15px;cursor:pointer;text-align:center;user-select:none"
+          onclick="toggleExam('${a.name}')">${isDone?'✅ 已完成':'❌ 未完成'}</td>
+    </tr>`;
+  });
+  const total=AGENTS.length;
+  const pend=total-doneCount;
+  const wrap=document.getElementById('exam-table-wrap');
+  if(wrap) wrap.innerHTML=`<table class="dt" style="min-width:320px">
+    <thead><tr>
+      <th style="padding:8px 16px;background:#065F46;color:#fff">代运营商</th>
+      <th style="padding:8px 16px;background:#065F46;color:#fff;min-width:140px">月考状态（点击切换）</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+  const sumEl=document.getElementById('exam-summary');
+  if(sumEl) sumEl.innerHTML=`<span style="color:#16a34a">✅ ${doneCount} 已完成</span>&nbsp;&nbsp;<span style="color:#dc2626">❌ ${pend} 未完成</span>`;
+}
+function toggleExam(name){
+  const key='exam_status';
+  const cur=g(name,key)||'未完成';
+  s(name,key,cur==='完成'?'未完成':'完成');
+  renderExam();
+}
+
+// ════════════════════════════════════════════════════════════
+// 状态栏
+// ════════════════════════════════════════════════════════════
+function updateStatusBar(){
+  const {pct:tp,day,total}=timePct();
+  const remain=total-day;
+  const sbT=document.getElementById('sb-timepct');
+  if(sbT){ sbT.textContent=fmtPct(tp); sbT.className='sb-val blue'; }
+  const sbR=document.getElementById('sb-remain');
+  if(sbR) sbR.textContent=`${remain}天 (${day}/${total})`;
+  const sbG=document.getElementById('sb-gtv');
+  if(sbG){
+    let c=0,t=0; AGENTS.forEach(a=>{c+=g(a.name,'gtv');t+=gt(a.name,'gtv');});
+    const p=t>0?c/t:0, cl=colorOf(p,tp);
+    sbG.textContent=fmtPct(p); sbG.className='sb-val '+(cl==='sg'?'green':cl==='sy'?'yellow':'red');
+  }
+  const sbC=document.getElementById('sb-cpc');
+  if(sbC){
+    let c=0,t=0; AGENTS.forEach(a=>{c+=g(a.name,'cpc');t+=gt(a.name,'cpc');});
+    const p=t>0?c/t:0, cl=colorOf(p,tp);
+    sbC.textContent=fmtPct(p); sbC.className='sb-val '+(cl==='sg'?'green':cl==='sy'?'yellow':'red');
+  }
+  const sbU=document.getElementById('sb-updated');
+  if(sbU) sbU.textContent=S._updated||'未更新';
+}
+
+// ════════════════════════════════════════════════════════════
+// 编辑弹窗 — 字段定义
+// ════════════════════════════════════════════════════════════
+const FIELD_META = {
+  gtv:         {label:'月累计GTV'},
+  gtv_y:       {label:'昨日GTV'},
+  gtv_excl:    {label:'GTV剔除率(%)'},
+  cpc:         {label:'月CPC消耗'},
+  cpc_y:       {label:'昨日CPC消耗(不含旺铺通)'},
+  cpc_y2:      {label:'昨日CPC&QCPS消耗(含旺铺通)'},
+  cpc_newsgn:  {label:'CPC有效新签'},
+  cpc_wpu:     {label:'旺铺通消耗'},
+  mem:         {label:'MEM收款额'},
+  cps:         {label:'CPS交易收入'},
+  memrate:     {label:'MEM续约率(%)'},
+  memrate_day: {label:'续约率日变化(pp)'},
+  score:       {label:'当前评分达标数'},
+  score_day:   {label:'评分日净增'},
+  score_near:  {label:'50~69分门店数'},
+  dongxiao:    {label:'已达标动销门店'},
+  dongxiao_day:{label:'昨日净增动销'},
+  dongxiao_gtv:{label:'好店店转GTV'},
+  visit:       {label:'拜访达标天数'},
+  visit_y:     {label:'昨日有效拜访次数'},
+  visit_haodian:{label:'昨日好店拜访次数'},
+  order:       {label:'已铺设合格数'},
+  order_day:   {label:'日新增合格'},
+  memrenew:    {label:'已续约数'},
+  memexpire:   {label:'到期总数'},
+  memrenew_day:{label:'昨日新增续约'},
+  memurgent:   {label:'紧急未续约(≤30天)'},
+  aurora_total:{label:'待办总数'},
+  aurora_act_done:{label:'动作-已完成'},
+  aurora_act_pend:{label:'动作-待处理'},
+  aurora_res_done:{label:'结果-已完成'},
+  aurora_res_pend:{label:'结果-待处理'},
+  exam_status: {label:'月考状态'},
+  zrq_shops:      {label:'合作门店数'},
+  zrq_bind:       {label:'绑码商户数'},
+  zrq_bindrate:   {label:'绑码率(%)'},
+  zrq_bind_inc_m: {label:'月净增绑码数(vs 4月1日)'},
+  zrq_bind_inc_d: {label:'日净增绑码数(vs昨日)'},
+  zrq_dong:       {label:'有效动销门店数'},
+  zrq_dongrate:   {label:'动销率(%)'},
+  zrq_gtv:        {label:'店转GTV(元)'},
+  zrq_gtv_y:      {label:'昨日店转GTV'},
+  zrq_pct:        {label:'店转GTV渗透率(%)'},
+  zrq_pct_y:      {label:'昨日渗透率(%)'},
+  zrq_pay_y:      {label:'昨日实付GTV'},
+  zrq_pay:        {label:'实付GTV(元)'},
+  zrq_aov:        {label:'店转客单均价'},
+};
+
+let _ctx=null;
+function openEdit(name, field){
+  _ctx={name,field};
+  const meta=FIELD_META[field]||{label:field};
+  document.getElementById('pj-title').textContent=`编辑：${name} · ${meta.label}`;
+  document.getElementById('pj-fields').innerHTML=`
+    <div class="pj-f pj-f-full">
+      <label>${meta.label}</label>
+      <input type="number" id="pj-val" value="${g(name,field)||''}" placeholder="输入数值" autofocus>
+    </div>`;
+  document.getElementById('pj-overlay').classList.add('show');
+  setTimeout(()=>{ const i=document.getElementById('pj-val'); if(i){i.focus();i.select();} },50);
+}
+function closeEdit(){
+  document.getElementById('pj-overlay').classList.remove('show');
+  _ctx=null;
+}
+// 渲染：职人码进度看板
+// ════════════════════════════════════════════════════════════
+function renderZrq(){
+  const fields=[
+    'zrq_shops','zrq_bind','zrq_bindrate',
+    'zrq_bind_inc_m','zrq_bind_inc_d',
+    'zrq_dong','zrq_dongrate',
+    'zrq_gtv','zrq_gtv_y',
+    'zrq_pct','zrq_pct_y',
+    'zrq_pay_y','zrq_pay','zrq_aov'
+  ];
+  // 汇总行
+  const sumRow=()=>{
+    let cols='<td class="tn" style="font-weight:700">粤闽浙汇总</td><td class="tc">胡英杰</td>';
+    const sumFields=['zrq_shops','zrq_bind',null,'zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong',null,'zrq_gtv','zrq_gtv_y',null,null,'zrq_pay_y','zrq_pay',null];
+    const numFields=['zrq_shops','zrq_bind','zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong','zrq_gtv','zrq_gtv_y','zrq_pay_y','zrq_pay'];
+    let sums={};
+    numFields.forEach(f=>{
+      sums[f]=AGENTS.reduce((acc,a)=>acc+(parseFloat(g(a.name,f))||0),0);
+    });
+    const fmtSum=f=>sums[f]?fmtNum(Math.round(sums[f])):'—';
+    cols+=`<td class="tc">${fmtSum('zrq_shops')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_bind')}</td>`;
+    cols+=`<td class="tc">—</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_bind_inc_m')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_bind_inc_d')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_dong')}</td>`;
+    cols+=`<td class="tc">—</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_gtv')}</td>`;
+    const gtvY=sums['zrq_gtv_y'];
+    cols+=`<td class="tc" style="color:${gtvY>0?'#16a34a':'#dc2626'}">${gtvY>0?'+':''}${fmtNum(Math.round(gtvY))}</td>`;
+    cols+=`<td class="tc">—</td><td class="tc">—</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_pay_y')}</td>`;
+    cols+=`<td class="tc">${fmtSum('zrq_pay')}</td>`;
+    cols+=`<td class="tc">—</td>`;
+    return `<tr style="background:#dcfce7;font-weight:700">${cols}</tr>`;
+  };
+
+  let html=sumRow();
+  AGENTS.forEach(a=>{
+    const shops=g(a.name,'zrq_shops'), bind=g(a.name,'zrq_bind');
+    const bindrate=g(a.name,'zrq_bindrate');
+    const bindIncM=g(a.name,'zrq_bind_inc_m'), bindIncD=g(a.name,'zrq_bind_inc_d');
+    const dong=g(a.name,'zrq_dong'), dongrate=g(a.name,'zrq_dongrate');
+    const gtv=g(a.name,'zrq_gtv'), gtvY=g(a.name,'zrq_gtv_y');
+    const pct=g(a.name,'zrq_pct'), pctY=g(a.name,'zrq_pct_y');
+    const payY=g(a.name,'zrq_pay_y'), pay=g(a.name,'zrq_pay'), aov=g(a.name,'zrq_aov');
+    const gtvYNum=parseFloat(gtvY)||0;
+    const bindIncDNum=parseFloat(bindIncD)||0;
+    const pctNum=parseFloat(pct)||0;
+    const pctYNum=parseFloat(pctY)||0;
+    const editTd=(field,val,extra='')=>`<td class="tc" style="cursor:pointer${extra}" onclick="openEdit('${a.name}','${field}')">${val||'—'}</td>`;
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td class="tc">${a.mgr||'—'}</td>
+      ${editTd('zrq_shops', shops?fmtNum(shops):'')}
+      ${editTd('zrq_bind', bind?fmtNum(bind):'')}
+      ${editTd('zrq_bindrate', bindrate?bindrate+'%':'')}
+      <td class="tc" style="cursor:pointer;color:${bindIncM>=0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_bind_inc_m')">${bindIncM?(bindIncM>0?'+':'')+bindIncM:'—'}</td>
+      <td class="tc" style="cursor:pointer;color:${bindIncDNum>0?'#16a34a':bindIncDNum<0?'#dc2626':'#6b7280'}" onclick="openEdit('${a.name}','zrq_bind_inc_d')">${bindIncD?(bindIncDNum>0?'+':'')+bindIncD:'—'}</td>
+      ${editTd('zrq_dong', dong?fmtNum(dong):'')}
+      ${editTd('zrq_dongrate', dongrate?dongrate+'%':'')}
+      ${editTd('zrq_gtv', gtv?fmtNum(gtv):'')}
+      <td class="tc" style="cursor:pointer;color:${gtvYNum>0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_gtv_y')">${gtvY?(gtvYNum>0?'+':'')+fmtNum(gtvY):'—'}</td>
+      <td class="tc" style="cursor:pointer;color:${pctNum>=16.5?'#16a34a':pctNum>=14?'#d97706':'#dc2626'}" onclick="openEdit('${a.name}','zrq_pct')">${pct?pct+'%':'—'}</td>
+      <td class="tc" style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','zrq_pct_y')">${pctY?pctY+'%':'—'}</td>
+      ${editTd('zrq_pay_y', payY?fmtNum(payY):'')}
+      ${editTd('zrq_pay', pay?fmtNum(pay):'')}
+      ${editTd('zrq_aov', aov?aov:'')}
+    </tr>`;
+  });
+  document.getElementById('zrq-tbody').innerHTML=html;
+  const badge=document.getElementById('zrq-badge');
+  if(badge){const{pct:tp}=timePct();badge.textContent=`时间进度 ${fmtPct(tp)}`;}
+}
+
+// saveEdit 合并到下方 renderWeek 区块
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('pj-overlay').classList.contains('show')) saveEdit();
+  if(e.key==='Escape') closeEdit();
+});
+document.getElementById('pj-overlay').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeEdit(); });
+
+// ════════════════════════════════════════════════════════════
+// Tab / Reset / Toast / Clock
+// ════════════════════════════════════════════════════════════
+function switchTab(id){
+  document.querySelectorAll('.tabn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+}
+function pjReset(){
+  if(!confirm('确认重置所有数据？')) return;
+  localStorage.removeItem(LS_KEY); S={};
+  renderAll(); showToast('已重置');
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent='✅ '+(msg||'已保存'); t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0'), m=String(now.getMinutes()).padStart(2,'0'), sec=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent=`${h}:${m}:${sec}`;
+  const days=['日','一','二','三','四','五','六'];
+  document.getElementById('clockdate').textContent=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
+}
+
+// ── 周目标数据（4月第三周 4/14-4/20，手动填入）──
+const WEEK_DATA = {
+  gtv: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:720000, days:[95000,95000,95000,95000,110000,110000,120000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:800000, days:[90000,110000,110000,115000,120000,125000,130000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:750000, days:[90000,90000,90000,90000,110000,140000,140000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:900000, days:[115000,115000,115000,115000,140000,160000,140000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:580000, days:[79000,79000,79000,79000,88000,88000,88000]},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:655000, days:[80000,85000,85000,85000,100000,120000,100000]},
+  ],
+  cpc: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:33000,  days:[4200,4200,4200,4200,5000,5700,5500]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:33000,  days:[4200,4200,4200,4200,5000,5700,5500]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:23000,  days:[2800,2800,2800,2800,3800,4000,4000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:20000,  days:[2500,2500,2500,2500,3000,4000,3000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:12300,  days:[1500,1500,1800,1800,1900,1900,1900]},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:58387,  days:[2000,2000,2000,4000,5000,5500,5500]},
+  ],
+  coupon: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:210000, days:[26000,26000,26000,26000,36000,30000,30000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:0,      days:[30000,30000,35000,35000,40000,45000,45000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:210000, days:[30000,30000,30000,30000,30000,30000,30000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:220000, days:[31000,31000,31000,31000,31000,35000,30000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:175000, days:[25000,25000,25000,25000,25000,25000,25000]},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:195000, days:[25000,25000,25000,25000,25000,40000,30000]},
+  ],
+  newsgn: [
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:15, cur:12},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:15, cur:6},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:0,  cur:0},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:15, cur:17},
+    {name:'惠安广通',  mgr:'尤云生', tgt:8,  cur:5},
+    {name:'泉州小花猫',mgr:'陈彩凤', tgt:12, cur:15},
+  ],
+};
+
+function renderWeek(){
+  const DAY_LABELS = ['周一','周二','周三','周四','周五','周六','周日'];
+
+  function weekRow(d, tbodyId, isMoney, noCur){
+    // 本周目标 = 周一~周日填入值之和（自动求和）
+    const tgt = d.days.reduce((s,v)=>s+(v||0), 0);
+    const tgtVal = isMoney ? fmtMoney(tgt) : tgt;
+    const curVal = d.cur!=null ? (isMoney?fmtMoney(d.cur):d.cur) : '<span style="color:#9ca3af">—</span>';
+    // 预计完成进度：手动填写，存 forecast 字段
+    const fc = d.forecast;
+    const fcCls = fc!=null ? (fc>=1?'sg':fc>=0.7?'sy':'sr') : '';
+    const fcStr = fc!=null ? (fc*100).toFixed(1)+'%' : '<span style="color:#9ca3af;font-size:11px">点击填写</span>';
+    const fcCell = `<td style="cursor:pointer" onclick="openWeekEdit('${tbodyId}','${d.name}','forecast')">${fc!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(fcCls)}">${(fc*100).toFixed(1)}%</div><div class="bw"><div class="bf ${fcCls}" style="width:${Math.min(100,fc*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af;font-size:11px">点击填写</span>'}</td>`;
+    let dayCells = d.days.map((v,i)=>`<td style="cursor:pointer;color:#374151" onclick="openWeekEdit('${tbodyId}','${d.name}',${i})">${isMoney?fmtMoney(v):v}</td>`).join('');
+    const curCells = noCur ? '' : `
+      <td style="cursor:pointer;color:#2563eb;font-weight:600" onclick="openWeekEdit('${tbodyId}','${d.name}','cur')">${curVal}</td>
+      ${fcCell}`;
+    return `<tr>
+      <td class="tn">${d.name}</td>
+      <td style="color:#6b7280">${d.mgr}</td>
+      <td style="font-weight:700;color:#dc2626">${tgtVal}</td>
+      ${curCells}
+      ${dayCells}
+    </tr>`;
+  }
+
+  function newSgnRow(d){
+    const fc = d.forecast;
+    const fcCls = fc!=null ? (fc>=1?'sg':fc>=0.7?'sy':'sr') : '';
+    return `<tr>
+      <td class="tn">${d.name}</td>
+      <td style="color:#6b7280">${d.mgr}</td>
+      <td style="font-weight:700;color:#dc2626">${d.tgt||'—'}</td>
+      <td style="font-weight:700;color:#374151">${d.cur!=null?d.cur:'—'}</td>
+      <td style="cursor:pointer" onclick="openWeekEdit('week-newsgn-tbody','${d.name}','forecast')">${fc!=null?`<div style="font-size:12px;font-weight:700;color:${colorText(fcCls)}">${(fc*100).toFixed(1)}%</div><div class="bw"><div class="bf ${fcCls}" style="width:${Math.min(100,fc*100).toFixed(1)}%"></div></div>`:'<span style="color:#9ca3af;font-size:11px">点击填写</span>'}</td>
+    </tr>`;
+  }
+
+  // 从 localStorage 读取本周已填数据
+  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+
+  ['gtv','cpc','coupon'].forEach(type=>{
+    const tbodyId = 'week-'+type+'-tbody';
+    const tbody = document.getElementById(tbodyId);
+    if(!tbody) return;
+    tbody.innerHTML = WEEK_DATA[type].map(d=>{
+      const saved = (ws[type]||{})[d.name]||{};
+      const cur = saved.cur!=null ? saved.cur : null;
+      const forecast = saved.forecast!=null ? saved.forecast : null;
+      const days = d.days.map((v,i)=> saved['d'+i]!=null ? saved['d'+i] : v);
+      return weekRow({...d, cur, forecast, days}, tbodyId, true, type==='coupon');
+    }).join('');
+  });
+
+  const ns = document.getElementById('week-newsgn-tbody');
+  if(ns) ns.innerHTML = WEEK_DATA.newsgn.map(d=>{
+    const saved = ((ws.newsgn||{})[d.name])||{};
+    return newSgnRow({...d, cur: saved.cur!=null?saved.cur:d.cur, forecast: saved.forecast!=null?saved.forecast:null});
+  }).join('');
+}
+
+function openWeekEdit(tbodyId, name, field){
+  const type = tbodyId.replace('week-','').replace('-tbody','');
+  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+  if(!ws[type]) ws[type]={};
+  if(!ws[type][name]) ws[type][name]={};
+  const key = field==='cur'?'cur':(field==='forecast'?'forecast':('d'+field));
+  const cur = ws[type][name][key];
+  const label = field==='cur'?'本周累计':field==='forecast'?'预计完成进度（%）':`第${Number(field)+1}天（${'一二三四五六日'[Number(field)]}）`;
+
+  document.getElementById('pj-overlay').classList.add('show');
+  document.getElementById('pj-title').textContent=`${name} · ${label}`;
+  const isForecast = key==='forecast';
+  const displayVal = isForecast && cur!=null ? (cur*100).toFixed(1) : (cur!=null?cur:'');
+  document.getElementById('pj-fields').innerHTML=`
+    <div class="pj-row">
+      <label>${label}</label>
+      <input type="number" id="pj-val" value="${displayVal}" placeholder="${isForecast?'输入百分比，如 85':'输入数值'}" autofocus>
+      ${isForecast?'<span style="font-size:12px;color:#6b7280;margin-top:4px">输入0-100的数字，代表百分比</span>':''}
+    </div>`;
+  setTimeout(()=>{const i=document.getElementById('pj-val');if(i){i.focus();i.select();}},50);
+
+  // 临时挂 save 回调
+  document.getElementById('pj-fields').dataset.weekType = type;
+  document.getElementById('pj-fields').dataset.weekName = name;
+  document.getElementById('pj-fields').dataset.weekKey = key;
+  document.getElementById('pj-fields').dataset.weekMode = '1';
+}
+
+function saveEdit(){
+  const fields = document.getElementById('pj-fields');
+  if(fields.dataset.weekMode==='1'){
+    // 周目标编辑模式
+    const {weekType:type,weekName:name,weekKey:key} = fields.dataset;
+    let val = parseFloat(document.getElementById('pj-val').value);
+    if(isNaN(val)){closeEdit();return;}
+    // forecast 输入的是百分比数字（如 85），存为小数（0.85）
+    if(key==='forecast') val = val/100;
+    const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+    if(!ws[type]) ws[type]={};
+    if(!ws[type][name]) ws[type][name]={};
+    ws[type][name][key]=val;
+    localStorage.setItem('week_data_v1', JSON.stringify(ws));
+    delete fields.dataset.weekMode;
+    closeEdit(); renderWeek();
+    return;
+  }
+  // 原有保存逻辑（核心业绩数据编辑）
+  if(!_ctx) return;
+  const val=parseFloat(document.getElementById('pj-val').value)||0;
+  sv(_ctx.name,_ctx.field,val);
+  S._updated=new Date().toTimeString().slice(0,5);
+  ss(); closeEdit(); renderAll(); showToast();
+}
+
+function renderAll(){
+  renderGtv(); renderCpc(); renderMem();
+  renderScore(); renderDongxiao();
+  renderVisit(); renderOrder(); renderMemrate();
+  renderAurora(); renderExam(); renderZrq();
+  renderWeek();
+  updateStatusBar();
+  const {pct:tp}=timePct();
+  const b=document.getElementById('perf-badge');
+  if(b) b.textContent=`时间进度 ${fmtPct(tp)}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// 预置数据（2026-04-17 17:24）
 // ════════════════════════════════════════════════════════════
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-18b') return;
+  if(ex._dataDate==='2026-04-18c') return;
   const D={
-    '惠州巨浪':{gtv:2101391, gtv_y:115965, gtv_excl:3.28,
+    '惠州巨浪':  {gtv:2101391, gtv_y:115965, gtv_excl:3.28,
                   cpc:43939,   cpc_y:1510,    cpc_y2:2490,   cpc_newsgn:10, cpc_wpu:18406,
                   mem:80058, cps:134205, memrate:44.62,
                   score:225, score_near:0, dongxiao:0, visit:0, order:74,
-                  memrenew:27, memexpire:63, memurgent:36},
-    '义乌汐洋':{gtv:1595395, gtv_y:113070, gtv_excl:1.13,
-                  cpc:77669,   cpc_y:4771,    cpc_y2:5545,   cpc_newsgn:4, cpc_wpu:11182,
-                  mem:66200, cps:107982, memrate:63.89,
-                  score:131, score_near:0, dongxiao:0, visit:0, order:22,
-                  memrenew:22, memexpire:36, memurgent:14},
-    '惠安广通':{gtv:1213560, gtv_y:80752, gtv_excl:3.21,
-                  cpc:25580,   cpc_y:1269,    cpc_y2:1741,   cpc_newsgn:1, cpc_wpu:10534,
-                  mem:43529, cps:78813, memrate:39.39,
-                  score:100, score_near:0, dongxiao:0, visit:0, order:39,
-                  memrenew:12, memexpire:33, memurgent:21},
-    '惠州柏万':{gtv:1834160, gtv_y:101466, gtv_excl:2.65,
+                  memrenew:27, memexpire:63, memurgent:36,
+                  zrq_shops:2579, zrq_bind:637, zrq_bindrate:24.7,
+                  zrq_bind_inc_m:55, zrq_bind_inc_d:4,
+                  zrq_dong:109, zrq_dongrate:4.2,
+                  zrq_gtv:501536, zrq_gtv_y:28244,
+                  zrq_pct:23.8, zrq_pct_y:24.7,
+                  zrq_pay_y:114499, zrq_pay:2107688, zrq_aov:236},
+    '惠州柏万':  {gtv:1834160, gtv_y:101466, gtv_excl:2.65,
                   cpc:52777,   cpc_y:2809,    cpc_y2:3562,   cpc_newsgn:6, cpc_wpu:13666,
                   mem:106329, cps:118306, memrate:49.09,
                   score:141, score_near:0, dongxiao:0, visit:0, order:41,
-                  memrenew:24, memexpire:54, memurgent:30},
+                  memrenew:24, memexpire:54, memurgent:30,
+                  zrq_shops:1698, zrq_bind:486, zrq_bindrate:28.6,
+                  zrq_bind_inc_m:44, zrq_bind_inc_d:7,
+                  zrq_dong:104, zrq_dongrate:6.1,
+                  zrq_gtv:521742, zrq_gtv_y:32455,
+                  zrq_pct:28.3, zrq_pct_y:31.9,
+                  zrq_pay_y:101857, zrq_pay:1841856, zrq_aov:185},
     '泉州小花猫':{gtv:1463599, gtv_y:85655, gtv_excl:3.33,
                   cpc:47611,   cpc_y:2930,    cpc_y2:3988,   cpc_newsgn:1, cpc_wpu:13313,
                   mem:58129, cps:94109, memrate:35.42,
                   score:148, score_near:0, dongxiao:0, visit:0, order:68,
-                  memrenew:14, memexpire:47, memurgent:33},
-    '慈溪哲光':{gtv:1564548, gtv_y:114259, gtv_excl:3.38,
+                  memrenew:14, memexpire:47, memurgent:33,
+                  zrq_shops:1844, zrq_bind:553, zrq_bindrate:30.0,
+                  zrq_bind_inc_m:61, zrq_bind_inc_d:3,
+                  zrq_dong:106, zrq_dongrate:5.7,
+                  zrq_gtv:414211, zrq_gtv_y:49915,
+                  zrq_pct:28.2, zrq_pct_y:45.1,
+                  zrq_pay_y:110628, zrq_pay:1469134, zrq_aov:241},
+    '惠安广通':  {gtv:1213560, gtv_y:80752, gtv_excl:3.21,
+                  cpc:25580,   cpc_y:1269,    cpc_y2:1741,   cpc_newsgn:1, cpc_wpu:10534,
+                  mem:43529, cps:78813, memrate:39.39,
+                  score:100, score_near:0, dongxiao:0, visit:0, order:39,
+                  memrenew:12, memexpire:33, memurgent:21,
+                  zrq_shops:1608, zrq_bind:433, zrq_bindrate:26.9,
+                  zrq_bind_inc_m:37, zrq_bind_inc_d:1,
+                  zrq_dong:83, zrq_dongrate:5.2,
+                  zrq_gtv:315224, zrq_gtv_y:30245,
+                  zrq_pct:25.7, zrq_pct_y:36.6,
+                  zrq_pay_y:82657, zrq_pay:1225485, zrq_aov:217},
+    '慈溪哲光':  {gtv:1564548, gtv_y:114259, gtv_excl:3.38,
                   cpc:71102,   cpc_y:4336,    cpc_y2:4786,   cpc_newsgn:6, cpc_wpu:9640,
                   mem:48097, cps:106268, memrate:37.78,
                   score:138, score_near:0, dongxiao:0, visit:0, order:15,
-                  memrenew:15, memexpire:44, memurgent:29}
+                  memrenew:15, memexpire:44, memurgent:29,
+                  zrq_shops:1827, zrq_bind:549, zrq_bindrate:30.0,
+                  zrq_bind_inc_m:257, zrq_bind_inc_d:1,
+                  zrq_dong:75, zrq_dongrate:4.1,
+                  zrq_gtv:359969, zrq_gtv_y:46054,
+                  zrq_pct:22.4, zrq_pct_y:41.5,
+                  zrq_pay_y:110914, zrq_pay:1603810, zrq_aov:239},
+    '义乌汐洋':  {gtv:1595395, gtv_y:113070, gtv_excl:1.13,
+                  cpc:77669,   cpc_y:4771,    cpc_y2:5545,   cpc_newsgn:4, cpc_wpu:11182,
+                  mem:66200, cps:107982, memrate:63.89,
+                  score:131, score_near:0, dongxiao:0, visit:0, order:22,
+                  memrenew:22, memexpire:36, memurgent:14,
+                  zrq_shops:1739, zrq_bind:625, zrq_bindrate:35.9,
+                  zrq_bind_inc_m:214, zrq_bind_inc_d:1,
+                  zrq_dong:97, zrq_dongrate:5.6,
+                  zrq_gtv:436210, zrq_gtv_y:43542,
+                  zrq_pct:26.9, zrq_pct_y:38.6,
+                  zrq_pay_y:112665, zrq_pay:1622145, zrq_aov:251},
   };
-  const ns={_updated:'09:47',_dataDate:'2026-04-18b'};
+  const ns={_updated:'10:14',_dataDate:'2026-04-18c'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
