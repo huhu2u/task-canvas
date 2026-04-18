@@ -1204,12 +1204,12 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-18f') return;
+  if(ex._dataDate==='2026-04-18g') return;
   const D={
     '惠州巨浪':  {gtv:2101391, gtv_y:115965, gtv_excl:3.28,
                   cpc:43939,   cpc_y:1510,    cpc_y2:2490,   cpc_newsgn:10, cpc_wpu:18406,
                   mem:80058, cps:134205, memrate:42.86,
-                  score:225, score_near:0, dongxiao:95, dongxiao_day:5, dongxiao_gtv:410763, visit:0, order:74,
+                  score:228, score_near:291, dongxiao:95, dongxiao_day:5, dongxiao_gtv:410763, visit:0, order:74,
                   memrenew:27, memexpire:72, memurgent:36, memrenew_day:0,
                   zrq_shops:2579, zrq_bind:637, zrq_bindrate:24.7,
                   zrq_bind_inc_m:55, zrq_bind_inc_d:4,
@@ -1220,7 +1220,7 @@ function renderAll(){
     '惠州柏万':  {gtv:1834160, gtv_y:101466, gtv_excl:2.65,
                   cpc:52777,   cpc_y:2809,    cpc_y2:3562,   cpc_newsgn:6, cpc_wpu:13666,
                   mem:106329, cps:118306, memrate:48.15,
-                  score:141, score_near:0, dongxiao:85, dongxiao_day:8, dongxiao_gtv:297432, visit:0, order:41,
+                  score:144, score_near:182, dongxiao:85, dongxiao_day:8, dongxiao_gtv:297432, visit:0, order:41,
                   memrenew:26, memexpire:60, memurgent:28, memrenew_day:2,
                   zrq_shops:1698, zrq_bind:486, zrq_bindrate:28.6,
                   zrq_bind_inc_m:44, zrq_bind_inc_d:7,
@@ -1231,7 +1231,7 @@ function renderAll(){
     '泉州小花猫':{gtv:1463599, gtv_y:85655, gtv_excl:3.33,
                   cpc:47611,   cpc_y:2930,    cpc_y2:3988,   cpc_newsgn:1, cpc_wpu:13313,
                   mem:58129, cps:94109, memrate:36.17,
-                  score:148, score_near:0, dongxiao:60, dongxiao_day:2, dongxiao_gtv:265790, visit:0, order:68,
+                  score:146, score_near:223, dongxiao:60, dongxiao_day:2, dongxiao_gtv:265790, visit:0, order:68,
                   memrenew:17, memexpire:58, memurgent:30, memrenew_day:3,
                   zrq_shops:1844, zrq_bind:553, zrq_bindrate:30.0,
                   zrq_bind_inc_m:61, zrq_bind_inc_d:3,
@@ -1242,7 +1242,7 @@ function renderAll(){
     '惠安广通':  {gtv:1213560, gtv_y:80752, gtv_excl:3.21,
                   cpc:25580,   cpc_y:1269,    cpc_y2:1741,   cpc_newsgn:1, cpc_wpu:10534,
                   mem:43529, cps:78813, memrate:39.39,
-                  score:100, score_near:0, dongxiao:55, dongxiao_day:1, dongxiao_gtv:226515, visit:0, order:39,
+                  score:102, score_near:195, dongxiao:55, dongxiao_day:1, dongxiao_gtv:226515, visit:0, order:39,
                   memrenew:13, memexpire:38, memurgent:20, memrenew_day:1,
                   zrq_shops:1608, zrq_bind:433, zrq_bindrate:26.9,
                   zrq_bind_inc_m:37, zrq_bind_inc_d:1,
@@ -1253,7 +1253,7 @@ function renderAll(){
     '慈溪哲光':  {gtv:1564548, gtv_y:114259, gtv_excl:3.38,
                   cpc:71102,   cpc_y:4336,    cpc_y2:4786,   cpc_newsgn:6, cpc_wpu:9640,
                   mem:48097, cps:106268, memrate:36.36,
-                  score:138, score_near:0, dongxiao:59, dongxiao_day:3, dongxiao_gtv:259798, visit:0, order:15,
+                  score:143, score_near:192, dongxiao:59, dongxiao_day:3, dongxiao_gtv:259798, visit:0, order:15,
                   memrenew:16, memexpire:46, memurgent:28, memrenew_day:1,
                   zrq_shops:1827, zrq_bind:549, zrq_bindrate:30.0,
                   zrq_bind_inc_m:257, zrq_bind_inc_d:1,
@@ -1264,7 +1264,7 @@ function renderAll(){
     '义乌汐洋':  {gtv:1595395, gtv_y:113070, gtv_excl:1.13,
                   cpc:77669,   cpc_y:4771,    cpc_y2:5545,   cpc_newsgn:4, cpc_wpu:11182,
                   mem:66200, cps:107982, memrate:63.89,
-                  score:131, score_near:0, dongxiao:53, dongxiao_day:5, dongxiao_gtv:334491, visit:0, order:22,
+                  score:133, score_near:180, dongxiao:53, dongxiao_day:5, dongxiao_gtv:334491, visit:0, order:22,
                   memrenew:23, memexpire:38, memurgent:13, memrenew_day:1,
                   zrq_shops:1739, zrq_bind:625, zrq_bindrate:35.9,
                   zrq_bind_inc_m:214, zrq_bind_inc_d:1,
@@ -1273,7 +1273,7 @@ function renderAll(){
                   zrq_pct:26.9, zrq_pct_y:38.6,
                   zrq_pay_y:112665, zrq_pay:1622145, zrq_aov:251},
   };
-  const ns={_updated:'10:29',_dataDate:'2026-04-18f'};
+  const ns={_updated:'10:30',_dataDate:'2026-04-18g'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
