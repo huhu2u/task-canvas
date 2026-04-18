@@ -232,8 +232,8 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <div class="sec">
     <div class="sec-hdr c-mem2"><span>🔄 MEM续约明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">已续约</th><th class="ht">到期总数</th>
-      <th class="hp">续约率</th><th class="hg">目标缺口</th>
+      <th class="hn">代运营商</th><th class="hc">已续约</th><th class="ht">参与计算</th>
+      <th class="hp">续约率</th><th class="hp" style="background:#fef3c7;color:#92400e">目标65%</th><th class="hg">缺口数量</th>
       <th class="hd">昨日新增</th><th class="hd">紧急未续(&le;30天)</th>
     </tr></thead><tbody id="memrate-tbody"></tbody></table></div>
   </div>
@@ -376,12 +376,12 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // 配置：代运营商基础数据
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
-  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3804112, cpc_tgt:74222,  cpc_newsgn_tgt:13, score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:88,  memrate_tgt:60, order_pool:329},
-  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3124634, cpc_tgt:95454,  cpc_newsgn_tgt:12, score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:54,  memrate_tgt:60, order_pool:201},
-  {name:'泉州小花猫',mgr:'陈彩凤', gtv_tgt:2598259, cpc_tgt:113144, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:60,  memrate_tgt:60, order_pool:226},
-  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2236565, cpc_tgt:57886,  cpc_newsgn_tgt:8,  score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:38,  memrate_tgt:60, order_pool:141},
-  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3137253, cpc_tgt:146180, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:67,  memrate_tgt:60, order_pool:251},
-  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:2893879, cpc_tgt:139466, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:51,  memrate_tgt:60, order_pool:191},
+  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3804112, cpc_tgt:74222,  cpc_newsgn_tgt:13, score_tgt:246, dongxiao_tgt:153, visit_tgt:20, order_tgt:88,  memrate_tgt:65, order_pool:329},
+  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3124634, cpc_tgt:95454,  cpc_newsgn_tgt:12, score_tgt:156, dongxiao_tgt:119, visit_tgt:20, order_tgt:54,  memrate_tgt:65, order_pool:201},
+  {name:'泉州小花猫',mgr:'陈彩凤', gtv_tgt:2598259, cpc_tgt:113144, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:124, visit_tgt:20, order_tgt:60,  memrate_tgt:65, order_pool:226},
+  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2236565, cpc_tgt:57886,  cpc_newsgn_tgt:8,  score_tgt:116, dongxiao_tgt:91,  visit_tgt:20, order_tgt:38,  memrate_tgt:65, order_pool:141},
+  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3137253, cpc_tgt:146180, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:96,  visit_tgt:20, order_tgt:67,  memrate_tgt:65, order_pool:251},
+  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:2893879, cpc_tgt:139466, cpc_newsgn_tgt:15, score_tgt:161, dongxiao_tgt:99,  visit_tgt:20, order_tgt:51,  memrate_tgt:65, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
@@ -742,6 +742,7 @@ function renderMemrate(){
       <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','memrenew')">${renewed||'<span style="color:#9ca3af">—</span>'}</td>
       <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','memexpire')">${expire||'—'}</td>
       <td><span style="font-weight:700;color:${colorText(cls)}">${expire>0?fmtPct(rate):'—'}</span></td>
+      <td style="color:#92400e;font-weight:700">${tgt}%</td>
       <td>${expire>0?gapHtml(renewed,Math.ceil(expire*tgt/100),true):'—'}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','memrenew_day')">${dayHtml(dayChg,'')}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','memurgent')">${urgent?`<span style="color:#dc2626;font-weight:700">⚠️ ${urgent}家</span>`:'<span style="color:#9ca3af">—</span>'}</td>
@@ -1204,13 +1205,13 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-18g') return;
+  if(ex._dataDate==='2026-04-18h') return;
   const D={
     '惠州巨浪':  {gtv:2101391, gtv_y:115965, gtv_excl:3.28,
                   cpc:43939,   cpc_y:1510,    cpc_y2:2490,   cpc_newsgn:10, cpc_wpu:18406,
                   mem:80058, cps:134205, memrate:42.86,
                   score:228, score_near:291, dongxiao:95, dongxiao_day:5, dongxiao_gtv:410763, visit:0, order:74,
-                  memrenew:27, memexpire:72, memurgent:36, memrenew_day:0,
+                  memrenew:27, memexpire:63, memurgent:36, memrenew_day:0,
                   zrq_shops:2579, zrq_bind:637, zrq_bindrate:24.7,
                   zrq_bind_inc_m:55, zrq_bind_inc_d:4,
                   zrq_dong:109, zrq_dongrate:4.2,
@@ -1221,7 +1222,7 @@ function renderAll(){
                   cpc:52777,   cpc_y:2809,    cpc_y2:3562,   cpc_newsgn:6, cpc_wpu:13666,
                   mem:106329, cps:118306, memrate:48.15,
                   score:144, score_near:182, dongxiao:85, dongxiao_day:8, dongxiao_gtv:297432, visit:0, order:41,
-                  memrenew:26, memexpire:60, memurgent:28, memrenew_day:2,
+                  memrenew:26, memexpire:54, memurgent:28, memrenew_day:2,
                   zrq_shops:1698, zrq_bind:486, zrq_bindrate:28.6,
                   zrq_bind_inc_m:44, zrq_bind_inc_d:7,
                   zrq_dong:104, zrq_dongrate:6.1,
@@ -1232,7 +1233,7 @@ function renderAll(){
                   cpc:47611,   cpc_y:2930,    cpc_y2:3988,   cpc_newsgn:1, cpc_wpu:13313,
                   mem:58129, cps:94109, memrate:36.17,
                   score:146, score_near:223, dongxiao:60, dongxiao_day:2, dongxiao_gtv:265790, visit:0, order:68,
-                  memrenew:17, memexpire:58, memurgent:30, memrenew_day:3,
+                  memrenew:17, memexpire:47, memurgent:30, memrenew_day:3,
                   zrq_shops:1844, zrq_bind:553, zrq_bindrate:30.0,
                   zrq_bind_inc_m:61, zrq_bind_inc_d:3,
                   zrq_dong:106, zrq_dongrate:5.7,
@@ -1243,7 +1244,7 @@ function renderAll(){
                   cpc:25580,   cpc_y:1269,    cpc_y2:1741,   cpc_newsgn:1, cpc_wpu:10534,
                   mem:43529, cps:78813, memrate:39.39,
                   score:102, score_near:195, dongxiao:55, dongxiao_day:1, dongxiao_gtv:226515, visit:0, order:39,
-                  memrenew:13, memexpire:38, memurgent:20, memrenew_day:1,
+                  memrenew:13, memexpire:33, memurgent:20, memrenew_day:1,
                   zrq_shops:1608, zrq_bind:433, zrq_bindrate:26.9,
                   zrq_bind_inc_m:37, zrq_bind_inc_d:1,
                   zrq_dong:83, zrq_dongrate:5.2,
@@ -1254,7 +1255,7 @@ function renderAll(){
                   cpc:71102,   cpc_y:4336,    cpc_y2:4786,   cpc_newsgn:6, cpc_wpu:9640,
                   mem:48097, cps:106268, memrate:36.36,
                   score:143, score_near:192, dongxiao:59, dongxiao_day:3, dongxiao_gtv:259798, visit:0, order:15,
-                  memrenew:16, memexpire:46, memurgent:28, memrenew_day:1,
+                  memrenew:16, memexpire:44, memurgent:28, memrenew_day:1,
                   zrq_shops:1827, zrq_bind:549, zrq_bindrate:30.0,
                   zrq_bind_inc_m:257, zrq_bind_inc_d:1,
                   zrq_dong:75, zrq_dongrate:4.1,
@@ -1265,7 +1266,7 @@ function renderAll(){
                   cpc:77669,   cpc_y:4771,    cpc_y2:5545,   cpc_newsgn:4, cpc_wpu:11182,
                   mem:66200, cps:107982, memrate:63.89,
                   score:133, score_near:180, dongxiao:53, dongxiao_day:5, dongxiao_gtv:334491, visit:0, order:22,
-                  memrenew:23, memexpire:38, memurgent:13, memrenew_day:1,
+                  memrenew:23, memexpire:36, memurgent:13, memrenew_day:1,
                   zrq_shops:1739, zrq_bind:625, zrq_bindrate:35.9,
                   zrq_bind_inc_m:214, zrq_bind_inc_d:1,
                   zrq_dong:97, zrq_dongrate:5.6,
@@ -1273,7 +1274,7 @@ function renderAll(){
                   zrq_pct:26.9, zrq_pct_y:38.6,
                   zrq_pay_y:112665, zrq_pay:1622145, zrq_aov:251},
   };
-  const ns={_updated:'10:30',_dataDate:'2026-04-18g'};
+  const ns={_updated:'10:31',_dataDate:'2026-04-18h'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
