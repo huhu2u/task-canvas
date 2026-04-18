@@ -408,7 +408,7 @@ function sv(name,f,v,t){
 function timePct(){
   const now=new Date(), y=now.getFullYear(), m=now.getMonth(), d=now.getDate();
   const total=new Date(y,m+1,0).getDate();
-  return {pct:d/total, day:d, total};
+  return {pct:(d-1)/total, day:d, total};
 }
 function colorOf(pct, tp){
   if(pct>=tp) return 'sg';
@@ -1204,7 +1204,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-18e') return;
+  if(ex._dataDate==='2026-04-18f') return;
   const D={
     '惠州巨浪':  {gtv:2101391, gtv_y:115965, gtv_excl:3.28,
                   cpc:43939,   cpc_y:1510,    cpc_y2:2490,   cpc_newsgn:10, cpc_wpu:18406,
@@ -1273,7 +1273,7 @@ function renderAll(){
                   zrq_pct:26.9, zrq_pct_y:38.6,
                   zrq_pay_y:112665, zrq_pay:1622145, zrq_aov:251},
   };
-  const ns={_updated:'10:26',_dataDate:'2026-04-18e'};
+  const ns={_updated:'10:29',_dataDate:'2026-04-18f'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
