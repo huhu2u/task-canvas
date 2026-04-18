@@ -826,7 +826,7 @@ function renderExam(){
 function toggleExam(name){
   const key='exam_status';
   const cur=g(name,key)||'未完成';
-  s(name,key,cur==='完成'?'未完成':'完成');
+  sv(name,key,cur==='完成'?'未完成':'完成');
   renderExam();
 }
 
