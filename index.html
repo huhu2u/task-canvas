@@ -477,13 +477,11 @@ function makeCards(containerId, items){
 // 返回昨日日目标数值（数字），若无则返回 0
 function getYesterdayDayTarget(type, name){
   const now = new Date();
-  // 今天是周几？0=周日,1=周一...6=周六 → 转成周内索引 0=周一...6=周日
-  const jsDay = now.getDay(); // 0=Sun
-  // 昨天
-  const ydJsDay = jsDay === 0 ? 6 : jsDay - 1; // 0=Sun→昨天是Sat=6
-  // days 数组索引：0=周一...6=周日，即 ydJsDay===0→Sun→idx=6，否则 ydJsDay-1+1=ydJsDay... 
-  // 实际：jsDay 1(Mon)→昨天Sun→idx=6; jsDay 2(Tue)→昨天Mon→idx=0; ...
-  const dayIdx = jsDay === 1 ? 6 : jsDay - 2; // 0=周一
+  // 昨天是周几（JS：0=Sun,1=Mon...6=Sat）
+  const ydJsDay = (now.getDay() + 6) % 7; // 今天getDay()-1，周日(0)→6
+  // days数组：0=周一,1=周二,...,5=周六,6=周日
+  // ydJsDay: 0=Sun→idx=6, 1=Mon→idx=0, 2=Tue→idx=1, ..., 6=Sat→idx=5
+  const dayIdx = ydJsDay === 0 ? 6 : ydJsDay - 1;
   const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
   const saved = (ws[type]||{})[name]||{};
   const base = (WEEK_DATA[type]||[]).find(d=>d.name===name);
