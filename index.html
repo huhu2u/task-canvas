@@ -1203,7 +1203,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-20b') return;
+  if(ex._dataDate==='2026-04-20c') return;
   const D={
     '惠州巨浪':  {gtv:2430612, gtv_y:155466, gtv_excl:3.25,
                   cpc:50251,   cpc_y:1926,    cpc_y2:3246,   cpc_newsgn:11, cpc_wpu:21222,
@@ -1278,7 +1278,7 @@ function renderAll(){
                   zrq_pay_y:137504, zrq_pay:1892108, zrq_aov:259,
                   aurora_total:33, aurora_act_done:20, aurora_act_pend:13, aurora_res_done:14, aurora_res_pend:10},
   };
-  const ns={_updated:'10:48',_dataDate:'2026-04-20b'};
+  const ns={_updated:'10:48',_dataDate:'2026-04-20c'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
