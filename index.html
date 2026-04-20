@@ -1203,7 +1203,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-20f') return;
+  if(ex._dataDate==='2026-04-20f'&&ex['惠州巨浪']?.zrq_pay_y===160629) return;
   const D={
     '惠州巨浪':  {gtv:2430612, gtv_y:155466, gtv_excl:3.25,
                   cpc:50251,   cpc_y:1926,    cpc_y2:3246,   cpc_newsgn:11, cpc_wpu:21222,
@@ -1214,8 +1214,8 @@ function renderAll(){
                   zrq_bind_inc_m:533, zrq_bind_inc_d:0,
                   zrq_dong:115, zrq_dongrate:4.5,
                   zrq_gtv:563738, zrq_gtv_y:24045,
-                  zrq_pct:23.2, zrq_pct_y:23.68,
-                  zrq_pay_y:101541, zrq_pay:2434629, zrq_aov:224,
+                  zrq_pct:23.2, zrq_pct_y:15.0,
+                  zrq_pay_y:160629, zrq_pay:2434629, zrq_aov:224,
                   aurora_total:22, aurora_act_done:15, aurora_act_pend:7, aurora_res_done:11, aurora_res_pend:5},
     '惠州柏万':  {gtv:2103704, gtv_y:123334, gtv_excl:2.5,
                   cpc:61694,   cpc_y:3291,    cpc_y2:4875,   cpc_newsgn:8, cpc_wpu:16281,
@@ -1226,8 +1226,8 @@ function renderAll(){
                   zrq_bind_inc_m:383, zrq_bind_inc_d:1,
                   zrq_dong:93, zrq_dongrate:5.5,
                   zrq_gtv:592632, zrq_gtv_y:30343,
-                  zrq_pct:28.1, zrq_pct_y:28.27,
-                  zrq_pay_y:107333, zrq_pay:2112569, zrq_aov:183,
+                  zrq_pct:28.1, zrq_pct_y:24.5,
+                  zrq_pay_y:123674, zrq_pay:2112569, zrq_aov:183,
                   aurora_total:46, aurora_act_done:29, aurora_act_pend:17, aurora_res_done:19, aurora_res_pend:14},
     '泉州小花猫':{gtv:1687293, gtv_y:100504, gtv_excl:3.07,
                   cpc:56707,   cpc_y:3824,    cpc_y2:5209,   cpc_newsgn:2, cpc_wpu:15612,
@@ -1238,8 +1238,8 @@ function renderAll(){
                   zrq_bind_inc_m:408, zrq_bind_inc_d:1,
                   zrq_dong:120, zrq_dongrate:6.5,
                   zrq_gtv:477422, zrq_gtv_y:26869,
-                  zrq_pct:28.3, zrq_pct_y:28.37,
-                  zrq_pay_y:94710, zrq_pay:1684322, zrq_aov:238,
+                  zrq_pct:28.3, zrq_pct_y:26.4,
+                  zrq_pay_y:101708, zrq_pay:1684322, zrq_aov:238,
                   aurora_total:25, aurora_act_done:19, aurora_act_pend:6, aurora_res_done:12, aurora_res_pend:6},
     '惠安广通':  {gtv:1355533, gtv_y:66273, gtv_excl:2.96,
                   cpc:29698,   cpc_y:1470,    cpc_y2:2189,   cpc_newsgn:1, cpc_wpu:11759,
@@ -1250,8 +1250,8 @@ function renderAll(){
                   zrq_bind_inc_m:318, zrq_bind_inc_d:-1,
                   zrq_dong:83, zrq_dongrate:5.2,
                   zrq_gtv:336689, zrq_gtv_y:8810,
-                  zrq_pct:24.7, zrq_pct_y:25.24,
-                  zrq_pay_y:34905, zrq_pay:1365297, zrq_aov:205,
+                  zrq_pct:24.7, zrq_pct_y:13.4,
+                  zrq_pay_y:65738, zrq_pay:1365297, zrq_aov:205,
                   aurora_total:24, aurora_act_done:15, aurora_act_pend:9, aurora_res_done:5, aurora_res_pend:8},
     '慈溪哲光':  {gtv:1804016, gtv_y:114215, gtv_excl:3.45,
                   cpc:81162,   cpc_y:4488,    cpc_y2:5243,   cpc_newsgn:8, cpc_wpu:11024,
@@ -1262,8 +1262,8 @@ function renderAll(){
                   zrq_bind_inc_m:502, zrq_bind_inc_d:-2,
                   zrq_dong:83, zrq_dongrate:4.6,
                   zrq_gtv:397218, zrq_gtv_y:19802,
-                  zrq_pct:21.7, zrq_pct_y:21.97,
-                  zrq_pay_y:90132, zrq_pay:1832152, zrq_aov:231,
+                  zrq_pct:21.7, zrq_pct_y:17.2,
+                  zrq_pay_y:115058, zrq_pay:1832152, zrq_aov:231,
                   aurora_total:123, aurora_act_done:88, aurora_act_pend:35, aurora_res_done:39, aurora_res_pend:30},
     '义乌汐洋':  {gtv:1864266, gtv_y:138461, gtv_excl:1.33,
                   cpc:91456,   cpc_y:5544,    cpc_y2:6688,   cpc_newsgn:7, cpc_wpu:13331,
@@ -1274,11 +1274,11 @@ function renderAll(){
                   zrq_bind_inc_m:532, zrq_bind_inc_d:0,
                   zrq_dong:97, zrq_dongrate:5.6,
                   zrq_gtv:521970, zrq_gtv_y:41691,
-                  zrq_pct:27.6, zrq_pct_y:27.39,
-                  zrq_pay_y:152213, zrq_pay:1892108, zrq_aov:259,
+                  zrq_pct:27.6, zrq_pct_y:30.3,
+                  zrq_pay_y:137504, zrq_pay:1892108, zrq_aov:259,
                   aurora_total:33, aurora_act_done:20, aurora_act_pend:13, aurora_res_done:14, aurora_res_pend:10},
   };
-  const ns={_updated:'11:11',_dataDate:'2026-04-20f'};
+  const ns={_updated:'11:59',_dataDate:'2026-04-20f'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
