@@ -1203,7 +1203,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-21i') return;
+  if(ex._dataDate==='2026-04-21j') return;
   const D={
     '惠州巨浪':  {gtv:2521365, gtv_y:95937, gtv_excl:3.42,
                   cpc:52571,   cpc_y:1312,    cpc_y2:2325,   cpc_newsgn:12, cpc_wpu:22235,
@@ -1216,7 +1216,7 @@ function renderAll(){
                   zrq_gtv:589072, zrq_gtv_y:25334,
                   zrq_pct:23.32, zrq_pct_y:27.70,
                   zrq_pay_y:91563, zrq_pay:2526192, zrq_aov:226,
-                  aurora_total:22, aurora_act_done:15, aurora_act_pend:7, aurora_res_done:11, aurora_res_pend:5},
+                  aurora_total:6, aurora_act_done:2, aurora_act_pend:4, aurora_res_done:2, aurora_res_pend:4},
     '惠州柏万':  {gtv:2195993, gtv_y:92982, gtv_excl:2.50,
                   cpc:64441,   cpc_y:1980,    cpc_y2:2753,   cpc_newsgn:8, cpc_wpu:17055,
                   mem:109129, cps:135665, memrate:48.15,
@@ -1228,7 +1228,7 @@ function renderAll(){
                   zrq_gtv:622397, zrq_gtv_y:29765,
                   zrq_pct:28.21, zrq_pct_y:32.85,
                   zrq_pay_y:90747, zrq_pay:2203316, zrq_aov:184,
-                  aurora_total:46, aurora_act_done:29, aurora_act_pend:17, aurora_res_done:19, aurora_res_pend:14},
+                  aurora_total:17, aurora_act_done:12, aurora_act_pend:5, aurora_res_done:4, aurora_res_pend:13},
     '泉州小花猫':{gtv:1754085, gtv_y:68246, gtv_excl:3.10,
                   cpc:60012,   cpc_y:2836,    cpc_y2:3308,   cpc_newsgn:5, cpc_wpu:16084,
                   mem:73129, cps:108253, memrate:46.81,
@@ -1240,7 +1240,7 @@ function renderAll(){
                   zrq_gtv:498788, zrq_gtv_y:21366,
                   zrq_pct:28.43, zrq_pct_y:30.54,
                   zrq_pay_y:70137, zrq_pay:1754460, zrq_aov:237,
-                  aurora_total:25, aurora_act_done:19, aurora_act_pend:6, aurora_res_done:12, aurora_res_pend:6},
+                  aurora_total:6, aurora_act_done:2, aurora_act_pend:4, aurora_res_done:2, aurora_res_pend:4},
     '惠安广通':  {gtv:1426481, gtv_y:70213, gtv_excl:2.89,
                   cpc:31490,   cpc_y:1371,    cpc_y2:1797,   cpc_newsgn:1, cpc_wpu:12185,
                   mem:51129, cps:88540, memrate:45.45,
@@ -1252,7 +1252,7 @@ function renderAll(){
                   zrq_gtv:359584, zrq_gtv_y:22895,
                   zrq_pct:25.07, zrq_pct_y:32.04,
                   zrq_pay_y:71568, zrq_pay:1436865, zrq_aov:207,
-                  aurora_total:24, aurora_act_done:15, aurora_act_pend:9, aurora_res_done:5, aurora_res_pend:8},
+                  aurora_total:9, aurora_act_done:5, aurora_act_pend:4, aurora_res_done:3, aurora_res_pend:6},
     '慈溪哲光':  {gtv:1882038, gtv_y:91174, gtv_excl:4.10,
                   cpc:84960,   cpc_y:3347,    cpc_y2:3805,   cpc_newsgn:9, cpc_wpu:11482,
                   mem:60297, cps:122625, memrate:45.45,
@@ -1264,7 +1264,7 @@ function renderAll(){
                   zrq_gtv:421755, zrq_gtv_y:24537,
                   zrq_pct:21.97, zrq_pct_y:26.22,
                   zrq_pay_y:93801, zrq_pay:1925953, zrq_aov:233,
-                  aurora_total:123, aurora_act_done:88, aurora_act_pend:35, aurora_res_done:39, aurora_res_pend:30},
+                  aurora_total:8, aurora_act_done:2, aurora_act_pend:6, aurora_res_done:1, aurora_res_pend:7},
     '义乌汐洋':  {gtv:1962629, gtv_y:97986, gtv_excl:1.30,
                   cpc:97040,   cpc_y:4775,    cpc_y2:5589,   cpc_newsgn:7, cpc_wpu:14145,
                   mem:71800, cps:126194, memrate:63.89,
@@ -1276,9 +1276,9 @@ function renderAll(){
                   zrq_gtv:559427, zrq_gtv_y:37456,
                   zrq_pct:28.16, zrq_pct_y:38.43,
                   zrq_pay_y:97528, zrq_pay:1989636, zrq_aov:264,
-                  aurora_total:33, aurora_act_done:20, aurora_act_pend:13, aurora_res_done:14, aurora_res_pend:10},
+                  aurora_total:8, aurora_act_done:0, aurora_act_pend:8, aurora_res_done:2, aurora_res_pend:6},
   };
-  const ns={_updated:'10:58',_dataDate:'2026-04-21i'};
+  const ns={_updated:'11:28',_dataDate:'2026-04-21j'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
