@@ -1203,7 +1203,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-21b'&&ex['惠州巨浪']?.zrq_pay===2526192) return;
+  if(ex._dataDate==='2026-04-21c'&&ex['惠州巨浪']?.zrq_bind_inc_d===2) return;
   const D={
     '惠州巨浪':  {gtv:2430612, gtv_y:155466, gtv_excl:3.25,
                   cpc:50251,   cpc_y:1926,    cpc_y2:3246,   cpc_newsgn:11, cpc_wpu:21222,
@@ -1211,7 +1211,7 @@ function renderAll(){
                   score:229, score_near:287, dongxiao:110, dongxiao_day:2, dongxiao_gtv:484963, visit:0, order:74,
                   memrenew:27, memexpire:63, memurgent:36, memrenew_day:0,
                   zrq_shops:2577, zrq_bind:638, zrq_bindrate:24.8.7,
-                  zrq_bind_inc_m:42, zrq_bind_inc_d:0,
+                  zrq_bind_inc_m:42, zrq_bind_inc_d:2,
                   zrq_dong:116, zrq_dongrate:4.5.5,
                   zrq_gtv:589072, zrq_gtv_y:25334,
                   zrq_pct:23.3.2, zrq_pct_y:27.7.0,
@@ -1223,7 +1223,7 @@ function renderAll(){
                   score:153, score_near:173, dongxiao:92, dongxiao_day:1, dongxiao_gtv:357090, visit:0, order:41,
                   memrenew:26, memexpire:54, memurgent:28, memrenew_day:2,
                   zrq_shops:1697, zrq_bind:492, zrq_bindrate:29.0.8,
-                  zrq_bind_inc_m:34, zrq_bind_inc_d:0,
+                  zrq_bind_inc_m:34, zrq_bind_inc_d:2,
                   zrq_dong:91, zrq_dongrate:5.4.5,
                   zrq_gtv:622397, zrq_gtv_y:29765,
                   zrq_pct:28.2.1, zrq_pct_y:32.8.5,
@@ -1235,7 +1235,7 @@ function renderAll(){
                   score:147, score_near:226, dongxiao:76, dongxiao_day:6, dongxiao_gtv:314238, visit:0, order:68,
                   memrenew:17, memexpire:47, memurgent:30, memrenew_day:3,
                   zrq_shops:1838, zrq_bind:555, zrq_bindrate:30.2.1,
-                  zrq_bind_inc_m:40, zrq_bind_inc_d:0,
+                  zrq_bind_inc_m:40, zrq_bind_inc_d:1,
                   zrq_dong:122, zrq_dongrate:6.6.5,
                   zrq_gtv:498788, zrq_gtv_y:21366,
                   zrq_pct:28.4.3, zrq_pct_y:30.5.4,
@@ -1247,7 +1247,7 @@ function renderAll(){
                   score:104, score_near:194, dongxiao:61, dongxiao_day:2, dongxiao_gtv:259759, visit:0, order:39,
                   memrenew:13, memexpire:33, memurgent:20, memrenew_day:1,
                   zrq_shops:1604, zrq_bind:433, zrq_bindrate:27.0.9,
-                  zrq_bind_inc_m:32, zrq_bind_inc_d:0,
+                  zrq_bind_inc_m:32, zrq_bind_inc_d:1,
                   zrq_dong:89, zrq_dongrate:5.5.2,
                   zrq_gtv:359584, zrq_gtv_y:22895,
                   zrq_pct:25.0.7, zrq_pct_y:32.0.4,
@@ -1259,7 +1259,7 @@ function renderAll(){
                   score:148, score_near:187, dongxiao:64, dongxiao_day:2, dongxiao_gtv:305606, visit:0, order:15,
                   memrenew:16, memexpire:44, memurgent:28, memrenew_day:1,
                   zrq_shops:1816, zrq_bind:549, zrq_bindrate:30.2.2,
-                  zrq_bind_inc_m:241, zrq_bind_inc_d:0,
+                  zrq_bind_inc_m:241, zrq_bind_inc_d:1,
                   zrq_dong:83, zrq_dongrate:4.6.6,
                   zrq_gtv:421755, zrq_gtv_y:24537,
                   zrq_pct:21.9.7, zrq_pct_y:26.2.2,
@@ -1278,7 +1278,7 @@ function renderAll(){
                   zrq_pay_y:97528, zrq_pay:1989636, zrq_aov:264,
                   aurora_total:33, aurora_act_done:20, aurora_act_pend:13, aurora_res_done:14, aurora_res_pend:10},
   };
-  const ns={_updated:'09:51',_dataDate:'2026-04-21b'};
+  const ns={_updated:'09:54',_dataDate:'2026-04-21c'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
