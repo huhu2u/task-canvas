@@ -492,7 +492,7 @@ function getYesterdayDayTarget(type, name){
 
 function renderGtv(){
   const {pct:tp,day,total}=timePct();
-  const remain=total-day;
+  const remain=total-day+1;
   let totCur=0, totTgt=0, html='';
   AGENTS.forEach(a=>{
     const cur=g(a.name,'gtv'), tgt=gt(a.name,'gtv');
@@ -530,7 +530,7 @@ function renderGtv(){
 // ════════════════════════════════════════════════════════════
 function renderCpc(){
   const {pct:tp,day,total}=timePct();
-  const remain=total-day;
+  const remain=total-day+1;
   let totCur=0, totTgt=0, html='';
   AGENTS.forEach(a=>{
     const cur=g(a.name,'cpc'), tgt=gt(a.name,'cpc');
@@ -833,7 +833,7 @@ function toggleExam(name){
 // ════════════════════════════════════════════════════════════
 function updateStatusBar(){
   const {pct:tp,day,total}=timePct();
-  const remain=total-day;
+  const remain=total-day+1;
   const sbT=document.getElementById('sb-timepct');
   if(sbT){ sbT.textContent=fmtPct(tp); sbT.className='sb-val blue'; }
   const sbR=document.getElementById('sb-remain');
@@ -1203,7 +1203,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-21f') return;
+  if(ex._dataDate==='2026-04-21g') return;
   const D={
     '惠州巨浪':  {gtv:2521365, gtv_y:95937, gtv_excl:3.42,
                   cpc:52571,   cpc_y:1312,    cpc_y2:2325,   cpc_newsgn:12, cpc_wpu:22235,
@@ -1278,7 +1278,7 @@ function renderAll(){
                   zrq_pay_y:97528, zrq_pay:1989636, zrq_aov:264,
                   aurora_total:33, aurora_act_done:20, aurora_act_pend:13, aurora_res_done:14, aurora_res_pend:10},
   };
-  const ns={_updated:'10:34',_dataDate:'2026-04-21f'};
+  const ns={_updated:'10:37',_dataDate:'2026-04-21g'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
