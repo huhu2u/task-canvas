@@ -1203,13 +1203,13 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  if(ex._dataDate==='2026-04-23b') return;
+  if(ex._dataDate==='2026-04-23c') return;
   const D={
     '惠州巨浪':  {gtv:2705104, gtv_y:91822, gtv_excl:3.97,
                   cpc:56854,   cpc_y:1101,    cpc_y2:2124,   cpc_newsgn:14, cpc_wpu:24203,
                   mem:96258, cps:173704, memrate:51.56,
                   score:229, score_day:0, score_near:285, dongxiao:114, dongxiao_day:3, dongxiao_gtv:518718, visit:0, order:106,
-                  memrenew:31, memexpire:63, memurgent:32, memrenew_day:0,
+                  memrenew:33, memexpire:62, memurgent:31, memrenew_day:0, memrate:53.23,
                   zrq_shops:2572, zrq_bind:642, zrq_bindrate:24.96,
                   zrq_bind_inc_m:46, zrq_bind_inc_d:-1,
                   zrq_dong:110, zrq_dongrate:4.28,
@@ -1221,7 +1221,7 @@ function renderAll(){
                   cpc:69634,   cpc_y:1937,    cpc_y2:2560,   cpc_newsgn:9, cpc_wpu:18455,
                   mem:128129, cps:152413, memrate:58.49,
                   score:150, score_day:-5, score_near:173, dongxiao:101, dongxiao_day:5, dongxiao_gtv:388368, visit:0, order:59,
-                  memrenew:30, memexpire:53, memurgent:23, memrenew_day:0,
+                  memrenew:31, memexpire:52, memurgent:22, memrenew_day:0, memrate:59.62,
                   zrq_shops:1687, zrq_bind:494, zrq_bindrate:29.28,
                   zrq_bind_inc_m:36, zrq_bind_inc_d:2,
                   zrq_dong:102, zrq_dongrate:6.05,
@@ -1233,7 +1233,7 @@ function renderAll(){
                   cpc:67389,   cpc_y:3166,    cpc_y2:3909,   cpc_newsgn:6, cpc_wpu:17343,
                   mem:73129, cps:121761, memrate:45.83,
                   score:147, score_day:1, score_near:222, dongxiao:85, dongxiao_day:5, dongxiao_gtv:343667, visit:0, order:72,
-                  memrenew:22, memexpire:47, memurgent:25, memrenew_day:0,
+                  memrenew:22, memexpire:47, memurgent:25, memrenew_day:0, memrate:46.81,
                   zrq_shops:1835, zrq_bind:556, zrq_bindrate:30.30,
                   zrq_bind_inc_m:41, zrq_bind_inc_d:0,
                   zrq_dong:122, zrq_dongrate:6.65,
@@ -1245,7 +1245,7 @@ function renderAll(){
                   cpc:36503,   cpc_y:2319,    cpc_y2:2931,   cpc_newsgn:3, cpc_wpu:13306,
                   mem:56729, cps:102038, memrate:48.48,
                   score:105, score_day:1, score_near:189, dongxiao:69, dongxiao_day:3, dongxiao_gtv:294247, visit:0, order:43,
-                  memrenew:16, memexpire:33, memurgent:17, memrenew_day:0,
+                  memrenew:16, memexpire:33, memurgent:17, memrenew_day:0, memrate:48.48,
                   zrq_shops:1597, zrq_bind:440, zrq_bindrate:27.55,
                   zrq_bind_inc_m:39, zrq_bind_inc_d:4,
                   zrq_dong:103, zrq_dongrate:6.45,
@@ -1257,7 +1257,7 @@ function renderAll(){
                   cpc:92766,   cpc_y:3769,    cpc_y2:4042,   cpc_newsgn:10, cpc_wpu:12121,
                   mem:69697, cps:141420, memrate:51.06,
                   score:147, score_day:0, score_near:185, dongxiao:71, dongxiao_day:3, dongxiao_gtv:361630, visit:0, order:30,
-                  memrenew:22, memexpire:46, memurgent:24, memrenew_day:0,
+                  memrenew:24, memexpire:46, memurgent:23, memrenew_day:0, memrate:52.17,
                   zrq_shops:1812, zrq_bind:555, zrq_bindrate:30.63,
                   zrq_bind_inc_m:247, zrq_bind_inc_d:2,
                   zrq_dong:76, zrq_dongrate:4.19,
@@ -1269,7 +1269,7 @@ function renderAll(){
                   cpc:106845,  cpc_y:4258,    cpc_y2:4718,   cpc_newsgn:8, cpc_wpu:15253,
                   mem:81200, cps:143292, memrate:70.59,
                   score:137, score_day:-2, score_near:174, dongxiao:64, dongxiao_day:3, dongxiao_gtv:488573, visit:0, order:50,
-                  memrenew:24, memexpire:34, memurgent:10, memrenew_day:0,
+                  memrenew:24, memexpire:34, memurgent:10, memrenew_day:0, memrate:70.59,
                   zrq_shops:1711, zrq_bind:629, zrq_bindrate:36.76,
                   zrq_bind_inc_m:206, zrq_bind_inc_d:3,
                   zrq_dong:94, zrq_dongrate:5.49,
@@ -1278,7 +1278,7 @@ function renderAll(){
                   zrq_pay_y:77578, zrq_pay:2158777, zrq_aov:270,
                   aurora_total:8, aurora_act_done:0, aurora_act_pend:8, aurora_res_done:2, aurora_res_pend:6},
   };
-  const ns={_updated: '09:17',_dataDate: '2026-04-23b'};
+  const ns={_updated: '09:23',_dataDate: '2026-04-23c'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
