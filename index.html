@@ -118,6 +118,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <button class="tabn"        id="tab-exam"     onclick="switchTab('exam')">📝 月考</button>
   <button class="tabn"        id="tab-zrq"      onclick="switchTab('zrq')">📌 职人码进度</button>
   <button class="tabn"        id="tab-week"     onclick="switchTab('week')">🎯 周目标追踪</button>
+  <button class="tabn"        id="tab-bml"      onclick="switchTab('bml')">🏷 好店BML</button>
 </div>
 
 <!-- Tab1: 核心业绩 -->
@@ -355,6 +356,31 @@ table.dt tbody tr:last-child td{border-bottom:none}
       <th class="hd">当前完成</th>
       <th class="hp">预计完成进度</th>
     </tr></thead><tbody id="week-newsgn-tbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- Tab11: 好店BML -->
+<div id="panel-bml" class="tab-panel">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div>
+      <div style="font-size:18px;font-weight:700;color:#b45309">🏷 好店BML看板</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:2px">货架Lose率 · 目标 ≤ 30% · 本月累计</div>
+    </div>
+    <div style="font-size:11px;color:#9ca3af">来源：策略管理-PC-中小发BML商户明细 · 好店底表筛选</div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr" style="background:#fef3c7;border-left:4px solid #d97706"><span>📊 代运营商BML汇总（好店口径）</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th>
+      <th class="hc">操盘手</th>
+      <th style="background:#fee2e2;color:#991b1b">好店Lose数</th>
+      <th style="background:#fee2e2;color:#991b1b">Lose率<br><span style="font-size:9px;font-weight:400">(目标≤30%)</span></th>
+      <th class="ht">是否达标</th>
+      <th style="background:#fef9c3;color:#854d0e">高危(≥5天)</th>
+      <th style="background:#fef3c7;color:#92400e">中危(3-4天)</th>
+      <th style="background:#f0fdf4;color:#166534">低危(≤2天)</th>
+      <th class="hp">月累计天数</th>
+    </tr></thead><tbody id="bml-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -890,6 +916,12 @@ const FIELD_META = {
   aurora_act_pend:{label:'动作-待处理'},
   aurora_res_done:{label:'结果-已完成'},
   aurora_res_pend:{label:'结果-待处理'},
+  bml_lose_n:  {label:'好店Lose数'},
+  bml_lose_pct:{label:'Lose率(%)，如输入59.5'},
+  bml_high:    {label:'高危(≥5天)门店数'},
+  bml_mid:     {label:'中危(3-4天)门店数'},
+  bml_low:     {label:'低危(≤2天)门店数'},
+  bml_days:    {label:'本月累计天数'},
   exam_status: {label:'月考状态'},
   zrq_shops:      {label:'合作门店数'},
   zrq_bind:       {label:'绑码商户数'},
@@ -1185,12 +1217,62 @@ function saveEdit(){
   ss(); closeEdit(); renderAll(); showToast();
 }
 
+function renderBml(){
+  const AGENTS=[
+    {name:'惠州巨浪',  mgr:'肖立铭'},
+    {name:'惠州柏万',  mgr:'林启梁'},
+    {name:'泉州小花猫',mgr:'康子诚'},
+    {name:'惠安广通',  mgr:'尤云生'},
+    {name:'慈溪哲光',  mgr:'孙浩'},
+    {name:'义乌汐洋',  mgr:'陈铨'},
+  ];
+  let html='', totalLose=0, totalHigh=0, totalMid=0, totalLow=0, totalDays=0;
+  AGENTS.forEach(a=>{
+    const loseN   = g(a.name,'bml_lose_n')   || 0;
+    const losePct = g(a.name,'bml_lose_pct') || 0;   // 已是百分数，如 59.5
+    const high    = g(a.name,'bml_high')     || 0;
+    const mid     = g(a.name,'bml_mid')      || 0;
+    const low     = g(a.name,'bml_low')      || 0;
+    const days    = g(a.name,'bml_days')     || 0;
+    totalLose+=loseN; totalHigh+=high; totalMid+=mid; totalLow+=low;
+    totalDays = Math.max(totalDays, days);
+    const ok = losePct <= 30;
+    const pctColor = ok ? '#16a34a' : (losePct <= 50 ? '#d97706' : '#dc2626');
+    const pctBg    = ok ? '#d1fae5' : (losePct <= 50 ? '#fef3c7' : '#fee2e2');
+    html+=`<tr>
+      <td class="tn">${a.name}</td>
+      <td>${a.mgr}</td>
+      <td style="cursor:pointer;font-weight:700" onclick="openEdit('${a.name}','bml_lose_n')">${loseN||'—'}</td>
+      <td style="background:${pctBg};color:${pctColor};font-weight:700;cursor:pointer" onclick="openEdit('${a.name}','bml_lose_pct')">${losePct?losePct.toFixed(1)+'%':'—'}</td>
+      <td style="font-weight:700;color:${ok?'#16a34a':'#dc2626'}">${loseN?ok?'✅ 达标':'❌ 未达标':'—'}</td>
+      <td style="background:#fef9c3;color:${high>0?'#dc2626':'#6b7280'};font-weight:${high>0?700:400};cursor:pointer" onclick="openEdit('${a.name}','bml_high')">${high||0}</td>
+      <td style="background:#fef3c7;cursor:pointer" onclick="openEdit('${a.name}','bml_mid')">${mid||0}</td>
+      <td style="background:#f0fdf4;cursor:pointer" onclick="openEdit('${a.name}','bml_low')">${low||0}</td>
+      <td style="color:#6b7280;cursor:pointer" onclick="openEdit('${a.name}','bml_days')">${days?days+'天':'—'}</td>
+    </tr>`;
+  });
+  // 合计行
+  const allPct = totalLose>0 ? (totalDays>0 ? null : null) : 0;
+  html+=`<tr style="background:#1a365d;color:#fff;font-weight:700">
+    <td class="tn" style="color:#fff">粤闽浙合计</td>
+    <td style="color:#fff">—</td>
+    <td style="color:#fff">${totalLose}</td>
+    <td style="color:#fff">—</td>
+    <td style="color:#fff">—</td>
+    <td style="color:${totalHigh>0?'#fca5a5':'#fff'}">${totalHigh}</td>
+    <td style="color:#fff">${totalMid}</td>
+    <td style="color:#fff">${totalLow}</td>
+    <td style="color:#fff">${totalDays?totalDays+'天':'—'}</td>
+  </tr>`;
+  document.getElementById('bml-tbody').innerHTML=html;
+}
+
 function renderAll(){
   renderGtv(); renderCpc(); renderMem();
   renderScore(); renderDongxiao();
   renderVisit(); renderOrder(); renderMemrate();
   renderAurora(); renderExam(); renderZrq();
-  renderWeek();
+  renderWeek(); renderBml();
   updateStatusBar();
   const {pct:tp}=timePct();
   const b=document.getElementById('perf-badge');
@@ -1204,7 +1286,7 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 版本比较：本地版本 >= 当前嵌入版本则跳过，否则强制覆盖
-  const EMBED_VER = '2026-05-07f';
+  const EMBED_VER = '2026-05-07g';
   if(ex._dataDate && ex._dataDate >= EMBED_VER) return;
   const D={
   '惠州巨浪':  {
@@ -1219,7 +1301,8 @@ function renderAll(){
     zrq_gtv:98992, zrq_gtv_y:18436,
     zrq_pct:12.01, zrq_pct_y:20.45,
     zrq_pay_y:90162, zrq_pay:824003, zrq_aov:107,
-    aurora_total:6, aurora_act_done:5,  aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0},
+    aurora_total:6, aurora_act_done:5,  aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0,
+    bml_lose_n:6, bml_lose_pct:59.5, bml_high:3, bml_mid:3, bml_low:0, bml_days:7},
   '惠州柏万':  {
     gtv:755872, gtv_y:88346, gtv_excl:1.56,
     cpc:23058,   cpc_y:1907,    cpc_y2:2736,   cpc_newsgn:0, cpc_wpu:7829,
@@ -1232,7 +1315,8 @@ function renderAll(){
     zrq_gtv:167755, zrq_gtv_y:26176,
     zrq_pct:22.0, zrq_pct_y:29.48,
     zrq_pay_y:88803, zrq_pay:762667, zrq_aov:177,
-    aurora_total:7, aurora_act_done:4,  aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:5},
+    aurora_total:7, aurora_act_done:4,  aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:5,
+    bml_lose_n:7, bml_lose_pct:57.1, bml_high:3, bml_mid:1, bml_low:3, bml_days:7},
   '泉州小花猫':  {
     gtv:644510, gtv_y:68154, gtv_excl:3.25,
     cpc:27261,   cpc_y:1682,    cpc_y2:2719,   cpc_newsgn:2, cpc_wpu:7928,
@@ -1245,7 +1329,8 @@ function renderAll(){
     zrq_gtv:149592, zrq_gtv_y:16904,
     zrq_pct:23.01, zrq_pct_y:24.58,
     zrq_pay_y:68770, zrq_pay:650090, zrq_aov:164,
-    aurora_total:15, aurora_act_done:4,  aurora_act_pend:11, aurora_res_done:4, aurora_res_pend:11},
+    aurora_total:15, aurora_act_done:4,  aurora_act_pend:11, aurora_res_done:4, aurora_res_pend:11,
+    bml_lose_n:7, bml_lose_pct:77.6, bml_high:6, bml_mid:0, bml_low:1, bml_days:7},
   '惠安广通':  {
     gtv:464818, gtv_y:56161, gtv_excl:0.96,
     cpc:16132,   cpc_y:1295,    cpc_y2:1922,   cpc_newsgn:0, cpc_wpu:4925,
@@ -1258,7 +1343,8 @@ function renderAll(){
     zrq_gtv:61454, zrq_gtv_y:9675,
     zrq_pct:13.12, zrq_pct_y:17.2,
     zrq_pay_y:56265, zrq_pay:468414, zrq_aov:91,
-    aurora_total:10, aurora_act_done:7,  aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:8},
+    aurora_total:10, aurora_act_done:7,  aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:8,
+    bml_lose_n:7, bml_lose_pct:69.4, bml_high:5, bml_mid:1, bml_low:1, bml_days:7},
   '慈溪哲光':  {
     gtv:601082, gtv_y:83798, gtv_excl:5.18,
     cpc:25246,   cpc_y:2656,    cpc_y2:3192,   cpc_newsgn:3, cpc_wpu:3841,
@@ -1271,7 +1357,8 @@ function renderAll(){
     zrq_gtv:80907, zrq_gtv_y:13075,
     zrq_pct:13.25, zrq_pct_y:14.89,
     zrq_pay_y:87786, zrq_pay:610553, zrq_aov:147,
-    aurora_total:20, aurora_act_done:12,  aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15},
+    aurora_total:20, aurora_act_done:12,  aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15,
+    bml_lose_n:8, bml_lose_pct:62.5, bml_high:5, bml_mid:1, bml_low:2, bml_days:7},
   '义乌汐洋':  {
     gtv:681159, gtv_y:101208, gtv_excl:0.97,
     cpc:31672,   cpc_y:3878,    cpc_y2:4714,   cpc_newsgn:2, cpc_wpu:6990,
@@ -1284,9 +1371,10 @@ function renderAll(){
     zrq_gtv:183224, zrq_gtv_y:41785,
     zrq_pct:26.61, zrq_pct_y:41.01,
     zrq_pay_y:101880, zrq_pay:688588, zrq_aov:213,
-    aurora_total:15, aurora_act_done:14,  aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14},
+    aurora_total:15, aurora_act_done:14,  aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14,
+    bml_lose_n:1, bml_lose_pct:71.4, bml_high:1, bml_mid:0, bml_low:0, bml_days:7},
   };
-  const ns={_updated: '10:26',_dataDate: '2026-05-07f'};
+  const ns={_updated: '18:56',_dataDate: '2026-05-07g'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
