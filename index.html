@@ -1286,11 +1286,11 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 版本比较：本地版本 >= 当前嵌入版本则跳过，否则强制覆盖
-  const EMBED_VER = '2026-05-08e';
+  const EMBED_VER = '2026-05-08f';
   if(ex._dataDate && ex._dataDate >= EMBED_VER) return;
   const D={
   '惠州巨浪':  {
-    gtv:905783, gtv_y:818013, gtv_excl:5.24,
+    gtv:905783, gtv_y:87770, gtv_excl:5.24,
     cpc:21542,   cpc_y:11956,    cpc_y2:20457,   cpc_newsgn:6, cpc_wpu:9425,
     mem:26529, cps:59491, memrate:17.54,
     score:213, score_day:-30, score_near:255, dongxiao:16, dongxiao_day:8, dongxiao_gtv:87997, visit:0, order:132,
@@ -1304,7 +1304,7 @@ function renderAll(){
     aurora_total:6, aurora_act_done:5,  aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0,
     bml_lose_n:6, bml_lose_pct:59.5, bml_high:3, bml_mid:3, bml_low:0, bml_days:7},
   '惠州柏万':  {
-    gtv:844979, gtv_y:755335, gtv_excl:1.63,
+    gtv:844979, gtv_y:89644, gtv_excl:1.63,
     cpc:25643,   cpc_y:15892,    cpc_y2:23722,   cpc_newsgn:0, cpc_wpu:8492,
     mem:48858, cps:54645, memrate:36.67,
     score:134, score_day:-24, score_near:169, dongxiao:25, dongxiao_day:15, dongxiao_gtv:104702, visit:0, order:63,
@@ -1318,7 +1318,7 @@ function renderAll(){
     aurora_total:7, aurora_act_done:4,  aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:5,
     bml_lose_n:7, bml_lose_pct:57.1, bml_high:3, bml_mid:1, bml_low:3, bml_days:7},
   '泉州小花猫':  {
-    gtv:715023, gtv_y:645576, gtv_excl:3.09,
+    gtv:715023, gtv_y:69447, gtv_excl:3.09,
     cpc:29620,   cpc_y:19898,    cpc_y2:27826,   cpc_newsgn:2, cpc_wpu:8492,
     mem:20800, cps:46251, memrate:11.9,
     score:155, score_day:-16, score_near:190, dongxiao:19, dongxiao_day:12, dongxiao_gtv:96293, visit:0, order:79,
@@ -1332,7 +1332,7 @@ function renderAll(){
     aurora_total:15, aurora_act_done:4,  aurora_act_pend:11, aurora_res_done:4, aurora_res_pend:11,
     bml_lose_n:7, bml_lose_pct:77.6, bml_high:6, bml_mid:0, bml_low:1, bml_days:7},
   '惠安广通':  {
-    gtv:517700, gtv_y:464912, gtv_excl:0.94,
+    gtv:517700, gtv_y:52787, gtv_excl:0.94,
     cpc:17855,   cpc_y:11658,    cpc_y2:16583,   cpc_newsgn:0, cpc_wpu:5376,
     mem:24400, cps:35525, memrate:20.0,
     score:119, score_day:-4, score_near:167, dongxiao:17, dongxiao_day:11, dongxiao_gtv:38751, visit:0, order:46,
@@ -1346,7 +1346,7 @@ function renderAll(){
     aurora_total:10, aurora_act_done:7,  aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:8,
     bml_lose_n:7, bml_lose_pct:69.4, bml_high:5, bml_mid:1, bml_low:1, bml_days:7},
   '慈溪哲光':  {
-    gtv:682540, gtv_y:604971, gtv_excl:4.55,
+    gtv:682540, gtv_y:77570, gtv_excl:4.55,
     cpc:28962,   cpc_y:21946,    cpc_y2:25786,   cpc_newsgn:3, cpc_wpu:4382,
     mem:30460, cps:47267, memrate:20.41,
     score:150, score_day:-13, score_near:169, dongxiao:22, dongxiao_day:15, dongxiao_gtv:57971, visit:0, order:94,
@@ -1360,7 +1360,7 @@ function renderAll(){
     aurora_total:20, aurora_act_done:12,  aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15,
     bml_lose_n:8, bml_lose_pct:62.5, bml_high:5, bml_mid:1, bml_low:2, bml_days:7},
   '义乌汐洋':  {
-    gtv:755343, gtv_y:679827, gtv_excl:0.89,
+    gtv:755343, gtv_y:75516, gtv_excl:0.89,
     cpc:36445,   cpc_y:25468,    cpc_y2:32458,   cpc_newsgn:2, cpc_wpu:7777,
     mem:30000, cps:50860, memrate:28.21,
     score:155, score_day:-13, score_near:139, dongxiao:18, dongxiao_day:8, dongxiao_gtv:127500, visit:0, order:64,
@@ -1374,7 +1374,7 @@ function renderAll(){
     aurora_total:15, aurora_act_done:14,  aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14,
     bml_lose_n:1, bml_lose_pct:71.4, bml_high:1, bml_mid:0, bml_low:0, bml_days:7},
   };
-  const ns={_updated: '10:02',_dataDate: '2026-05-08e'};
+  const ns={_updated: '12:15',_dataDate: '2026-05-08f'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
