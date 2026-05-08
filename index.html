@@ -1286,14 +1286,14 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 版本比较：本地版本 >= 当前嵌入版本则跳过，否则强制覆盖
-  const EMBED_VER = '2026-05-08c';
+  const EMBED_VER = '2026-05-08d';
   if(ex._dataDate && ex._dataDate >= EMBED_VER) return;
   const D={
   '惠州巨浪':  {
     gtv:905783, gtv_y:818013, gtv_excl:5.24,
     cpc:21542,   cpc_y:11956,    cpc_y2:20457,   cpc_newsgn:6, cpc_wpu:9425,
     mem:26529, cps:59491, memrate:17.54,
-    score:213, score_day:-30, score_near:255, dongxiao:45, dongxiao_day:0, dongxiao_gtv:87997, visit:0, order:132,
+    score:213, score_day:-30, score_near:255, dongxiao:16, dongxiao_day:8, dongxiao_gtv:87997, visit:0, order:132,
     memrenew:9, memexpire:55, memurgent:46, memrenew_day:0,
     zrq_shops:2555, zrq_bind:653, zrq_bindrate:25.56,
     zrq_bind_inc_m:0, zrq_bind_inc_d:-1,
@@ -1307,7 +1307,7 @@ function renderAll(){
     gtv:844979, gtv_y:755335, gtv_excl:1.63,
     cpc:25643,   cpc_y:15892,    cpc_y2:23722,   cpc_newsgn:0, cpc_wpu:8492,
     mem:48858, cps:54645, memrate:36.67,
-    score:134, score_day:-24, score_near:169, dongxiao:37, dongxiao_day:0, dongxiao_gtv:104702, visit:0, order:63,
+    score:134, score_day:-24, score_near:169, dongxiao:25, dongxiao_day:15, dongxiao_gtv:104702, visit:0, order:63,
     memrenew:22, memexpire:59, memurgent:37, memrenew_day:0,
     zrq_shops:1678, zrq_bind:517, zrq_bindrate:30.81,
     zrq_bind_inc_m:0, zrq_bind_inc_d:3,
@@ -1321,7 +1321,7 @@ function renderAll(){
     gtv:715023, gtv_y:645576, gtv_excl:3.09,
     cpc:29620,   cpc_y:19898,    cpc_y2:27826,   cpc_newsgn:2, cpc_wpu:8492,
     mem:20800, cps:46251, memrate:11.9,
-    score:155, score_day:-16, score_near:190, dongxiao:41, dongxiao_day:0, dongxiao_gtv:96293, visit:0, order:79,
+    score:155, score_day:-16, score_near:190, dongxiao:19, dongxiao_day:12, dongxiao_gtv:96293, visit:0, order:79,
     memrenew:5, memexpire:41, memurgent:36, memrenew_day:0,
     zrq_shops:1804, zrq_bind:570, zrq_bindrate:31.6,
     zrq_bind_inc_m:0, zrq_bind_inc_d:0,
@@ -1335,7 +1335,7 @@ function renderAll(){
     gtv:517700, gtv_y:464912, gtv_excl:0.94,
     cpc:17855,   cpc_y:11658,    cpc_y2:16583,   cpc_newsgn:0, cpc_wpu:5376,
     mem:24400, cps:35525, memrate:20.0,
-    score:119, score_day:-4, score_near:167, dongxiao:29, dongxiao_day:0, dongxiao_gtv:38751, visit:0, order:46,
+    score:119, score_day:-4, score_near:167, dongxiao:17, dongxiao_day:11, dongxiao_gtv:38751, visit:0, order:46,
     memrenew:8, memexpire:39, memurgent:31, memrenew_day:0,
     zrq_shops:1592, zrq_bind:458, zrq_bindrate:28.77,
     zrq_bind_inc_m:0, zrq_bind_inc_d:2,
@@ -1349,7 +1349,7 @@ function renderAll(){
     gtv:682540, gtv_y:604971, gtv_excl:4.55,
     cpc:28962,   cpc_y:21946,    cpc_y2:25786,   cpc_newsgn:3, cpc_wpu:4382,
     mem:30460, cps:47267, memrate:20.41,
-    score:150, score_day:-13, score_near:169, dongxiao:26, dongxiao_day:0, dongxiao_gtv:57971, visit:0, order:94,
+    score:150, score_day:-13, score_near:169, dongxiao:22, dongxiao_day:15, dongxiao_gtv:57971, visit:0, order:94,
     memrenew:10, memexpire:48, memurgent:38, memrenew_day:0,
     zrq_shops:1794, zrq_bind:558, zrq_bindrate:31.1,
     zrq_bind_inc_m:0, zrq_bind_inc_d:1,
@@ -1363,7 +1363,7 @@ function renderAll(){
     gtv:755343, gtv_y:679827, gtv_excl:0.89,
     cpc:36445,   cpc_y:25468,    cpc_y2:32458,   cpc_newsgn:2, cpc_wpu:7777,
     mem:30000, cps:50860, memrate:28.21,
-    score:155, score_day:-13, score_near:139, dongxiao:34, dongxiao_day:0, dongxiao_gtv:127500, visit:0, order:64,
+    score:155, score_day:-13, score_near:139, dongxiao:18, dongxiao_day:8, dongxiao_gtv:127500, visit:0, order:64,
     memrenew:11, memexpire:39, memurgent:28, memrenew_day:0,
     zrq_shops:1693, zrq_bind:641, zrq_bindrate:37.86,
     zrq_bind_inc_m:0, zrq_bind_inc_d:3,
@@ -1374,7 +1374,7 @@ function renderAll(){
     aurora_total:15, aurora_act_done:14,  aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14,
     bml_lose_n:1, bml_lose_pct:71.4, bml_high:1, bml_mid:0, bml_low:0, bml_days:7},
   };
-  const ns={_updated: '09:42',_dataDate: '2026-05-08c'};
+  const ns={_updated: '09:56',_dataDate: '2026-05-08d'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
