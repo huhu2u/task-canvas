@@ -1070,31 +1070,31 @@ function updateClock(){
   document.getElementById('clockdate').textContent=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
 }
 
-// ── 周目标数据（4月第四周 4/21-4/27，来源：学城2757166498）──
+// ── 周目标数据（5月第二周 5/12-5/18，2026-05-11英杰更新）──
 const WEEK_DATA = {
   gtv: [
-    {name:'义乌汐洋',  mgr:'陈铨',   tgt:670000, days:[85000,85000,85000,85000,90000,120000,120000]},
-    {name:'慈溪哲光',  mgr:'孙浩',   tgt:920000, days:[110000,130000,130000,130000,140000,140000,140000]},
-    {name:'惠州柏万',  mgr:'林启梁', tgt:720000, days:[90000,90000,90000,90000,100000,140000,120000]},
-    {name:'惠州巨浪',  mgr:'肖立铭', tgt:890000, days:[115000,115000,115000,115000,130000,160000,140000]},
-    {name:'惠安广通',  mgr:'尤云生', tgt:545000, days:[75000,75000,75000,75000,85000,85000,75000]},
-    {name:'泉州小花猫',mgr:'陈彩凤', tgt:655000, days:[80000,85000,85000,85000,100000,120000,100000]},
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:665000, days:[85000,85000,90000,90000,100000,105000,110000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:760000, days:[100000,100000,105000,105000,105000,125000,125000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:760000, days:[100000,100000,100000,100000,110000,120000,130000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:900000, days:[110000,110000,110000,120000,140000,160000,150000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:525000, days:[65000,65000,65000,75000,85000,85000,85000]},
+    {name:'泉州小花猫',mgr:'康子诚', tgt:645000, days:[70000,85000,85000,85000,100000,110000,110000]},
   ],
   cpc: [
-    {name:'义乌汐洋',  mgr:'陈铨',   tgt:31000,  days:[4000,4000,4000,4000,5000,5000,5000]},
-    {name:'慈溪哲光',  mgr:'孙浩',   tgt:40000,  days:[5500,5500,5500,5500,7000,7000,7000]},
-    {name:'惠州柏万',  mgr:'林启梁', tgt:20400,  days:[2800,2800,2800,2800,3500,4500,4000]},
-    {name:'惠州巨浪',  mgr:'肖立铭', tgt:19500,  days:[2500,2500,2500,2500,3000,4000,3000]},
-    {name:'惠安广通',  mgr:'尤云生', tgt:15100,  days:[2000,2000,2000,2000,2300,2500,2300]},
-    {name:'泉州小花猫',mgr:'陈彩凤', tgt:35500,  days:[4500,5000,5000,5500,5500,5500,5500]},
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:32500,  days:[4500,4500,4500,4500,5000,5000,5000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:37000,  days:[4000,4000,4000,4000,5500,5500,5500]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:23800,  days:[3000,3000,3000,3000,3400,4000,3500]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:16500,  days:[2000,2000,2000,2000,2500,3000,3000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:16500,  days:[2000,2000,2000,2000,2500,2500,2500]},
+    {name:'泉州小花猫',mgr:'康子诚', tgt:22200,  days:[2600,2700,2800,2900,3000,3200,3200]},
   ],
   coupon: [
-    {name:'义乌汐洋',  mgr:'陈铨',   tgt:20000,  days:[3000,4000,4000,3000,3000,3000,0]},
-    {name:'慈溪哲光',  mgr:'孙浩',   tgt:380000, days:[50000,50000,50000,50000,60000,60000,60000]},
-    {name:'惠州柏万',  mgr:'林启梁', tgt:30000,  days:[5000,5000,5000,5000,5000,5000,0]},
-    {name:'惠州巨浪',  mgr:'肖立铭', tgt:225000, days:[30000,30000,31000,31000,31000,37000,35000]},
-    {name:'惠安广通',  mgr:'尤云生', tgt:0,      days:[0,0,0,0,0,0,0]},
-    {name:'泉州小花猫',mgr:'陈彩凤', tgt:30000,  days:[6000,6000,6000,6000,6000,0,0]},
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:213000, days:[27000,27000,31000,31000,31000,33000,33000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:245000, days:[35000,35000,35000,35000,35000,35000,35000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:255000, days:[35000,35000,35000,35000,40000,40000,35000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:230000, days:[30000,30000,30000,30000,30000,35000,35000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:155000, days:[20000,20000,20000,20000,25000,25000,25000]},
+    {name:'泉州小花猫',mgr:'康子诚', tgt:230000, days:[25000,30000,30000,30000,35000,35000,35000]},
   ],
   newsgn: [
     {name:'义乌汐洋',  mgr:'陈铨',   tgt:15, cur:12},
@@ -1300,7 +1300,7 @@ function renderAll(){
   '慈溪哲光':  {gtv:949516, gtv_y:92465, gtv_excl:3.9, cpc:43280, cpc_newsgn:5, cpc_wpu:5941, mem:44749, memrate:29.17, memrenew:14, memexpire:48, memurgent:34, memrenew_day:14, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1784, zrq_bind:563, zrq_bindrate:30.8, zrq_bind_inc_m:255, zrq_bind_inc_d:563, zrq_dong:66, zrq_dongrate:3.7, zrq_gtv:140022, zrq_gtv_y:140022, zrq_pct:14.7, zrq_pct_y:14.7, zrq_pay:952931, zrq_pay_y:952931, zrq_aov:157, bml_lose_n:8, bml_lose_pct:47.1, cps:59253, cpc_y:4432, cpc_y2:5033, score:151, score_day:-13, score_near:214, dongxiao:45, dongxiao_day:3, dongxiao_gtv:57971, visit:0, order:111, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:9, bml_mid:3, bml_low:2, bml_days:16},
   '义乌汐洋':  {gtv:1073777, gtv_y:121785, gtv_excl:0.88, cpc:52757, cpc_newsgn:2, cpc_wpu:11135, mem:39400, memrate:33.33, memrenew:13, memexpire:39, memurgent:26, memrenew_day:13, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1685, zrq_bind:644, zrq_bindrate:40, zrq_bind_inc_m:221, zrq_bind_inc_d:644, zrq_dong:113, zrq_dongrate:6.7, zrq_gtv:300846, zrq_gtv_y:300846, zrq_pct:27.9, zrq_pct_y:27.9, zrq_pay:1079953, zrq_pay_y:1079953, zrq_aov:229, bml_lose_n:4, bml_lose_pct:36.4, cps:64002, cpc_y:4463, cpc_y2:5522, score:156, score_day:-13, score_near:174, dongxiao:63, dongxiao_day:7, dongxiao_gtv:127500, visit:0, order:74, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:7, bml_mid:0, bml_low:0, bml_days:11},
   };
-  const ns={_updated: '13:26',_dataDate: '2026-05-11f'};
+  const ns={_updated: '14:15',_dataDate: '2026-05-11g'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
