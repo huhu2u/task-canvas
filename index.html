@@ -114,7 +114,6 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <button class="tabn active" id="tab-perf"     onclick="switchTab('perf')">📊 核心业绩</button>
   <button class="tabn"        id="tab-score"    onclick="switchTab('score')">⭐ 好店评分</button>
   <button class="tabn"        id="tab-dongxiao" onclick="switchTab('dongxiao')">🔖 好店职人码动销</button>
-  <button class="tabn"        id="tab-visit"    onclick="switchTab('visit')">🧑 有效作业</button>
   <button class="tabn"        id="tab-order"    onclick="switchTab('order')">📦 物料工单</button>
   <button class="tabn"        id="tab-memrate"  onclick="switchTab('memrate')">🔄 MEM续约</button>
   <button class="tabn"        id="tab-aurora"   onclick="switchTab('aurora')">🔧 欧若拉工单</button>
@@ -194,21 +193,6 @@ table.dt tbody tr:last-child td{border-bottom:none}
 </div>
 
 <!-- Tab4: 有效作业 -->
-<div id="panel-visit" class="tab-panel">
-  <div class="panel-topbar">
-    <div><div class="panel-title">🧑 有效作业人数</div><div class="panel-sub">拜访达标天数 · 月目标20天 | 点击可编辑</div></div>
-    <div id="visit-badge" class="timepct-badge"></div>
-  </div>
-  <div id="visit-cards" class="sum-cards"></div>
-  <div class="sec">
-    <div class="sec-hdr c-visit"><span>🧑 有效作业明细</span></div>
-    <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">达标天数</th><th class="ht">月目标</th>
-      <th class="hp">完成进度</th><th class="hg">缺口</th>
-      <th class="hd">昨日有效拜访</th><th class="hd">昨日好店拜访</th>
-    </tr></thead><tbody id="visit-tbody"></tbody></table></div>
-  </div>
-</div>
 
 <!-- Tab5: 物料工单 -->
 <div id="panel-order" class="tab-panel">
@@ -1338,7 +1322,7 @@ function renderAll(){
   '慈溪哲光':  {gtv:1126592, gtv_y:92237, gtv_excl:3.7, cpc:52845, cpc_newsgn:6, cpc_wpu:6883, mem:47549, memrate:31.2, memrenew:15, memexpire:48, memurgent:33, memrenew_day:1, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1778, zrq_bind:562, zrq_bindrate:31.6, zrq_bind_inc_m:4, zrq_bind_inc_d:-1, zrq_dong:70, zrq_dongrate:3.9, zrq_gtv:186366, zrq_gtv_y:25237, zrq_pct:16.6, zrq_pct_y:29.9, zrq_pay:1119763, zrq_pay_y:92237, zrq_aov:169, bml_lose_n:6, bml_lose_pct:35.3, cps:78375, cpc_y:4447, cpc_y2:4792, score:162, score_day:-13, score_near:208, dongxiao:61, dongxiao_day:8, dongxiao_gtv:57971, visit:0, order:111, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:5, bml_mid:1, bml_low:1, bml_days:16, wpt_hd:532, wpt_open:48, wpt_open_day:0, wpt_hd_open:48, wpt_hd_not:484, wpt_amt:6903},
   '义乌汐洋':  {gtv:1260930, gtv_y:89556, gtv_excl:1.11, cpc:61823, cpc_newsgn:2, cpc_wpu:12830, mem:45000, memrate:38.5, memrenew:15, memexpire:39, memurgent:24, memrenew_day:2, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1681, zrq_bind:653, zrq_bindrate:38.8, zrq_bind_inc_m:16, zrq_bind_inc_d:7, zrq_dong:109, zrq_dongrate:6.5, zrq_gtv:354809, zrq_gtv_y:22785, zrq_pct:28.1, zrq_pct_y:27.3, zrq_pay:1262081, zrq_pay_y:89556, zrq_aov:234, bml_lose_n:3, bml_lose_pct:30.0, cps:84898, cpc_y:3790, cpc_y2:4475, score:156, score_day:-13, score_near:183, dongxiao:66, dongxiao_day:3, dongxiao_gtv:127500, visit:0, order:74, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:2, bml_mid:0, bml_low:0, bml_days:11, wpt_hd:459, wpt_open:77, wpt_open_day:0, wpt_hd_open:77, wpt_hd_not:382, wpt_amt:12889},
   };
-  const ns={_updated: '10:52',_dataDate: '2026-05-13k'};
+  const ns={_updated: '10:52',_dataDate: '2026-05-13l'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
