@@ -405,12 +405,12 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // 配置：代运营商基础数据
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
-  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3956557, cpc_tgt:87905,  cpc_newsgn_tgt:15, score_tgt:246, dongxiao_tgt:225, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
-  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3240197, cpc_tgt:110304, cpc_newsgn_tgt:12, score_tgt:156, dongxiao_tgt:162, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
-  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:2774237, cpc_tgt:123755, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:193, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
-  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2358641, cpc_tgt:73700,  cpc_newsgn_tgt:9,  score_tgt:116, dongxiao_tgt:132, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
-  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3117649, cpc_tgt:155148, cpc_newsgn_tgt:16, score_tgt:161, dongxiao_tgt:151, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
-  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3002361, cpc_tgt:151368, cpc_newsgn_tgt:16, score_tgt:161, dongxiao_tgt:162, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
+  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3956557, cpc_tgt:87905,  cpc_newsgn_tgt:15, score_tgt:283, dongxiao_tgt:225, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
+  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3240197, cpc_tgt:110304, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:162, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
+  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:2774237, cpc_tgt:123755, cpc_newsgn_tgt:12, score_tgt:195, dongxiao_tgt:193, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
+  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2358641, cpc_tgt:73700,  cpc_newsgn_tgt:9,  score_tgt:139, dongxiao_tgt:132, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
+  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3117649, cpc_tgt:155148, cpc_newsgn_tgt:16, score_tgt:185, dongxiao_tgt:151, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
+  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3002361, cpc_tgt:151368, cpc_newsgn_tgt:16, score_tgt:184, dongxiao_tgt:162, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
@@ -1303,7 +1303,7 @@ function renderAll(){
   '慈溪哲光':  {gtv:1126592, gtv_y:92237, gtv_excl:3.7, cpc:52845, cpc_newsgn:6, cpc_wpu:6883, mem:47549, memrate:31.2, memrenew:15, memexpire:48, memurgent:33, memrenew_day:1, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1778, zrq_bind:562, zrq_bindrate:31.6, zrq_bind_inc_m:4, zrq_bind_inc_d:-1, zrq_dong:70, zrq_dongrate:3.9, zrq_gtv:186366, zrq_gtv_y:25237, zrq_pct:16.6, zrq_pct_y:29.9, zrq_pay:1119763, zrq_pay_y:92237, zrq_aov:169, bml_lose_n:6, bml_lose_pct:35.3, cps:78375, cpc_y:4447, cpc_y2:4792, score:162, score_day:-13, score_near:208, dongxiao:61, dongxiao_day:8, dongxiao_gtv:57971, visit:0, order:111, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:5, bml_mid:1, bml_low:1, bml_days:16},
   '义乌汐洋':  {gtv:1260930, gtv_y:89556, gtv_excl:1.11, cpc:61823, cpc_newsgn:2, cpc_wpu:12830, mem:45000, memrate:38.5, memrenew:15, memexpire:39, memurgent:24, memrenew_day:2, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1681, zrq_bind:653, zrq_bindrate:38.8, zrq_bind_inc_m:16, zrq_bind_inc_d:7, zrq_dong:109, zrq_dongrate:6.5, zrq_gtv:354809, zrq_gtv_y:22785, zrq_pct:28.1, zrq_pct_y:27.3, zrq_pay:1262081, zrq_pay_y:89556, zrq_aov:234, bml_lose_n:3, bml_lose_pct:30.0, cps:84898, cpc_y:3790, cpc_y2:4475, score:156, score_day:-13, score_near:183, dongxiao:66, dongxiao_day:3, dongxiao_gtv:127500, visit:0, order:74, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:2, bml_mid:0, bml_low:0, bml_days:11},
   };
-  const ns={_updated: '10:24',_dataDate: '2026-05-13h'};
+  const ns={_updated: '10:26',_dataDate: '2026-05-13i'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
