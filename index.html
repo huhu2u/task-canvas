@@ -1312,7 +1312,7 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 版本比较：本地版本 >= 当前嵌入版本则跳过，否则强制覆盖
-  const EMBED_VER = '2026-05-13k';
+  const EMBED_VER = '2026-05-13z2';
   if(ex._dataDate && ex._dataDate >= EMBED_VER) return;
   const D={
     '惠州巨浪':  {gtv:1479313, gtv_y:105490, gtv_excl:4.24, cpc:33028, cpc_newsgn:7, cpc_wpu:14787, mem:80858, memrate:35.1, memrenew:19, memexpire:55, memurgent:36, memrenew_day:7, mem_visit_all:13.3, mem_visit_renew:28.6, mem_visit_break:0.0, mem_visit_pend:11.4, zrq_shops:2538, zrq_bind:666, zrq_bindrate:26.2, zrq_bind_inc_m:16, zrq_bind_inc_d:1, zrq_dong:118, zrq_dongrate:4.6, zrq_gtv:272946, zrq_gtv_y:29928, zrq_pct:18.4, zrq_pct_y:28.7, zrq_pay:1485793, zrq_pay_y:105490, zrq_aov:170, bml_lose_n:5, bml_lose_pct:25.0, cps:97277, cpc_y:1071, cpc_y2:2442, score:239, score_day:-30, score_near:297, dongxiao:86, dongxiao_day:10, dongxiao_gtv:87997, visit:0, order:136, aurora_total:6, aurora_act_done:5, aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0, bml_high:4, bml_mid:1, bml_low:1, bml_days:26, wpt_hd:794, wpt_open:154, wpt_open_day:0, wpt_hd_open:154, wpt_hd_not:640, wpt_amt:14787},
@@ -1322,7 +1322,7 @@ function renderAll(){
   '慈溪哲光':  {gtv:1126592, gtv_y:92237, gtv_excl:3.7, cpc:52845, cpc_newsgn:6, cpc_wpu:6883, mem:47549, memrate:31.2, memrenew:15, memexpire:48, memurgent:33, memrenew_day:1, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1778, zrq_bind:562, zrq_bindrate:31.6, zrq_bind_inc_m:4, zrq_bind_inc_d:-1, zrq_dong:70, zrq_dongrate:3.9, zrq_gtv:186366, zrq_gtv_y:25237, zrq_pct:16.6, zrq_pct_y:29.9, zrq_pay:1119763, zrq_pay_y:92237, zrq_aov:169, bml_lose_n:6, bml_lose_pct:35.3, cps:78375, cpc_y:4447, cpc_y2:4792, score:162, score_day:-13, score_near:208, dongxiao:61, dongxiao_day:8, dongxiao_gtv:57971, visit:0, order:124, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:5, bml_mid:1, bml_low:1, bml_days:16, wpt_hd:532, wpt_open:48, wpt_open_day:0, wpt_hd_open:48, wpt_hd_not:484, wpt_amt:6903},
   '义乌汐洋':  {gtv:1260930, gtv_y:89556, gtv_excl:1.11, cpc:61823, cpc_newsgn:2, cpc_wpu:12830, mem:45000, memrate:38.5, memrenew:15, memexpire:39, memurgent:24, memrenew_day:2, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1681, zrq_bind:653, zrq_bindrate:38.8, zrq_bind_inc_m:16, zrq_bind_inc_d:7, zrq_dong:109, zrq_dongrate:6.5, zrq_gtv:354809, zrq_gtv_y:22785, zrq_pct:28.1, zrq_pct_y:27.3, zrq_pay:1262081, zrq_pay_y:89556, zrq_aov:234, bml_lose_n:3, bml_lose_pct:30.0, cps:84898, cpc_y:3790, cpc_y2:4475, score:156, score_day:-13, score_near:183, dongxiao:66, dongxiao_day:3, dongxiao_gtv:127500, visit:0, order:83, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:2, bml_mid:0, bml_low:0, bml_days:11, wpt_hd:459, wpt_open:77, wpt_open_day:0, wpt_hd_open:77, wpt_hd_not:382, wpt_amt:12889},
   };
-  const ns={_updated: '10:59',_dataDate: '2026-05-13m'};
+  const ns={_updated: '11:07',_dataDate: '2026-05-13z2'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
