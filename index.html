@@ -122,6 +122,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <button class="tabn"        id="tab-zrq"      onclick="switchTab('zrq')">📌 职人码进度</button>
   <button class="tabn"        id="tab-week"     onclick="switchTab('week')">🎯 周目标追踪</button>
   <button class="tabn"        id="tab-bml"      onclick="switchTab('bml')">🏷 BML</button>
+  <button class="tabn"        id="tab-wpt"      onclick="switchTab('wpt')">🏪 旺铺通</button>
 </div>
 
 <!-- Tab1: 核心业绩 -->
@@ -384,6 +385,33 @@ table.dt tbody tr:last-child td{border-bottom:none}
       <th style="background:#f0fdf4;color:#166534">低危(≤2天)</th>
       <th class="hp">月累计天数</th>
     </tr></thead><tbody id="bml-tbody"></tbody></table></div>
+  </div>
+</div>
+
+
+<!-- Tab12: 旺铺通 -->
+<div id="panel-wpt" class="tab-panel">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div>
+      <div style="font-size:18px;font-weight:700;color:#0369a1">🏪 旺铺通开通看板</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:2px">开通数=消耗额>0 · 好店开通率 · 日变化 | 点击可编辑</div>
+    </div>
+    <div style="font-size:11px;color:#9ca3af">来源：CPC旺铺通底表 · 好店口径</div>
+  </div>
+  <div id="wpt-cards" class="sum-cards"></div>
+  <div class="sec">
+    <div class="sec-hdr" style="background:#e0f2fe;border-left:4px solid #0369a1"><span>📊 代运营商旺铺通汇总</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th>
+      <th class="hc">操盘手</th>
+      <th style="background:#dbeafe;color:#1e40af">好店数</th>
+      <th style="background:#dbeafe;color:#1e40af">开通数<br><span style="font-size:9px;font-weight:400">(消耗>0)</span></th>
+      <th style="background:#dcfce7;color:#166534">日变化</th>
+      <th style="background:#dbeafe;color:#1e40af">好店开通</th>
+      <th style="background:#fee2e2;color:#991b1b">好店未开通</th>
+      <th style="background:#dcfce7;color:#166534">好店开通率</th>
+      <th style="background:#fef9c3;color:#854d0e">旺铺通消耗额</th>
+    </tr></thead><tbody id="wpt-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -923,6 +951,13 @@ const FIELD_META = {
   aurora_act_pend:{label:'动作-待处理'},
   aurora_res_done:{label:'结果-已完成'},
   aurora_res_pend:{label:'结果-待处理'},
+
+  wpt_hd:       {label:'好店数'},
+  wpt_open:     {label:'开通数(消耗>0)'},
+  wpt_open_day: {label:'日变化(+/-数字)'},
+  wpt_hd_open:  {label:'好店开通数'},
+  wpt_hd_not:   {label:'好店未开通数'},
+  wpt_amt:      {label:'旺铺通消耗额'},
   bml_lose_n:  {label:'全量Lose数'},
   bml_lose_pct:{label:'Lose率(%)，如输入59.5'},
   bml_high:    {label:'高危(≥5天)门店数'},
@@ -1296,14 +1331,14 @@ function renderAll(){
   const EMBED_VER = '2026-05-13z';
   if(ex._dataDate && ex._dataDate >= EMBED_VER) return;
   const D={
-    '惠州巨浪':  {gtv:1479313, gtv_y:105490, gtv_excl:4.24, cpc:33028, cpc_newsgn:7, cpc_wpu:14787, mem:80858, memrate:35.1, memrenew:19, memexpire:55, memurgent:36, memrenew_day:7, mem_visit_all:13.3, mem_visit_renew:28.6, mem_visit_break:0.0, mem_visit_pend:11.4, zrq_shops:2538, zrq_bind:666, zrq_bindrate:26.2, zrq_bind_inc_m:16, zrq_bind_inc_d:1, zrq_dong:118, zrq_dongrate:4.6, zrq_gtv:272946, zrq_gtv_y:29928, zrq_pct:18.4, zrq_pct_y:28.7, zrq_pay:1485793, zrq_pay_y:105490, zrq_aov:170, bml_lose_n:5, bml_lose_pct:25.0, cps:97277, cpc_y:1071, cpc_y2:2442, score:239, score_day:-30, score_near:297, dongxiao:86, dongxiao_day:10, dongxiao_gtv:87997, visit:0, order:135, aurora_total:6, aurora_act_done:5, aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0, bml_high:4, bml_mid:1, bml_low:1, bml_days:26},
-  '惠州柏万':  {gtv:1326779, gtv_y:92303, gtv_excl:2.25, cpc:41191, cpc_newsgn:2, cpc_wpu:12681, mem:58258, memrate:41.7, memrenew:25, memexpire:59, memurgent:34, memrenew_day:3, mem_visit_all:20.0, mem_visit_renew:31.8, mem_visit_break:14.3, mem_visit_pend:13.3, zrq_shops:1662, zrq_bind:543, zrq_bindrate:32.7, zrq_bind_inc_m:34, zrq_bind_inc_d:10, zrq_dong:103, zrq_dongrate:6.2, zrq_gtv:354038, zrq_gtv_y:51252, zrq_pct:26.6, zrq_pct_y:46.7, zrq_pay:1332874, zrq_pay_y:92303, zrq_aov:207, bml_lose_n:2, bml_lose_pct:9.1, cps:85532, cpc_y:2057, cpc_y2:2841, score:159, score_day:-24, score_near:185, dongxiao:77, dongxiao_day:4, dongxiao_gtv:104702, visit:0, order:75, aurora_total:7, aurora_act_done:4, aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:5, bml_high:5, bml_mid:1, bml_low:0, bml_days:29},
-  '泉州小花猫':  {gtv:1096416, gtv_y:70414, gtv_excl:2.45, cpc:43055, cpc_newsgn:4, cpc_wpu:11960, mem:35000, memrate:22.0, memrenew:9, memexpire:41, memurgent:32, memrenew_day:2, mem_visit_all:19.6, mem_visit_renew:28.6, mem_visit_break:42.9, mem_visit_pend:14.8, zrq_shops:1793, zrq_bind:588, zrq_bindrate:32.8, zrq_bind_inc_m:22, zrq_bind_inc_d:2, zrq_dong:145, zrq_dongrate:8.1, zrq_gtv:295129, zrq_gtv_y:18170, zrq_pct:27.0, zrq_pct_y:26.5, zrq_pay:1094732, zrq_pay_y:70414, zrq_aov:190, bml_lose_n:11, bml_lose_pct:45.8, cps:70961, cpc_y:2065, cpc_y2:2640, score:168, score_day:-16, score_near:240, dongxiao:87, dongxiao_day:6, dongxiao_gtv:96293, visit:0, order:104, aurora_total:15, aurora_act_done:4, aurora_act_pend:11, aurora_res_done:4, aurora_res_pend:11, bml_high:11, bml_mid:1, bml_low:0, bml_days:27},
-  '惠安广通':  {gtv:818972, gtv_y:63086, gtv_excl:1.44, cpc:27620, cpc_newsgn:1, cpc_wpu:8411, mem:40729, memrate:33.3, memrenew:13, memexpire:39, memurgent:26, memrenew_day:3, mem_visit_all:23.9, mem_visit_renew:27.3, mem_visit_break:22.2, mem_visit_pend:30.0, zrq_shops:1567, zrq_bind:467, zrq_bindrate:29.8, zrq_bind_inc_m:10, zrq_bind_inc_d:0, zrq_dong:93, zrq_dongrate:5.9, zrq_gtv:151406, zrq_gtv_y:21256, zrq_pct:18.6, zrq_pct_y:34.5, zrq_pay:814393, zrq_pay_y:63086, zrq_aov:119, bml_lose_n:7, bml_lose_pct:30.4, cps:55796, cpc_y:1130, cpc_y2:1614, score:122, score_day:-4, score_near:200, dongxiao:62, dongxiao_day:2, dongxiao_gtv:38751, visit:0, order:56, aurora_total:10, aurora_act_done:7, aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:8, bml_high:5, bml_mid:1, bml_low:0, bml_days:24},
-  '慈溪哲光':  {gtv:1126592, gtv_y:92237, gtv_excl:3.7, cpc:52845, cpc_newsgn:6, cpc_wpu:6883, mem:47549, memrate:31.2, memrenew:15, memexpire:48, memurgent:33, memrenew_day:1, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1778, zrq_bind:562, zrq_bindrate:31.6, zrq_bind_inc_m:4, zrq_bind_inc_d:-1, zrq_dong:70, zrq_dongrate:3.9, zrq_gtv:186366, zrq_gtv_y:25237, zrq_pct:16.6, zrq_pct_y:29.9, zrq_pay:1119763, zrq_pay_y:92237, zrq_aov:169, bml_lose_n:6, bml_lose_pct:35.3, cps:78375, cpc_y:4447, cpc_y2:4792, score:162, score_day:-13, score_near:208, dongxiao:61, dongxiao_day:8, dongxiao_gtv:57971, visit:0, order:111, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:5, bml_mid:1, bml_low:1, bml_days:16},
-  '义乌汐洋':  {gtv:1260930, gtv_y:89556, gtv_excl:1.11, cpc:61823, cpc_newsgn:2, cpc_wpu:12830, mem:45000, memrate:38.5, memrenew:15, memexpire:39, memurgent:24, memrenew_day:2, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1681, zrq_bind:653, zrq_bindrate:38.8, zrq_bind_inc_m:16, zrq_bind_inc_d:7, zrq_dong:109, zrq_dongrate:6.5, zrq_gtv:354809, zrq_gtv_y:22785, zrq_pct:28.1, zrq_pct_y:27.3, zrq_pay:1262081, zrq_pay_y:89556, zrq_aov:234, bml_lose_n:3, bml_lose_pct:30.0, cps:84898, cpc_y:3790, cpc_y2:4475, score:156, score_day:-13, score_near:183, dongxiao:66, dongxiao_day:3, dongxiao_gtv:127500, visit:0, order:74, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:2, bml_mid:0, bml_low:0, bml_days:11},
+    '惠州巨浪':  {gtv:1479313, gtv_y:105490, gtv_excl:4.24, cpc:33028, cpc_newsgn:7, cpc_wpu:14787, mem:80858, memrate:35.1, memrenew:19, memexpire:55, memurgent:36, memrenew_day:7, mem_visit_all:13.3, mem_visit_renew:28.6, mem_visit_break:0.0, mem_visit_pend:11.4, zrq_shops:2538, zrq_bind:666, zrq_bindrate:26.2, zrq_bind_inc_m:16, zrq_bind_inc_d:1, zrq_dong:118, zrq_dongrate:4.6, zrq_gtv:272946, zrq_gtv_y:29928, zrq_pct:18.4, zrq_pct_y:28.7, zrq_pay:1485793, zrq_pay_y:105490, zrq_aov:170, bml_lose_n:5, bml_lose_pct:25.0, cps:97277, cpc_y:1071, cpc_y2:2442, score:239, score_day:-30, score_near:297, dongxiao:86, dongxiao_day:10, dongxiao_gtv:87997, visit:0, order:135, aurora_total:6, aurora_act_done:5, aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0, bml_high:4, bml_mid:1, bml_low:1, bml_days:26, wpt_hd:794, wpt_open:154, wpt_open_day:0, wpt_hd_open:154, wpt_hd_not:640, wpt_amt:14787},
+  '惠州柏万':  {gtv:1326779, gtv_y:92303, gtv_excl:2.25, cpc:41191, cpc_newsgn:2, cpc_wpu:12681, mem:58258, memrate:41.7, memrenew:25, memexpire:59, memurgent:34, memrenew_day:3, mem_visit_all:20.0, mem_visit_renew:31.8, mem_visit_break:14.3, mem_visit_pend:13.3, zrq_shops:1662, zrq_bind:543, zrq_bindrate:32.7, zrq_bind_inc_m:34, zrq_bind_inc_d:10, zrq_dong:103, zrq_dongrate:6.2, zrq_gtv:354038, zrq_gtv_y:51252, zrq_pct:26.6, zrq_pct_y:46.7, zrq_pay:1332874, zrq_pay_y:92303, zrq_aov:207, bml_lose_n:2, bml_lose_pct:9.1, cps:85532, cpc_y:2057, cpc_y2:2841, score:159, score_day:-24, score_near:185, dongxiao:77, dongxiao_day:4, dongxiao_gtv:104702, visit:0, order:75, aurora_total:7, aurora_act_done:4, aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:5, bml_high:5, bml_mid:1, bml_low:0, bml_days:29, wpt_hd:482, wpt_open:85, wpt_open_day:0, wpt_hd_open:85, wpt_hd_not:397, wpt_amt:12680},
+  '泉州小花猫':  {gtv:1096416, gtv_y:70414, gtv_excl:2.45, cpc:43055, cpc_newsgn:4, cpc_wpu:11960, mem:35000, memrate:22.0, memrenew:9, memexpire:41, memurgent:32, memrenew_day:2, mem_visit_all:19.6, mem_visit_renew:28.6, mem_visit_break:42.9, mem_visit_pend:14.8, zrq_shops:1793, zrq_bind:588, zrq_bindrate:32.8, zrq_bind_inc_m:22, zrq_bind_inc_d:2, zrq_dong:145, zrq_dongrate:8.1, zrq_gtv:295129, zrq_gtv_y:18170, zrq_pct:27.0, zrq_pct_y:26.5, zrq_pay:1094732, zrq_pay_y:70414, zrq_aov:190, bml_lose_n:11, bml_lose_pct:45.8, cps:70961, cpc_y:2065, cpc_y2:2640, score:168, score_day:-16, score_near:240, dongxiao:87, dongxiao_day:6, dongxiao_gtv:96293, visit:0, order:104, aurora_total:15, aurora_act_done:4, aurora_act_pend:11, aurora_res_done:4, aurora_res_pend:11, bml_high:11, bml_mid:1, bml_low:0, bml_days:27, wpt_hd:596, wpt_open:94, wpt_open_day:0, wpt_hd_open:94, wpt_hd_not:502, wpt_amt:11977},
+  '惠安广通':  {gtv:818972, gtv_y:63086, gtv_excl:1.44, cpc:27620, cpc_newsgn:1, cpc_wpu:8411, mem:40729, memrate:33.3, memrenew:13, memexpire:39, memurgent:26, memrenew_day:3, mem_visit_all:23.9, mem_visit_renew:27.3, mem_visit_break:22.2, mem_visit_pend:30.0, zrq_shops:1567, zrq_bind:467, zrq_bindrate:29.8, zrq_bind_inc_m:10, zrq_bind_inc_d:0, zrq_dong:93, zrq_dongrate:5.9, zrq_gtv:151406, zrq_gtv_y:21256, zrq_pct:18.6, zrq_pct_y:34.5, zrq_pay:814393, zrq_pay_y:63086, zrq_aov:119, bml_lose_n:7, bml_lose_pct:30.4, cps:55796, cpc_y:1130, cpc_y2:1614, score:122, score_day:-4, score_near:200, dongxiao:62, dongxiao_day:2, dongxiao_gtv:38751, visit:0, order:56, aurora_total:10, aurora_act_done:7, aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:8, bml_high:5, bml_mid:1, bml_low:0, bml_days:24, wpt_hd:402, wpt_open:90, wpt_open_day:0, wpt_hd_open:90, wpt_hd_not:312, wpt_amt:8410},
+  '慈溪哲光':  {gtv:1126592, gtv_y:92237, gtv_excl:3.7, cpc:52845, cpc_newsgn:6, cpc_wpu:6883, mem:47549, memrate:31.2, memrenew:15, memexpire:48, memurgent:33, memrenew_day:1, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1778, zrq_bind:562, zrq_bindrate:31.6, zrq_bind_inc_m:4, zrq_bind_inc_d:-1, zrq_dong:70, zrq_dongrate:3.9, zrq_gtv:186366, zrq_gtv_y:25237, zrq_pct:16.6, zrq_pct_y:29.9, zrq_pay:1119763, zrq_pay_y:92237, zrq_aov:169, bml_lose_n:6, bml_lose_pct:35.3, cps:78375, cpc_y:4447, cpc_y2:4792, score:162, score_day:-13, score_near:208, dongxiao:61, dongxiao_day:8, dongxiao_gtv:57971, visit:0, order:111, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:5, bml_mid:1, bml_low:1, bml_days:16, wpt_hd:532, wpt_open:48, wpt_open_day:0, wpt_hd_open:48, wpt_hd_not:484, wpt_amt:6903},
+  '义乌汐洋':  {gtv:1260930, gtv_y:89556, gtv_excl:1.11, cpc:61823, cpc_newsgn:2, cpc_wpu:12830, mem:45000, memrate:38.5, memrenew:15, memexpire:39, memurgent:24, memrenew_day:2, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1681, zrq_bind:653, zrq_bindrate:38.8, zrq_bind_inc_m:16, zrq_bind_inc_d:7, zrq_dong:109, zrq_dongrate:6.5, zrq_gtv:354809, zrq_gtv_y:22785, zrq_pct:28.1, zrq_pct_y:27.3, zrq_pay:1262081, zrq_pay_y:89556, zrq_aov:234, bml_lose_n:3, bml_lose_pct:30.0, cps:84898, cpc_y:3790, cpc_y2:4475, score:156, score_day:-13, score_near:183, dongxiao:66, dongxiao_day:3, dongxiao_gtv:127500, visit:0, order:74, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:2, bml_mid:0, bml_low:0, bml_days:11, wpt_hd:459, wpt_open:77, wpt_open_day:0, wpt_hd_open:77, wpt_hd_not:382, wpt_amt:12889},
   };
-  const ns={_updated: '10:26',_dataDate: '2026-05-13i'};
+  const ns={_updated: '10:48',_dataDate: '2026-05-13j'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
