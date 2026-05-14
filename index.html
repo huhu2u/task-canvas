@@ -991,77 +991,69 @@ function closeEdit(){
 // 渲染：职人码进度看板
 // ════════════════════════════════════════════════════════════
 function renderZrq(){
-  const fields=[
-    'zrq_shops','zrq_bind','zrq_bindrate',
-    'zrq_bind_inc_m','zrq_bind_inc_d',
-    'zrq_dong','zrq_dongrate',
-    'zrq_gtv','zrq_gtv_y',
-    'zrq_pct','zrq_pct_y',
-    'zrq_pay_y','zrq_pay','zrq_aov'
-  ];
-  // 汇总行
-  const sumRow=()=>{
-    let cols='<td class="tn" style="font-weight:700">粤闽浙汇总</td><td class="tc">胡英杰</td>';
-    const sumFields=['zrq_shops','zrq_bind',null,'zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong',null,'zrq_gtv','zrq_gtv_y',null,null,'zrq_pay_y','zrq_pay',null];
-    const numFields=['zrq_shops','zrq_bind','zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong','zrq_gtv','zrq_gtv_y','zrq_pay_y','zrq_pay'];
-    let sums={};
-    numFields.forEach(f=>{
-      sums[f]=AGENTS.reduce((acc,a)=>acc+(parseFloat(g(a.name,f))||0),0);
+  try{
+    const safe=v => (v===undefined || v===null || v==='') ? '—' : String(v);
+    const safeNum=v => (parseFloat(v)||0);
+    const fmtSafe=v => (safeNum(v) ? fmtNum(Math.round(safeNum(v))) : '—');
+    const sumRow=()=>{
+      let cols='<td class="tn" style="font-weight:700">粤闽浙汇总</td><td class="tc">胡英杰</td>';
+      const numFields=['zrq_shops','zrq_bind','zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong','zrq_gtv','zrq_gtv_y','zrq_pay_y','zrq_pay'];
+      let sums={};
+      numFields.forEach(f=>{ sums[f]=AGENTS.reduce((acc,a)=>acc+(parseFloat(g(a.name,f))||0),0); });
+      const fmtSum=f=>sums[f]?fmtNum(Math.round(sums[f])):'—';
+      cols+=`<td class="tc">${fmtSum('zrq_shops')}</td>`;
+      cols+=`<td class="tc">${fmtSum('zrq_bind')}</td>`;
+      cols+=`<td class="tc">—</td>`;
+      cols+=`<td class="tc">${fmtSum('zrq_bind_inc_m')}</td>`;
+      cols+=`<td class="tc">${fmtSum('zrq_bind_inc_d')}</td>`;
+      cols+=`<td class="tc">${fmtSum('zrq_dong')}</td>`;
+      cols+=`<td class="tc">—</td>`;
+      cols+=`<td class="tc">${fmtSum('zrq_gtv')}</td>`;
+      const gtvY=sums['zrq_gtv_y'];
+      cols+=`<td class="tc" style="color:${gtvY>0?'#16a34a':'#dc2626'}">${gtvY>0?'+':''}${fmtNum(Math.round(gtvY))}</td>`;
+      cols+=`<td class="tc">—</td><td class="tc">—</td>`;
+      cols+=`<td class="tc">${fmtSum('zrq_pay_y')}</td>`;
+      cols+=`<td class="tc">${fmtSum('zrq_pay')}</td>`;
+      cols+=`<td class="tc">—</td>`;
+      return `<tr style="background:#dcfce7;font-weight:700">${cols}</tr>`;
+    };
+    let html=sumRow();
+    AGENTS.forEach(a=>{
+      const shops=g(a.name,'zrq_shops'), bind=g(a.name,'zrq_bind');
+      const bindrate=g(a.name,'zrq_bindrate');
+      const bindIncM=g(a.name,'zrq_bind_inc_m'), bindIncD=g(a.name,'zrq_bind_inc_d');
+      const dong=g(a.name,'zrq_dong'), dongrate=g(a.name,'zrq_dongrate');
+      const gtv=g(a.name,'zrq_gtv'), gtvY=g(a.name,'zrq_gtv_y');
+      const pct=g(a.name,'zrq_pct'), pctY=g(a.name,'zrq_pct_y');
+      const payY=g(a.name,'zrq_pay_y'), pay=g(a.name,'zrq_pay'), aov=g(a.name,'zrq_aov');
+      const gtvYNum=safeNum(gtvY), bindIncMNum=safeNum(bindIncM), bindIncDNum=safeNum(bindIncD), pctNum=safeNum(pct);
+      const editTd=(field,val,extra='')=>`<td class="tc" style="cursor:pointer${extra}" onclick="openEdit('${a.name}','${field}')">${safe(val)}</td>`;
+      html+=`<tr>
+        <td class="tn">${a.name}</td>
+        <td class="tc">${a.mgr||'—'}</td>
+        ${editTd('zrq_shops', shops?fmtNum(shops):'—')}
+        ${editTd('zrq_bind', bind?fmtNum(bind):'—')}
+        ${editTd('zrq_bindrate', bindrate!==undefined && bindrate!==null && bindrate!=='' ? bindrate+'%' : '—')}
+        <td class="tc" style="cursor:pointer;color:${bindIncMNum>=0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_bind_inc_m')">${bindIncM!==undefined && bindIncM!==null && bindIncM!=='' ? ((bindIncMNum>0?'+':'')+bindIncM) : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:${bindIncDNum>0?'#16a34a':bindIncDNum<0?'#dc2626':'#6b7280'}" onclick="openEdit('${a.name}','zrq_bind_inc_d')">${bindIncD!==undefined && bindIncD!==null && bindIncD!=='' ? ((bindIncDNum>0?'+':'')+bindIncD) : '—'}</td>
+        ${editTd('zrq_dong', dong?fmtNum(dong):'—')}
+        ${editTd('zrq_dongrate', dongrate!==undefined && dongrate!==null && dongrate!=='' ? dongrate+'%' : '—')}
+        ${editTd('zrq_gtv', gtv?fmtNum(gtv):'—')}
+        <td class="tc" style="cursor:pointer;color:${gtvYNum>0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_gtv_y')">${gtvY!==undefined && gtvY!==null && gtvY!=='' ? ((gtvYNum>0?'+':'')+fmtNum(gtvY)) : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:${pctNum>=16.5?'#16a34a':pctNum>=14?'#d97706':'#dc2626'}" onclick="openEdit('${a.name}','zrq_pct')">${pct!==undefined && pct!==null && pct!=='' ? pct+'%' : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','zrq_pct_y')">${pctY!==undefined && pctY!==null && pctY!=='' ? pctY+'%' : '—'}</td>
+        ${editTd('zrq_pay_y', payY?fmtNum(payY):'—')}
+        ${editTd('zrq_pay', pay?fmtNum(pay):'—')}
+        ${editTd('zrq_aov', aov!==undefined && aov!==null && aov!=='' ? aov : '—')}
+      </tr>`;
     });
-    const fmtSum=f=>sums[f]?fmtNum(Math.round(sums[f])):'—';
-    cols+=`<td class="tc">${fmtSum('zrq_shops')}</td>`;
-    cols+=`<td class="tc">${fmtSum('zrq_bind')}</td>`;
-    cols+=`<td class="tc">—</td>`;
-    cols+=`<td class="tc">${fmtSum('zrq_bind_inc_m')}</td>`;
-    cols+=`<td class="tc">${fmtSum('zrq_bind_inc_d')}</td>`;
-    cols+=`<td class="tc">${fmtSum('zrq_dong')}</td>`;
-    cols+=`<td class="tc">—</td>`;
-    cols+=`<td class="tc">${fmtSum('zrq_gtv')}</td>`;
-    const gtvY=sums['zrq_gtv_y'];
-    cols+=`<td class="tc" style="color:${gtvY>0?'#16a34a':'#dc2626'}">${gtvY>0?'+':''}${fmtNum(Math.round(gtvY))}</td>`;
-    cols+=`<td class="tc">—</td><td class="tc">—</td>`;
-    cols+=`<td class="tc">${fmtSum('zrq_pay_y')}</td>`;
-    cols+=`<td class="tc">${fmtSum('zrq_pay')}</td>`;
-    cols+=`<td class="tc">—</td>`;
-    return `<tr style="background:#dcfce7;font-weight:700">${cols}</tr>`;
-  };
-
-  let html=sumRow();
-  AGENTS.forEach(a=>{
-    const shops=g(a.name,'zrq_shops'), bind=g(a.name,'zrq_bind');
-    const bindrate=g(a.name,'zrq_bindrate');
-    const bindIncM=g(a.name,'zrq_bind_inc_m'), bindIncD=g(a.name,'zrq_bind_inc_d');
-    const dong=g(a.name,'zrq_dong'), dongrate=g(a.name,'zrq_dongrate');
-    const gtv=g(a.name,'zrq_gtv'), gtvY=g(a.name,'zrq_gtv_y');
-    const pct=g(a.name,'zrq_pct'), pctY=g(a.name,'zrq_pct_y');
-    const payY=g(a.name,'zrq_pay_y'), pay=g(a.name,'zrq_pay'), aov=g(a.name,'zrq_aov');
-    const gtvYNum=parseFloat(gtvY)||0;
-    const bindIncDNum=parseFloat(bindIncD)||0;
-    const pctNum=parseFloat(pct)||0;
-    const pctYNum=parseFloat(pctY)||0;
-    const editTd=(field,val,extra='')=>`<td class="tc" style="cursor:pointer${extra}" onclick="openEdit('${a.name}','${field}')">${val||'—'}</td>`;
-    html+=`<tr>
-      <td class="tn">${a.name}</td>
-      <td class="tc">${a.mgr||'—'}</td>
-      ${editTd('zrq_shops', shops?fmtNum(shops):'')}
-      ${editTd('zrq_bind', bind?fmtNum(bind):'')}
-      ${editTd('zrq_bindrate', bindrate?bindrate+'%':'')}
-      <td class="tc" style="cursor:pointer;color:${bindIncM>=0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_bind_inc_m')">${bindIncM?(bindIncM>0?'+':'')+bindIncM:'—'}</td>
-      <td class="tc" style="cursor:pointer;color:${bindIncDNum>0?'#16a34a':bindIncDNum<0?'#dc2626':'#6b7280'}" onclick="openEdit('${a.name}','zrq_bind_inc_d')">${bindIncD?(bindIncDNum>0?'+':'')+bindIncD:'—'}</td>
-      ${editTd('zrq_dong', dong?fmtNum(dong):'')}
-      ${editTd('zrq_dongrate', dongrate?dongrate+'%':'')}
-      ${editTd('zrq_gtv', gtv?fmtNum(gtv):'')}
-      <td class="tc" style="cursor:pointer;color:${gtvYNum>0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_gtv_y')">${gtvY?(gtvYNum>0?'+':'')+fmtNum(gtvY):'—'}</td>
-      <td class="tc" style="cursor:pointer;color:${pctNum>=16.5?'#16a34a':pctNum>=14?'#d97706':'#dc2626'}" onclick="openEdit('${a.name}','zrq_pct')">${pct?pct+'%':'—'}</td>
-      <td class="tc" style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','zrq_pct_y')">${pctY?pctY+'%':'—'}</td>
-      ${editTd('zrq_pay_y', payY?fmtNum(payY):'')}
-      ${editTd('zrq_pay', pay?fmtNum(pay):'')}
-      ${editTd('zrq_aov', aov?aov:'')}
-    </tr>`;
-  });
-  document.getElementById('zrq-tbody').innerHTML=html;
-  const badge=document.getElementById('zrq-badge');
-  if(badge){const{pct:tp}=timePct();badge.textContent=`时间进度 ${fmtPct(tp)}`;}
+    document.getElementById('zrq-tbody').innerHTML=html;
+    const badge=document.getElementById('zrq-badge');
+    if(badge){const{pct:tp}=timePct();badge.textContent=`时间进度 ${fmtPct(tp)}`;}
+  }catch(e){
+    console.log('renderZrq failed', e);
+    document.getElementById('zrq-tbody').innerHTML = `<tr><td colspan="16" style="padding:12px;color:#dc2626">职人码渲染异常，请刷新重试</td></tr>`;
+  }
 }
 
 // saveEdit 合并到下方 renderWeek 区块
@@ -1318,7 +1310,7 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 每次都强制用HTML嵌入数据覆盖（保留用户手动编辑的字段）
-  const EMBED_VER = '2026-05-14zn';
+  const EMBED_VER = '2026-05-14zo';
   const D={
     '惠州巨浪':  {gtv:1568911, gtv_y:90901, gtv_excl:4.3, cpc:34762, cpc_newsgn:15, cpc_wpu:12480, mem:86458.0, memrate:41.8, memrenew:23, memexpire:55, memurgent:34, memrenew_day:0, mem_visit_all:13.3, mem_visit_renew:28.6, mem_visit_break:0.0, mem_visit_pend:11.4, zrq_shops:2538, zrq_bind:670, zrq_bindrate:26.4, zrq_bind_inc_m:20, zrq_bind_inc_d:4, zrq_dong:120, zrq_dongrate:4.7, zrq_gtv:294928, zrq_gtv_y:21982, zrq_pct:18.8, zrq_pct_y:26.8, zrq_pay:1567747, zrq_pay_y:90901.41, zrq_aov:171, bml_lose_n:5, bml_lose_pct:25.0, cps:97277, cpc_y:1071, cpc_y2:2442, score:236, score_day:-3, score_near:306, dongxiao:95, dongxiao_day:9, dongxiao_gtv:1263214, visit:0, order:136, aurora_total:6, aurora_act_done:5, aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0, bml_high:4, bml_mid:1, bml_low:0, bml_days:20, wpt_hd:890, wpt_open:156, wpt_open_day:-76, wpt_hd_open:156, wpt_hd_not:734, wpt_amt:15451, order_day:0},
   '惠州柏万':  {gtv:1429496, gtv_y:102038, gtv_excl:2.2, cpc:44131, cpc_newsgn:12, cpc_wpu:11404, mem:63058.0, memrate:44.1, memrenew:26, memexpire:59, memurgent:33, memrenew_day:0, mem_visit_all:20.0, mem_visit_renew:31.8, mem_visit_break:14.3, mem_visit_pend:13.3, zrq_shops:1659, zrq_bind:553, zrq_bindrate:33.3, zrq_bind_inc_m:44, zrq_bind_inc_d:10, zrq_dong:116, zrq_dongrate:7.0, zrq_gtv:397266, zrq_gtv_y:43228, zrq_pct:27.7, zrq_pct_y:42.4, zrq_pay:1434716, zrq_pay_y:102038.21, zrq_aov:212, bml_lose_n:2, bml_lose_pct:9.1, cps:85532, cpc_y:2057, cpc_y2:2841, score:158, score_day:0, score_near:182, dongxiao:80, dongxiao_day:3, dongxiao_gtv:1144504, visit:0, order:86, aurora_total:7, aurora_act_done:4, aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:5, bml_high:0, bml_mid:1, bml_low:1, bml_days:22, wpt_hd:535, wpt_open:86, wpt_open_day:-64, wpt_hd_open:86, wpt_hd_not:449, wpt_amt:13618, order_day:0},
@@ -1327,7 +1319,7 @@ function renderAll(){
   '慈溪哲光':  {gtv:1207293, gtv_y:84211, gtv_excl:4.0, cpc:58030, cpc_newsgn:16, cpc_wpu:5942, mem:45048.0, memrate:33.3, memrenew:16, memexpire:48, memurgent:33, memrenew_day:0, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1771, zrq_bind:560, zrq_bindrate:31.6, zrq_bind_inc_m:2, zrq_bind_inc_d:-2, zrq_dong:75, zrq_dongrate:4.2, zrq_gtv:208839, zrq_gtv_y:22472, zrq_pct:17.5, zrq_pct_y:29.6, zrq_pay:1195564, zrq_pay_y:84210.85, zrq_aov:172, bml_lose_n:4, bml_lose_pct:23.5, cps:78375, cpc_y:4447, cpc_y2:4792, score:163, score_day:1, score_near:204, dongxiao:70, dongxiao_day:9, dongxiao_gtv:949516, visit:0, order:124, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:0, bml_mid:2, bml_low:2, bml_days:17, wpt_hd:613, wpt_open:48, wpt_open_day:-46, wpt_hd_open:48, wpt_hd_not:565, wpt_amt:7353, order_day:0},
   '义乌汐洋':  {gtv:1348878, gtv_y:94323, gtv_excl:1.61, cpc:66154, cpc_newsgn:16, cpc_wpu:11136, mem:48480.0, memrate:41.0, memrenew:16, memexpire:39, memurgent:23, memrenew_day:0, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1680, zrq_bind:656, zrq_bindrate:39.0, zrq_bind_inc_m:19, zrq_bind_inc_d:3, zrq_dong:112, zrq_dongrate:6.7, zrq_gtv:390762, zrq_gtv_y:35952, zrq_pct:28.8, zrq_pct_y:37.8, zrq_pay:1357236, zrq_pay_y:94322.83, zrq_aov:236, bml_lose_n:0, bml_lose_pct:0.0, cps:84898, cpc_y:3790, cpc_y2:4475, score:160, score_day:4, score_near:181, dongxiao:69, dongxiao_day:3, dongxiao_gtv:1073777, visit:0, order:89, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:0, bml_mid:0, bml_low:0, bml_days:9, wpt_hd:530, wpt_open:78, wpt_open_day:-33, wpt_hd_open:78, wpt_hd_not:452, wpt_amt:13425, order_day:0},
   };
-  const ns={_updated: '11:33',_dataDate: '2026-05-14an'};
+  const ns={_updated: '11:35',_dataDate: '2026-05-14ao'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
