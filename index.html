@@ -1341,29 +1341,5 @@ updateClock();
 setInterval(updateClock,1000);
 setInterval(updateStatusBar,60000);
 </script>
-
-<script>
-// 动态加载最新数据（绕过HTML缓存）
-(function() {
-  var url = 'https://huhu2u.github.io/task-canvas/data.json?t=' + Date.now();
-  fetch(url, {cache: 'no-store'})
-    .then(function(r){ return r.json(); })
-    .then(function(json) {
-      if (!json || !json.data) return;
-      // 等待页面初始化完成后注入数据
-      function applyData() {
-        if (typeof window._applyExternalData === 'function') {
-          window._applyExternalData(json);
-        } else {
-          // 存到全局，让页面初始化时读取
-          window._CANVAS_REMOTE_DATA = json;
-        }
-      }
-      if (document.readyState === 'complete') { applyData(); }
-      else { window.addEventListener('load', applyData); }
-    })
-    .catch(function(e){ console.log('data.json load failed', e); });
-})();
-</script>
 </body>
 </html>
