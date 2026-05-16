@@ -1,0 +1,2810 @@
+{
+  "821103713": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "鑫悦会馆·SPA·泡澡·按摩"
+  },
+  "1213678148": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "349",
+    "shop_name": "光耀自助棋牌"
+  },
+  "1801451486": {
+    "org": "惠安广通",
+    "sale": "许佳伟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "0",
+    "shop_name": "Go拳击健身工作室"
+  },
+  "1582158035": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "350",
+    "shop_name": "耳帝采耳文化体验馆"
+  },
+  "1214683439": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "5號酒馆NO.5TAVERN精酿·啤酒·咖啡"
+  },
+  "1791132249": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "宠无界（惠州店）"
+  },
+  "1112917288": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "346",
+    "shop_name": "汐野化妆·造型"
+  },
+  "1695294766": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "9",
+    "shop_name": "OG·壹米健康空间（居家主题DIY健身工作室）"
+  },
+  "1755669612": {
+    "org": "慈溪哲光",
+    "sale": "舒文谦",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-19",
+    "shop_name": "途越连锁租车 （商贸区店）"
+  },
+  "672539273": {
+    "org": "慈溪哲光",
+    "sale": "舒文谦",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "指缘美甲美睫美肤中心（银海小区店）"
+  },
+  "932724059": {
+    "org": "泉州小花猫",
+    "sale": "林俊贤",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "由心瑜伽普拉提"
+  },
+  "1245194924": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "来碰碰共享棋牌·茶室（泉商悦湖店）"
+  },
+  "1306769264": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "358",
+    "shop_name": "瑗一·瑜伽普拉提运动美学空间"
+  },
+  "1392126591": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "373",
+    "shop_name": "壹加壹舞蹈"
+  },
+  "1151252732": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-7",
+    "shop_name": "SEE U·囍柚美甲美睫（晋江宝龙广场店）"
+  },
+  "1503332576": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "玖悦美甲美睫（珠江·东岸店）"
+  },
+  "505012502": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "363",
+    "shop_name": "星野·nail美甲美睫（浦西万达店）"
+  },
+  "1465829833": {
+    "org": "泉州小花猫",
+    "sale": "孙林喻",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-17",
+    "shop_name": "花下美学·日式美甲美睫（浦西万达店）"
+  },
+  "1697022110": {
+    "org": "惠安广通",
+    "sale": "许佳伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "低头脖适推拿"
+  },
+  "1767089262": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "362",
+    "shop_name": "山水间采耳·头疗养生馆（湖中店）"
+  },
+  "793184748": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-19",
+    "shop_name": "不晚美学·化妆纹绣美甲美睫店铺（学府壹号店）"
+  },
+  "1032818537": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-10",
+    "shop_name": "尹氏足道（家华名都花园店）"
+  },
+  "1851795568": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "347",
+    "shop_name": "雀乐自助棋牌室（河胖家园店）"
+  },
+  "838848324": {
+    "org": "义乌汐洋",
+    "sale": "郭靖宇",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-5",
+    "shop_name": "欢喜头疗养生馆"
+  },
+  "1318945593": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-4",
+    "shop_name": "旺角·茶舍·棋牌"
+  },
+  "1825521431": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "泉源足道·养生SPA·轻奢Massge"
+  },
+  "1040160128": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "KO舞蹈艺术学院（惠州水口校区）"
+  },
+  "1193030065": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "muduo沐朵·美甲美睫"
+  },
+  "1590461601": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "366",
+    "shop_name": "君兰舞蹈"
+  },
+  "127992425": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "375",
+    "shop_name": "艾馨日式美甲美睫"
+  },
+  "1143262956": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "364",
+    "shop_name": "吾悦·里美甲美睫"
+  },
+  "1539437618": {
+    "org": "义乌汐洋",
+    "sale": "申屠昊雍",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "349",
+    "shop_name": "樂多会棋牌会所（棒杰大厦店）"
+  },
+  "1174884115": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "374",
+    "shop_name": "胡筒里棋牌"
+  },
+  "1319737256": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "373",
+    "shop_name": "白鲸健身工作室（新光汇店）"
+  },
+  "1460398299": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "云庭汇"
+  },
+  "1142408259": {
+    "org": "泉州小花猫",
+    "sale": "倪靖宏",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "348",
+    "shop_name": "福旅汽车租赁"
+  },
+  "1332144093": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-1",
+    "shop_name": "减肥训练营·减肥达人（海滨店）"
+  },
+  "1599603095": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "九紫租车（惠城店）"
+  },
+  "1363422305": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "351",
+    "shop_name": "千针纹身·穿孔"
+  },
+  "1195783825": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "黎保佑中翳理疗馆（壹中心店）"
+  },
+  "813173149": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "363",
+    "shop_name": "邦拓连锁租车（商贸城店）"
+  },
+  "1059743867": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "346",
+    "shop_name": "倾宠宠物店"
+  },
+  "1165564748": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "353",
+    "shop_name": "美德拉·专注美睫（奥园店）"
+  },
+  "112256944": {
+    "org": "义乌汐洋",
+    "sale": "兰将兵",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "尚品美甲美睫"
+  },
+  "906624020": {
+    "org": "惠州巨浪",
+    "sale": "杨伟纯",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "5",
+    "shop_name": "阿英盲人按摩"
+  },
+  "1764152719": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-12",
+    "shop_name": "雀发潮24小时自助棋牌（水口店）"
+  },
+  "893421078": {
+    "org": "义乌汐洋",
+    "sale": "郭靖宇",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-10",
+    "shop_name": "禧乐棋牌（西站1区店）"
+  },
+  "1487325801": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "349",
+    "shop_name": "悟雀互娱玩乐共享棋牌（中骏世界城店）"
+  },
+  "1667485568": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "挑战者户外俱乐部"
+  },
+  "1733819670": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "360",
+    "shop_name": "LS美甲美睫店"
+  },
+  "581796261": {
+    "org": "义乌汐洋",
+    "sale": "申屠昊雍",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "初心日式美甲美睫纹绣（吾悦店）"
+  },
+  "508210288": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "聆心阁SPA养生馆"
+  },
+  "664360831": {
+    "org": "惠州柏万",
+    "sale": "林启梁",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-18",
+    "shop_name": "甜秘密新奇潮玩体验店"
+  },
+  "602705578": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "怪兽动力健身（天益城店）"
+  },
+  "654459694": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "347",
+    "shop_name": "巧手姐姐手作DIY拼豆·陶艺"
+  },
+  "1185127841": {
+    "org": "义乌汐洋",
+    "sale": "申屠昊雍",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "雅苑棋牌（九联二店）"
+  },
+  "1072378574": {
+    "org": "惠州巨浪",
+    "sale": "李柠",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "373",
+    "shop_name": "加壹·美甲美睫（港惠店）"
+  },
+  "1029427618": {
+    "org": "惠安广通",
+    "sale": "王少镕",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "372",
+    "shop_name": "一刻健身（大润发店）"
+  },
+  "1114155458": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-7",
+    "shop_name": "叁生堂健康管理·推拿正骨（江北店）"
+  },
+  "1641032229": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-14",
+    "shop_name": "仁手推拿正骨理疗馆"
+  },
+  "1019179920": {
+    "org": "泉州小花猫",
+    "sale": "曾鹏东",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "353",
+    "shop_name": "A界美学（万达金街店）"
+  },
+  "1689237370": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "369",
+    "shop_name": "宁静瑜伽·Peace Yoga"
+  },
+  "669466641": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "澳头小桂沐海小镇"
+  },
+  "1810656775": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "350",
+    "shop_name": "四人聚自助棋牌（铂金广场店）"
+  },
+  "1486095346": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "363",
+    "shop_name": "壹号男士理发馆（大亚湾万达店）"
+  },
+  "884557062": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "云隆养生·SPA·推拿·泡澡"
+  },
+  "1457076939": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "350",
+    "shop_name": "义乌言蹊美学派对布置"
+  },
+  "794516888": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-6",
+    "shop_name": "花里美学"
+  },
+  "1681220127": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "美人瑜·美学设计（万联广场店）"
+  },
+  "1881645686": {
+    "org": "惠州柏万",
+    "sale": "黄子明",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "雾屿美学·美甲美睫"
+  },
+  "529857644": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-2",
+    "shop_name": "羽舒SPA·轻奢定制·Massage"
+  },
+  "1957168174": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "362",
+    "shop_name": "会蘭瑜伽·普拉提（淡水东御店）"
+  },
+  "913907030": {
+    "org": "义乌汐洋",
+    "sale": "陈浪涛",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "352",
+    "shop_name": "帕菲克游泳健身（经发店）"
+  },
+  "1222357192": {
+    "org": "慈溪哲光",
+    "sale": "贾凌姗",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-6",
+    "shop_name": "遇见美学·美甲美睫"
+  },
+  "680718628": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "352",
+    "shop_name": "惠城区雄英汇租车免押金"
+  },
+  "95955585": {
+    "org": "泉州小花猫",
+    "sale": "林俊贤",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "10",
+    "shop_name": "新刺青客"
+  },
+  "1852427630": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-6",
+    "shop_name": "CC·SALON专业团队烫染"
+  },
+  "541803262": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-14",
+    "shop_name": "NK美学·纹眉·美甲美睫（天虹店）"
+  },
+  "1506341208": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-7",
+    "shop_name": "易足堂（星河丹堤店）"
+  },
+  "881073103": {
+    "org": "惠安广通",
+    "sale": "王少镕",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-7",
+    "shop_name": "顺风棋牌·茶室（晋江市标店）"
+  },
+  "634911583": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "花芙丽美容"
+  },
+  "45564476": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "352",
+    "shop_name": "艾足康·养生足道（东湖店）"
+  },
+  "1910166300": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-10",
+    "shop_name": "暮色·推油·SPA"
+  },
+  "1482897240": {
+    "org": "惠安广通",
+    "sale": "陈泳权",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "灵美人美容美甲"
+  },
+  "748849727": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "352",
+    "shop_name": "艾足康养生足道（华贸店）"
+  },
+  "1654206387": {
+    "org": "惠安广通",
+    "sale": "向超",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "五号造物DIY玻璃体验"
+  },
+  "510700372": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "壹佳健身"
+  },
+  "1772274476": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-15",
+    "shop_name": "熊猫健身工作室"
+  },
+  "1688198377": {
+    "org": "慈溪哲光",
+    "sale": "董莎莎",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "幸运棋牌24H无人自助"
+  },
+  "21203747": {
+    "org": "泉州小花猫",
+    "sale": "曾鹏东",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "MAKINA玛琪娜美容美发"
+  },
+  "1466622624": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "368",
+    "shop_name": "谦元自助棋牌室"
+  },
+  "1425069914": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "G5聚舞舞蹈影像艺术基地（仲恺天益城店）"
+  },
+  "723027075": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-19",
+    "shop_name": "海澜湾团建轰趴·休闲度假团建聚会"
+  },
+  "1819742059": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "346",
+    "shop_name": "祖传特效疗法"
+  },
+  "1245176360": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-6",
+    "shop_name": "漫悦·宫屿奢享·养生SPA"
+  },
+  "1598410319": {
+    "org": "义乌汐洋",
+    "sale": "陈浪涛",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "351",
+    "shop_name": "合顺茶楼自助棋牌"
+  },
+  "131920385": {
+    "org": "泉州小花猫",
+    "sale": "康子诚",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-10",
+    "shop_name": "安娜•美甲•美睫•培训（华大店）"
+  },
+  "1994141619": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "便荔商店棋牌室"
+  },
+  "699042618": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "Charm湖畔养生馆（北八店）"
+  },
+  "1499943657": {
+    "org": "惠安广通",
+    "sale": "王少镕",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "HELLO女神旗舰沙龙（晋江宝龙广场店）"
+  },
+  "1375018134": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "满棠棋牌·茶艺（中海生活汇店）"
+  },
+  "1073136936": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "不胡都南棋牌室（晋江青阳店）"
+  },
+  "1884247033": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "蓝蒂蔻·纹绣半永久美学中心（华贸店）"
+  },
+  "1757781490": {
+    "org": "惠州巨浪",
+    "sale": "肖立铭",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "爱优丽潮玩馆"
+  },
+  "1005251143": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "圣武拳击俱乐部"
+  },
+  "669340731": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "363",
+    "shop_name": "山野刺青"
+  },
+  "742383528": {
+    "org": "惠州柏万",
+    "sale": "黄子明",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "伯菲特·健尔美健身游泳俱乐部（大润发店）"
+  },
+  "1723788329": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "1970棋牌"
+  },
+  "1718533836": {
+    "org": "惠州柏万",
+    "sale": "黄子明",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-4",
+    "shop_name": "阳光100健身俱乐部（东御店）"
+  },
+  "1581348930": {
+    "org": "惠安广通",
+    "sale": "董超亚",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "356",
+    "shop_name": "告白Bloved·品质影院（万达宝龙店）"
+  },
+  "1336551899": {
+    "org": "惠安广通",
+    "sale": "向超",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "梦回·汉唐SPA"
+  },
+  "808317454": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "尚美金奢 Salon烫染专业店（惠州学院店）"
+  },
+  "1377622609": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-6",
+    "shop_name": "野家私人影院"
+  },
+  "1416808790": {
+    "org": "慈溪哲光",
+    "sale": "贾凌姗",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "353",
+    "shop_name": "义冠汽车维修养护中心"
+  },
+  "533769400": {
+    "org": "泉州小花猫",
+    "sale": "陈彩凤",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-5",
+    "shop_name": "思思私密空间解压馆"
+  },
+  "1841859165": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "356",
+    "shop_name": "苏喜棋牌"
+  },
+  "1125464857": {
+    "org": "义乌汐洋",
+    "sale": "申屠昊雍",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "811普拉提健身中心"
+  },
+  "1126510743": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "玖别DIY手工坊（西街开元寺店）"
+  },
+  "1004159932": {
+    "org": "泉州小花猫",
+    "sale": "孙林喻",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "幸会私人空间（领SHOW天地店）"
+  },
+  "1475907843": {
+    "org": "惠州巨浪",
+    "sale": "杨伟纯",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "369",
+    "shop_name": "左邻右舍健身工厂（河南岸店）"
+  },
+  "1331412559": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-10",
+    "shop_name": "康嘉霏•抚愈SPA•瑶浴（海惠花园店）"
+  },
+  "1247525817": {
+    "org": "惠安广通",
+    "sale": "董超亚",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "秘闻沉浸式潮玩空间·剧本杀（五店市店）"
+  },
+  "1896966098": {
+    "org": "慈溪哲光",
+    "sale": "李凯鸿",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "352",
+    "shop_name": "得元中医养生馆-正骨-亚健康调理"
+  },
+  "1422505035": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "366",
+    "shop_name": "颐扬白发脱发养发头道（宗泽路店）"
+  },
+  "1320240796": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "360",
+    "shop_name": "飞鲨游泳（三街四坊店）"
+  },
+  "1028616434": {
+    "org": "慈溪哲光",
+    "sale": "贾凌姗",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "九龙健身·24H"
+  },
+  "1213295798": {
+    "org": "义乌汐洋",
+    "sale": "兰将兵",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "367",
+    "shop_name": "康婳宠物医院"
+  },
+  "112772701": {
+    "org": "惠州柏万",
+    "sale": "黄子明",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "3",
+    "shop_name": "东际造型美发烫发染发（东晟1店）"
+  },
+  "1284168561": {
+    "org": "惠州巨浪",
+    "sale": "黄嘉琳",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-18",
+    "shop_name": "隐訫·美丽SPA（仲恺店）"
+  },
+  "57977508": {
+    "org": "慈溪哲光",
+    "sale": "舒文谦",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "义乌魔界纹身·穿孔·洗图连锁店（义乌店）"
+  },
+  "1316027165": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "17·Nail美甲美睫（涂门关帝庙店）"
+  },
+  "1117645686": {
+    "org": "义乌汐洋",
+    "sale": "兰将兵",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "望云棋牌"
+  },
+  "1660624653": {
+    "org": "泉州小花猫",
+    "sale": "林俊贤",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "陕西专业修脚房（东湖公园店）"
+  },
+  "1193433352": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "悦色日式美甲美睫"
+  },
+  "1206010890": {
+    "org": "泉州小花猫",
+    "sale": "林俊贤",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-5",
+    "shop_name": "鲤遇三朝园木偶戏南音体验馆"
+  },
+  "630792128": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "梵丝艺品 FANSiYiPing"
+  },
+  "767425015": {
+    "org": "惠安广通",
+    "sale": "许佳伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "356",
+    "shop_name": "晋江德壹堂中医门诊部"
+  },
+  "790433058": {
+    "org": "惠安广通",
+    "sale": "向超",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "悦耳堂采耳文化体验馆（安海店）"
+  },
+  "852581099": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-7",
+    "shop_name": "乐绮采耳·头疗·SPA馆（中骏世界城店）"
+  },
+  "759908041": {
+    "org": "泉州小花猫",
+    "sale": "曾鹏东",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-5",
+    "shop_name": "迟野Chiye专业接发"
+  },
+  "1384778834": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "雀运来 24 小时自助棋牌（陈江店）"
+  },
+  "1135630483": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "舍予美业（方直FUN STAR天地店）"
+  },
+  "1394454865": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "9",
+    "shop_name": "慕名美发沙龙"
+  },
+  "1678889743": {
+    "org": "惠州巨浪",
+    "sale": "黄天",
+    "renewed": true,
+    "calc": false,
+    "label": "已续约",
+    "remain": "13",
+    "shop_name": "气运上升台球俱乐部"
+  },
+  "966669306": {
+    "org": "泉州小花猫",
+    "sale": "刘洋",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "LYS日式美甲美睫（泉州大字报店）"
+  },
+  "1020700837": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "358",
+    "shop_name": "無限汽車Studio"
+  },
+  "1936605041": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "陕西专业修脚按摩"
+  },
+  "1692604436": {
+    "org": "惠州巨浪",
+    "sale": "杨伟纯",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "352",
+    "shop_name": "莲心瑜伽教培学院（演达店）"
+  },
+  "838655151": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-4",
+    "shop_name": "QY•桌游•私影"
+  },
+  "1581214479": {
+    "org": "惠安广通",
+    "sale": "王伟龙",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "橙子新奇解压馆"
+  },
+  "1058801708": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "357",
+    "shop_name": "筋骨堂推拿按摩（龙光城店）"
+  },
+  "1938530114": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-12",
+    "shop_name": "百世娱乐棋牌台球"
+  },
+  "124134326": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "乐德中医养生保健馆"
+  },
+  "19807895": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "351",
+    "shop_name": "名艺造型专业接发"
+  },
+  "867824352": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "曾朝辉冠军健身工作室"
+  },
+  "1080966389": {
+    "org": "慈溪哲光",
+    "sale": "舒文谦",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "江南会ktv"
+  },
+  "1364247509": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "UMI HAIR 美发沙龙"
+  },
+  "1391878589": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "泽博士·白发脱发中心（北苑望道金街店）"
+  },
+  "1985373021": {
+    "org": "泉州小花猫",
+    "sale": "孙林喻",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-10",
+    "shop_name": "ANNA安娜美甲美睫（中骏世界城店）"
+  },
+  "788843224": {
+    "org": "泉州小花猫",
+    "sale": "倪靖宏",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "悠品·影音空间·共享空间"
+  },
+  "1347739237": {
+    "org": "义乌汐洋",
+    "sale": "郭靖宇",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "靓点·美甲美睫养生"
+  },
+  "1480272080": {
+    "org": "泉州小花猫",
+    "sale": "孙林喻",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "爱尚健身游泳连锁（富临店）"
+  },
+  "1659510271": {
+    "org": "慈溪哲光",
+    "sale": "舒文谦",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "358",
+    "shop_name": "欢乐小麻人棋牌馆"
+  },
+  "1486952275": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "362",
+    "shop_name": "Wagi Pet 尾巴摇摇宠物社（壹号院店）"
+  },
+  "594508726": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "江湖棋牌"
+  },
+  "1167268309": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "372",
+    "shop_name": "雀有约棋牌茶室·台球（湖心花苑店）"
+  },
+  "1560146715": {
+    "org": "惠安广通",
+    "sale": "王少镕",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "10",
+    "shop_name": "花橘子产后瑜伽（百捷金街店）"
+  },
+  "1884113051": {
+    "org": "慈溪哲光",
+    "sale": "舒文谦",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "362",
+    "shop_name": "行运棋牌"
+  },
+  "1186363571": {
+    "org": "惠州巨浪",
+    "sale": "杨伟纯",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "996越野卡丁车俱乐部（金山湖店）"
+  },
+  "1523281141": {
+    "org": "慈溪哲光",
+    "sale": "李凯鸿",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-19",
+    "shop_name": "喜雀棋牌"
+  },
+  "1218197213": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "5",
+    "shop_name": "石榴宠物店"
+  },
+  "1672715548": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "滚仓rock Live"
+  },
+  "1160828005": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "348",
+    "shop_name": "芊耳阁"
+  },
+  "1593314498": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-5",
+    "shop_name": "江冬荟PARTY KTV"
+  },
+  "13699698": {
+    "org": "惠州巨浪",
+    "sale": "杨伟纯",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "3",
+    "shop_name": "水立方汽车服务中心（白泥路店）"
+  },
+  "853775477": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-18",
+    "shop_name": "十三幺24H棋牌室"
+  },
+  "575519007": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-12",
+    "shop_name": "新乐·桌游馆"
+  },
+  "1787593184": {
+    "org": "惠安广通",
+    "sale": "许佳伟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "憩园养生足浴·泡澡·SPA"
+  },
+  "1163283002": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-11",
+    "shop_name": "艾家庭生活馆"
+  },
+  "1446960150": {
+    "org": "惠州柏万",
+    "sale": "黄宝莹",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "357",
+    "shop_name": "Three+ pilates 3+ 普拉提运动（壹中心店）"
+  },
+  "1410710728": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-12",
+    "shop_name": "易租租车"
+  },
+  "667893934": {
+    "org": "惠州巨浪",
+    "sale": "李柠",
+    "renewed": true,
+    "calc": false,
+    "label": "已续约",
+    "remain": "24",
+    "shop_name": "狗的猫宁"
+  },
+  "1043685520": {
+    "org": "惠州柏万",
+    "sale": "林启梁",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-6",
+    "shop_name": "时光驿站"
+  },
+  "1107499452": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "367",
+    "shop_name": "SOLO舞蹈（义乌之心店）"
+  },
+  "1207403181": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "CHUAN XUE传雪穿戴甲"
+  },
+  "784758190": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "373",
+    "shop_name": "雀发潮24小时自助棋牌（乌石广场店）"
+  },
+  "1302161137": {
+    "org": "慈溪哲光",
+    "sale": "王祥晨",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-7",
+    "shop_name": "哈喽空间·放映室（义乌贝村店）"
+  },
+  "107848870": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-8",
+    "shop_name": "健康来了盲人按摩"
+  },
+  "1892388400": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "颐瑾羽毛球馆"
+  },
+  "1416304423": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-5",
+    "shop_name": "Pai健身 GYM 24h"
+  },
+  "1479144556": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "364",
+    "shop_name": "稠江羽毛球馆"
+  },
+  "585690110": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "茶香肆溢SPA"
+  },
+  "1193289986": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "乔伊瑜伽普拉提学院（麦地店）"
+  },
+  "824373216": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "C8棋牌"
+  },
+  "1315636979": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "5",
+    "shop_name": "名仕达棋牌"
+  },
+  "828227209": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "350",
+    "shop_name": "启橙健身"
+  },
+  "692921151": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "乐逍遥棋牌室"
+  },
+  "1226956237": {
+    "org": "义乌汐洋",
+    "sale": "兰将兵",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-2",
+    "shop_name": "自助棋牌室"
+  },
+  "661771301": {
+    "org": "惠州巨浪",
+    "sale": "黄天",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "何氏针灸理疗馆"
+  },
+  "1140450289": {
+    "org": "义乌汐洋",
+    "sale": "郭靖宇",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-1",
+    "shop_name": "天字棋牌"
+  },
+  "1606117783": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "360",
+    "shop_name": "润·瑜伽&普拉提（后宅街店）"
+  },
+  "1472202919": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "夏至·植物手作diy"
+  },
+  "1410268337": {
+    "org": "惠安广通",
+    "sale": "许佳伟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "0",
+    "shop_name": "极美.女子运动"
+  },
+  "1478235774": {
+    "org": "义乌汐洋",
+    "sale": "郭靖宇",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "366",
+    "shop_name": "阿力租车"
+  },
+  "1362104935": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-10",
+    "shop_name": "SEE U•囍柚美甲美睫（池店西宅店）"
+  },
+  "1455698544": {
+    "org": "泉州小花猫",
+    "sale": "林俊贤",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-18",
+    "shop_name": "凤之舞·成人·少儿舞蹈培训（丰泽校区）"
+  },
+  "1718211011": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "367",
+    "shop_name": "林夏探案馆"
+  },
+  "1218854027": {
+    "org": "惠州巨浪",
+    "sale": "黄天",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "10",
+    "shop_name": "轩雀棋牌·茶饮"
+  },
+  "870676255": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-18",
+    "shop_name": "六眼猴汽车贴膜（鲤城闽鑫店）"
+  },
+  "863524484": {
+    "org": "惠安广通",
+    "sale": "向超",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "370",
+    "shop_name": "爱麻仕棋牌室"
+  },
+  "1113250442": {
+    "org": "惠州巨浪",
+    "sale": "李柠",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "365",
+    "shop_name": "Y+依家养发头疗·洗发·洗脸·养身调理"
+  },
+  "67873032": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "349",
+    "shop_name": "仟彩·化妆·皮肤管理·新娘妆造（东霞店）"
+  },
+  "783346943": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "创意diy手工坊（晋江万达店）"
+  },
+  "947489102": {
+    "org": "慈溪哲光",
+    "sale": "李凯鸿",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "御经方·推拿艾灸·经络调理"
+  },
+  "129358665": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "346",
+    "shop_name": "白鲸健身工作室（和聚园店）"
+  },
+  "1592717591": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "一间泥巴屋·陶艺DIY·拼豆·肌理画DIY"
+  },
+  "1451751931": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "353",
+    "shop_name": "漫悦国际酒店恒温游泳健身（惠风店）"
+  },
+  "1213850518": {
+    "org": "惠安广通",
+    "sale": "王伟龙",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "353",
+    "shop_name": "缘SPA（缘公馆宝龙店）"
+  },
+  "1305006962": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-4",
+    "shop_name": "曼斯特·男士理发馆Barber shop"
+  },
+  "1484407865": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "362",
+    "shop_name": "汇雀共享空间棋牌茶室（城东万达店）"
+  },
+  "1115977156": {
+    "org": "义乌汐洋",
+    "sale": "郭靖宇",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "348",
+    "shop_name": "明炜游泳健身会所"
+  },
+  "1365509004": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "3",
+    "shop_name": "九樟24h自助棋牌·茶室（淡水店）"
+  },
+  "1159863204": {
+    "org": "义乌汐洋",
+    "sale": "申屠昊雍",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "24小时棋牌（宾王店）"
+  },
+  "990014125": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "357",
+    "shop_name": "温心堂（麦地嘉园店）"
+  },
+  "717962778": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-13",
+    "shop_name": "胜春堂·中医理疗馆·快速解决各种疼痛"
+  },
+  "1725234814": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "黑鲨搏击健身房"
+  },
+  "1626822594": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "GrantKing冠镜运动表现中心"
+  },
+  "1258194658": {
+    "org": "惠安广通",
+    "sale": "尤云生",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-12",
+    "shop_name": "肆季造型•烫发染发（万达店）"
+  },
+  "1133040495": {
+    "org": "泉州小花猫",
+    "sale": "曾鹏东",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "碧莲盛Lotus·脱发养发中心（温陵南路店）"
+  },
+  "1934965886": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "362",
+    "shop_name": "谛道刺青"
+  },
+  "1143995110": {
+    "org": "慈溪哲光",
+    "sale": "舒文谦",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "361",
+    "shop_name": "三言叁品·自助茶空间（五爱店）"
+  },
+  "1940961307": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "此刻健身工厂（德州城店）"
+  },
+  "1222572229": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "350",
+    "shop_name": "转折舞蹈（众安广场店）"
+  },
+  "1778088048": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "壹玖棋牌"
+  },
+  "1637668032": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-14",
+    "shop_name": "米兔·私影·桌游"
+  },
+  "124427342": {
+    "org": "泉州小花猫",
+    "sale": "孙林喻",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "353",
+    "shop_name": "本草堂专业修脚·足浴·按摩（西街开元店）"
+  },
+  "1786286737": {
+    "org": "惠安广通",
+    "sale": "王伟龙",
+    "renewed": false,
+    "calc": false,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "密语之境VR轰趴馆"
+  },
+  "1098031687": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "半人间·香道美学空间"
+  },
+  "1389697158": {
+    "org": "义乌汐洋",
+    "sale": "陈浪涛",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-2",
+    "shop_name": "缇兰·瑜伽普拉提"
+  },
+  "1762893031": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": true,
+    "calc": false,
+    "label": "已续约",
+    "remain": "29",
+    "shop_name": "宠之桥宠物善终火化中心"
+  },
+  "1256154742": {
+    "org": "惠安广通",
+    "sale": "向超",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "儒友乐24小时自助棋牌（晋江宝龙店）"
+  },
+  "612233029": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "360",
+    "shop_name": "尤里·美舍（万达店）"
+  },
+  "878260307": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "368",
+    "shop_name": "臻享室内高尔夫俱乐部"
+  },
+  "1704401622": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "362",
+    "shop_name": "左邻右舍健身工厂（碧桂园·星钻店）"
+  },
+  "804256151": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "351",
+    "shop_name": "成裕健康管理中医诊所"
+  },
+  "792243315": {
+    "org": "泉州小花猫",
+    "sale": "林俊贤",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-4",
+    "shop_name": "星空点点私人悦影（水岸假日店）"
+  },
+  "1742116864": {
+    "org": "惠安广通",
+    "sale": "许佳伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "366",
+    "shop_name": "与你·私人悦影空间（晋江宝龙广场店）"
+  },
+  "129627878": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-18",
+    "shop_name": "EC²健身工作室"
+  },
+  "1886424155": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "安家宠物生活馆（稠江中学店）"
+  },
+  "1724791442": {
+    "org": "慈溪哲光",
+    "sale": "孙浩",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "ai猫女·解压馆（国贸大道店）"
+  },
+  "535480040": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "挽情小酒馆"
+  },
+  "844859291": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "4",
+    "shop_name": "足愉坊养生馆"
+  },
+  "668868327": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "6",
+    "shop_name": "华夏名足陕西专业修脚（石化大道西店）"
+  },
+  "1915003671": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "2",
+    "shop_name": "雀发潮24小时自助棋牌（河南岸苏屋墩店）"
+  },
+  "1214887217": {
+    "org": "泉州小花猫",
+    "sale": "黄伟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "356",
+    "shop_name": "雀圣自助棋牌室"
+  },
+  "1614170317": {
+    "org": "义乌汐洋",
+    "sale": "陈浪涛",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "旭恒宠物医院"
+  },
+  "892619313": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": false,
+    "label": "已续约",
+    "remain": "18",
+    "shop_name": "浮生小酒馆"
+  },
+  "793029523": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "9",
+    "shop_name": "雀府阁智能棋牌（稠山店）"
+  },
+  "1427848126": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-15",
+    "shop_name": "惠阳乐动网球馆"
+  },
+  "1800827934": {
+    "org": "惠州巨浪",
+    "sale": "杨伟纯",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "shail男士理发馆 （佳兆业店）"
+  },
+  "1113629941": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "8",
+    "shop_name": "雀麻香棋牌室（万达梅龙店）"
+  },
+  "1575641746": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "四人乐24小时自助棋牌（将军路店）"
+  },
+  "97919763": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "爱纶美·美甲美睫半永久（浦西万达店）"
+  },
+  "1671559823": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "10",
+    "shop_name": "红馆·美甲美睫纹绣"
+  },
+  "1722711930": {
+    "org": "泉州小花猫",
+    "sale": "刘洋",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "CC逆龄•抗衰•筋膜刀•体态调理（中骏世界城店）"
+  },
+  "1914436495": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "胡筒里自助棋牌室"
+  },
+  "1841221717": {
+    "org": "泉州小花猫",
+    "sale": "刘洋",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "悟雀棋牌茶空间（城东星光耀店）"
+  },
+  "1649430061": {
+    "org": "泉州小花猫",
+    "sale": "兰思帆",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "372",
+    "shop_name": "星光·泡澡·养生SPA"
+  },
+  "1380667079": {
+    "org": "泉州小花猫",
+    "sale": "刘洋",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "365",
+    "shop_name": "九别日式美甲美睫Nail Studio"
+  },
+  "1710895337": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "353",
+    "shop_name": "JM婕·米 美甲美睫（义乌店）"
+  },
+  "1101089989": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "欧尔塑形中心·普拉提·产后修护"
+  },
+  "16182369": {
+    "org": "惠州巨浪",
+    "sale": "肖立铭",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-11",
+    "shop_name": "朵儿彩妆美甲（悦洲广场店）"
+  },
+  "744261614": {
+    "org": "惠州柏万",
+    "sale": "黄子明",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "360",
+    "shop_name": "伯菲特·健尔美健身游泳连锁（碧桂园店）"
+  },
+  "1277025746": {
+    "org": "惠州柏万",
+    "sale": "邓百明",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "7",
+    "shop_name": "苏菲名猫宠物店"
+  },
+  "1018910580": {
+    "org": "惠州巨浪",
+    "sale": "李柠",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-3",
+    "shop_name": "可也美甲·Keyar nail"
+  },
+  "521787056": {
+    "org": "慈溪哲光",
+    "sale": "贾凌姗",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "363",
+    "shop_name": "U3 ART NAIL日式美甲美睫（万达SOHO店）"
+  },
+  "519913579": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "YC FITNESS 健身（宝龙店）"
+  },
+  "68003820": {
+    "org": "惠州巨浪",
+    "sale": "梁庆锋",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "0",
+    "shop_name": "世龙世家灰指甲鸡眼脚气甲沟炎跖疣护理（惠城区小金口店）"
+  },
+  "1497620607": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "358",
+    "shop_name": "与你瑜伽·螺旋·普拉提"
+  },
+  "1735164733": {
+    "org": "惠州柏万",
+    "sale": "卢晓翔",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "耳小熊可视采耳（COCO Garden星河店）"
+  },
+  "1495379266": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "356",
+    "shop_name": "粤昊•足疗•推拿养生馆"
+  },
+  "918226447": {
+    "org": "惠州巨浪",
+    "sale": "张德亮",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "耳小熊可视采耳（惠城旗舰店）"
+  },
+  "1969872853": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "3",
+    "shop_name": "FT健身（义亭之心）"
+  },
+  "1028623861": {
+    "org": "惠州巨浪",
+    "sale": "吴誉",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-7",
+    "shop_name": "花花美甲美睫"
+  },
+  "1639263089": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-5",
+    "shop_name": "Be Beauty Salon 俄式美甲美睫"
+  },
+  "802086426": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "359",
+    "shop_name": "雀中发24h自助棋牌室（好宜多店）"
+  },
+  "1040410497": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "367",
+    "shop_name": "乐巢棋牌室"
+  },
+  "1372529010": {
+    "org": "义乌汐洋",
+    "sale": "兰将兵",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-14",
+    "shop_name": "瑞意男士理发馆"
+  },
+  "1733912118": {
+    "org": "惠州巨浪",
+    "sale": "黄天",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "354",
+    "shop_name": "家理造型美发"
+  },
+  "1922456107": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "346",
+    "shop_name": "艾满足（中骏柏景湾店）"
+  },
+  "742434017": {
+    "org": "惠安广通",
+    "sale": "陈泳权",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-6",
+    "shop_name": "鼎尚足道保健（安海上悦城店）"
+  },
+  "985673352": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "麻上喜·24小时自助棋牌（德洲城店）"
+  },
+  "717346742": {
+    "org": "泉州小花猫",
+    "sale": "曾鹏东",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-4",
+    "shop_name": "米悠舞蹈艺术中心"
+  },
+  "987366081": {
+    "org": "惠州巨浪",
+    "sale": "黄天",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "348",
+    "shop_name": "张张發24小时自助棋牌（水口荣丰店）"
+  },
+  "1930743601": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "麻上喜·24小时自助棋牌（龙光城北五店）"
+  },
+  "1499375980": {
+    "org": "惠州巨浪",
+    "sale": "杨伟纯",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "364",
+    "shop_name": "好会赢24h自助棋牌（东平店）"
+  },
+  "553373923": {
+    "org": "惠安广通",
+    "sale": "王少镕",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "9",
+    "shop_name": "one舞蹈（福建吾悦总部）"
+  },
+  "1671381628": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "9",
+    "shop_name": "水木堂养生馆"
+  },
+  "619250932": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "1",
+    "shop_name": "雀空间24h自助棋牌（白石店）"
+  },
+  "1873946351": {
+    "org": "惠州柏万",
+    "sale": "赖宇能",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "356",
+    "shop_name": "四人行24小时自助棋牌·台球（万达店）"
+  },
+  "847039572": {
+    "org": "慈溪哲光",
+    "sale": "王婵娟",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-4",
+    "shop_name": "璟健身CLUB（江东店）"
+  },
+  "1311516183": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "355",
+    "shop_name": "雀麻香棋牌室（万达中威店）"
+  },
+  "1631266180": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "356",
+    "shop_name": "CHIMUSE沁沐头皮养发"
+  },
+  "1121231871": {
+    "org": "惠安广通",
+    "sale": "董超亚",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-12",
+    "shop_name": "静馨瑜伽普拉提馆"
+  },
+  "754410995": {
+    "org": "义乌汐洋",
+    "sale": "李立江",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "351",
+    "shop_name": "雀府阁智能棋牌（四季店）"
+  },
+  "567888211": {
+    "org": "泉州小花猫",
+    "sale": "郭俊峰",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "0",
+    "shop_name": "泉州滨江皇冠假日酒店 · 脉动健身中心 Pulse Fitness Center"
+  },
+  "1865874446": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": false,
+    "calc": false,
+    "label": "已断约",
+    "remain": "-14",
+    "shop_name": "麻老六·24h共享棋牌台球"
+  },
+  "1933425000": {
+    "org": "义乌汐洋",
+    "sale": "郭国江",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-12",
+    "shop_name": "雀圣无人自助棋牌（九联店）"
+  },
+  "1967176943": {
+    "org": "惠安广通",
+    "sale": "陈建江",
+    "renewed": false,
+    "calc": true,
+    "label": "已断约",
+    "remain": "-14",
+    "shop_name": "存正堂"
+  },
+  "1012044161": {
+    "org": "惠州柏万",
+    "sale": "刘锦科",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "352",
+    "shop_name": "悦己普拉提（锦绣壹号店）"
+  },
+  "716330388": {
+    "org": "泉州小花猫",
+    "sale": "孙林喻",
+    "renewed": true,
+    "calc": true,
+    "label": "已续约",
+    "remain": "372",
+    "shop_name": "康惠推拿•正骨整脊•辩证理疗"
+  },
+  "975266239": {
+    "org": "惠州巨浪",
+    "sale": "梁庆幸",
+    "renewed": false,
+    "calc": true,
+    "label": "待续约",
+    "remain": "3",
+    "shop_name": "叁栖·美甲·美睫半永久（隆生金山湖中心店）"
+  }
+}

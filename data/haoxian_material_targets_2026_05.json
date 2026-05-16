@@ -1,0 +1,47 @@
+{
+  "month": "2026-05",
+  "coverage_tgt": "55%",
+  "total": {
+    "leader": "李俊",
+    "work_pool": 10331,
+    "month_tgt": 5682
+  },
+  "cities": {
+    "高线粤闽浙城市群": {
+      "leader": "胡英杰",
+      "work_pool": 1338,
+      "month_tgt": 736,
+      "coverage_tgt": "55.0%"
+    },
+    "高线粤海城市群": {
+      "leader": "张涛",
+      "work_pool": 1945,
+      "month_tgt": 1070,
+      "coverage_tgt": "55.0%"
+    },
+    "高线苏浙城市群": {
+      "leader": "于继龙",
+      "work_pool": 1682,
+      "month_tgt": 925,
+      "coverage_tgt": "55.0%"
+    },
+    "高线苏皖城市群": {
+      "leader": "方广生",
+      "work_pool": 1799,
+      "month_tgt": 989,
+      "coverage_tgt": "55.0%"
+    },
+    "高线苏鲁豫城市群": {
+      "leader": "高子扬",
+      "work_pool": 2050,
+      "month_tgt": 1128,
+      "coverage_tgt": "55.0%"
+    },
+    "高线新甘蒙城市群": {
+      "leader": "叶泽锋",
+      "work_pool": 1517,
+      "month_tgt": 834,
+      "coverage_tgt": "55.0%"
+    }
+  }
+}

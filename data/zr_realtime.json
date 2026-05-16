@@ -1,0 +1,367 @@
+{
+  "update_time": "2026-05-16 11:00",
+  "date": "2026-05-16",
+  "total": {
+    "name": "高线粤闽浙城市群",
+    "today_gtv": 3394.6,
+    "today_orders": 49,
+    "shops": 10997,
+    "bind_cnt": 3541,
+    "material_cnt": 979,
+    "sale_shop_cnt": 704,
+    "bind_rate": "27.6%",
+    "month_sale_orders": 10838,
+    "month_sale_gtv": 2125007.8,
+    "month_sale_gtv_rate": "24.7%",
+    "month_gtv": 8616884.47,
+    "month_orders": 140634,
+    "daily_bind_inc": 21,
+    "daily_sale_gtv": 166782.05,
+    "daily_sale_orders": 722,
+    "daily_sale_gtv_rate": "4913.2%"
+  },
+  "orgs": [
+    {
+      "name": "义乌市汐洋-金华义乌乐生活组",
+      "today_gtv": 844.87,
+      "today_orders": 10,
+      "shops": 1678,
+      "bind_cnt": 663,
+      "material_cnt": 186,
+      "sale_shop_cnt": 126,
+      "bind_rate": "28.1%",
+      "month_sale_orders": 1875,
+      "month_sale_gtv": 453156.38,
+      "month_sale_gtv_rate": "29.7%",
+      "month_gtv": 1525192.61,
+      "month_orders": 20408,
+      "daily_bind_inc": 4,
+      "daily_sale_gtv": 32157.22,
+      "daily_sale_orders": 130,
+      "daily_sale_gtv_rate": "3806.2%"
+    },
+    {
+      "name": "惠安广通-晋江乐生活组",
+      "today_gtv": 687.1,
+      "today_orders": 12,
+      "shops": 1566,
+      "bind_cnt": 478,
+      "material_cnt": 131,
+      "sale_shop_cnt": 98,
+      "bind_rate": "27.4%",
+      "month_sale_orders": 1576,
+      "month_sale_gtv": 217289.5,
+      "month_sale_gtv_rate": "21.7%",
+      "month_gtv": 999813.7,
+      "month_orders": 18931,
+      "daily_bind_inc": 2,
+      "daily_sale_gtv": 17877.37,
+      "daily_sale_orders": 108,
+      "daily_sale_gtv_rate": "2601.9%"
+    },
+    {
+      "name": "慈溪哲光-金华义乌乐生活组",
+      "today_gtv": 659.8,
+      "today_orders": 3,
+      "shops": 1771,
+      "bind_cnt": 564,
+      "material_cnt": 107,
+      "sale_shop_cnt": 84,
+      "bind_rate": "19.0%",
+      "month_sale_orders": 1430,
+      "month_sale_gtv": 265253.77,
+      "month_sale_gtv_rate": "19.1%",
+      "month_gtv": 1387348.01,
+      "month_orders": 22915,
+      "daily_bind_inc": 3,
+      "daily_sale_gtv": 27887.15,
+      "daily_sale_orders": 107,
+      "daily_sale_gtv_rate": "4226.6%"
+    },
+    {
+      "name": "惠州市柏万-惠阳乐生活组",
+      "today_gtv": 444.25,
+      "today_orders": 15,
+      "shops": 1659,
+      "bind_cnt": 565,
+      "material_cnt": 173,
+      "sale_shop_cnt": 128,
+      "bind_rate": "30.6%",
+      "month_sale_orders": 2138,
+      "month_sale_gtv": 465369.54,
+      "month_sale_gtv_rate": "28.7%",
+      "month_gtv": 1622234.81,
+      "month_orders": 27036,
+      "daily_bind_inc": 7,
+      "daily_sale_gtv": 28683.24,
+      "daily_sale_orders": 134,
+      "daily_sale_gtv_rate": "6456.6%"
+    },
+    {
+      "name": "泉州市小花猫-泉州乐生活组",
+      "today_gtv": 434.7,
+      "today_orders": 4,
+      "shops": 1793,
+      "bind_cnt": 597,
+      "material_cnt": 203,
+      "sale_shop_cnt": 150,
+      "bind_rate": "34.0%",
+      "month_sale_orders": 1844,
+      "month_sale_gtv": 382182.6,
+      "month_sale_gtv_rate": "28.8%",
+      "month_gtv": 1325535.91,
+      "month_orders": 19098,
+      "daily_bind_inc": 3,
+      "daily_sale_gtv": 28978.0,
+      "daily_sale_orders": 103,
+      "daily_sale_gtv_rate": "6666.2%"
+    },
+    {
+      "name": "惠州市巨浪-惠州乐生活组",
+      "today_gtv": 323.88,
+      "today_orders": 5,
+      "shops": 2530,
+      "bind_cnt": 674,
+      "material_cnt": 179,
+      "sale_shop_cnt": 118,
+      "bind_rate": "26.6%",
+      "month_sale_orders": 1975,
+      "month_sale_gtv": 341756.01,
+      "month_sale_gtv_rate": "19.5%",
+      "month_gtv": 1756759.43,
+      "month_orders": 32246,
+      "daily_bind_inc": 2,
+      "daily_sale_gtv": 31199.07,
+      "daily_sale_orders": 140,
+      "daily_sale_gtv_rate": "9632.9%"
+    }
+  ],
+  "sales_by_org": {
+    "义乌汐洋": [],
+    "惠安广通": [],
+    "慈溪哲光": [],
+    "惠州柏万": [
+      {
+        "name": "邓百明",
+        "month_sale_gtv": 637.0,
+        "today_sale_gtv": 30.0,
+        "day_sale_gtv": 37.0,
+        "bind_cnt": 109
+      },
+      {
+        "name": "赖宇能",
+        "month_sale_gtv": 277.0,
+        "today_sale_gtv": 24.0,
+        "day_sale_gtv": 15.0,
+        "bind_cnt": 113
+      },
+      {
+        "name": "黄宝莹",
+        "month_sale_gtv": 85.0,
+        "today_sale_gtv": 9.0,
+        "day_sale_gtv": 10.0,
+        "bind_cnt": 55
+      },
+      {
+        "name": "黄子明",
+        "month_sale_gtv": 383.0,
+        "today_sale_gtv": 27.0,
+        "day_sale_gtv": 29.0,
+        "bind_cnt": 125
+      },
+      {
+        "name": "刘锦科",
+        "month_sale_gtv": 499.0,
+        "today_sale_gtv": 21.0,
+        "day_sale_gtv": 19.0,
+        "bind_cnt": 83
+      },
+      {
+        "name": "林启梁",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 3
+      },
+      {
+        "name": "曾小聪",
+        "month_sale_gtv": 3.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 3
+      },
+      {
+        "name": "卢晓翔",
+        "month_sale_gtv": 254.0,
+        "today_sale_gtv": 17.0,
+        "day_sale_gtv": 24.0,
+        "bind_cnt": 74
+      }
+    ],
+    "泉州小花猫": [
+      {
+        "name": "刘洋",
+        "month_sale_gtv": 645.0,
+        "today_sale_gtv": 48.0,
+        "day_sale_gtv": 30.0,
+        "bind_cnt": 105
+      },
+      {
+        "name": "黄伟",
+        "month_sale_gtv": 450.0,
+        "today_sale_gtv": 24.0,
+        "day_sale_gtv": 27.0,
+        "bind_cnt": 104
+      },
+      {
+        "name": "康文硕",
+        "month_sale_gtv": 72.0,
+        "today_sale_gtv": 9.0,
+        "day_sale_gtv": 8.0,
+        "bind_cnt": 64
+      },
+      {
+        "name": "李家兴",
+        "month_sale_gtv": 286.0,
+        "today_sale_gtv": 24.0,
+        "day_sale_gtv": 19.0,
+        "bind_cnt": 88
+      },
+      {
+        "name": "康子诚",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 8
+      },
+      {
+        "name": "郭俊峰",
+        "month_sale_gtv": 185.0,
+        "today_sale_gtv": 25.0,
+        "day_sale_gtv": 9.0,
+        "bind_cnt": 90
+      },
+      {
+        "name": "范振吉",
+        "month_sale_gtv": 171.0,
+        "today_sale_gtv": 17.0,
+        "day_sale_gtv": 10.0,
+        "bind_cnt": 70
+      },
+      {
+        "name": "倪靖宏",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 0
+      },
+      {
+        "name": "陈彩凤",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 1
+      },
+      {
+        "name": "曾鹏东",
+        "month_sale_gtv": 34.0,
+        "today_sale_gtv": 3.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 66
+      },
+      {
+        "name": "孙林喻",
+        "month_sale_gtv": 1.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 1
+      },
+      {
+        "name": "林俊贤",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": 0.0,
+        "bind_cnt": 0
+      }
+    ],
+    "惠州巨浪": [
+      {
+        "name": "张德亮",
+        "month_sale_gtv": 236.0,
+        "today_sale_gtv": 19.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 98
+      },
+      {
+        "name": "王瑞",
+        "month_sale_gtv": 206.0,
+        "today_sale_gtv": 4.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 52
+      },
+      {
+        "name": "杨伟纯",
+        "month_sale_gtv": 235.0,
+        "today_sale_gtv": 15.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 91
+      },
+      {
+        "name": "梁庆锋",
+        "month_sale_gtv": 215.0,
+        "today_sale_gtv": 20.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 121
+      },
+      {
+        "name": "张国如",
+        "month_sale_gtv": 8.0,
+        "today_sale_gtv": 1.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 19
+      },
+      {
+        "name": "梁庆幸",
+        "month_sale_gtv": 356.0,
+        "today_sale_gtv": 29.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 107
+      },
+      {
+        "name": "肖立铭",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 7
+      },
+      {
+        "name": "曾文琦",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 1
+      },
+      {
+        "name": "黄天",
+        "month_sale_gtv": 182.0,
+        "today_sale_gtv": 11.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 66
+      },
+      {
+        "name": "林盛意",
+        "month_sale_gtv": 10.0,
+        "today_sale_gtv": 1.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 11
+      },
+      {
+        "name": "吴誉",
+        "month_sale_gtv": 527.0,
+        "today_sale_gtv": 18.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 101
+      }
+    ]
+  }
+}

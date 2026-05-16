@@ -1,0 +1,12 @@
+{
+  "month": "2026-04",
+  "total": {"leader": "李俊", "hc": 295, "work_pool": 10395, "month_tgt": 2617, "total_tgt": 7851},
+  "cities": {
+    "高线苏鲁豫城市群": {"leader": "高子扬", "hc": 54, "work_pool": 2063, "month_tgt": 520, "total_tgt": 1560},
+    "高线苏皖城市群":   {"leader": "方广生", "hc": 51, "work_pool": 1813, "month_tgt": 450, "total_tgt": 1350},
+    "高线苏浙城市群":   {"leader": "于继龙", "hc": 50, "work_pool": 1695, "month_tgt": 440, "total_tgt": 1320},
+    "高线新甘蒙城市群": {"leader": "叶泽锋", "hc": 40, "work_pool": 1524, "month_tgt": 385, "total_tgt": 1155},
+    "高线粤海城市群":   {"leader": "张涛",   "hc": 54, "work_pool": 1961, "month_tgt": 464, "total_tgt": 1392},
+    "高线粤闽浙城市群": {"leader": "胡英杰", "hc": 46, "work_pool": 1339, "month_tgt": 358, "total_tgt": 1074}
+  }
+}
