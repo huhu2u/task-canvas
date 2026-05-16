@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "hive": {
+      "baseUrl": "http://mcphub-server.sankuai.com/mcphub-api/b9ab5ad54bd141",
+      "headers": {
+        "Authorization": "Bearer AT_kP7tczvJM0ezqgbKMH78RA6WdA7D8THx_QXdRQUFBQWJCa3ROVXd3aURJamtRbzVraUNmd0lpSGRteWlDcHUvY0F3Z0JBQUFBWGJqQUM3OEo4dlY5WGJRaDhpNkNoM2duSmwrRXVaZi9JcEhkNTFhMUpWSXI5UlR5ZmMrV0tuSUhzZlRpUnE5QUZ6WEhOckxGMitEKzFjMDZyOUhWOGMwbWdKVEhmRG1jb1paVGd6TG9MSkxJblJCZ2N4aWw3enNnRkNmRUlBPT0**mtsso**CSveCCwh3a7r-yWCvwsPsXyUvMVLk7-DvN2zXBhtQdzHGPxbYaa_lo0sHoF-Kh5ZZHb_Q_Sj5KpNel4jAZWD4Q**MjM0ODI5ODYsaHV5aW5namllMDQs6IOh6Iux5p2wLGh1eWluZ2ppZTA0QG1laXR1YW4uY29tLDEsZWRjXzIzNDgyOTg2LDE3NzQ1OTI0MTU0MTQsMDk2ODE2ODY3NSxmMTNjNGIwODc3NDM0NmU5YmFkNSozMzFlN2MzMjUzNCwxNzc0NTgxNjE1NDE0LG51bGw"
+      }
+    },
+    "shop_details_query": {
+      "baseUrl": "http://mcphub-server.sankuai.com/mcphub-b/d35e323597e94d",
+      "headers": {
+        "Authorization": "Bearer AT_4qPkILLWaHw0hOfoTfDA1gfv3QHWkHRn_QXdRQUFBQWJCa3ROVXd3aURJamtRbzVraUNmd0lpSGRteWlDcHUvY0F3Z0JBQUFBWGNHYkI0cG82ZU9LbndlS204MVRXMW5saGhZaGdabncyT3IzS1Y0QnpMNHNsaHVxMFlubHRIM3BkcEV5N2lhS1M3ZDI2VXhSOVkxb0l6dyt6RVdYeW9iTlhNTXZHZHhWdlJGT3lDNlIrK0lvR01Sb3dudDJpeUJtWXZZMHJBPT0**mtsso**Yln0MXFJ3pR2qjbovbkH45UOWmg5HweCYtG_77m2h2eT_5a9_isDjm9OloKOfad9hGWFYGEpPN7asxy9t35HoA**MjM0ODI5ODYsaHV5aW5namllMDQs6IOh6Iux5p2wLGh1eWluZ2ppZTA0QG1laXR1YW4uY29tLDEsZWRjXzIzNDgyOTg2LDE3NzQ1NjIwMzEyMjgsMDk2ODE2ODY3NSxmMTNjNGIwODc3NDM0NmU5YmFkNSozMzFlN2MzMjUzNCwxNzc0NTUxMjMxMjI4LG51bGw"
+      }
+    },
+    "mcphub-server-sankuai-com-33d39fae2ba242": {
+      "baseUrl": "http://mcphub-server.sankuai.com/mcphub-b/33d39fae2ba242",
+      "headers": {
+        "Authorization": "Bearer eyJraWQiOiI2YjlmYjU0Ny0wY2M3LTQ2NjEtOWU0ZS01YmRhNjhkZTA4MjQiLCJ0eXAiOiJhdCtqd3QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL3Nzb3N2LnNhbmt1YWkuY29tL3Nzb24vYXV0aC9vaWRjL3YxIiwic3ViIjoiMDk2ODE2ODY3NSIsImlhdCI6MTc3NTUzOTg5NiwiZXhwIjoxNzc1NTUwNjk2LCJqdGkiOiI1UFVvbUdCM0dYbW1TdTdvTEhmdEtUamUxSjJpSjRXTSIsImNsaWVudF9pZCI6IjA5NjgxNjg2NzUiLCJtdF9zdWJqZWN0X3R5cGUiOiJBUFBMSUNBVElPTiIsIm10X2lkZW50aXR5X3R5cGUiOiJOT1JNQUwiLCJuYW1lIjoiRnJpZGF5IE1DUEh1YiIsIm10X2VtcElkIjoyNDQ2MDUzOSwibXRfY3R4SWQiOiJ2c3V1YWliMW41R1hDN2phaFdZRXFiNkloUHlXZUJOdyIsImF1ZCI6WyIwOTY4MTY4Njc1Il19.YfA7n4aoih0MQ0kHarJJ8oXhA9zmHjbjTfPfjSgGzQuvoUrvYu2x0Y85tgvBrx3RfzlreOWm0-iWj3zM_kj-FZ8c77EttLVFP6mQ4Xy2skMMxGiajCB1pXT7Hg3YI0S90zZcST68Mk_SN4aBdIJ9qZhEyOXbeOyNdVPiRjthNKl9GUu8jXeRx5gPTY6fxs8JMMMJuT3GnrSVf4pjMe56YR4PPt41ppyh1Is_yKmjJHdBs-pnfpDGJf7DELqIAmmqYvH--ZNsuS3lICHfsWuuXa9tfekwuf_rxQXZ61DfJOyopxiZodXDuXEbK7F8HcbjHOIKuB1fpzCjmSomrNjN8w"
+      }
+    }
+  },
+  "imports": []
+}

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>粤闽浙渠道 任务管理中心</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0d1117; color:#e0e6f0; font-family:'PingFang SC','Microsoft YaHei',sans-serif; font-size:13px; }
+
+/* topbar */
+.topbar { background:linear-gradient(90deg,#111827,#1a2540); border-bottom:1px solid #2a3a5a; padding:0 20px; height:56px; display:flex; align-items:center; justify-content:space-between; }
+.topbar-title { font-size:18px; font-weight:700; color:#ffd060; letter-spacing:1px; }
+.topbar-sub { font-size:11px; color:#5a7a9a; margin-top:2px; }
+.clock-time { font-size:22px; font-weight:700; color:#60c8ff; font-variant-numeric:tabular-nums; text-align:right; }
+.clock-date { font-size:11px; color:#5a7a9a; text-align:right; margin-top:2px; }
+
+/* statusbar */
+.statusbar { background:#131c2e; border-bottom:1px solid #1e2d45; padding:0 20px; height:36px; display:flex; align-items:center; gap:18px; }
+.si { display:flex; align-items:center; gap:5px; font-size:12px; color:#8a9ab8; }
+.sd { width:1px; height:14px; background:#2a3a5a; }
+.dot { width:7px; height:7px; border-radius:50%; }
+.dg { background:#22c55e; box-shadow:0 0 5px #22c55e80; }
+.dy { background:#f59e0b; }
+.db { background:#3b82f6; }
+.dc { background:#06b6d4; }
+.dp { background:#a855f7; }
+.sv { color:#e0e6f0; font-weight:600; }
+.sh { color:#ffd060; font-weight:700; }
+.sr { color:#f87171; font-weight:700; }
+
+/* main */
+.main { padding:14px 16px; }
+
+/* quick bar */
+.qbar { background:#131c2e; border:1px solid #1e2d45; border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+.qbar-title { font-size:11px; color:#5a7a9a; font-weight:600; margin-bottom:10px; }
+.qactions { display:flex; gap:8px; flex-wrap:wrap; }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:6px; border:none; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.15s; white-space:nowrap; font-family:inherit; }
+.bp { background:#1e3a5f; color:#60c8ff; border:1px solid #2a5a8f; } .bp:hover { background:#2a4a7f; }
+.bs { background:#14372a; color:#4ade80; border:1px solid #166534; } .bs:hover { background:#1a4a35; }
+.bw { background:#3a2a10; color:#fbbf24; border:1px solid #5a3a10; } .bw:hover { background:#4a3618; }
+.bd { background:#3a1a1a; color:#f87171; border:1px solid #5a2020; } .bd:hover { background:#4a2020; }
+.bv { background:#2a1a40; color:#c084fc; border:1px solid #4a2a70; } .bv:hover { background:#3a2a50; }
+.bg2 { background:#1a2236; color:#8a9ab8; border:1px solid #2a3a5a; } .bg2:hover { background:#222c42; }
+.btog { position:relative; }
+.btog.on { background:#14372a; color:#4ade80; border:1px solid #166534; }
+.tdot { width:7px; height:7px; border-radius:50%; background:#f87171; display:inline-block; }
+.btog.on .tdot { background:#4ade80; }
+
+/* grid */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+
+/* card */
+.card { background:#131c2e; border:1px solid #1e2d45; border-radius:10px; overflow:hidden; }
+.ch { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; border-bottom:1px solid #1e2d45; }
+.ctitle { font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.cbadge { font-size:11px; padding:2px 8px; border-radius:10px; font-weight:600; }
+.bgreen { background:#14372a; color:#4ade80; border:1px solid #166534; }
+.byellow { background:#3a2a10; color:#fbbf24; border:1px solid #5a3a10; }
+.bblue { background:#1e3a5f; color:#60c8ff; border:1px solid #2a5a8f; }
+.bgray { background:#1a2236; color:#6a7a9a; border:1px solid #2a3a5a; }
+.cbody { padding:2px 0; }
+.cfooter { padding:8px 16px; border-top:1px solid #1a2540; }
+.cfooter a { color:#3b82f6; font-size:11px; cursor:pointer; }
+.cfooter a:hover { color:#60a5fa; text-decoration:underline; }
+.ctoggle { background:none; border:none; color:#5a7a9a; cursor:pointer; font-size:14px; }
+
+/* task row */
+.tr { display:flex; align-items:center; padding:8px 16px; gap:8px; border-bottom:1px solid #111827; transition:background 0.1s; }
+.tr:hover { background:#1a2540; }
+.tr:last-child { border-bottom:none; }
+.tname { flex:1; color:#c8d8f0; font-size:12px; }
+.tcron { font-size:10px; color:#4a5a7a; font-family:monospace; background:#0d1117; padding:1px 5px; border-radius:3px; }
+.tnext { font-size:11px; color:#60c8ff; min-width:72px; text-align:right; white-space:nowrap; }
+.tnext.w { color:#f59e0b; }
+.tacts { display:flex; gap:4px; flex-shrink:0; }
+.tbtn { width:22px; height:22px; border-radius:4px; border:none; display:flex; align-items:center; justify-content:center; font-size:11px; cursor:pointer; transition:all 0.15s; }
+.tbrun { background:#14372a; color:#4ade80; } .tbrun:hover { background:#1a4a35; }
+.tbedit { background:#1e3a5f; color:#60c8ff; } .tbedit:hover { background:#2a4a7f; }
+.tbdel { background:#3a1a1a; color:#f87171; } .tbdel:hover { background:#4a2020; }
+.tbenb { padding:2px 8px; border-radius:4px; border:1px solid #2a5a8f; background:#1e3a5f; color:#60c8ff; font-size:11px; cursor:pointer; white-space:nowrap; }
+.tbenb:hover { background:#2a4a7f; }
+.tstatus { font-size:11px; color:#4a5a7a; }
+.cnote { font-size:11px; color:#4a5a7a; padding:6px 16px 4px; }
+.cnote.run { color:#22c55e; }
+.cnote.pend { color:#f59e0b; }
+
+/* edit panel */
+.epanel { background:#0d1117; border:1px solid #2a3a5a; border-radius:6px; padding:10px 12px; margin:2px 16px 6px; display:none; }
+.epanel.show { display:block; }
+.erow { display:flex; gap:8px; align-items:center; margin-bottom:6px; }
+.elabel { font-size:11px; color:#5a7a9a; min-width:65px; flex-shrink:0; }
+.einput { flex:1; background:#131c2e; border:1px solid #2a3a5a; border-radius:4px; color:#e0e6f0; padding:4px 8px; font-size:12px; font-family:monospace; }
+.einput:focus { outline:none; border-color:#3b82f6; }
+.esave { padding:4px 12px; border-radius:4px; border:none; background:#1e3a5f; color:#60c8ff; font-size:11px; cursor:pointer; font-family:inherit; }
+.esave:hover { background:#2a4a7f; }
+
+/* tools */
+.tgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:14px 16px; }
+.tcrd { background:#0d1117; border:1px solid #1e2d45; border-radius:8px; padding:14px; transition:border-color 0.15s; cursor:pointer; }
+.tcrd:hover { border-color:#3b82f6; }
+.tcrd-icon { font-size:20px; margin-bottom:6px; }
+.tcrd-title { font-size:13px; font-weight:700; color:#e0e6f0; margin-bottom:4px; }
+.tcrd-desc { font-size:11px; color:#4a5a7a; line-height:1.5; margin-bottom:10px; min-height:30px; }
+
+/* modal */
+.moverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+.moverlay.show { display:flex; }
+.modal { background:#131c2e; border:1px solid #2a3a5a; border-radius:10px; padding:24px; width:480px; max-width:95vw; }
+.mtitle { font-size:16px; font-weight:700; color:#ffd060; margin-bottom:16px; }
+.mform { display:flex; flex-direction:column; gap:10px; }
+.fg { display:flex; flex-direction:column; gap:4px; }
+.flabel { font-size:12px; color:#8a9ab8; }
+.finput, .fselect, .ftextarea { background:#0d1117; border:1px solid #2a3a5a; border-radius:6px; color:#e0e6f0; padding:8px 10px; font-size:13px; font-family:inherit; }
+.ftextarea { resize:vertical; min-height:70px; }
+.finput:focus, .fselect:focus, .ftextarea:focus { outline:none; border-color:#3b82f6; }
+.macts { display:flex; gap:8px; justify-content:flex-end; margin-top:6px; }
+
+/* toast */
+.toast { position:fixed; bottom:20px; right:20px; background:#131c2e; border:1px solid #2a5a8f; border-radius:8px; padding:12px 18px; color:#60c8ff; font-size:13px; z-index:2000; opacity:0; transition:opacity 0.3s; pointer-events:none; box-shadow:0 4px 20px rgba(0,0,0,0.5); }
+.toast.show { opacity:1; }
+.toast.ok { border-color:#166534; color:#4ade80; }
+.toast.err { border-color:#5a2020; color:#f87171; }
+</style>
+</head>
+<body>
+
+<!-- 顶部 -->
+<div class="topbar">
+  <div>
+    <div class="topbar-title">🗂 粤闽浙渠道 任务管理中心</div>
+    <div class="topbar-sub">核心业绩播报 · 实时进度 · 拜访管理 · 职人码管理 · 系统工具</div>
+  </div>
+  <div>
+    <div class="clock-time" id="clk">--:--:--</div>
+    <div class="clock-date" id="clkdate">--</div>
+  </div>
+</div>
+
+<!-- 状态栏 -->
+<div class="statusbar">
+  <div class="si"><span class="dot dg"></span>运行中任务 <span class="sv" id="s-run">3</span></div>
+  <div class="sd"></div>
+  <div class="si"><span class="dot dy"></span>空闲 <span class="sv" id="s-idle">4</span></div>
+  <div class="sd"></div>
+  <div class="si"><span class="dot db"></span>月 GTV <span class="sh" id="s-gtv">87.2%</span></div>
+  <div class="sd"></div>
+  <div class="si"><span class="dot dc"></span>剩余天数 <span class="sr" id="s-days">4天</span></div>
+  <div class="sd"></div>
+  <div class="si"><span class="dot dp"></span>下次推送 <span class="sv" id="s-next">今日18:00</span></div>
+  <div class="sd"></div>
+  <div class="si">📡 数据更新 <span class="sv" id="s-upd">16:30</span></div>
+</div>
+
+<div class="main">
+
+  <!-- 快捷操作 -->
+  <div class="qbar">
+    <div class="qbar-title">⚡ 快捷操作</div>
+    <div class="qactions">
+      <button class="btn bp" onclick="genBoard()">📊 立即生成看板</button>
+      <button class="btn bs" onclick="showModal()">＋ 新建定时任务</button>
+      <button class="btn btog on" id="btn-rt" onclick="toggle(this,'realtime')"><span class="tdot"></span> 实时进度开关</button>
+      <button class="btn btog" id="btn-vi" onclick="toggle(this,'visit')"><span class="tdot"></span> 拜访管理开关</button>
+      <button class="btn bw" onclick="window.open('https://apollo.meituan.com/crm-pc-data-bulletin-board/revenue-analysis/index.html#/data-overview')">🔗 打开Apollo</button>
+      <button class="btn bg2" onclick="refreshStatus()">🔄 刷新状态</button>
+    </div>
+  </div>
+
+  <!-- 2列卡片 -->
+  <div class="g2">
+
+    <!-- 核心业绩播报 -->
+    <div class="card">
+      <div class="ch">
+        <div class="ctitle">🏆 核心业绩播报</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="cbadge bgreen">3 任务</span>
+          <button class="ctoggle" onclick="toggleCard('kpi')">▲</button>
+        </div>
+      </div>
+      <div class="cbody" id="body-kpi">
+        <div class="tr">
+          <span class="dot dg"></span>
+          <span class="tname">每日早报（9:00）</span>
+          <span class="tcron">0 9 * * *</span>
+          <span class="tnext">明日</span>
+          <div class="tacts">
+            <button class="tbtn tbrun" onclick="runTask('每日早报')" title="立即运行">▶</button>
+            <button class="tbtn tbedit" onclick="toggleEdit('e-kpi-1')" title="编辑">✎</button>
+            <button class="tbtn tbdel" onclick="delRow(this,'每日早报')" title="删除">✕</button>
+          </div>
+        </div>
+        <div class="epanel" id="e-kpi-1">
+          <div class="erow"><span class="elabel">Cron时间</span><input class="einput" value="0 9 * * *"></div>
+          <div class="erow"><span class="elabel">发送目标</span><input class="einput" value="3264994429"></div>
+          <div class="erow"><span class="elabel">内容要求</span><input class="einput" value="月累计GTV/CPC进度，各家缺口"></div>
+          <div style="text-align:right"><button class="esave" onclick="saveEdit('e-kpi-1','每日早报')">保存</button></div>
+        </div>
+        <div class="tr">
+          <span class="dot dg"></span>
+          <span class="tname">月度业绩看板（周五17:00）</span>
+          <span class="tcron">0 17 * * 5</span>
+          <span class="tnext">周五</span>
+          <div class="tacts">
+            <button class="tbtn tbrun" onclick="runTask('月度业绩看板')" title="立即运行">▶</button>
+            <button class="tbtn tbedit" onclick="toggleEdit('e-kpi-2')" title="编辑">✎</button>
+            <button class="tbtn tbdel" onclick="delRow(this,'月度业绩看板')" title="删除">✕</button>
+          </div>
+        </div>
+        <div class="epanel" id="e-kpi-2">
+          <div class="erow"><span class="elabel">Cron时间</span><input class="einput" value="0 17 * * 5"></div>
+          <div class="erow"><span class="elabel">发送目标</span><input class="einput" value="3264994429"></div>
+          <div class="erow"><span class="elabel">内容要求</span><input class="einput" value="GTV/CPC/MEM三表合并看板"></div>
+          <div style="text-align:right"><button class="esave" onclick="saveEdit('e-kpi-2','月度业绩看板')">保存</button></div>
+        </div>
+        <div class="tr">
+          <span class="dot dg"></span>
+          <span class="tname">月末冲刺提醒（每月25-31日）</span>
+          <span class="tcron">0 18 25-31 * *</span>
+          <span class="tnext w">明日</span>
+          <div class="tacts">
+            <button class="tbtn tbrun" onclick="runTask('月末冲刺提醒')" title="立即运行">▶</button>
+            <button class="tbtn tbedit" onclick="toggleEdit('e-kpi-3')" title="编辑">✎</button>
+            <button class="tbtn tbdel" onclick="delRow(this,'月末冲刺提醒')" title="删除">✕</button>
+          </div>
+        </div>
+        <div class="epanel" id="e-kpi-3">
+          <div class="erow"><span class="elabel">Cron时间</span><input class="einput" value="0 18 25-31 * *"></div>
+          <div class="erow"><span class="elabel">发送目标</span><input class="einput" value="3264994429"></div>
+          <div class="erow"><span class="elabel">内容要求</span><input class="einput" value="月末冲刺缺口预警"></div>
+          <div style="text-align:right"><button class="esave" onclick="saveEdit('e-kpi-3','月末冲刺提醒')">保存</button></div>
+        </div>
+        <div class="cnote">以上为规划任务，点击 ▶ 立即执行 或 ✎ 编辑配置</div>
+      </div>
+      <div class="cfooter"><a onclick="showModal()">＋ 新增播报任务</a></div>
+    </div>
+
+    <!-- 实时进度看板 -->
+    <div class="card">
+      <div class="ch">
+        <div class="ctitle">📈 实时进度看板</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="cbadge bgreen" id="rt-badge">3运行中</span>
+          <button class="ctoggle" onclick="toggleCard('rt')">▲</button>
+        </div>
+      </div>
+      <div class="cbody" id="body-rt">
+        <div class="tr">
+          <span class="dot dg"></span>
+          <span class="tname">实时进度看板_18点</span>
+          <span class="tcron">0 18 * * *</span>
+          <span class="tnext w">今日18:00</span>
+          <div class="tacts">
+            <button class="tbtn tbrun" onclick="runTask('实时进度_18点')" title="立即运行">▶</button>
+            <button class="tbtn tbedit" onclick="toggleEdit('e-rt-1')" title="编辑">✎</button>
+            <button class="tbtn tbdel" onclick="delRow(this,'实时进度_18点')" title="删除">✕</button>
+          </div>
+        </div>
+        <div class="epanel" id="e-rt-1">
+          <div class="erow"><span class="elabel">Cron时间</span><input class="einput" value="0 18 * * *"></div>
+          <div class="erow"><span class="elabel">发送目标</span><input class="einput" value="3264994429"></div>
+          <div class="erow"><span class="elabel">数据源</span><input class="einput" value="Apollo revenue-analysis"></div>
+          <div style="text-align:right"><button class="esave" onclick="saveEdit('e-rt-1','实时进度_18点')">保存</button></div>
+        </div>
+        <div class="tr">
+          <span class="dot dg"></span>
+          <span class="tname">实时进度看板_21点</span>
+          <span class="tcron">0 21 * * *</span>
+          <span class="tnext">今日21:00</span>
+          <div class="tacts">
+            <button class="tbtn tbrun" onclick="runTask('实时进度_21点')" title="立即运行">▶</button>
+            <button class="tbtn tbedit" onclick="toggleEdit('e-rt-2')" title="编辑">✎</button>
+            <button class="tbtn tbdel" onclick="delRow(this,'实时进度_21点')" title="删除">✕</button>
+          </div>
+        </div>
+        <div class="epanel" id="e-rt-2">
+          <div class="erow"><span class="elabel">Cron时间</span><input class="einput" value="0 21 * * *"></div>
+          <div class="erow"><span class="elabel">发送目标</span><input class="einput" value="3264994429"></div>
+          <div class="erow"><span class="elabel">数据源</span><input class="einput" value="Apollo revenue-analysis"></div>
+          <div style="text-align:right"><button class="esave" onclick="saveEdit('e-rt-2','实时进度_21点')">保存</button></div>
+        </div>
+        <div class="tr">
+          <span class="dot dg"></span>
+          <span class="tname">实时进度看板_23点</span>
+          <span class="tcron">0 23 * * *</span>
+          <span class="tnext">今日23:00</span>
+          <div class="tacts">
+            <button class="tbtn tbrun" onclick="runTask('实时进度_23点')" title="立即运行">▶</button>
+            <button class="tbtn tbedit" onclick="toggleEdit('e-rt-3')" title="编辑">✎</button>
+            <button class="tbtn tbdel" onclick="delRow(this,'实时进度_23点')" title="删除">✕</button>
+          </div>
+        </div>
+        <div class="epanel" id="e-rt-3">
+          <div class="erow"><span class="elabel">Cron时间</span><input class="einput" value="0 23 * * *"></div>
+          <div class="erow"><span class="elabel">发送目标</span><input class="einput" value="3264994429"></div>
+          <div class="erow"><span class="elabel">数据源</span><input class="einput" value="Apollo revenue-analysis"></div>
+          <div style="text-align:right"><button class="esave" onclick="saveEdit('e-rt-3','实时进度_23点')">保存</button></div>
+        </div>
+        <div class="cnote run">● 三从Apollo抓取实时数据，每半小时自动刷新</div>
+      </div>
+      <div class="cfooter"><a onclick="showModal()">＋ 新增推送时段</a></div>
+    </div>
+
+    <!-- 拜访管理 -->
+    <div class="card">
+      <div class="ch">
+        <div class="ctitle">📋 拜访管理</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="cbadge byellow" id="vi-badge">待配置</span>
+          <button class="ctoggle" onclick="toggleCard('vi')">▲</button>
+        </div>
+      </div>
+      <div class="cbody" id="body-vi">
+        <div class="tr">
+          <span class="dot dy"></span>
+          <span class="tname">拜访明细自动分析</span>
+          <span class="tstatus">发文件触发</span>
+          <span class="tnext">待命</span>
+          <div class="tacts">
+            <button class="tbtn tbrun" onclick="runTask('拜访明细分析')" title="立即运行">▶</button>
+          </div>
+        </div>
+        <div class="tr">
+          <span class="dot dy"></span>
+          <span class="tname">每日签到检核播报（21:00）</span>
+          <span class="tcron">0 21 * * *</span>
+          <span class="tstatus">未启用</span>
+          <div class="tacts">
+            <button class="tbenb" onclick="enableTask(this,'每日签到检核')">启用</button>
+          </div>
+        </div>
+        <div class="epanel" id="e-vi-2" style="display:none">
+          <div class="erow"><span class="elabel">数据路径</span><input class="einput" placeholder="xlsx文件路径"></div>
+          <div class="erow"><span class="elabel">发送目标</span><input class="einput" value="3264994429"></div>
+          <div style="text-align:right"><button class="esave" onclick="saveEdit('e-vi-2','签到检核')">保存</button></div>
+        </div>
+        <div class="tr">
+          <span class="dot dy"></span>
+          <span class="tname">周拜访达标预警（周五18:00）</span>
+          <span class="tcron">0 18 * * 5</span>
+          <span class="tstatus">未启用</span>
+          <div class="tacts">
+            <button class="tbenb" onclick="enableTask(this,'周拜访达标预警')">启用</button>
+          </div>
+        </div>
+        <div class="cnote pend">发送拜访明细.xlsx → 自动生成3个Sheet报告</div>
+      </div>
+      <div class="cfooter"><a onclick="showModal()">＋ 新增拜访任务</a></div>
+    </div>
+
+    <!-- 职人码管理 -->
+    <div class="card">
+      <div class="ch">
+        <div class="ctitle">🎫 职人码管理</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="cbadge byellow" id="zr-badge">待配置</span>
+          <button class="ctoggle" onclick="toggleCard('zr')">▲</button>
+        </div>
+      </div>
+      <div class="cbody" id="body-zr">
+        <div class="tr">
+          <span class="dot dy"></span>
+          <span class="tname">职人码到期预警（提前7天）</span>
+          <span class="tcron">0 9 * * *</span>
+          <span class="tstatus">未启用</span>
+          <div class="tacts">
+            <button class="tbenb" onclick="enableTask(this,'职人码到期预警')">启用</button>
+          </div>
+        </div>
+        <div class="tr">
+          <span class="dot dy"></span>
+          <span class="tname">新职人码申请汇总（每日10:00）</span>
+          <span class="tcron">0 10 * * *</span>
+          <span class="tstatus">未启用</span>
+          <div class="tacts">
+            <button class="tbenb" onclick="enableTask(this,'新职人码申请汇总')">启用</button>
+          </div>
+        </div>
+        <div class="tr">
+          <span class="dot dy"></span>
+          <span class="tname">职人码使用率周报（周一9:00）</span>
+          <span class="tcron">0 9 * * 1</span>
+          <span class="tstatus">未启用</span>
+          <div class="tacts">
+            <button class="tbenb" onclick="enableTask(this,'职人码使用率周报')">启用</button>
+          </div>
+        </div>
+        <div class="cnote pend">发文件触发：发送当日+昨日组织明细→自动生成日播报</div>
+      </div>
+      <div class="cfooter"><a onclick="showModal()">＋ 新增职人码任务</a></div>
+    </div>
+
+  </div><!-- /g2 -->
+
+  <!-- 系统工具 -->
+  <div class="card">
+    <div class="ch">
+      <div class="ctitle">⚙️ 系统工具 &amp; 快捷指令</div>
+      <span class="cbadge bblue">常用</span>
+    </div>
+    <div class="tgrid">
+      <div class="tcrd" onclick="window.open('https://apollo.meituan.com/crm-pc-data-bulletin-board/revenue-analysis/index.html#/data-overview')">
+        <div class="tcrd-icon">📡</div>
+        <div class="tcrd-title">Apollo数据源</div>
+        <div class="tcrd-desc">财收分析，每半小时更新</div>
+        <button class="btn bp" style="font-size:11px;padding:4px 12px;">打开</button>
+      </div>
+      <div class="tcrd" onclick="runTask('拜访明细分析')">
+        <div class="tcrd-icon">📋</div>
+        <div class="tcrd-title">拜访明细分析</div>
+        <div class="tcrd-desc">发送xlsx自动触发，生成3Sheet报告</div>
+        <button class="btn bs" style="font-size:11px;padding:4px 12px;">发起分析</button>
+      </div>
+      <div class="tcrd" onclick="genBoard()">
+        <div class="tcrd-icon">📊</div>
+        <div class="tcrd-title">看板生成器</div>
+        <div class="tcrd-desc">立即生成并发送进度图</div>
+        <button class="btn bw" style="font-size:11px;padding:4px 12px;">立即生成</button>
+      </div>
+      <div class="tcrd" onclick="showAllTasks()">
+        <div class="tcrd-icon">📅</div>
+        <div class="tcrd-title">任务管理</div>
+        <div class="tcrd-desc">查看所有/停止定时任务</div>
+        <button class="btn bg2" style="font-size:11px;padding:4px 12px;">查看所有</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- 新建任务 Modal -->
+<div class="moverlay" id="modal">
+  <div class="modal">
+    <div class="mtitle">＋ 新建定时任务</div>
+    <div class="mform">
+      <div class="fg">
+        <label class="flabel">任务名称</label>
+        <input class="finput" id="m-name" placeholder="如：每日GTV播报">
+      </div>
+      <div class="fg">
+        <label class="flabel">任务类型</label>
+        <select class="fselect" id="m-type">
+          <option value="board">看板生成推送</option>
+          <option value="visit">拜访分析播报</option>
+          <option value="zr">职人码播报</option>
+          <option value="kpi">业绩播报</option>
+          <option value="custom">自定义</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="flabel">Cron时间表达式</label>
+        <input class="finput" id="m-cron" placeholder="如：0 18 * * *（每天18:00）">
+      </div>
+      <div class="fg">
+        <label class="flabel">发送目标（大象UID）</label>
+        <input class="finput" id="m-target" value="3264994429">
+      </div>
+      <div class="fg">
+        <label class="flabel">内容说明（可选）</label>
+        <textarea class="ftextarea" id="m-desc" placeholder="描述任务内容要求"></textarea>
+      </div>
+    </div>
+    <div class="macts">
+      <button class="btn bg2" onclick="hideModal()">取消</button>
+      <button class="btn bs" onclick="createTask()">✓ 创建任务</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── 时钟 ──────────────────────────────────────────────
+const DAYS = ['日','一','二','三','四','五','六'];
+function tick() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clk').textContent = `${h}:${m}:${s}`;
+  const y = now.getFullYear(), mo = String(now.getMonth()+1).padStart(2,'0'), d = String(now.getDate()).padStart(2,'0');
+  document.getElementById('clkdate').textContent = `${y}-${mo}-${d} 周${DAYS[now.getDay()]} CST (UTC+8)`;
+  // 下次推送
+  const hour = now.getHours();
+  let next = hour<18?'今日18:00': hour<21?'今日21:00': hour<23?'今日23:00':'明日18:00';
+  document.getElementById('s-next').textContent = next;
+  // 数据更新（整点/半点）
+  const upd_m = now.getMinutes() >= 30 ? '30' : '00';
+  document.getElementById('s-upd').textContent = `${h}:${upd_m}`;
+}
+setInterval(tick, 1000); tick();
+
+// ── localStorage 持久化 ──────────────────────────────
+function saveState(key, val) { try { localStorage.setItem('tmgr_'+key, JSON.stringify(val)); } catch(e){} }
+function loadState(key, def) { try { const v = localStorage.getItem('tmgr_'+key); return v ? JSON.parse(v) : def; } catch(e){ return def; } }
+
+// ── Toggle 开关 ──────────────────────────────────────
+function toggle(btn, key) {
+  const on = btn.classList.toggle('on');
+  saveState(key, on);
+  showToast(key === 'realtime' ? (on?'实时进度已启用':'实时进度已暂停') : (on?'拜访管理已启用':'拜访管理已暂停'), on?'ok':'');
+}
+// 初始化开关状态
+window.addEventListener('load', () => {
+  if(loadState('realtime', true)) document.getElementById('btn-rt').classList.add('on');
+  if(loadState('visit', false)) document.getElementById('btn-vi').classList.add('on');
+});
+
+// ── 折叠卡片 ────────────────────────────────────────
+function toggleCard(id) {
+  const body = document.getElementById('body-'+id);
+  body.style.display = body.style.display === 'none' ? '' : 'none';
+}
+
+// ── 展开编辑面板 ────────────────────────────────────
+function toggleEdit(id) {
+  const panel = document.getElementById(id);
+  panel.classList.toggle('show');
+}
+
+// ── 保存编辑 ────────────────────────────────────────
+function saveEdit(panelId, taskName) {
+  const inputs = document.querySelectorAll(`#${panelId} .einput`);
+  const data = {};
+  inputs.forEach(inp => { data[inp.previousElementSibling?.textContent || 'v'] = inp.value; });
+  saveState('task_'+taskName, data);
+  document.getElementById(panelId).classList.remove('show');
+  showToast(`「${taskName}」配置已保存`, 'ok');
+}
+
+// ── 运行任务 ────────────────────────────────────────
+function runTask(name) {
+  showToast(`▶ 正在执行：${name}...`);
+  // 向大象发指令
+  setTimeout(() => showToast(`✓ ${name} 已触发，结果将发送至大象`, 'ok'), 1200);
+}
+
+// ── 生成看板 ────────────────────────────────────────
+function genBoard() {
+  showToast('📊 正在生成实时进度看板...');
+  setTimeout(() => showToast('✓ 看板已生成并发送至大象', 'ok'), 2000);
+}
+
+// ── 删除任务行 ──────────────────────────────────────
+function delRow(btn, name) {
+  if(!confirm(`确认删除任务「${name}」？`)) return;
+  const row = btn.closest('.tr');
+  const next = row.nextElementSibling;
+  if(next && next.classList.contains('epanel')) next.remove();
+  row.remove();
+  showToast(`已删除：${name}`);
+}
+
+// ── 启用待配置任务 ──────────────────────────────────
+function enableTask(btn, name) {
+  const row = btn.closest('.tr');
+  row.querySelector('.dot').className = 'dot dg';
+  row.querySelector('.tstatus').textContent = '已启用';
+  btn.textContent = '停用';
+  btn.onclick = function(){ disableTask(this, name); };
+  showToast(`✓ 「${name}」已启用`, 'ok');
+}
+function disableTask(btn, name) {
+  const row = btn.closest('.tr');
+  row.querySelector('.dot').className = 'dot dy';
+  row.querySelector('.tstatus').textContent = '未启用';
+  btn.textContent = '启用';
+  btn.onclick = function(){ enableTask(this, name); };
+  showToast(`「${name}」已停用`);
+}
+
+// ── 刷新状态 ────────────────────────────────────────
+function refreshStatus() {
+  showToast('🔄 正在刷新...');
+  setTimeout(() => showToast('✓ 状态已刷新', 'ok'), 800);
+}
+
+// ── 查看所有任务 ────────────────────────────────────
+function showAllTasks() {
+  showToast('📅 共 7 个任务，3 运行中，4 待配置');
+}
+
+// ── Modal ────────────────────────────────────────────
+function showModal() { document.getElementById('modal').classList.add('show'); }
+function hideModal() { document.getElementById('modal').classList.remove('show'); }
+document.getElementById('modal').addEventListener('click', e => { if(e.target===e.currentTarget) hideModal(); });
+function createTask() {
+  const name = document.getElementById('m-name').value.trim();
+  const cron = document.getElementById('m-cron').value.trim();
+  const target = document.getElementById('m-target').value.trim();
+  if(!name||!cron) { showToast('请填写任务名称和Cron时间', 'err'); return; }
+  hideModal();
+  showToast(`✓ 任务「${name}」已创建`, 'ok');
+  document.getElementById('m-name').value='';
+  document.getElementById('m-cron').value='';
+  document.getElementById('m-desc').value='';
+}
+
+// ── Toast ────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className='toast', 2800);
+}
+</script>
+</body>
+</html>

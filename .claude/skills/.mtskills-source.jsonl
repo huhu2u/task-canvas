@@ -1,0 +1,7 @@
+{"skillName":"bi-query-sql","sourceType":"mt-name","sourceId":"bi-query-sql","env":"prod","installedAt":"2026-03-26T18:31:43.924Z","targetDir":"/mnt/openclaw/.openclaw/workspace/.claude/skills"}
+{"skillName":"bi-data-query-chat","sourceType":"mt-name","sourceId":"bi-data-query-chat","env":"prod","installedAt":"2026-03-26T18:33:02.624Z","targetDir":"/mnt/openclaw/.openclaw/workspace/.claude/skills"}
+{"skillName":"bi-analysis-calculation-toolkit","sourceType":"mt-name","sourceId":"bi-analysis-calculation-toolkit","env":"prod","installedAt":"2026-03-26T18:33:41.352Z","targetDir":"/mnt/openclaw/.openclaw/workspace/.claude/skills"}
+{"skillName":"bi-analysis-moshu","sourceType":"mt-name","sourceId":"bi-analysis-moshu","env":"prod","installedAt":"2026-03-26T18:33:56.110Z","targetDir":"/mnt/openclaw/.openclaw/workspace/.claude/skills"}
+{"skillName":"progress-data-source","sourceType":"mt-name","sourceId":"progress-data-source","env":"prod","installedAt":"2026-03-26T18:44:56.367Z","targetDir":"/mnt/openclaw/.openclaw/workspace/.claude/skills"}
+{"skillName":"apollo-cli-install","sourceType":"mt-name","sourceId":"apollo-cli-install","env":"prod","installedAt":"2026-03-26T18:59:20.194Z","targetDir":"/mnt/openclaw/.openclaw/workspace/.claude/skills"}
+{"skillName":"nocode-cli","sourceType":"mt-name","sourceId":"nocode-cli","env":"prod","installedAt":"2026-03-26T19:22:36.033Z","targetDir":"/mnt/openclaw/.openclaw/workspace/.claude/skills"}

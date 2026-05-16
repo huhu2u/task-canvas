@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  min-height: 100vh;
+}
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 24px;
+}
+.header h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.header .subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+}
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.summary-card .label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+.summary-card .value {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+.summary-card .change {
+  font-size: 12px;
+  margin-top: 4px;
+}
+.positive { color: #52c41a; }
+.negative { color: #f5222d; }
+.data-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.table-header {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr 1fr;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+.table-row:hover { background: #f8f9fa; }
+.table-row.header-row {
+  background: #fafafa;
+  font-weight: bold;
+  font-size: 13px;
+  color: #666;
+}
+.org-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+.metric {
+  text-align: right;
+  font-size: 13px;
+}
+.metric-value {
+  font-weight: 600;
+  color: #333;
+}
+.metric-label {
+  font-size: 11px;
+  color: #999;
+}
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e8e8e8;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #52c41a 0%, #73d13d 100%);
+  border-radius: 4px;
+}
+.progress-fill.warning {
+  background: linear-gradient(90deg, #faad14 0%, #ffc53d 100%);
+}
+.progress-fill.danger {
+  background: linear-gradient(90deg, #f5222d 0%, #ff4d4f 100%);
+}
+.rate {
+  font-weight: bold;
+  font-size: 14px;
+}
+.notice {
+  background: #fff7e6;
+  border: 1px solid #ffd591;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+  color: #d46b08;
+  font-size: 13px;
+}
+.footer {
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <h1>📊 粤闽浙城市群实时进度看板</h1>
+    <div class="subtitle">数据时间：2026年03月 | 统计周期：月度累计 | 数据来源：Apollo财收分析</div>
+  </div>
+
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="label">月累计实付验证GTV</div>
+      <div class="value">¥1,869.86万</div>
+      <div class="change positive">↑ 41.98% 月环比</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">月累计财务收入</div>
+      <div class="value">¥239.57万</div>
+      <div class="change positive">↑ 35.27% 月环比</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">月累计销售业绩</div>
+      <div class="value">¥235.56万</div>
+      <div class="change positive">↑ 65.82% 月环比</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">月累计交易收入</div>
+      <div class="value">¥117.44万</div>
+      <div class="change positive">↑ 41.60% 月环比</div>
+    </div>
+  </div>
+
+  <div class="data-table">
+    <div class="table-header">各代运营商业绩明细（2026年3月）</div>
+    <div class="table-row header-row">
+      <div>代运营商</div>
+      <div>月累计GTV</div>
+      <div>财务收入</div>
+      <div>销售业绩</div>
+      <div>交易收入</div>
+      <div>月环比</div>
+    </div>
+    <div class="table-row">
+      <div class="org-name">惠州市巨浪-惠州乐生活组</div>
+      <div class="metric">
+        <div class="metric-value">¥360.45万</div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+      </div>
+      <div class="metric metric-value">¥44.47万</div>
+      <div class="metric metric-value">¥44.83万</div>
+      <div class="metric metric-value">¥23.23万</div>
+      <div class="metric rate positive">+31.01%</div>
+    </div>
+    <div class="table-row">
+      <div class="org-name">惠州市柏万-惠阳乐生活组</div>
+      <div class="metric">
+        <div class="metric-value">¥315.77万</div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 87.6%"></div></div>
+      </div>
+      <div class="metric metric-value">¥41.07万</div>
+      <div class="metric metric-value">¥39.50万</div>
+      <div class="metric metric-value">¥20.12万</div>
+      <div class="metric rate positive">+32.56%</div>
+    </div>
+    <div class="table-row">
+      <div class="org-name">泉州市小花猫-泉州乐生活组</div>
+      <div class="metric">
+        <div class="metric-value">¥286.37万</div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 79.5%"></div></div>
+      </div>
+      <div class="metric metric-value">¥40.28万</div>
+      <div class="metric metric-value">¥35.79万</div>
+      <div class="metric metric-value">¥17.49万</div>
+      <div class="metric rate positive">+15.64%</div>
+    </div>
+    <div class="table-row">
+      <div class="org-name">宁夏灵创-金华义乌乐生活组</div>
+      <div class="metric">
+        <div class="metric-value">¥258.45万</div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 71.7%"></div></div>
+      </div>
+      <div class="metric metric-value">¥31.53万</div>
+      <div class="metric metric-value">¥36.05万</div>
+      <div class="metric metric-value">¥14.04万</div>
+      <div class="metric rate positive">+114.17%</div>
+    </div>
+    <div class="table-row">
+      <div class="org-name">惠安广通-晋江乐生活组</div>
+      <div class="metric">
+        <div class="metric-value">¥228.05万</div>
+        <div class="progress-bar"><div class="progress-fill warning" style="width: 63.3%"></div></div>
+      </div>
+      <div class="metric metric-value">¥27.01万</div>
+      <div class="metric metric-value">¥24.43万</div>
+      <div class="metric metric-value">¥14.58万</div>
+      <div class="metric rate positive">+19.89%</div>
+    </div>
+    <div class="table-row">
+      <div class="org-name">慈溪哲光-金华义乌乐生活组</div>
+      <div class="metric">
+        <div class="metric-value">¥214.77万</div>
+        <div class="progress-bar"><div class="progress-fill warning" style="width: 59.6%"></div></div>
+      </div>
+      <div class="metric metric-value">¥27.77万</div>
+      <div class="metric metric-value">¥29.35万</div>
+      <div class="metric metric-value">¥13.92万</div>
+      <div class="metric rate positive">+98.85%</div>
+    </div>
+    <div class="table-row">
+      <div class="org-name">义乌市汐洋-金华义乌乐生活组</div>
+      <div class="metric">
+        <div class="metric-value">¥206.01万</div>
+        <div class="progress-bar"><div class="progress-fill warning" style="width: 57.1%"></div></div>
+      </div>
+      <div class="metric metric-value">¥27.44万</div>
+      <div class="metric metric-value">¥25.65万</div>
+      <div class="metric metric-value">¥14.05万</div>
+      <div class="metric rate">0.00%</div>
+    </div>
+  </div>
+
+  <div class="notice">
+    ⚠️ 说明：当前展示的是2026年3月历史数据。Apollo系统当前时间为2026年4月，3月数据为完整月度数据。由于系统中未设置月目标值，完成率和日均缺口暂无法计算。今日实时数据（GTV/CPC）仅对应当前月份（4月）。
+  </div>
+
+  <div class="footer">
+    生成时间：2026-04-05 23:10 | 数据来源：Apollo财收分析 | 组织：高线粤闽浙城市群
+  </div>
+</div>
+</body>
+</html>

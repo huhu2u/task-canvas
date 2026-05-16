@@ -1,0 +1,349 @@
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+[2026-04-15] 总数: 2619, 共14页
+  第5/14页, 累计1000条
+  第10/14页, 累计2000条
+拉取完成，共2619条
+✓ /tmp/files/粤闽浙拜访分析_20260415.xlsx (34,791 bytes)
+Sheet1:47行 Sheet2:47行 Sheet3:236行
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 250, in <module>
+    subprocess.run(['openclaw', 'message', 'send', '--channel', 'daxiang', '--target', TARGET_USER, '--media', OUT_FILE, '--message', msg], timeout=120)
+  File "/usr/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'openclaw'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+[2026-04-16] 总数: 2862, 共15页
+  第5/15页, 累计1000条
+  第10/15页, 累计2000条
+  第15/15页, 累计2862条
+拉取完成，共2862条
+✓ /tmp/files/粤闽浙拜访分析_20260416.xlsx (35,898 bytes)
+Sheet1:48行 Sheet2:48行 Sheet3:243行
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 250, in <module>
+    subprocess.run(['openclaw', 'message', 'send', '--channel', 'daxiang', '--target', TARGET_USER, '--media', OUT_FILE, '--message', msg], timeout=120)
+  File "/usr/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'openclaw'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+[2026-04-17] 总数: 3091, 共16页
+  第5/16页, 累计1000条
+  第10/16页, 累计2000条
+  第15/16页, 累计3000条
+拉取完成，共3091条
+✓ /tmp/files/粤闽浙拜访分析_20260417.xlsx (34,968 bytes)
+Sheet1:48行 Sheet2:48行 Sheet3:229行
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 250, in <module>
+    subprocess.run(['openclaw', 'message', 'send', '--channel', 'daxiang', '--target', TARGET_USER, '--media', OUT_FILE, '--message', msg], timeout=120)
+  File "/usr/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'openclaw'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'
+/usr/local/lib/python3.12/dist-packages/openpyxl/styles/stylesheet.py:237: UserWarning: Workbook contains no default style, apply openpyxl's default
+  warn("Workbook contains no default style, apply openpyxl's default")
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 78, in <module>
+    _, total = fetch_page(1, page_size)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/scripts/fetch_visit_analysis.py", line 72, in fetch_page
+    result = r.json()["data"]["result"]
+             ~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'result'

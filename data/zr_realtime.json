@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-16 11:00",
+  "update_time": "2026-05-16 11:30",
   "date": "2026-05-16",
   "total": {
     "name": "高线粤闽浙城市群",
@@ -138,7 +138,64 @@
   ],
   "sales_by_org": {
     "义乌汐洋": [],
-    "惠安广通": [],
+    "惠安广通": [
+      {
+        "name": "王伟龙",
+        "month_sale_gtv": 342.0,
+        "today_sale_gtv": 10.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 18
+      },
+      {
+        "name": "董超亚",
+        "month_sale_gtv": 341.0,
+        "today_sale_gtv": 25.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 92
+      },
+      {
+        "name": "王琼英",
+        "month_sale_gtv": 194.0,
+        "today_sale_gtv": 14.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 91
+      },
+      {
+        "name": "许佳伟",
+        "month_sale_gtv": 145.0,
+        "today_sale_gtv": 17.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 84
+      },
+      {
+        "name": "向超",
+        "month_sale_gtv": 373.0,
+        "today_sale_gtv": 18.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 78
+      },
+      {
+        "name": "陈建江",
+        "month_sale_gtv": 181.0,
+        "today_sale_gtv": 14.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 103
+      },
+      {
+        "name": "尤云生",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 12
+      },
+      {
+        "name": "王少镕",
+        "month_sale_gtv": 0.0,
+        "today_sale_gtv": 0.0,
+        "day_sale_gtv": null,
+        "bind_cnt": 0
+      }
+    ],
     "慈溪哲光": [],
     "惠州柏万": [
       {
@@ -198,92 +255,7 @@
         "bind_cnt": 74
       }
     ],
-    "泉州小花猫": [
-      {
-        "name": "刘洋",
-        "month_sale_gtv": 645.0,
-        "today_sale_gtv": 48.0,
-        "day_sale_gtv": 30.0,
-        "bind_cnt": 105
-      },
-      {
-        "name": "黄伟",
-        "month_sale_gtv": 450.0,
-        "today_sale_gtv": 24.0,
-        "day_sale_gtv": 27.0,
-        "bind_cnt": 104
-      },
-      {
-        "name": "康文硕",
-        "month_sale_gtv": 72.0,
-        "today_sale_gtv": 9.0,
-        "day_sale_gtv": 8.0,
-        "bind_cnt": 64
-      },
-      {
-        "name": "李家兴",
-        "month_sale_gtv": 286.0,
-        "today_sale_gtv": 24.0,
-        "day_sale_gtv": 19.0,
-        "bind_cnt": 88
-      },
-      {
-        "name": "康子诚",
-        "month_sale_gtv": 0.0,
-        "today_sale_gtv": 0.0,
-        "day_sale_gtv": 0.0,
-        "bind_cnt": 8
-      },
-      {
-        "name": "郭俊峰",
-        "month_sale_gtv": 185.0,
-        "today_sale_gtv": 25.0,
-        "day_sale_gtv": 9.0,
-        "bind_cnt": 90
-      },
-      {
-        "name": "范振吉",
-        "month_sale_gtv": 171.0,
-        "today_sale_gtv": 17.0,
-        "day_sale_gtv": 10.0,
-        "bind_cnt": 70
-      },
-      {
-        "name": "倪靖宏",
-        "month_sale_gtv": 0.0,
-        "today_sale_gtv": 0.0,
-        "day_sale_gtv": 0.0,
-        "bind_cnt": 0
-      },
-      {
-        "name": "陈彩凤",
-        "month_sale_gtv": 0.0,
-        "today_sale_gtv": 0.0,
-        "day_sale_gtv": 0.0,
-        "bind_cnt": 1
-      },
-      {
-        "name": "曾鹏东",
-        "month_sale_gtv": 34.0,
-        "today_sale_gtv": 3.0,
-        "day_sale_gtv": 0.0,
-        "bind_cnt": 66
-      },
-      {
-        "name": "孙林喻",
-        "month_sale_gtv": 1.0,
-        "today_sale_gtv": 0.0,
-        "day_sale_gtv": 0.0,
-        "bind_cnt": 1
-      },
-      {
-        "name": "林俊贤",
-        "month_sale_gtv": 0.0,
-        "today_sale_gtv": 0.0,
-        "day_sale_gtv": 0.0,
-        "bind_cnt": 0
-      }
-    ],
+    "泉州小花猫": [],
     "惠州巨浪": [
       {
         "name": "张德亮",

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>粤闽浙实时进度看板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .header .time {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .summary-card .label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .summary-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .summary-card .value.gtv {
+            color: #1890ff;
+        }
+        .summary-card .value.cpc {
+            color: #52c41a;
+        }
+        .summary-card .sub-value {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .main-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .table-header {
+            background: linear-gradient(90deg, #1890ff, #096dd9);
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #f5f5f5;
+            padding: 12px 10px;
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            font-weight: 600;
+            border-bottom: 2px solid #e8e8e8;
+        }
+        td {
+            padding: 14px 10px;
+            text-align: center;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .operator-name {
+            text-align: left;
+            font-weight: 500;
+            color: #333;
+            padding-left: 20px;
+        }
+        .number {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
+        }
+        .gtv-month {
+            color: #1890ff;
+        }
+        .gtv-today {
+            color: #fa8c16;
+        }
+        .cpc-today {
+            color: #52c41a;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .progress-fill.high {
+            background: linear-gradient(90deg, #52c41a, #95de64);
+        }
+        .progress-fill.medium {
+            background: linear-gradient(90deg, #faad14, #ffc53d);
+        }
+        .progress-fill.low {
+            background: linear-gradient(90deg, #f5222d, #ff7875);
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 0 0 2px white;
+        }
+        .total-row {
+            background: linear-gradient(90deg, #e6f7ff, #f0f5ff);
+            font-weight: bold;
+        }
+        .total-row td {
+            border-top: 2px solid #1890ff;
+            border-bottom: none;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .badge-top {
+            background: #fff2e8;
+            color: #fa541c;
+        }
+        .gap-positive {
+            color: #f5222d;
+        }
+        .gap-negative {
+            color: #52c41a;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #999;
+            background: #fafafa;
+        }
+        .no-target {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>📊 粤闽浙实时进度看板</h1>
+            <div class="subtitle">高线粤闽浙城市群 - 2026年3月财收分析</div>
+            <div class="time">数据更新时间: 2026-04-11 23:10</div>
+        </div>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="label">城市群月累计GTV</div>
+                <div class="value gtv">574.50万</div>
+                <div class="sub-value">实付验证GTV(剔除风控+退款)</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">城市群今日GTV</div>
+                <div class="value gtv">71.59万</div>
+                <div class="sub-value">日环比 +22.86%</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">城市群今日CPC</div>
+                <div class="value cpc">1.61万</div>
+                <div class="sub-value">日环比 +13.87%</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">今日交易收入</div>
+                <div class="value">4.76万</div>
+                <div class="sub-value">日环比 +26.93%</div>
+            </div>
+        </div>
+
+        <div class="main-table">
+            <div class="table-header">📈 各代运营商业绩明细</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 18%;">代运营商</th>
+                        <th style="width: 12%;">月累计GTV</th>
+                        <th style="width: 12%;">月目标</th>
+                        <th style="width: 15%;">完成率</th>
+                        <th style="width: 10%;">日均缺口</th>
+                        <th style="width: 12%;">今日GTV</th>
+                        <th style="width: 12%;">今日CPC</th>
+                        <th style="width: 9%;">排名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="operator-name"><span class="badge badge-top">TOP1</span> 惠州市巨浪-惠州</td>
+                        <td class="number gtv-month">127.78万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill medium" style="width: 50%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">15.74万</td>
+                        <td class="number cpc-today">2,399</td>
+                        <td>🥇</td>
+                    </tr>
+                    <tr>
+                        <td class="operator-name"><span class="badge badge-top">TOP2</span> 惠州市柏万-惠阳</td>
+                        <td class="number gtv-month">108.92万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill medium" style="width: 50%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">13.69万</td>
+                        <td class="number cpc-today">2,852</td>
+                        <td>🥈</td>
+                    </tr>
+                    <tr>
+                        <td class="operator-name"><span class="badge badge-top">TOP3</span> 慈溪哲光-金华义乌</td>
+                        <td class="number gtv-month">88.79万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill medium" style="width: 50%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">11.10万</td>
+                        <td class="number cpc-today">3,531</td>
+                        <td>🥉</td>
+                    </tr>
+                    <tr>
+                        <td class="operator-name">义乌市汐洋-金华义乌</td>
+                        <td class="number gtv-month">86.40万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill medium" style="width: 50%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">11.51万</td>
+                        <td class="number cpc-today">4,112</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="operator-name">泉州市小花猫-泉州</td>
+                        <td class="number gtv-month">85.24万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill medium" style="width: 50%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">12.18万</td>
+                        <td class="number cpc-today">2,589</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td class="operator-name">惠安广通-晋江</td>
+                        <td class="number gtv-month">71.48万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill medium" style="width: 50%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">7.36万</td>
+                        <td class="number cpc-today">663</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td class="operator-name">宁夏灵创-金华义乌</td>
+                        <td class="number gtv-month">5.88万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill low" style="width: 10%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">0</td>
+                        <td class="number cpc-today">0</td>
+                        <td>7</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td class="operator-name">🏢 高线粤闽浙城市群汇总</td>
+                        <td class="number gtv-month">574.50万</td>
+                        <td class="no-target">-</td>
+                        <td><div class="progress-bar"><div class="progress-fill high" style="width: 100%;"></div><span class="progress-text">N/A</span></div></td>
+                        <td class="number">-</td>
+                        <td class="number gtv-today">71.59万</td>
+                        <td class="number cpc-today">16,148</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="footer">
+                数据来源: Apollo财收分析系统 | 统计口径: 实付验证GTV(剔除风控+退款) | 月目标完成率/缺口: 系统中暂无目标数据
+            </div>
+        </div>
+    </div>
+</body>
+</html>

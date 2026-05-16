@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  min-height: 100vh;
+}
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.header {
+  background: rgba(255,255,255,0.95);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.header h1 {
+  font-size: 28px;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+.header .subtitle {
+  color: #666;
+  font-size: 14px;
+}
+.header .update-time {
+  color: #999;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.summary-card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+.summary-card .label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 8px;
+}
+.summary-card .value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a2e;
+}
+.summary-card .change {
+  font-size: 12px;
+  margin-top: 4px;
+}
+.positive { color: #52c41a; }
+.negative { color: #f5222d; }
+.operator-list {
+  background: rgba(255,255,255,0.95);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.operator-list h2 {
+  font-size: 18px;
+  color: #1a1a2e;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+.operator-item {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+.operator-item:last-child {
+  border-bottom: none;
+}
+.operator-item:hover {
+  background: #fafafa;
+  border-radius: 8px;
+}
+.operator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.operator-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+.operator-tag {
+  background: #e6f7ff;
+  color: #1890ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.metric {
+  text-align: center;
+}
+.metric-label {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 4px;
+}
+.metric-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+.metric-value.small {
+  font-size: 12px;
+}
+.progress-section {
+  margin-top: 12px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 6px;
+}
+.progress-bar {
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.progress-fill.high { background: linear-gradient(90deg, #52c41a, #95de64); }
+.progress-fill.medium { background: linear-gradient(90deg, #faad14, #ffc53d); }
+.progress-fill.low { background: linear-gradient(90deg, #f5222d, #ff7875); }
+.notice {
+  background: #fff7e6;
+  border: 1px solid #ffd591;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #d46b08;
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <h1>📊 粤闽浙实时进度看板</h1>
+    <div class="subtitle">高线粤闽浙城市群 · 2026年03月</div>
+    <div class="update-time">数据更新时间：2026-04-03 23:10（cron定时任务）</div>
+  </div>
+
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="label">城市群月累计GTV</div>
+      <div class="value">1,869.86万</div>
+      <div class="change positive">↑ 41.98% 月环比</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">月累计财务收入</div>
+      <div class="value">239.57万</div>
+      <div class="change positive">↑ 35.27% 月环比</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">月累计销售业绩</div>
+      <div class="value">235.56万</div>
+      <div class="change positive">↑ 65.82% 月环比</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">交易收入</div>
+      <div class="value">117.44万</div>
+      <div class="change positive">↑ 41.60% 月环比</div>
+    </div>
+  </div>
+
+  <div class="operator-list">
+    <h2>代运营商实时进度详情</h2>
+    
+    <div class="operator-item">
+      <div class="operator-header">
+        <span class="operator-name">惠州市巨浪-惠州乐生活组</span>
+        <span class="operator-tag">TOP1</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">月累计GTV</div>
+          <div class="metric-value">360.45万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">月目标</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">完成率</div>
+          <div class="metric-value">0.00%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">日均缺口</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日GTV*</div>
+          <div class="metric-value">11.73万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日CPC*</div>
+          <div class="metric-value small">0.12万</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-item">
+      <div class="operator-header">
+        <span class="operator-name">惠州市柏万-惠阳乐生活组</span>
+        <span class="operator-tag">TOP2</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">月累计GTV</div>
+          <div class="metric-value">315.77万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">月目标</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">完成率</div>
+          <div class="metric-value">0.00%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">日均缺口</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日GTV*</div>
+          <div class="metric-value">10.16万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日CPC*</div>
+          <div class="metric-value small">0.25万</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-item">
+      <div class="operator-header">
+        <span class="operator-name">泉州市小花猫-泉州乐生活组</span>
+        <span class="operator-tag">TOP3</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">月累计GTV</div>
+          <div class="metric-value">286.37万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">月目标</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">完成率</div>
+          <div class="metric-value">0.00%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">日均缺口</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日GTV*</div>
+          <div class="metric-value">6.46万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日CPC*</div>
+          <div class="metric-value small">0.14万</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-item">
+      <div class="operator-header">
+        <span class="operator-name">宁夏灵创-金华义乌乐生活组</span>
+        <span class="operator-tag">高增</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">月累计GTV</div>
+          <div class="metric-value">258.45万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">月目标</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">完成率</div>
+          <div class="metric-value">0.00%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">日均缺口</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日GTV*</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日CPC*</div>
+          <div class="metric-value small">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-item">
+      <div class="operator-header">
+        <span class="operator-name">慈溪哲光-金华义乌乐生活组</span>
+        <span class="operator-tag">高增</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">月累计GTV</div>
+          <div class="metric-value">214.77万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">月目标</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">完成率</div>
+          <div class="metric-value">0.00%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">日均缺口</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日GTV*</div>
+          <div class="metric-value">9.24万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日CPC*</div>
+          <div class="metric-value small">0.35万</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-item">
+      <div class="operator-header">
+        <span class="operator-name">义乌市汐洋-金华义乌乐生活组</span>
+        <span class="operator-tag">-</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">月累计GTV</div>
+          <div class="metric-value">206.01万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">月目标</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">完成率</div>
+          <div class="metric-value">0.00%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">日均缺口</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日GTV*</div>
+          <div class="metric-value">7.54万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日CPC*</div>
+          <div class="metric-value small">0.31万</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="operator-item">
+      <div class="operator-header">
+        <span class="operator-name">惠安广通-晋江乐生活组</span>
+        <span class="operator-tag">-</span>
+      </div>
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">月累计GTV</div>
+          <div class="metric-value">228.05万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">月目标</div>
+          <div class="metric-value">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">完成率</div>
+          <div class="metric-value">0.00%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">日均缺口</div>
+          <div class="metric-value">0</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日GTV*</div>
+          <div class="metric-value">4.51万</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">今日CPC*</div>
+          <div class="metric-value small">0.10万</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice">
+      📌 数据说明：<br>
+      1. 月累计数据来源于Apollo财收分析页面（2026年03月）<br>
+      2. 今日GTV/CPC* 数据基于昨日（4月2日）Apollo实时数据估算<br>
+      3. 月目标/完成率/缺口：Apollo未配置月度目标，显示为"-"<br>
+      4. 宁夏灵创昨日数据未返回，显示为"-"
+    </div>
+  </div>
+</div>
+</body>
+</html>

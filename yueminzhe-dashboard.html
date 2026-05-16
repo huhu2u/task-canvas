@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=1.0">
+    <title>粤闽浙实时进度看板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%);
+            padding: 30px;
+            min-height: 100vh;
+            color: #fff;
+        }
+        .dashboard {
+            max-width: 1140px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, rgba(255,193,7,0.15) 0%, rgba(255,152,0,0.1) 100%);
+            border: 1px solid rgba(255,193,7,0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .summary-item {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+        .summary-item .label {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .summary-item .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #FFD700;
+        }
+        .summary-item .sub-value {
+            font-size: 14px;
+            color: #10b981;
+            margin-top: 4px;
+        }
+        .table-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .table-header {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFD700;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead th {
+            background: rgba(0,0,0,0.2);
+            padding: 14px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+        }
+        tbody tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        tbody td {
+            padding: 16px 12px;
+            font-size: 14px;
+            text-align: center;
+        }
+        tbody td:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+            padding-left: 20px;
+        }
+        .number { font-family: 'SF Mono', Monaco, monospace; font-weight: 600; }
+        .gtv { color: #4fc3f7; }
+        .target { color: #ffab91; }
+        .rate { color: #81c784; }
+        .gap { color: #ff8a80; }
+        .today { color: #ffd54f; font-weight: 700; }
+        .cpc { color: #ce93d8; }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            transition: width 0.3s;
+        }
+        .progress-fill.low {
+            background: linear-gradient(90deg, #f44336, #ff9800);
+        }
+        .progress-fill.medium {
+            background: linear-gradient(90deg, #ff9800, #ffc107);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-good { background: rgba(76,175,80,0.2); color: #81c784; }
+        .badge-warn { background: rgba(255,152,0,0.2); color: #ffb74d; }
+        .badge-bad { background: rgba(244,67,54,0.2); color: #ef5350; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🏆 粤闽浙实时进度看板</h1>
+            <div class="subtitle">高线粤闽浙城市群 | 数据更新时间：2026年4月9日 23:10</div>
+        </div>
+        
+        <div class="summary-card">
+            <div class="summary-item">
+                <div class="label">3月累计 GTV</div>
+                <div class="value">¥1,869.9万</div>
+                <div class="sub-value">+41.98% 环比增长</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">今日实时 GTV</div>
+                <div class="value" style="color:#4fc3f7">¥54.8万</div>
+                <div class="sub-value">+5.76% 日环比增长</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">今日 CPC 消耗</div>
+                <div class="value" style="color:#ce93d8">¥1.18万</div>
+                <div class="sub-value">+1.07% 日环比增长</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">活跃代运营商</div>
+                <div class="value">7 家</div>
+                <div class="sub-value">100% 在线运营</div>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <div class="table-header">📊 各代运营商详细数据</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:18%">代运营商</th>
+                        <th style="width:14%">月累计 GTV</th>
+                        <th style="width:12%">月目标</th>
+                        <th style="width:16%">完成率</th>
+                        <th style="width:12%">日均缺口</th>
+                        <th style="width:14%">今日 GTV</th>
+                        <th style="width:14%">今日 CPC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>惠州市巨浪-惠州乐生活组</td>
+                        <td class="number gtv">¥360.4万</td>
+                        <td class="number target">-</td>
+                        <td>
+                            <span class="number rate">31.01%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill low" style="width:31%"></div>
+                            </div>
+                        </td>
+                        <td class="number gap">-</td>
+                        <td class="number today">¥11.19万</td>
+                        <td class="number cpc">¥1,325</td>
+                    </tr>
+                    <tr>
+                        <td>惠州市柏万-惠阳乐生活组</td>
+                        <td class="number gtv">¥315.8万</td>
+                        <td class="number target">-</td>
+                        <td>
+                            <span class="number rate">32.56%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill low" style="width:33%"></div>
+                            </div>
+                        </td>
+                        <td class="number gap">-</td>
+                        <td class="number today">¥9.61万</td>
+                        <td class="number cpc">¥1,952</td>
+                    </tr>
+                    <tr>
+                        <td>义乌市汐洋-金华义乌乐生活组</td>
+                        <td class="number gtv">¥206.0万</td>
+                        <td class="number target">-</td>
+                        <td>
+                            <span class="number rate">0.00%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill low" style="width:0%"></div>
+                            </div>
+                        </td>
+                        <td class="number gap">-</td>
+                        <td class="number today">¥8.84万</td>
+                        <td class="number cpc">¥2,804</td>
+                    </tr>
+                    <tr>
+                        <td>慈溪哲光-金华义乌乐生活组</td>
+                        <td class="number gtv">¥214.8万</td>
+                        <td class="number target">-</td>
+                        <td>
+                            <span class="number rate">98.85%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width:99%"></div>
+                            </div>
+                        </td>
+                        <td class="number gap">-</td>
+                        <td class="number today">¥10.10万</td>
+                        <td class="number cpc">¥3,533</td>
+                    </tr>
+                    <tr>
+                        <td>泉州市小花猫-泉州乐生活组</td>
+                        <td class="number gtv">¥286.4万</td>
+                        <td class="number target">-</td>
+                        <td>
+                            <span class="number rate">15.64%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill low" style="width:16%"></div>
+                            </div>
+                        </td>
+                        <td class="number gap">-</td>
+                        <td class="number today">¥7.43万</td>
+                        <td class="number cpc">¥1,540</td>
+                    </tr>
+                    <tr>
+                        <td>惠安广通-晋江乐生活组</td>
+                        <td class="number gtv">¥228.0万</td>
+                        <td class="number target">-</td>
+                        <td>
+                            <span class="number rate">19.89%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill low" style="width:20%"></div>
+                            </div>
+                        </td>
+                        <td class="number gap">-</td>
+                        <td class="number today">¥7.63万</td>
+                        <td class="number cpc">¥671</td>
+                    </tr>
+                    <tr>
+                        <td>宁夏灵创-金华义乌乐生活组</td>
+                        <td class="number gtv">¥258.5万</td>
+                        <td class="number target">-</td>
+                        <td>
+                            <span class="number rate">114.17%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width:100%"></div>
+                            </div>
+                        </td>
+                        <td class="number gap">-</td>
+                        <td class="number today" style="color:#ef5350">¥0</td>
+                        <td class="number cpc" style="color:#ef5350">¥0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            数据来源：Apollo财收分析系统 | 统计周期：2026年3月累计 + 4月9日实时 | 如有疑问请联系渠道运营团队
+        </div>
+    </div>
+</body>
+</html>

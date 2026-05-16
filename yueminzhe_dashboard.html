@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>粤闽浙实时进度看板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .summary-card .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .summary-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .summary-card .value.highlight {
+            color: #667eea;
+        }
+        .summary-card .sub-value {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+        }
+        .operator-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .operator-card:hover {
+            transform: translateY(-5px);
+        }
+        .operator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .operator-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .operator-rank {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .metrics-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .metric-item {
+            text-align: center;
+        }
+        .metric-item.full-width {
+            grid-column: 1 / -1;
+        }
+        .metric-label {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+        .metric-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .metric-value.small {
+            font-size: 14px;
+        }
+        .metric-value.positive {
+            color: #52c41a;
+        }
+        .metric-value.negative {
+            color: #ff4d4f;
+        }
+        .progress-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #e8e8e8;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #faad14, #ff7a45);
+        }
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #ff4d4f, #ff7875);
+        }
+        .today-section {
+            background: linear-gradient(135deg, #f6ffed 0%, #e6f7ff 100%);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .today-title {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .today-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .today-item {
+            text-align: center;
+        }
+        .today-label {
+            font-size: 10px;
+            color: #999;
+        }
+        .today-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1890ff;
+        }
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🏆 粤闽浙城市群实时进度看板</h1>
+            <div class="subtitle">数据时间：2026年3月累计 + 2026年4月13日实时 | 组织：高线粤闽浙城市群</div>
+        </div>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="label">城市群3月累计GTV</div>
+                <div class="value highlight">1,869.86万</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">3月财务收入</div>
+                <div class="value">239.57万</div>
+                <div class="sub-value">环比 +35.27%</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">3月销售业绩</div>
+                <div class="value">235.56万</div>
+                <div class="sub-value">环比 +65.82%</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">今日实付验证GTV</div>
+                <div class="value highlight">27.42万</div>
+                <div class="sub-value">环比 -34.98%</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">今日CPC消耗</div>
+                <div class="value">0.84万</div>
+                <div class="sub-value">环比 -17.97%</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">今日交易收入</div>
+                <div class="value">1.78万</div>
+                <div class="sub-value">环比 -36.10%</div>
+            </div>
+        </div>
+
+        <div class="operator-grid">
+            <!-- 惠州市巨浪 -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">🌊 惠州市巨浪-惠州乐生活组</div>
+                    <div class="operator-rank">1</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">360.45万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value positive">+31.01%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">44.47万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">44.83万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value">4.76万</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value">0.12万</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 惠州市柏万 -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">🌿 惠州市柏万-惠阳乐生活组</div>
+                    <div class="operator-rank">2</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">315.77万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value positive">+32.56%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">41.07万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">39.50万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value">5.49万</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value">0.15万</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 泉州市小花猫 -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">🐱 泉州市小花猫-泉州乐生活组</div>
+                    <div class="operator-rank">3</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">286.37万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value positive">+15.64%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">40.28万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">35.79万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value">3.99万</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value">0.08万</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 宁夏灵创 -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">⚡ 宁夏灵创-金华义乌乐生活组</div>
+                    <div class="operator-rank">4</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">258.45万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value positive">+114.17%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">31.53万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">36.05万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value negative">0</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value negative">0</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 慈溪哲光 -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">💫 慈溪哲光-金华义乌乐生活组</div>
+                    <div class="operator-rank">5</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">214.77万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value positive">+98.85%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">27.77万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">29.35万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value">4.36万</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value">0.21万</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 义乌市汐洋 -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">🌊 义乌市汐洋-金华义乌乐生活组</div>
+                    <div class="operator-rank">6</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">206.01万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value">0.00%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">27.44万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">25.65万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value">4.80万</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value">0.24万</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 惠安广通 -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">📡 惠安广通-晋江乐生活组</div>
+                    <div class="operator-rank">7</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">228.05万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value positive">+19.89%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">27.01万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">24.43万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value">4.02万</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value">0.05万</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 宁夏灵创(4月低业绩) -->
+            <div class="operator-card">
+                <div class="operator-header">
+                    <div class="operator-name">⚠️ 宁夏灵创-金华义乌乐生活组</div>
+                    <div class="operator-rank">8</div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月累计GTV</div>
+                        <div class="metric-value">5.88万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">GTV环比</div>
+                        <div class="metric-value negative">-93.19%</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric-item">
+                        <div class="metric-label">3月财务收入</div>
+                        <div class="metric-value small">0.93万</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">3月销售业绩</div>
+                        <div class="metric-value small">0.99万</div>
+                    </div>
+                </div>
+                <div class="today-section">
+                    <div class="today-title">📊 今日实时数据 (4月13日)</div>
+                    <div class="today-grid">
+                        <div class="today-item">
+                            <div class="today-value negative">0</div>
+                            <div class="today-label">今日GTV</div>
+                        </div>
+                        <div class="today-item">
+                            <div class="today-value negative">0</div>
+                            <div class="today-label">今日CPC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            数据来源：Apollo财收分析 | 更新时间：2026-04-13 23:10 | 高线粤闽浙城市群
+        </div>
+    </div>
+</body>
+</html>

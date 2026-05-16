@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>粤闽浙渠道 项目管理看板</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  background: #f0f4f8;
+  color: #1e293b;
+  min-height: 100vh;
+}
+.navbar {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  color: white;
+  padding: 0 24px;
+  box-shadow: 0 2px 12px rgba(25,118,210,0.4);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.navbar-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+}
+.navbar-title { font-size: 20px; font-weight: 700; letter-spacing: 1px; flex: 1; min-width: 180px; }
+.navbar-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.clock-box { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 2px; }
+.date-box { font-size: 13px; opacity: 0.9; }
+.month-progress-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.month-progress-bar { width: 120px; height: 8px; background: rgba(255,255,255,0.25); border-radius: 4px; overflow: hidden; }
+.month-progress-fill { height: 100%; background: #a5f3c3; border-radius: 4px; transition: width 0.5s; }
+.reset-btn {
+  background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.4);
+  padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit;
+}
+.reset-btn:hover { background: rgba(255,255,255,0.28); }
+.main-content { max-width: 1600px; margin: 0 auto; padding: 24px 16px; }
+.section-title {
+  font-size: 15px; font-weight: 700; color: #1976d2;
+  margin-bottom: 14px; padding-left: 10px; border-left: 4px solid #1976d2;
+}
+.summary-cards {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px;
+}
+@media (max-width: 1100px) { .summary-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px)  { .summary-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+.summary-card {
+  background: white; border-radius: 12px; padding: 16px 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07); border-top: 3px solid #1976d2;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.summary-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.card-name { font-size: 12px; color: #64748b; margin-bottom: 8px; font-weight: 600; }
+.card-rate { font-size: 26px; font-weight: 800; margin-bottom: 4px; line-height: 1; }
+.card-detail { font-size: 11px; color: #94a3b8; margin-bottom: 8px; }
+.card-bar-wrap { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+.card-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+.color-green { color: #059669; } .color-yellow { color: #d97706; } .color-red { color: #dc2626; }
+.bg-green { background: #059669; } .bg-yellow { background: #f59e0b; } .bg-red { background: #ef4444; }
+.border-green { border-top-color: #059669 !important; }
+.border-yellow { border-top-color: #f59e0b !important; }
+.border-red { border-top-color: #ef4444 !important; }
+.detail-section { margin-bottom: 28px; }
+.scroll-hint { font-size: 11px; color: #94a3b8; margin-bottom: 6px; text-align: right; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.detail-table {
+  width: 100%; border-collapse: collapse; background: white;
+  border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); min-width: 900px;
+}
+.detail-table th {
+  background: #1976d2; color: white; font-size: 12px; font-weight: 700;
+  padding: 10px 6px; text-align: center; white-space: nowrap;
+}
+.detail-table th:first-child { background: #1565c0; min-width: 86px; }
+.detail-table td {
+  padding: 8px 5px; text-align: center; border-bottom: 1px solid #f1f5f9;
+  font-size: 12px; vertical-align: middle;
+}
+.detail-table tr:last-child td { border-bottom: none; }
+.detail-table tr:hover td { background: #f8faff; }
+.company-cell {
+  font-weight: 700; font-size: 12px; color: #1e293b;
+  text-align: left; padding-left: 12px; white-space: nowrap;
+}
+.data-cell { cursor: pointer; transition: background 0.15s; min-width: 100px; }
+.data-cell:hover { background: #eff6ff !important; }
+.cell-rate { font-size: 13px; font-weight: 700; }
+.cell-bar-wrap {
+  height: 5px; background: #e2e8f0; border-radius: 3px; overflow: hidden;
+  margin: 3px auto; width: 82%;
+}
+.cell-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+.cell-values { font-size: 10px; color: #94a3b8; white-space: nowrap; }
+.bottom-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+@media (max-width: 700px) { .bottom-tables { grid-template-columns: 1fr; } }
+.small-table-wrap { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+.small-table-title { background: #059669; color: white; font-size: 14px; font-weight: 700; padding: 10px 16px; }
+.small-table { width: 100%; border-collapse: collapse; }
+.small-table th {
+  background: #ecfdf5; color: #059669; font-size: 12px; font-weight: 700;
+  padding: 8px 12px; text-align: center; border-bottom: 1px solid #d1fae5;
+}
+.small-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+.small-table tr:last-child td { border-bottom: none; }
+.small-table td:first-child { text-align: left; font-weight: 600; padding-left: 14px; }
+.toggle-cell { cursor: pointer; font-size: 22px; user-select: none; transition: transform 0.15s; }
+.toggle-cell:hover { transform: scale(1.2); }
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  z-index: 500; align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: white; border-radius: 14px; padding: 24px 28px; width: 320px;
+  max-width: 92vw; box-shadow: 0 20px 60px rgba(0,0,0,0.25); animation: popIn 0.18s ease;
+}
+@keyframes popIn { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-title { font-size: 15px; font-weight: 700; color: #1976d2; margin-bottom: 18px; }
+.modal-field { margin-bottom: 14px; }
+.modal-field label { display: block; font-size: 12px; color: #64748b; margin-bottom: 5px; font-weight: 600; }
+.modal-field input {
+  width: 100%; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  font-size: 14px; color: #1e293b; font-family: inherit; transition: border-color 0.2s;
+}
+.modal-field input:focus { outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25,118,210,0.1); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+.btn-cancel {
+  padding: 8px 18px; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  background: white; color: #64748b; cursor: pointer; font-size: 13px; font-family: inherit;
+}
+.btn-cancel:hover { background: #f8fafc; }
+.btn-save {
+  padding: 8px 20px; background: #1976d2; color: white; border: none;
+  border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; font-family: inherit;
+}
+.btn-save:hover { background: #1565c0; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-title">🗂 粤闽浙渠道 项目管理看板</div>
+    <div class="navbar-meta">
+      <div class="clock-box" id="clock">--:--:--</div>
+      <div class="date-box" id="dateBox"></div>
+      <div class="month-progress-wrap">
+        <span id="monthPct">本月 --%</span>
+        <div class="month-progress-bar">
+          <div class="month-progress-fill" id="monthFill" style="width:0%"></div>
+        </div>
+      </div>
+      <button class="reset-btn" onclick="resetData()">🔄 重置数据</button>
+    </div>
+  </div>
+</nav>
+
+<div class="main-content">
+  <div class="section-title">📊 汇总概览</div>
+  <div class="summary-cards" id="summaryCards"></div>
+
+  <div class="detail-section">
+    <div class="section-title">📋 代运营商明细</div>
+    <p class="scroll-hint">← 左右滑动查看全部 →</p>
+    <div class="table-scroll">
+      <table class="detail-table" id="detailTable">
+        <thead><tr id="tableHead"></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title">📝 附加模块</div>
+  <div class="bottom-tables">
+    <div class="small-table-wrap">
+      <div class="small-table-title">🔧 欧若拉工单</div>
+      <table class="small-table">
+        <thead><tr><th style="text-align:left;padding-left:14px">代运营商</th><th>是否全员闭环</th></tr></thead>
+        <tbody id="ouroraTable"></tbody>
+      </table>
+    </div>
+    <div class="small-table-wrap">
+      <div class="small-table-title">📝 月考</div>
+      <table class="small-table">
+        <thead><tr><th style="text-align:left;padding-left:14px">代运营商</th><th>是否全员闭环</th></tr></thead>
+        <tbody id="examTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle">编辑数据</div>
+    <div class="modal-field">
+      <label id="labelCurrent">当前值</label>
+      <input type="number" id="inputCurrent" min="0" step="any" placeholder="请输入当前值">
+    </div>
+    <div class="modal-field">
+      <label id="labelTarget">目标值</label>
+      <input type="number" id="inputTarget" min="0" step="any" placeholder="请输入目标值">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-save" onclick="saveModal()">✓ 保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var COMPANIES = ['惠州巨浪','惠州柏万','泉州小花猫','惠安广通','慈溪哲光','义乌汐洋'];
+var MODULES = [
+  {key:'gtv',    name:'GTV',          isPct:false},
+  {key:'cpc',    name:'CPC消耗',      isPct:false},
+  {key:'mem',    name:'MEM收款',      isPct:false},
+  {key:'score',  name:'好店评分',     isPct:false},
+  {key:'zrq',    name:'职人码动销',   isPct:false},
+  {key:'visit',  name:'拜访达标天数', isPct:false},
+  {key:'order',  name:'物料工单',     isPct:false},
+  {key:'memrate',name:'MEM续约率',    isPct:true}
+];
+var DEFAULT_TARGETS = {
+  '惠州巨浪':   {gtv:3804112,cpc:74222, mem:0,score:246,zrq:153,visit:20,order:0,memrate:60},
+  '惠州柏万':   {gtv:3124634,cpc:95454, mem:0,score:156,zrq:119,visit:20,order:0,memrate:60},
+  '泉州小花猫': {gtv:2598259,cpc:113144,mem:0,score:175,zrq:124,visit:20,order:0,memrate:60},
+  '惠安广通':   {gtv:2236565,cpc:57886, mem:0,score:116,zrq:91, visit:20,order:0,memrate:60},
+  '慈溪哲光':   {gtv:3137253,cpc:146180,mem:0,score:161,zrq:96, visit:20,order:0,memrate:60},
+  '义乌汐洋':   {gtv:2893879,cpc:139466,mem:0,score:161,zrq:99, visit:20,order:0,memrate:60}
+};
+var STORAGE_KEY = 'pjdashboard_v1';
+
+function buildDefault() {
+  var d = {companies:{}, ourora:{}, exam:{}};
+  COMPANIES.forEach(function(c) {
+    d.companies[c] = {};
+    MODULES.forEach(function(m) {
+      d.companies[c][m.key] = {current:0, target:DEFAULT_TARGETS[c][m.key]};
+    });
+    d.ourora[c] = false;
+    d.exam[c]   = false;
+  });
+  return d;
+}
+
+function loadData() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      var p = JSON.parse(raw);
+      var def = buildDefault();
+      COMPANIES.forEach(function(c) {
+        if (!p.companies[c]) p.companies[c] = def.companies[c];
+        else MODULES.forEach(function(m) {
+          if (!p.companies[c][m.key]) p.companies[c][m.key] = def.companies[c][m.key];
+        });
+        if (p.ourora[c]===undefined) p.ourora[c] = false;
+        if (p.exam[c]===undefined)   p.exam[c]   = false;
+      });
+      return p;
+    }
+  } catch(e) {}
+  return buildDefault();
+}
+
+function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+
+function resetData() {
+  if (confirm('确定重置所有数据为默认值？此操作不可撤销。')) {
+    appData = buildDefault(); saveData(); renderAll();
+  }
+}
+
+var appData = loadData();
+
+function getMonthProgress() {
+  var n = new Date(), day = n.getDate();
+  var total = new Date(n.getFullYear(), n.getMonth()+1, 0).getDate();
+  return {day:day, total:total, pct:Math.round(day/total*100)};
+}
+
+function pad2(n) { return String(n).padStart(2,'0'); }
+
+function updateClock() {
+  var n = new Date(), wd = ['日','一','二','三','四','五','六'];
+  document.getElementById('clock').textContent = pad2(n.getHours())+':'+pad2(n.getMinutes())+':'+pad2(n.getSeconds());
+  document.getElementById('dateBox').textContent = n.getFullYear()+'/'+pad2(n.getMonth()+1)+'/'+pad2(n.getDate())+' 周'+wd[n.getDay()];
+  var mp = getMonthProgress();
+  document.getElementById('monthPct').textContent  = '本月 '+mp.day+'/'+mp.total+' ('+mp.pct+'%)';
+  document.getElementById('monthFill').style.width = mp.pct+'%';
+}
+
+function colorClass(ratePct) {
+  var tp = getMonthProgress().pct;
+  if (ratePct >= tp)     return 'green';
+  if (ratePct >= tp - 5) return 'yellow';
+  return 'red';
+}
+
+function fmtNum(n) {
+  n = Number(n);
+  if (n >= 10000) return (n/10000).toFixed(1)+'w';
+  return n.toLocaleString();
+}
+
+function calcRate(cur, tgt) {
+  cur = Number(cur); tgt = Number(tgt);
+  if (tgt === 0) return {rate:0, rateStr:'--'};
+  var r = Math.round(cur/tgt*100);
+  return {rate:r, rateStr:r+'%'};
+}
+
+function renderSummaryCards() {
+  var el = document.getElementById('summaryCards');
+  el.innerHTML = '';
+  MODULES.forEach(function(m) {
+    var tCur=0, tTgt=0;
+    COMPANIES.forEach(function(c) {
+      tCur += Number(appData.companies[c][m.key].current);
+      tTgt += Number(appData.companies[c][m.key].target);
+    });
+    var ro = calcRate(tCur, tTgt), cc = colorClass(ro.rate);
+    var barW = tTgt===0 ? 0 : Math.min(ro.rate, 100);
+    var detail = m.isPct
+      ? '均值 '+(tCur/COMPANIES.length).toFixed(1)+'% / 目标 '+(tTgt/COMPANIES.length).toFixed(1)+'%'
+      : '合计 '+fmtNum(tCur)+' / 目标 '+fmtNum(tTgt);
+    var card = document.createElement('div');
+    card.className = 'summary-card border-'+cc;
+    card.innerHTML =
+      '<div class="card-name">'+m.name+'</div>'+
+      '<div class="card-rate color-'+cc+'">'+ro.rateStr+'</div>'+
+      '<div class="card-detail">'+detail+'</div>'+
+      '<div class="card-bar-wrap"><div class="card-bar-fill bg-'+cc+'" style="width:'+barW+'%"></div></div>';
+    el.appendChild(card);
+  });
+}
+
+function escQ(s) { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function renderDetailTable() {
+  var head = document.getElementById('tableHead');
+  var h = '<th>代运营商</th>';
+  MODULES.forEach(function(m) { h += '<th>'+m.name+'</th>'; });
+  head.innerHTML = h;
+  var tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  COMPANIES.forEach(function(c) {
+    var tr = document.createElement('tr');
+    var html = '<td class="company-cell">'+c+'</td>';
+    MODULES.forEach(function(m) {
+      var d = appData.companies[c][m.key];
+      var cur = Number(d.current), tgt = Number(d.target);
+      var ro = calcRate(cur, tgt), cc = colorClass(ro.rate);
+      var barW = tgt===0 ? 0 : Math.min(ro.rate,100);
+      var curT = m.isPct ? cur+'%' : fmtNum(cur);
+      var tgtT = m.isPct ? tgt+'%' : fmtNum(tgt);
+      html +=
+        '<td class="data-cell" onclick="openModal(\''+escQ(c)+'\',\''+m.key+'\')">'+
+          '<div class="cell-rate color-'+cc+'">'+ro.rateStr+'</div>'+
+          '<div class="cell-bar-wrap"><div class="cell-bar-fill bg-'+cc+'" style="width:'+barW+'%"></div></div>'+
+          '<div class="cell-values">'+curT+' / '+tgtT+'</div>'+
+        '</td>';
+    });
+    tr.innerHTML = html;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderToggleTable(tbodyId, dataKey) {
+  var tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = '';
+  COMPANIES.forEach(function(c) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>'+c+'</td>'+
+      '<td class="toggle-cell" onclick="toggleCheck(\''+dataKey+'\',\''+escQ(c)+'\',this)">'+
+        (appData[dataKey][c]?'✅':'❌')+
+      '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleCheck(dataKey, company, el) {
+  appData[dataKey][company] = !appData[dataKey][company];
+  el.textContent = appData[dataKey][company] ? '✅' : '❌';
+  saveData();
+}
+
+var _mCtx = null;
+function openModal(company, moduleKey) {
+  var m = MODULES.filter(function(x){return x.key===moduleKey;})[0];
+  var d = appData.companies[company][moduleKey];
+  _mCtx = {company:company, moduleKey:moduleKey, isPct:m.isPct};
+  document.getElementById('modalTitle').textContent = '✏️ '+company+' · '+m.name;
+  document.getElementById('labelCurrent').textContent = m.isPct ? '当前续约率 (%)' : '当前值';
+  document.getElementById('labelTarget').textContent  = m.isPct ? '目标续约率 (%)' : '目标值';
+  document.getElementById('inputCurrent').value = d.current;
+  document.getElementById('inputTarget').value  = d.target;
+  document.getElementById('modal').classList.add('active');
+  setTimeout(function(){ document.getElementById('inputCurrent').select(); }, 80);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  _mCtx = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+function saveModal() {
+  if (!_mCtx) return;
+  var cur = parseFloat(document.getElementById('inputCurrent').value);
+  var tgt = parseFloat(document.getElementById('inputTarget').value);
+  if (isNaN(cur)||isNaN(tgt)) { alert('请输入有效数字'); return; }
+  if (cur<0||tgt<0) { alert('数值不能为负'); return; }
+  appData.companies[_mCtx.company][_mCtx.moduleKey].current = cur;
+  appData.companies[_mCtx.company][_mCtx.moduleKey].target  = tgt;
+  saveData(); renderAll(); closeModal();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('modal').classList.contains('active')) return;
+  if (e.key==='Enter')  saveModal();
+  if (e.key==='Escape') closeModal();
+});
+
+function renderAll() {
+  renderSummaryCards();
+  renderDetailTable();
+  renderToggleTable('ouroraTable','ourora');
+  renderToggleTable('examTable','exam');
+}
+
+updateClock();
+renderAll();
+setInterval(updateClock, 1000);
+<\/script>
+</body>
+</html>

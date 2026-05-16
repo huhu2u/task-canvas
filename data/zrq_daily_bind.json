@@ -4013,7 +4013,40 @@
       "month_sale_orders": 1975
     },
     "_sales_义乌汐洋": {},
-    "_sales_惠安广通": {},
+    "_sales_惠安广通": {
+      "王伟龙": {
+        "month_sale_gtv": 342.0,
+        "bind_cnt": 18
+      },
+      "董超亚": {
+        "month_sale_gtv": 341.0,
+        "bind_cnt": 92
+      },
+      "王琼英": {
+        "month_sale_gtv": 194.0,
+        "bind_cnt": 91
+      },
+      "许佳伟": {
+        "month_sale_gtv": 145.0,
+        "bind_cnt": 84
+      },
+      "向超": {
+        "month_sale_gtv": 373.0,
+        "bind_cnt": 78
+      },
+      "陈建江": {
+        "month_sale_gtv": 181.0,
+        "bind_cnt": 103
+      },
+      "尤云生": {
+        "month_sale_gtv": 0.0,
+        "bind_cnt": 12
+      },
+      "王少镕": {
+        "month_sale_gtv": 0.0,
+        "bind_cnt": 0
+      }
+    },
     "_sales_慈溪哲光": {},
     "_sales_惠州柏万": {
       "邓百明": {
@@ -4049,56 +4082,7 @@
         "bind_cnt": 74
       }
     },
-    "_sales_泉州小花猫": {
-      "刘洋": {
-        "month_sale_gtv": 645.0,
-        "bind_cnt": 105
-      },
-      "黄伟": {
-        "month_sale_gtv": 450.0,
-        "bind_cnt": 104
-      },
-      "康文硕": {
-        "month_sale_gtv": 72.0,
-        "bind_cnt": 64
-      },
-      "李家兴": {
-        "month_sale_gtv": 286.0,
-        "bind_cnt": 88
-      },
-      "康子诚": {
-        "month_sale_gtv": 0.0,
-        "bind_cnt": 8
-      },
-      "郭俊峰": {
-        "month_sale_gtv": 185.0,
-        "bind_cnt": 90
-      },
-      "范振吉": {
-        "month_sale_gtv": 171.0,
-        "bind_cnt": 70
-      },
-      "倪靖宏": {
-        "month_sale_gtv": 0.0,
-        "bind_cnt": 0
-      },
-      "陈彩凤": {
-        "month_sale_gtv": 0.0,
-        "bind_cnt": 1
-      },
-      "曾鹏东": {
-        "month_sale_gtv": 34.0,
-        "bind_cnt": 66
-      },
-      "孙林喻": {
-        "month_sale_gtv": 1.0,
-        "bind_cnt": 1
-      },
-      "林俊贤": {
-        "month_sale_gtv": 0.0,
-        "bind_cnt": 0
-      }
-    },
+    "_sales_泉州小花猫": {},
     "_sales_惠州巨浪": {
       "张德亮": {
         "month_sale_gtv": 236.0,
