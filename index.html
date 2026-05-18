@@ -794,6 +794,16 @@ function renderMemrate(){
         <td style="cursor:pointer" onclick="openEdit('${a.name}','memurgent')">${urgent?`<span style="color:#dc2626;font-weight:700">⚠️ ${urgent}家</span>`:'<span style="color:#9ca3af">—</span>'}</td>
       </tr>`;
     });
+    if(!html.trim()){ ls(); AGENTS.forEach(a=>{ const renewed=parseFloat(g(a.name,'memrenew'))||0; const expire=parseFloat(g(a.name,'memexpire'))||0; const rate=expire>0?renewed/expire:0, cls=rate>=0.5?'sg':rate>=0.35?'sy':'sr'; const dayChg=g(a.name,'memrenew_day'), urgent=parseFloat(g(a.name,'memurgent'))||0; const tgt=gt(a.name,'memrate'); html+=`<tr>
+        <td class="tn">${a.name}</td>
+        <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','memrenew')">${renewed?renewed:'<span style="color:#9ca3af">—</span>'}</td>
+        <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','memexpire')">${expire?expire:'—'}</td>
+        <td><span style="font-weight:700;color:${colorText(cls)}">${expire>0?fmtPct(rate):'—'}</span></td>
+        <td style="color:#92400e;font-weight:700">${tgt}%</td>
+        <td>${expire>0?gapHtml(renewed,Math.ceil(expire*tgt/100),true):'—'}</td>
+        <td style="cursor:pointer" onclick="openEdit('${a.name}','memrenew_day')">${dayHtml(dayChg,'')}</td>
+        <td style="cursor:pointer" onclick="openEdit('${a.name}','memurgent')">${urgent?`<span style="color:#dc2626;font-weight:700">⚠️ ${urgent}家</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      </tr>`; }); }
     document.getElementById('memrate-tbody').innerHTML=html;
     const totRate=totExpire>0?totRenewed/totExpire:0, cls=totRate>=0.5?'sg':totRate>=0.35?'sy':'sr';
     makeCards('memrate-cards',[
@@ -1052,6 +1062,24 @@ function renderZrq(){
         ${editTd('zrq_aov', aov!==undefined && aov!==null && aov!=='' ? aov : '—')}
       </tr>`;
     });
+    if(!html.trim() || html.indexOf('<tr')<0){ ls(); html=sumRow(); AGENTS.forEach(a=>{ const shops=g(a.name,'zrq_shops'), bind=g(a.name,'zrq_bind'); const bindrate=g(a.name,'zrq_bindrate'); const bindIncM=g(a.name,'zrq_bind_inc_m'), bindIncD=g(a.name,'zrq_bind_inc_d'); const dong=g(a.name,'zrq_dong'), dongrate=g(a.name,'zrq_dongrate'); const gtv=g(a.name,'zrq_gtv'), gtvY=g(a.name,'zrq_gtv_y'); const pct=g(a.name,'zrq_pct'), pctY=g(a.name,'zrq_pct_y'); const payY=g(a.name,'zrq_pay_y'), pay=g(a.name,'zrq_pay'), aov=g(a.name,'zrq_aov'); const gtvYNum=safeNum(gtvY), bindIncMNum=safeNum(bindIncM), bindIncDNum=safeNum(bindIncD), pctNum=safeNum(pct); const editTd=(field,val,extra='')=>`<td class="tc" style="cursor:pointer${extra}" onclick="openEdit('${a.name}','${field}')">${safe(val)}</td>`; html+=`<tr>
+        <td class="tn">${a.name}</td>
+        <td class="tc">${a.mgr||'—'}</td>
+        ${editTd('zrq_shops', shops?fmtNum(shops):'—')}
+        ${editTd('zrq_bind', bind?fmtNum(bind):'—')}
+        ${editTd('zrq_bindrate', bindrate!==undefined && bindrate!==null && bindrate!=='' ? bindrate+'%' : '—')}
+        <td class="tc" style="cursor:pointer;color:${bindIncMNum>=0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_bind_inc_m')">${bindIncM!==undefined && bindIncM!==null && bindIncM!=='' ? ((bindIncMNum>0?'+':'')+bindIncM) : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:${bindIncDNum>0?'#16a34a':bindIncDNum<0?'#dc2626':'#6b7280'}" onclick="openEdit('${a.name}','zrq_bind_inc_d')">${bindIncD!==undefined && bindIncD!==null && bindIncD!=='' ? ((bindIncDNum>0?'+':'')+bindIncD) : '—'}</td>
+        ${editTd('zrq_dong', dong?fmtNum(dong):'—')}
+        ${editTd('zrq_dongrate', dongrate!==undefined && dongrate!==null && dongrate!=='' ? dongrate+'%' : '—')}
+        ${editTd('zrq_gtv', gtv?fmtNum(gtv):'—')}
+        <td class="tc" style="cursor:pointer;color:${gtvYNum>0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_gtv_y')">${gtvY!==undefined && gtvY!==null && gtvY!=='' ? ((gtvYNum>0?'+':'')+fmtNum(gtvY)) : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:${pctNum>=16.5?'#16a34a':pctNum>=14?'#d97706':'#dc2626'}" onclick="openEdit('${a.name}','zrq_pct')">${pct!==undefined && pct!==null && pct!=='' ? pct+'%' : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','zrq_pct_y')">${pctY!==undefined && pctY!==null && pctY!=='' ? pctY+'%' : '—'}</td>
+        ${editTd('zrq_pay_y', payY?fmtNum(payY):'—')}
+        ${editTd('zrq_pay', pay?fmtNum(pay):'—')}
+        ${editTd('zrq_aov', aov!==undefined && aov!==null && aov!=='' ? aov : '—')}
+      </tr>`; }); }
     document.getElementById('zrq-tbody').innerHTML=html;
     const badge=document.getElementById('zrq-badge');
     if(badge){const{pct:tp}=timePct();badge.textContent=`时间进度 ${fmtPct(tp)}`;}
@@ -1315,7 +1343,7 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 每次都强制用HTML嵌入数据覆盖（保留用户手动编辑的字段）
-  const EMBED_VER = '2026-05-18z1';
+  const EMBED_VER = '2026-05-18z2';
   const D={
   '惠州巨浪':  {gtv:2070861, gtv_y:155687, gtv_excl:4.93, cps:136258, cpc:44726, cpc_y:1561, cpc_y2:3019, cpc_wpu:20273, cpc_newsgn:10, mem:100987, memrate:0.463, memrenew:25, memexpire:54, memurgent:29, memrenew_day:0, zrq_shops:2526, zrq_bind:677, zrq_bindrate:26.8, zrq_bind_inc_m:27, zrq_bind_inc_d:0, zrq_dong:132, zrq_dongrate:5.2, zrq_gtv:421092, zrq_gtv_y:39718, zrq_pct:20.2, zrq_pct_y:24.7, zrq_pay:2082887, zrq_pay_y:160836, zrq_aov:171, dongxiao:118, dongxiao_day:6, score:245, score_near:302, wpu_open:261, wpu_good:848, wpu_good_open:175, wpu_good_rate:20.6, wpu_consume:20273.1, wpu_good_consume:16255.34, wpu_good_pct:80.2},
   '惠州柏万':  {gtv:1875102, gtv_y:133986, gtv_excl:2.85, cps:119748, cpc:58041, cpc_y:2826, cpc_y2:3991, cpc_wpu:16904, cpc_newsgn:4, mem:80058, memrate:0.475, memrenew:28, memexpire:59, memurgent:31, memrenew_day:0, zrq_shops:1655, zrq_bind:572, zrq_bindrate:34.6, zrq_bind_inc_m:63, zrq_bind_inc_d:-1, zrq_dong:144, zrq_dongrate:8.7, zrq_gtv:539536, zrq_gtv_y:36887, zrq_pct:28.7, zrq_pct_y:27.6, zrq_pay:1878154, zrq_pay_y:133759, zrq_aov:215, dongxiao:101, dongxiao_day:7, score:163, score_near:178, wpu_open:167, wpu_good:513, wpu_good_open:94, wpu_good_rate:18.3, wpu_consume:16904.53, wpu_good_consume:11003.47, wpu_good_pct:65.1},
@@ -1325,7 +1353,7 @@ function renderAll(){
   '义乌汐洋':  {gtv:1751577, gtv_y:114723, gtv_excl:1.59, cps:118479, cpc:88323, cpc_y:5025, cpc_y2:6154, cpc_wpu:16681, cpc_newsgn:5, mem:63800, memrate:0.538, memrenew:21, memexpire:39, memurgent:18, memrenew_day:0, zrq_shops:1673, zrq_bind:666, zrq_bindrate:39.8, zrq_bind_inc_m:29, zrq_bind_inc_d:0, zrq_dong:136, zrq_dongrate:8.1, zrq_gtv:514710, zrq_gtv_y:29463, zrq_pct:29.3, zrq_pct_y:25.9, zrq_pay:1759146, zrq_pay_y:113859, zrq_aov:239, dongxiao:93, dongxiao_day:5, score:163, score_near:184, wpu_open:130, wpu_good:545, wpu_good_open:95, wpu_good_rate:17.4, wpu_consume:16681.58, wpu_good_consume:15131.87, wpu_good_pct:90.7}
   };
 
-  const ns={_updated: '08:50',_dataDate: '2026-05-18b'};
+  const ns={_updated: '08:50',_dataDate: '2026-05-18c'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
