@@ -53,10 +53,11 @@ def load_weekly_base_bind_map():
             try:
                 df_w = pd.read_excel(archive_path)
                 l2_w = df_w[df_w['层级'] == 'L2']
+                bind_col = '职人码绑码商户数' if '职人码绑码商户数' in df_w.columns else ('职人码绑码门店数' if '职人码绑码门店数' in df_w.columns else None)
                 for _, row in l2_w.iterrows():
                     if pd.notna(row['L2']):
                         key = str(row['L2']).strip()
-                        week_bind_map[key] = int(row['职人码绑码商户数']) if pd.notna(row['职人码绑码商户数']) else 0
+                        week_bind_map[key] = int(row[bind_col]) if (bind_col and pd.notna(row[bind_col])) else 0
                 print(f'  周净增基准: {target_date} ({len(week_bind_map)}家)')
             except Exception as e:
                 print(f'  周净增基准加载失败({target_date}): {e}')
@@ -105,8 +106,10 @@ def load_data(today_file):
             for _, row in l2_base.iterrows():
                 if pd.notna(row['L2']):
                     key = str(row['L2']).strip()
-                    base_bind_map[key] = int(row['职人码绑码商户数']) if pd.notna(row['职人码绑码商户数']) else 0
-                    base_shop_map[key] = int(row['合作门店数']) if pd.notna(row.get('合作门店数', None)) else 0
+                    bind_col = '职人码绑码商户数' if '职人码绑码商户数' in df_base.columns else ('职人码绑码门店数' if '职人码绑码门店数' in df_base.columns else None)
+                    shop_col = '合作门店数' if '合作门店数' in df_base.columns else ('合作门店数（老）' if '合作门店数（老）' in df_base.columns else None)
+                    base_bind_map[key] = int(row[bind_col]) if (bind_col and pd.notna(row[bind_col])) else 0
+                    base_shop_map[key] = int(row[shop_col]) if (shop_col and pd.notna(row.get(shop_col, None))) else 0
             print(f'  基准文件加载(4月1日): {len(base_bind_map)} 家代运营商')
         except Exception as e2:
             print(f'  基准文件加载失败: {e2}')
@@ -131,8 +134,10 @@ def build_rows(df, target_map, base_bind_map, base_shop_map, yesterday_data, wee
     l3_rows = df[df['层级'] == 'L3'].copy()
     l2_rows = df[df['层级'] == 'L2'].copy()
 
-    def extract(row, key, default=0):
-        v = row.get(key, default) if isinstance(row, dict) else getattr(row, key, default)
+    def extract(row, key, fallback_key=None, default=0):
+        v = row.get(key, None) if isinstance(row, dict) else getattr(row, key, None)
+        if pd.isna(v) and fallback_key:
+            v = row.get(fallback_key, None) if isinstance(row, dict) else getattr(row, fallback_key, None)
         try:
             return float(v) if pd.notna(v) else default
         except:
@@ -142,8 +147,8 @@ def build_rows(df, target_map, base_bind_map, base_shop_map, yesterday_data, wee
         l2_name = str(row['L2']).strip() if pd.notna(row['L2']) else ''
         agent_short = simplify_name(l2_name)
 
-        bind_cnt  = int(extract(row, '职人码绑码商户数'))
-        shop_cnt  = int(extract(row, '合作门店数'))
+        bind_cnt  = int(extract(row, '职人码绑码商户数', fallback_key='职人码绑码门店数'))
+        shop_cnt  = int(extract(row, '合作门店数', fallback_key='合作门店数（老）'))
         bind_rate = bind_cnt / shop_cnt if shop_cnt > 0 else 0
 
         base_bind    = base_bind_map.get(l2_name)
@@ -193,8 +198,8 @@ def build_rows(df, target_map, base_bind_map, base_shop_map, yesterday_data, wee
 
     def build_city_row(row, agents_under):
         cg = city_group_simple(str(row['L3']) if pd.notna(row['L3']) else '')
-        bind_cnt      = int(extract(row, '职人码绑码商户数'))
-        shop_cnt      = int(extract(row, '合作门店数'))
+        bind_cnt      = int(extract(row, '职人码绑码商户数', fallback_key='职人码绑码门店数'))
+        shop_cnt      = int(extract(row, '合作门店数', fallback_key='合作门店数（老）'))
         bind_rate     = bind_cnt / shop_cnt if shop_cnt > 0 else 0
         dongxiao_cnt  = int(extract(row, '职人码有效动销门店数'))
         dongxiao_rate = extract(row, '职人码有效动销率')
@@ -248,8 +253,8 @@ def build_rows(df, target_map, base_bind_map, base_shop_map, yesterday_data, wee
 
     # L4 汇总行
     if l4 is not None:
-        bind_cnt      = int(extract(l4, '职人码绑码商户数'))
-        shop_cnt      = int(extract(l4, '合作门店数'))
+        bind_cnt      = int(extract(l4, '职人码绑码商户数', fallback_key='职人码绑码门店数'))
+        shop_cnt      = int(extract(l4, '合作门店数', fallback_key='合作门店数（老）'))
         bind_rate     = bind_cnt / shop_cnt if shop_cnt > 0 else 0
         dongxiao_cnt  = int(extract(l4, '职人码有效动销门店数'))
         dongxiao_rate = extract(l4, '职人码有效动销率')
