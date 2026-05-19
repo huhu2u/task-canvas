@@ -1379,7 +1379,7 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 每次都强制用HTML嵌入数据覆盖（保留用户手动编辑的字段）
-  const EMBED_VER = '2026-05-19z8';
+  const EMBED_VER = '2026-05-19z9';
   const D={
   '惠州巨浪': {gtv:2174523, gtv_y:99044, gtv_excl:4.67, cps:143235, cpc:47284, cpc_y:3124, cpc_y2:4427, cpc_wpu:21577, cpc_newsgn:10, mem:107587, memrate:50.0, memrenew:27, memexpire:54, memurgent:27, memrenew_day:2, zrq_shops:2523, zrq_bind:679, zrq_bindrate:26.9, zrq_bind_inc_m:29, zrq_bind_inc_d:2, zrq_dong:132, zrq_dongrate:5.2, zrq_gtv:448297, zrq_gtv_y:27204, zrq_pct:20.6, zrq_pct_y:27.7, zrq_pay:2181148, zrq_pay_y:99044, zrq_aov:173, dongxiao:123, dongxiao_day:6, score:242, score_near:305,
     wpu_open:267,
@@ -1431,7 +1431,7 @@ function renderAll(){
     wpu_good_pct:90.7},
   };
 
-  const ns={_updated: '10:53',_dataDate: '2026-05-19h'};
+  const ns={_updated: '10:58',_dataDate: '2026-05-19i'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
 
   // 旺铺通日变化（2026-05-19）
@@ -1459,6 +1459,7 @@ function renderAll(){
   ns["慈溪哲光"].memrate = 39.6;
   ns["义乌汐洋"].memrate = 53.8;
 localStorage.setItem(LS_KEY, JSON.stringify(ns));
+S = ns; // 立即同步内存态，避免首次加载表头有数据但明细空白
 })();
 
 // ── 周目标数据种子（2026-05-18，英杰截图更新）──
@@ -1504,6 +1505,7 @@ ls();
   }
   ss();
 })();
+ls();
 renderAll();
 updateClock();
 setInterval(updateClock,1000);
