@@ -1324,6 +1324,42 @@ function renderBml(){
   document.getElementById('bml-tbody').innerHTML=html;
 }
 
+
+// ════════════════════════════════════════════════════════════
+// 渲染：旺铺通
+// ════════════════════════════════════════════════════════════
+function renderWpt(){
+  let html="", totGood=0, totOpen=0, totOpenDay=0, totGoodOpen=0, totGoodNot=0, totConsume=0;
+  AGENTS.forEach(a=>{
+    const good = g(a.name,"wpu_good")||0, open = g(a.name,"wpu_open")||0;
+    const openDay = g(a.name,"wpt_open_day")||0, goodOpen = g(a.name,"wpu_good_open")||0;
+    const goodNot = good-goodOpen, goodRate = good>0?goodOpen/good:0;
+    const consume = g(a.name,"wpu_consume")||0;
+    totGood+=good;totOpen+=open;totOpenDay+=openDay;totGoodOpen+=goodOpen;totGoodNot+=goodNot;totConsume+=consume;
+    const rateBg = goodRate>=0.2?"#d1fae5":goodRate>=0.15?"#fef3c7":"#fee2e2";
+    const rateColor = goodRate>=0.2?"#166534":goodRate>=0.15?"#a16207":"#991b1b";
+    html += `<tr>
+      <td class="tn">${a.name}</td>
+      <td>${a.mgr}</td>
+      <td style="color:#1e40af;font-weight:700">${good||"—"}</td>
+      <td style="color:#1e40af;font-weight:700">${open||"—"}</td>
+      <td style="color:${openDay>0?"#16a34a":openDay<0?"#dc2626":"#6b7280"};font-weight:700">${openDay?(openDay>0?"+"+openDay:""+openDay):"—"}</td>
+      <td style="color:#166534;font-weight:700">${goodOpen||"—"}</td>
+      <td style="color:#991b1b;font-weight:700">${goodNot||"—"}</td>
+      <td style="background:${rateBg};color:${rateColor};font-weight:700">${(goodRate*100).toFixed(1)}%</td>
+      <td style="color:#854d0e;font-weight:700">${consume?fmtMoney(consume):"—"}</td>
+    </tr>`;
+  });
+  document.getElementById("wpt-tbody").innerHTML=html;
+  const totRate=totGood>0?totGoodOpen/totGood:0;
+  makeCards("wpt-cards",[
+    {name:"旺铺通开通",pct:String(totOpen),cls:"sb",barW:"100",sub:"总开通数"},
+    {name:"今日净增",pct:(totOpenDay>0?"+"+totOpenDay:""+totOpenDay),cls:totOpenDay>=0?"sg":"sr",barW:"100",sub:"日变化"},
+    {name:"好店开通率",pct:fmtPct(totRate),cls:totRate>=0.2?"sg":totRate>=0.15?"sy":"sr",barW:Math.min(100,totRate*100).toFixed(1),sub:`${totGoodOpen}/${totGood}`},
+    {name:"旺铺通消耗额",pct:fmtMoney(totConsume),cls:"sb",barW:"100",sub:"合计消耗"}
+  ]);
+}
+
 function renderAll(){
   renderGtv(); renderCpc(); renderMem();
   renderScore(); renderDongxiao();
@@ -1343,7 +1379,7 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 每次都强制用HTML嵌入数据覆盖（保留用户手动编辑的字段）
-  const EMBED_VER = '2026-05-19z4';
+  const EMBED_VER = '2026-05-19z5';
   const D={
   '惠州巨浪': {gtv:2174523, gtv_y:99044, gtv_excl:4.67, cps:143235, cpc:47284, cpc_y:3124, cpc_y2:4427, cpc_wpu:21577, cpc_newsgn:10, mem:107587, memrate:0.5, memrenew:27, memexpire:54, memurgent:27, memrenew_day:2, zrq_shops:2523, zrq_bind:679, zrq_bindrate:26.9, zrq_bind_inc_m:29, zrq_bind_inc_d:2, zrq_dong:132, zrq_dongrate:5.2, zrq_gtv:448297, zrq_gtv_y:27204, zrq_pct:20.6, zrq_pct_y:27.7, zrq_pay:2181148, zrq_pay_y:99044, zrq_aov:173, dongxiao:123, dongxiao_day:5, score:242, score_near:302,
     wpu_open:267,
@@ -1395,8 +1431,17 @@ function renderAll(){
     wpu_good_pct:90.7},
   };
 
-  const ns={_updated: '10:30',_dataDate: '2026-05-19d'};
+  const ns={_updated: '10:34',_dataDate: '2026-05-19e'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
+
+  // 旺铺通日变化（2026-05-19）
+  ns["惠州巨浪"].wpt_open_day = 34;
+  ns["惠州柏万"].wpt_open_day = 20;
+  ns["泉州小花猫"].wpt_open_day = 49;
+  ns["惠安广通"].wpt_open_day = 17;
+  ns["慈溪哲光"].wpt_open_day = 19;
+  ns["义乌汐洋"].wpt_open_day = 20;
+
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
 
