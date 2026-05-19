@@ -1343,17 +1343,59 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 每次都强制用HTML嵌入数据覆盖（保留用户手动编辑的字段）
-  const EMBED_VER = '2026-05-19z';
+  const EMBED_VER = '2026-05-19z2';
   const D={
-  '惠州巨浪':  {gtv:2070861, gtv_y:155687, gtv_excl:4.93, cps:136258, cpc:44726, cpc_y:1561, cpc_y2:3019, cpc_wpu:20273, cpc_newsgn:10, mem:100987, memrate:0.500, memrenew:27, memexpire:54, memurgent:27, memrenew_day:2, zrq_shops:2526, zrq_bind:677, zrq_bindrate:26.8, zrq_bind_inc_m:27, zrq_bind_inc_d:0, zrq_dong:132, zrq_dongrate:5.2, zrq_gtv:421092, zrq_gtv_y:39718, zrq_pct:20.2, zrq_pct_y:24.7, zrq_pay:2082887, zrq_pay_y:160836, zrq_aov:171, dongxiao:118, dongxiao_day:6, score:245, score_near:302, wpu_open:261, wpu_good:848, wpu_good_open:175, wpu_good_rate:20.6, wpu_consume:20273.1, wpu_good_consume:16255.34, wpu_good_pct:80.2},
-  '惠州柏万':  {gtv:1875102, gtv_y:133986, gtv_excl:2.85, cps:119748, cpc:58041, cpc_y:2826, cpc_y2:3991, cpc_wpu:16904, cpc_newsgn:4, mem:80058, memrate:0.475, memrenew:28, memexpire:59, memurgent:31, memrenew_day:0, zrq_shops:1655, zrq_bind:572, zrq_bindrate:34.6, zrq_bind_inc_m:63, zrq_bind_inc_d:-1, zrq_dong:144, zrq_dongrate:8.7, zrq_gtv:539536, zrq_gtv_y:36887, zrq_pct:28.7, zrq_pct_y:27.6, zrq_pay:1878154, zrq_pay_y:133759, zrq_aov:215, dongxiao:101, dongxiao_day:7, score:163, score_near:178, wpu_open:167, wpu_good:513, wpu_good_open:94, wpu_good_rate:18.3, wpu_consume:16904.53, wpu_good_consume:11003.47, wpu_good_pct:65.1},
-  '泉州小花猫':  {gtv:1495036, gtv_y:75750, gtv_excl:3.07, cps:96757, cpc:59550, cpc_y:2800, cpc_y2:3761, cpc_wpu:16180, cpc_newsgn:7, mem:44400, memrate:0.317, memrenew:13, memexpire:41, memurgent:28, memrenew_day:3, zrq_shops:1783, zrq_bind:595, zrq_bindrate:33.4, zrq_bind_inc_m:29, zrq_bind_inc_d:-1, zrq_dong:145, zrq_dongrate:8.1, zrq_gtv:411459, zrq_gtv_y:12327, zrq_pct:27.6, zrq_pct_y:16.7, zrq_pay:1493234, zrq_pay_y:73858, zrq_aov:197, dongxiao:107, dongxiao_day:1, score:182, score_near:232, wpu_open:184, wpu_good:899, wpu_good_open:130, wpu_good_rate:14.5, wpu_consume:16180.81, wpu_good_consume:11894.28, wpu_good_pct:73.5},
-  '惠安广通':  {gtv:1165640, gtv_y:75353, gtv_excl:2.49, cps:79037, cpc:38095, cpc_y:1500, cpc_y2:2337, cpc_wpu:11717, cpc_newsgn:3, mem:51129, memrate:0.41, memrenew:16, memexpire:39, memurgent:23, memrenew_day:0, zrq_shops:1558, zrq_bind:475, zrq_bindrate:30.5, zrq_bind_inc_m:18, zrq_bind_inc_d:-2, zrq_dong:99, zrq_dongrate:6.4, zrq_gtv:253797, zrq_gtv_y:14069, zrq_pct:21.8, zrq_pct_y:18.8, zrq_pay:1165164, zrq_pay_y:74985, zrq_aov:137, dongxiao:73, dongxiao_day:2, score:123, score_near:196, wpu_open:145, wpu_good:492, wpu_good_open:102, wpu_good_rate:20.7, wpu_consume:11717.96, wpu_good_consume:9556.73, wpu_good_pct:81.6},
-  '慈溪哲光':  {gtv:1634271, gtv_y:115161, gtv_excl:3.68, cps:113409, cpc:77620, cpc_y:3784, cpc_y2:4542, cpc_wpu:9766, cpc_newsgn:11, mem:59056, memrate:0.396, memrenew:19, memexpire:48, memurgent:29, memrenew_day:0, zrq_shops:1767, zrq_bind:562, zrq_bindrate:31.8, zrq_bind_inc_m:4, zrq_bind_inc_d:-2, zrq_dong:88, zrq_dongrate:5.0, zrq_gtv:329232, zrq_gtv_y:29051, zrq_pct:20.2, zrq_pct_y:25.4, zrq_pay:1628683, zrq_pay_y:114386, zrq_aov:192, dongxiao:86, dongxiao_day:0, score:160, score_near:204, wpu_open:105, wpu_good:622, wpu_good_open:60, wpu_good_rate:9.6, wpu_consume:9766.8, wpu_good_consume:5325.62, wpu_good_pct:54.5},
-  '义乌汐洋':  {gtv:1751577, gtv_y:114723, gtv_excl:1.59, cps:118479, cpc:88323, cpc_y:5025, cpc_y2:6154, cpc_wpu:16681, cpc_newsgn:5, mem:63800, memrate:0.538, memrenew:21, memexpire:39, memurgent:18, memrenew_day:0, zrq_shops:1673, zrq_bind:666, zrq_bindrate:39.8, zrq_bind_inc_m:29, zrq_bind_inc_d:0, zrq_dong:136, zrq_dongrate:8.1, zrq_gtv:514710, zrq_gtv_y:29463, zrq_pct:29.3, zrq_pct_y:25.9, zrq_pay:1759146, zrq_pay_y:113859, zrq_aov:239, dongxiao:93, dongxiao_day:5, score:163, score_near:184, wpu_open:130, wpu_good:545, wpu_good_open:95, wpu_good_rate:17.4, wpu_consume:16681.58, wpu_good_consume:15131.87, wpu_good_pct:90.7}
+  '惠州巨浪': {gtv:2174523, gtv_y:99044, gtv_excl:4.67, cps:143235, cpc:47284, cpc_y:3124, cpc_y2:4427, cpc_wpu:21577, cpc_newsgn:10, mem:107587, memrate:0.5, memrenew:27, memexpire:54, memurgent:27, memrenew_day:2, zrq_shops:2523, zrq_bind:679, zrq_bindrate:26.9, zrq_bind_inc_m:29, zrq_bind_inc_d:2, zrq_dong:132, zrq_dongrate:5.2, zrq_gtv:448297, zrq_gtv_y:27204, zrq_pct:20.6, zrq_pct_y:27.7, zrq_pay:2181148, zrq_pay_y:99044, zrq_aov:173, dongxiao:123, dongxiao_day:5, score:242, score_near:302,
+    wpu_open:267,
+    wpu_good:852,
+    wpu_good_open:175,
+    wpu_good_rate:20.6,
+    wpu_consume:21577,
+    wpu_good_consume:16255,
+    wpu_good_pct:80.2},
+  '惠州柏万': {gtv:1970688, gtv_y:95982, gtv_excl:2.88, cps:125822, cpc:61086, cpc_y:3785, cpc_y2:4495, cpc_wpu:17614, cpc_newsgn:4, mem:80058, memrate:0.47, memrenew:28, memexpire:59, memurgent:31, memrenew_day:0, zrq_shops:1653, zrq_bind:584, zrq_bindrate:35.3, zrq_bind_inc_m:75, zrq_bind_inc_d:12, zrq_dong:143, zrq_dongrate:8.7, zrq_gtv:565237, zrq_gtv_y:25702, zrq_pct:28.7, zrq_pct_y:27.9, zrq_pay:1970325, zrq_pay_y:95982, zrq_aov:215, dongxiao:102, dongxiao_day:1, score:167, score_near:178,
+    wpu_open:171,
+    wpu_good:523,
+    wpu_good_open:94,
+    wpu_good_rate:18.3,
+    wpu_consume:17614,
+    wpu_good_consume:11003,
+    wpu_good_pct:65.1},
+  '泉州小花猫': {gtv:1564392, gtv_y:68896, gtv_excl:3.05, cps:101294, cpc:62571, cpc_y:4706, cpc_y2:5522, cpc_wpu:16997, cpc_newsgn:7, mem:52007, memrate:0.32, memrenew:13, memexpire:41, memurgent:28, memrenew_day:3, zrq_shops:1779, zrq_bind:597, zrq_bindrate:33.6, zrq_bind_inc_m:31, zrq_bind_inc_d:2, zrq_dong:139, zrq_dongrate:7.8, zrq_gtv:429974, zrq_gtv_y:18515, zrq_pct:27.5, zrq_pct_y:27.3, zrq_pay:1560933, zrq_pay_y:68896, zrq_aov:199, dongxiao:116, dongxiao_day:9, score:185, score_near:232,
+    wpu_open:187,
+    wpu_good:901,
+    wpu_good_open:130,
+    wpu_good_rate:14.5,
+    wpu_consume:16997,
+    wpu_good_consume:11894,
+    wpu_good_pct:73.5},
+  '惠安广通': {gtv:1232154, gtv_y:66569, gtv_excl:2.5, cps:83507, cpc:39850, cpc_y:2603, cpc_y2:3315, cpc_wpu:12430, cpc_newsgn:3, mem:51129, memrate:0.41, memrenew:16, memexpire:39, memurgent:23, memrenew_day:0, zrq_shops:1558, zrq_bind:477, zrq_bindrate:30.6, zrq_bind_inc_m:20, zrq_bind_inc_d:2, zrq_dong:102, zrq_dongrate:6.5, zrq_gtv:276619, zrq_gtv_y:22822, zrq_pct:22.4, zrq_pct_y:33.8, zrq_pay:1232619, zrq_pay_y:66569, zrq_aov:140, dongxiao:76, dongxiao_day:3, score:125, score_near:196,
+    wpu_open:148,
+    wpu_good:495,
+    wpu_good_open:102,
+    wpu_good_rate:20.7,
+    wpu_consume:12430,
+    wpu_good_consume:9557,
+    wpu_good_pct:81.6},
+  '慈溪哲光': {gtv:1732166, gtv_y:96782, gtv_excl:3.61, cps:120211, cpc:82368, cpc_y:5598, cpc_y2:6286, cpc_wpu:10455, cpc_newsgn:11, mem:62856, memrate:0.4, memrenew:19, memexpire:48, memurgent:29, memrenew_day:0, zrq_shops:1770, zrq_bind:566, zrq_bindrate:32, zrq_bind_inc_m:8, zrq_bind_inc_d:4, zrq_dong:92, zrq_dongrate:5.2, zrq_gtv:357357, zrq_gtv_y:28125, zrq_pct:20.7, zrq_pct_y:28.2, zrq_pay:1728540, zrq_pay_y:96782, zrq_aov:194, dongxiao:92, dongxiao_day:6, score:164, score_near:204,
+    wpu_open:109,
+    wpu_good:625,
+    wpu_good_open:60,
+    wpu_good_rate:9.6,
+    wpu_consume:10455,
+    wpu_good_consume:5326,
+    wpu_good_pct:54.5},
+  '义乌汐洋': {gtv:1838646, gtv_y:88117, gtv_excl:1.65, cps:124268, cpc:93894, cpc_y:4421, cpc_y2:5304, cpc_wpu:17564, cpc_newsgn:5, mem:63800, memrate:0.54, memrenew:21, memexpire:39, memurgent:18, memrenew_day:0, zrq_shops:1671, zrq_bind:665, zrq_bindrate:39.8, zrq_bind_inc_m:28, zrq_bind_inc_d:-1, zrq_dong:146, zrq_dongrate:8.7, zrq_gtv:540176, zrq_gtv_y:25466, zrq_pct:29.2, zrq_pct_y:28.8, zrq_pay:1847662, zrq_pay_y:88117, zrq_aov:238, dongxiao:100, dongxiao_day:7, score:167, score_near:184,
+    wpu_open:131,
+    wpu_good:549,
+    wpu_good_open:95,
+    wpu_good_rate:17.4,
+    wpu_consume:17564,
+    wpu_good_consume:15132,
+    wpu_good_pct:90.7},
   };
 
-  const ns={_updated: '09:49',_dataDate: '2026-05-19a'};
+  const ns={_updated: '10:20',_dataDate: '2026-05-19b'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
