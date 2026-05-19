@@ -1343,7 +1343,7 @@ function renderAll(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   // 每次都强制用HTML嵌入数据覆盖（保留用户手动编辑的字段）
-  const EMBED_VER = '2026-05-19z3';
+  const EMBED_VER = '2026-05-19z4';
   const D={
   '惠州巨浪': {gtv:2174523, gtv_y:99044, gtv_excl:4.67, cps:143235, cpc:47284, cpc_y:3124, cpc_y2:4427, cpc_wpu:21577, cpc_newsgn:10, mem:107587, memrate:0.5, memrenew:27, memexpire:54, memurgent:27, memrenew_day:2, zrq_shops:2523, zrq_bind:679, zrq_bindrate:26.9, zrq_bind_inc_m:29, zrq_bind_inc_d:2, zrq_dong:132, zrq_dongrate:5.2, zrq_gtv:448297, zrq_gtv_y:27204, zrq_pct:20.6, zrq_pct_y:27.7, zrq_pay:2181148, zrq_pay_y:99044, zrq_aov:173, dongxiao:123, dongxiao_day:5, score:242, score_near:302,
     wpu_open:267,
@@ -1395,7 +1395,7 @@ function renderAll(){
     wpu_good_pct:90.7},
   };
 
-  const ns={_updated: '10:25',_dataDate: '2026-05-19c'};
+  const ns={_updated: '10:30',_dataDate: '2026-05-19d'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
 })();
@@ -1427,6 +1427,22 @@ function renderAll(){
 // 启动
 // ════════════════════════════════════════════════════════════
 ls();
+// ── BML数据注入（2026-05-19更新）──
+(function(){
+  const BML_DATA = {
+    '惠州巨浪':  {bml_lose_n:8,  bml_lose_pct:34.8, bml_high:5, bml_mid:0, bml_low:3, bml_days:20},
+    '惠州柏万':  {bml_lose_n:4,  bml_lose_pct:22.2, bml_high:4, bml_mid:0, bml_low:0, bml_days:20},
+    '泉州小花猫':{bml_lose_n:9,  bml_lose_pct:50.0, bml_high:5, bml_mid:1, bml_low:2, bml_days:20},
+    '惠安广通':  {bml_lose_n:7,  bml_lose_pct:30.4, bml_high:5, bml_mid:2, bml_low:0, bml_days:20},
+    '慈溪哲光':  {bml_lose_n:5,  bml_lose_pct:29.4, bml_high:2, bml_mid:1, bml_low:2, bml_days:20},
+    '义乌汐洋':  {bml_lose_n:0,  bml_lose_pct:0.0,  bml_high:0, bml_mid:0, bml_low:0, bml_days:20},
+  };
+  for(const [name, vals] of Object.entries(BML_DATA)){
+    if(!S[name]) S[name]={};
+    for(const [k,v] of Object.entries(vals)) S[name][k]=v;
+  }
+  ss();
+})();
 renderAll();
 updateClock();
 setInterval(updateClock,1000);
