@@ -1391,6 +1391,8 @@ function renderAll(){
   };
 const ns={_updated: '10:55',_dataDate: '2026-05-21b'};
   Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
+  localStorage.setItem(LS_KEY, JSON.stringify(ns));
+  S = ns; // 立即同步内存态，避免首次加载表头有数据但明细空白
 
     // 旺铺通日变化（2026-05-21）
   ns["惠州巨浪"].wpt_open_day = 2;
@@ -1399,9 +1401,25 @@ const ns={_updated: '10:55',_dataDate: '2026-05-21b'};
   ns["惠安广通"].wpt_open_day = 5;
   ns["慈溪哲光"].wpt_open_day = 0;
   ns["义乌汐洋"].wpt_open_day = 1;
-// 双重保障：seedData写入后立即从localStorage回读，防止版本切换导致S为空
-ls();
 
+  // 职人码日变化（2026-05-21，来自职人码分析表）
+  ns["惠州巨浪"].zrq_bind_inc_d = 6;
+  ns["惠州柏万"].zrq_bind_inc_d = 5;
+  ns["泉州小花猫"].zrq_bind_inc_d = -3;
+  ns["惠安广通"].zrq_bind_inc_d = 1;
+  ns["慈溪哲光"].zrq_bind_inc_d = 0;
+  ns["义乌汐洋"].zrq_bind_inc_d = 0;
+
+  // MEM续约展示口径修正（2026-05-21）
+  ns["惠州巨浪"].memrate = 0;
+  ns["惠州柏万"].memrate = 0;
+  ns["泉州小花猫"].memrate = 0;
+  ns["惠安广通"].memrate = 0;
+  ns["慈溪哲光"].memrate = 0;
+  ns["义乌汐洋"].memrate = 0;
+
+  localStorage.setItem(LS_KEY, JSON.stringify(ns));
+  S = ns; // 立即同步内存态
 // ── 周目标数据种子（2026-05-18，英杰截图更新）──
 (function seedWeekData(){
   const WD = {
