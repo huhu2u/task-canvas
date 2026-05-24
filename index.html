@@ -733,7 +733,8 @@ function renderVisit(){
       <td style="cursor:pointer" onclick="openEdit('${a.name}','visit_haodian')">${yHaodian?`<span style="font-weight:700;color:${yHaodian>=3?'#16a34a':'#dc2626'}">${yHaodian}次 ${yHaodian>=3?'✅':'⚠️'}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
-  document.getElementById('visit-tbody').innerHTML=html;
+  const visitBody=document.getElementById('visit-tbody');
+  if(visitBody) visitBody.innerHTML=html;
   const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
   makeCards('visit-cards',[
     {name:'作业综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}天`},
@@ -764,7 +765,8 @@ function renderOrder(){
       <td style="color:#6b7280">${pool}</td>
     </tr>`;
   });
-  document.getElementById('order-tbody').innerHTML=html;
+  const orderBody=document.getElementById('order-tbody');
+  if(orderBody) orderBody.innerHTML=html;
   const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
   makeCards('order-cards',[
     {name:'工单综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
@@ -1366,11 +1368,16 @@ function renderWpt(){
 }
 
 function renderAll(){
-  renderGtv(); renderCpc(); renderMem();
-  renderScore(); renderDongxiao();
-  renderVisit(); renderOrder(); renderMemrate();
-  renderAurora(); renderExam(); renderZrq();
-  renderWeek(); renderBml(); renderWpt();
+  const tasks=[
+    ['renderGtv',renderGtv],['renderCpc',renderCpc],['renderMem',renderMem],
+    ['renderScore',renderScore],['renderDongxiao',renderDongxiao],
+    ['renderVisit',renderVisit],['renderOrder',renderOrder],['renderMemrate',renderMemrate],
+    ['renderAurora',renderAurora],['renderExam',renderExam],['renderZrq',renderZrq],
+    ['renderWeek',renderWeek],['renderBml',renderBml],['renderWpt',renderWpt],
+  ];
+  tasks.forEach(([name,fn])=>{
+    try{ fn(); }catch(e){ console.error(name, e); }
+  });
   updateStatusBar();
   const {pct:tp}=timePct();
   const b=document.getElementById('perf-badge');
