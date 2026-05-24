@@ -533,7 +533,11 @@ function getYesterdayDayTarget(type, name){
   const saved = (ws[type]||{})[name]||{};
   const base = (WEEK_DATA[type]||[]).find(d=>d.name===name);
   if(!base) return 0;
-  const val = saved['d'+dayIdx]!=null ? saved['d'+dayIdx] : (base.days[dayIdx]||0);
+  const val = saved['d'+dayIdx]!=null
+    ? saved['d'+dayIdx]
+    : (Array.isArray(saved.days) && saved.days[dayIdx]!=null
+        ? saved.days[dayIdx]
+        : ((base.days&&base.days[dayIdx]!=null) ? base.days[dayIdx] : 0));
   return val || 0;
 }
 
