@@ -529,7 +529,7 @@ function getYesterdayDayTarget(type, name){
   // days数组：0=周一,1=周二,...,5=周六,6=周日
   // ydJsDay: 0=Sun→idx=6, 1=Mon→idx=0, 2=Tue→idx=1, ..., 6=Sat→idx=5
   const dayIdx = ydJsDay === 0 ? 6 : ydJsDay - 1;
-  const ws = JSON.parse(localStorage.getItem('week_data_v2')||'{}');
+  const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
   const saved = (ws[type]||{})[name]||{};
   const base = (WEEK_DATA[type]||[]).find(d=>d.name===name);
   if(!base) return 0;
@@ -1205,7 +1205,7 @@ function renderWeek(){
   }
 
   // 从 localStorage 读取本周已填数据
-  const ws = JSON.parse(localStorage.getItem('week_data_v2')||'{}');
+  const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
 
   ['gtv','cpc','coupon'].forEach(type=>{
     const tbodyId = 'week-'+type+'-tbody';
@@ -1229,7 +1229,7 @@ function renderWeek(){
 
 function openWeekEdit(tbodyId, name, field){
   const type = tbodyId.replace('week-','').replace('-tbody','');
-  const ws = JSON.parse(localStorage.getItem('week_data_v2')||'{}');
+  const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
   if(!ws[type]) ws[type]={};
   if(!ws[type][name]) ws[type][name]={};
   const key = field==='cur'?'cur':(field==='forecast'?'forecast':('d'+field));
@@ -1264,11 +1264,11 @@ function saveEdit(){
     if(isNaN(val)){closeEdit();return;}
     // forecast 输入的是百分比数字（如 85），存为小数（0.85）
     if(key==='forecast') val = val/100;
-    const ws = JSON.parse(localStorage.getItem('week_data_v2')||'{}');
+    const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
     if(!ws[type]) ws[type]={};
     if(!ws[type][name]) ws[type][name]={};
     ws[type][name][key]=val;
-    localStorage.setItem('week_data_v2', JSON.stringify(ws));
+    localStorage.setItem('week_data_v3', JSON.stringify(ws));
     delete fields.dataset.weekMode;
     closeEdit(); renderWeek();
     return;
@@ -1399,7 +1399,7 @@ function renderAll(){
   "慈溪哲光": {aurora_act_done:0,aurora_act_pend:17,aurora_res_done:1,aurora_res_pend:16,aurora_total:17,bml_beat:10,bml_high:21,bml_lose:6,bml_meet:5,cpc:112249,cpc_newsgn:17,cpc_wpu:13761,cpc_y:5003,cpc_y2:5620,dongxiao:127,dongxiao_day:0,gtv:2361307,gtv_excl:3.74,gtv_y:114070,mem:72256,memexpire:48,memrate:0.458,memrenew:22,memrenew_day:0,memurgent:26,score:170,score_near:195,zrq_aov:213,zrq_bind:566,zrq_bind_inc_d:-1,zrq_bind_inc_m:8,zrq_bindrate:32.2,zrq_dong:104,zrq_dongrate:5.9,zrq_gtv:554745,zrq_gtv_y:23960,zrq_pay:2336965,zrq_pay_y:99370,zrq_pct:23.7,zrq_pct_y:24.1,zrq_shops:1758},
   "义乌汐洋": {aurora_act_done:0,aurora_act_pend:13,aurora_res_done:2,aurora_res_pend:11,aurora_total:13,bml_beat:7,bml_high:12,bml_lose:4,bml_meet:1,cpc:125771,cpc_newsgn:16,cpc_wpu:22307,cpc_y:5337,cpc_y2:6310,dongxiao:141,dongxiao_day:0,gtv:2397385,gtv_excl:1.57,gtv_y:103214,mem:77000,memexpire:39,memrate:0.641,memrenew:25,memrenew_day:0,memurgent:14,score:182,score_near:165,zrq_aov:237,zrq_bind:671,zrq_bind_inc_d:1,zrq_bind_inc_m:34,zrq_bindrate:40.3,zrq_dong:165,zrq_dongrate:9.9,zrq_gtv:720201,zrq_gtv_y:24887,zrq_pay:2405441,zrq_pay_y:104084,zrq_pct:29.9,zrq_pct_y:23.9,zrq_shops:1663}
   };
-const ns={...(ex||{}), _updated: '18:55', _dataDate: '2026-05-25h'};
+const ns={...(ex||{}), _updated: '18:55', _dataDate: '2026-05-25i'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
@@ -1439,24 +1439,24 @@ const ns={...(ex||{}), _updated: '18:55', _dataDate: '2026-05-25h'};
 (function seedWeekData(){
   const WD = {
     gtv: {
-      '惠州巨浪':  {cur:534000, forecast:0.593, days:[110000,110000,120000,120000,130000,140000,170000]},
-      '惠州柏万':  {cur:420000, forecast:0.553, days:[100000,100000,100000,100000,110000,120000,130000]},
-      '泉州小花猫':{cur:367500, forecast:0.570, days:[85000,85000,85000,90000,95000,100000,105000]},
-      '惠安广通':  {cur:273800, forecast:0.521, days:[70000,70000,70000,75000,80000,80000,80000]},
-      '慈溪哲光':  {cur:414000, forecast:0.545, days:[100000,100000,105000,105000,110000,120000,120000]},
-      '义乌汐洋':  {cur:375200, forecast:0.564, days:[85000,85000,90000,90000,100000,105000,110000]},
+      '惠州巨浪':  {cur:1050000, forecast:1.0, days:[130000, 130000, 130000, 140000, 170000, 180000, 170000]},
+      '惠州柏万':  {cur:770000, forecast:1.04, days:[90000, 90000, 80000, 80000, 90000, 120000, 120000]},
+      '泉州小花猫':  {cur:683007, forecast:1.0, days:[80000, 90000, 90000, 90000, 90000, 120000, 120000]},
+      '惠安广通':  {cur:620000, forecast:1.0, days:[85000, 85000, 85000, 85000, 90000, 95000, 95000]},
+      '慈溪哲光':  {cur:760000, forecast:1.01, days:[108000, 108000, 108000, 108000, 108000, 110000, 110000]},
+      '义乌汐洋':  {cur:650000, forecast:1.015, days:[90000, 85000, 85000, 90000, 95000, 105000, 100000]}
     },
     cpc: {
-      '惠州巨浪':  {cur:10500, forecast:0.636, days:[2000,2000,2000,2000,2500,3000,3000]},
-      '惠州柏万':  {cur:15200, forecast:0.639, days:[3000,3000,3000,3000,3400,4000,3500]},
-      '泉州小花猫':{cur:12800, forecast:0.577, days:[2600,2700,2800,2900,3000,3200,3200]},
-      '惠安广通':  {cur:8800,  forecast:0.533, days:[2000,2000,2000,2000,2500,2500,2500]},
-      '慈溪哲光':  {cur:20500, forecast:0.554, days:[4000,4000,4000,4000,5500,5500,5500]},
-      '义乌汐洋':  {cur:18000, forecast:0.554, days:[4500,4500,4500,4500,5000,5000,5000]},
+      '惠州巨浪':  {cur:22500, forecast:1.01, days:[2800, 2800, 2800, 2800, 3100, 4000, 4000]},
+      '惠州柏万':  {cur:29400, forecast:1.01, days:[3900, 3900, 3900, 3900, 4600, 4600, 4600]},
+      '泉州小花猫':  {cur:40000, forecast:1.0, days:[3000, 3000, 6000, 6000, 6000, 6000, 6000]},
+      '惠安广通':  {cur:15300, forecast:1.0, days:[2000, 2000, 2000, 2000, 2300, 2500, 2500]},
+      '慈溪哲光':  {cur:42898, forecast:1.0, days:[6200, 6200, 6200, 6200, 6200, 6200, 6200]},
+      '义乌汐洋':  {cur:32000, forecast:1.07, days:[4500, 4500, 4500, 4500, 4500, 5000, 5000]}
     },
   };
   let old = {};
-  try{ old = JSON.parse(localStorage.getItem('week_data_v2')||'{}'); }catch(e){ old = {}; }
+  try{ old = JSON.parse(localStorage.getItem('week_data_v3')||'{}'); }catch(e){ old = {}; }
   const norm = {...old};
   ['gtv','cpc'].forEach(type=>{
     norm[type] = norm[type] || {};
@@ -1472,7 +1472,7 @@ const ns={...(ex||{}), _updated: '18:55', _dataDate: '2026-05-25h'};
       };
     });
   });
-  localStorage.setItem('week_data_v2', JSON.stringify(norm));
+  localStorage.setItem('week_data_v3', JSON.stringify(norm));
 })();
 
 // ════════════════════════════════════════════════════════════
