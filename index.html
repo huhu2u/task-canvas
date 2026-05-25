@@ -1399,10 +1399,10 @@ function renderAll(){
   "慈溪哲光": {aurora_act_done:0,aurora_act_pend:17,aurora_res_done:1,aurora_res_pend:16,aurora_total:17,bml_beat:10,bml_high:21,bml_lose:6,bml_meet:5,cpc:112249,cpc_newsgn:17,cpc_wpu:13761,cpc_y:5003,cpc_y2:5620,dongxiao:127,dongxiao_day:0,gtv:2361307,gtv_excl:3.74,gtv_y:114070,mem:72256,memexpire:48,memrate:0.458,memrenew:22,memrenew_day:0,memurgent:26,score:170,score_near:195,zrq_aov:213,zrq_bind:566,zrq_bind_inc_d:-1,zrq_bind_inc_m:8,zrq_bindrate:32.2,zrq_dong:104,zrq_dongrate:5.9,zrq_gtv:554745,zrq_gtv_y:23960,zrq_pay:2336965,zrq_pay_y:99370,zrq_pct:23.7,zrq_pct_y:24.1,zrq_shops:1758},
   "义乌汐洋": {aurora_act_done:0,aurora_act_pend:13,aurora_res_done:2,aurora_res_pend:11,aurora_total:13,bml_beat:7,bml_high:12,bml_lose:4,bml_meet:1,cpc:125771,cpc_newsgn:16,cpc_wpu:22307,cpc_y:5337,cpc_y2:6310,dongxiao:141,dongxiao_day:0,gtv:2397385,gtv_excl:1.57,gtv_y:103214,mem:77000,memexpire:39,memrate:0.641,memrenew:25,memrenew_day:0,memurgent:14,score:182,score_near:165,zrq_aov:237,zrq_bind:671,zrq_bind_inc_d:1,zrq_bind_inc_m:34,zrq_bindrate:40.3,zrq_dong:165,zrq_dongrate:9.9,zrq_gtv:720201,zrq_gtv_y:24887,zrq_pay:2405441,zrq_pay_y:104084,zrq_pct:29.9,zrq_pct_y:23.9,zrq_shops:1663}
   };
-const ns={...(ex||{}), _updated: '10:45', _dataDate: '2026-05-25d'};
+const ns={...(ex||{}), _updated: '11:25', _dataDate: '2026-05-25e'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
-    ns[k] = {...v, ...((ex||{})[k]||{})};
+    ns[k] = {...((ex||{})[k]||{}), ...v};
   });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
   S = ns; // 立即同步内存态，避免首次加载表头有数据但明细空白
@@ -1416,19 +1416,19 @@ const ns={...(ex||{}), _updated: '10:45', _dataDate: '2026-05-25d'};
   ns["义乌汐洋"].wpt_open_day = 29;
 
   // 职人码日变化（2026-05-21，来自职人码分析表）
-  ns["惠州巨浪"].zrq_bind_inc_d = 6;
-  ns["惠州柏万"].zrq_bind_inc_d = 5;
-  ns["泉州小花猫"].zrq_bind_inc_d = -3;
+  ns["惠州巨浪"].zrq_bind_inc_d = 1;
+  ns["惠州柏万"].zrq_bind_inc_d = -1;
+  ns["泉州小花猫"].zrq_bind_inc_d = 0;
   ns["惠安广通"].zrq_bind_inc_d = 1;
-  ns["慈溪哲光"].zrq_bind_inc_d = 0;
-  ns["义乌汐洋"].zrq_bind_inc_d = 0;
+  ns["慈溪哲光"].zrq_bind_inc_d = -1;
+  ns["义乌汐洋"].zrq_bind_inc_d = 1;
 
   // MEM续约展示口径修正（2026-05-25）
-  ns["惠州巨浪"].memrate = 0.6364;
-  ns["惠州柏万"].memrate = 0.55;
-  ns["泉州小花猫"].memrate = 0.381;
-  ns["惠安广通"].memrate = 0.475;
-  ns["慈溪哲光"].memrate = 0.4694;
+  ns["惠州巨浪"].memrate = 0.623;
+  ns["惠州柏万"].memrate = 0.542;
+  ns["泉州小花猫"].memrate = 0.39;
+  ns["惠安广通"].memrate = 0.462;
+  ns["慈溪哲光"].memrate = 0.458;
   ns["义乌汐洋"].memrate = 0.641;
 
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
