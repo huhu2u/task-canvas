@@ -529,11 +529,15 @@ function getYesterdayDayTarget(type, name){
   // days数组：0=周一,1=周二,...,5=周六,6=周日
   // ydJsDay: 0=Sun→idx=6, 1=Mon→idx=0, 2=Tue→idx=1, ..., 6=Sat→idx=5
   const dayIdx = ydJsDay === 0 ? 6 : ydJsDay - 1;
-  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+  const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
   const saved = (ws[type]||{})[name]||{};
   const base = (WEEK_DATA[type]||[]).find(d=>d.name===name);
   if(!base) return 0;
-  const val = saved['d'+dayIdx]!=null ? saved['d'+dayIdx] : (base.days[dayIdx]||0);
+  const val = saved['d'+dayIdx]!=null
+    ? saved['d'+dayIdx]
+    : (Array.isArray(saved.days) && saved.days[dayIdx]!=null
+        ? saved.days[dayIdx]
+        : ((base.days&&base.days[dayIdx]!=null) ? base.days[dayIdx] : 0));
   return val || 0;
 }
 
@@ -729,7 +733,8 @@ function renderVisit(){
       <td style="cursor:pointer" onclick="openEdit('${a.name}','visit_haodian')">${yHaodian?`<span style="font-weight:700;color:${yHaodian>=3?'#16a34a':'#dc2626'}">${yHaodian}次 ${yHaodian>=3?'✅':'⚠️'}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
-  document.getElementById('visit-tbody').innerHTML=html;
+  const visitBody=document.getElementById('visit-tbody');
+  if(visitBody) visitBody.innerHTML=html;
   const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
   makeCards('visit-cards',[
     {name:'作业综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}天`},
@@ -760,7 +765,8 @@ function renderOrder(){
       <td style="color:#6b7280">${pool}</td>
     </tr>`;
   });
-  document.getElementById('order-tbody').innerHTML=html;
+  const orderBody=document.getElementById('order-tbody');
+  if(orderBody) orderBody.innerHTML=html;
   const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
   makeCards('order-cards',[
     {name:'工单综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
@@ -794,6 +800,16 @@ function renderMemrate(){
         <td style="cursor:pointer" onclick="openEdit('${a.name}','memurgent')">${urgent?`<span style="color:#dc2626;font-weight:700">⚠️ ${urgent}家</span>`:'<span style="color:#9ca3af">—</span>'}</td>
       </tr>`;
     });
+    if(!html.trim()){ ls(); AGENTS.forEach(a=>{ const renewed=parseFloat(g(a.name,'memrenew'))||0; const expire=parseFloat(g(a.name,'memexpire'))||0; const rate=expire>0?renewed/expire:0, cls=rate>=0.5?'sg':rate>=0.35?'sy':'sr'; const dayChg=g(a.name,'memrenew_day'), urgent=parseFloat(g(a.name,'memurgent'))||0; const tgt=gt(a.name,'memrate'); html+=`<tr>
+        <td class="tn">${a.name}</td>
+        <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','memrenew')">${renewed?renewed:'<span style="color:#9ca3af">—</span>'}</td>
+        <td style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','memexpire')">${expire?expire:'—'}</td>
+        <td><span style="font-weight:700;color:${colorText(cls)}">${expire>0?fmtPct(rate):'—'}</span></td>
+        <td style="color:#92400e;font-weight:700">${tgt}%</td>
+        <td>${expire>0?gapHtml(renewed,Math.ceil(expire*tgt/100),true):'—'}</td>
+        <td style="cursor:pointer" onclick="openEdit('${a.name}','memrenew_day')">${dayHtml(dayChg,'')}</td>
+        <td style="cursor:pointer" onclick="openEdit('${a.name}','memurgent')">${urgent?`<span style="color:#dc2626;font-weight:700">⚠️ ${urgent}家</span>`:'<span style="color:#9ca3af">—</span>'}</td>
+      </tr>`; }); }
     document.getElementById('memrate-tbody').innerHTML=html;
     const totRate=totExpire>0?totRenewed/totExpire:0, cls=totRate>=0.5?'sg':totRate>=0.35?'sy':'sr';
     makeCards('memrate-cards',[
@@ -1052,6 +1068,24 @@ function renderZrq(){
         ${editTd('zrq_aov', aov!==undefined && aov!==null && aov!=='' ? aov : '—')}
       </tr>`;
     });
+    if(!html.trim() || html.indexOf('<tr')<0){ ls(); html=sumRow(); AGENTS.forEach(a=>{ const shops=g(a.name,'zrq_shops'), bind=g(a.name,'zrq_bind'); const bindrate=g(a.name,'zrq_bindrate'); const bindIncM=g(a.name,'zrq_bind_inc_m'), bindIncD=g(a.name,'zrq_bind_inc_d'); const dong=g(a.name,'zrq_dong'), dongrate=g(a.name,'zrq_dongrate'); const gtv=g(a.name,'zrq_gtv'), gtvY=g(a.name,'zrq_gtv_y'); const pct=g(a.name,'zrq_pct'), pctY=g(a.name,'zrq_pct_y'); const payY=g(a.name,'zrq_pay_y'), pay=g(a.name,'zrq_pay'), aov=g(a.name,'zrq_aov'); const gtvYNum=safeNum(gtvY), bindIncMNum=safeNum(bindIncM), bindIncDNum=safeNum(bindIncD), pctNum=safeNum(pct); const editTd=(field,val,extra='')=>`<td class="tc" style="cursor:pointer${extra}" onclick="openEdit('${a.name}','${field}')">${safe(val)}</td>`; html+=`<tr>
+        <td class="tn">${a.name}</td>
+        <td class="tc">${a.mgr||'—'}</td>
+        ${editTd('zrq_shops', shops?fmtNum(shops):'—')}
+        ${editTd('zrq_bind', bind?fmtNum(bind):'—')}
+        ${editTd('zrq_bindrate', bindrate!==undefined && bindrate!==null && bindrate!=='' ? bindrate+'%' : '—')}
+        <td class="tc" style="cursor:pointer;color:${bindIncMNum>=0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_bind_inc_m')">${bindIncM!==undefined && bindIncM!==null && bindIncM!=='' ? ((bindIncMNum>0?'+':'')+bindIncM) : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:${bindIncDNum>0?'#16a34a':bindIncDNum<0?'#dc2626':'#6b7280'}" onclick="openEdit('${a.name}','zrq_bind_inc_d')">${bindIncD!==undefined && bindIncD!==null && bindIncD!=='' ? ((bindIncDNum>0?'+':'')+bindIncD) : '—'}</td>
+        ${editTd('zrq_dong', dong?fmtNum(dong):'—')}
+        ${editTd('zrq_dongrate', dongrate!==undefined && dongrate!==null && dongrate!=='' ? dongrate+'%' : '—')}
+        ${editTd('zrq_gtv', gtv?fmtNum(gtv):'—')}
+        <td class="tc" style="cursor:pointer;color:${gtvYNum>0?'#16a34a':'#dc2626'}" onclick="openEdit('${a.name}','zrq_gtv_y')">${gtvY!==undefined && gtvY!==null && gtvY!=='' ? ((gtvYNum>0?'+':'')+fmtNum(gtvY)) : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:${pctNum>=16.5?'#16a34a':pctNum>=14?'#d97706':'#dc2626'}" onclick="openEdit('${a.name}','zrq_pct')">${pct!==undefined && pct!==null && pct!=='' ? pct+'%' : '—'}</td>
+        <td class="tc" style="cursor:pointer;color:#6b7280" onclick="openEdit('${a.name}','zrq_pct_y')">${pctY!==undefined && pctY!==null && pctY!=='' ? pctY+'%' : '—'}</td>
+        ${editTd('zrq_pay_y', payY?fmtNum(payY):'—')}
+        ${editTd('zrq_pay', pay?fmtNum(pay):'—')}
+        ${editTd('zrq_aov', aov!==undefined && aov!==null && aov!=='' ? aov : '—')}
+      </tr>`; }); }
     document.getElementById('zrq-tbody').innerHTML=html;
     const badge=document.getElementById('zrq-badge');
     if(badge){const{pct:tp}=timePct();badge.textContent=`时间进度 ${fmtPct(tp)}`;}
@@ -1076,6 +1110,7 @@ function switchTab(id){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   document.getElementById('panel-'+id).classList.add('active');
+  renderAll(); // 切tab时强制重绘，避免首次进入某tab时tbody为空
 }
 function pjReset(){
   if(!confirm('确认重置所有数据？')) return;
@@ -1095,39 +1130,39 @@ function updateClock(){
   document.getElementById('clockdate').textContent=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
 }
 
-// ── 周目标数据（5月第二周 5/12-5/18，2026-05-11英杰更新）──
+// ── 周目标数据（5月第三周 5/19-5/25，2026-05-19英杰更新）──
 const WEEK_DATA = {
   gtv: [
-    {name:'义乌汐洋',  mgr:'陈铨',   tgt:665000, forecast:0.567, days:[85000,85000,90000,90000,100000,105000,110000]},
-    {name:'慈溪哲光',  mgr:'孙浩',   tgt:760000, forecast:0.548, days:[100000,100000,105000,105000,105000,125000,125000]},
-    {name:'惠州柏万',  mgr:'林启梁', tgt:760000, forecast:0.5526, days:[100000,100000,100000,100000,110000,120000,130000]},
-    {name:'惠州巨浪',  mgr:'肖立铭', tgt:900000, forecast:0.534, days:[110000,110000,110000,120000,140000,160000,150000]},
-    {name:'惠安广通',  mgr:'尤云生', tgt:525000, forecast:0.522, days:[65000,65000,65000,75000,85000,85000,85000]},
-    {name:'泉州小花猫',mgr:'康子诚', tgt:645000, forecast:0.57,  days:[70000,85000,85000,85000,100000,110000,110000]},
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:700000, forecast:0.0, days:[90000,90000,95000,95000,100000,110000,120000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:760000, forecast:0.0, days:[100000,100000,105000,105000,110000,120000,120000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:760000, forecast:0.0, days:[100000,100000,100000,100000,110000,120000,130000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:900000, forecast:0.0, days:[110000,110000,120000,120000,130000,140000,170000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:525000, forecast:0.0, days:[70000,70000,70000,75000,80000,80000,80000]},
+    {name:'泉州小花猫',mgr:'康子诚', tgt:645000, forecast:0.0, days:[85000,85000,85000,90000,95000,100000,105000]},
   ],
   cpc: [
-    {name:'义乌汐洋',  mgr:'陈铨',   tgt:32500,  days:[4500,4500,4500,4500,5000,5000,5000]},
-    {name:'慈溪哲光',  mgr:'孙浩',   tgt:37000,  days:[4000,4000,4000,4000,5500,5500,5500]},
-    {name:'惠州柏万',  mgr:'林启梁', tgt:23800,  days:[3000,3000,3000,3000,3400,4000,3500]},
-    {name:'惠州巨浪',  mgr:'肖立铭', tgt:16500,  days:[2000,2000,2000,2000,2500,3000,3000]},
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:32500,  days:[4500,4500,4500,5000,5000,5000,5000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:37000,  days:[4000,4000,4000,5000,5500,6000,6000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:23800,  days:[3000,3000,3000,3000,3500,4000,3500]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:16500,  days:[2000,2000,2000,2000,2500,3000,2500]},
     {name:'惠安广通',  mgr:'尤云生', tgt:16500,  days:[2000,2000,2000,2000,2500,2500,2500]},
     {name:'泉州小花猫',mgr:'康子诚', tgt:22200,  days:[2600,2700,2800,2900,3000,3200,3200]},
   ],
   coupon: [
-    {name:'义乌汐洋',  mgr:'陈铨',   tgt:213000, days:[27000,27000,31000,31000,31000,33000,33000]},
-    {name:'慈溪哲光',  mgr:'孙浩',   tgt:245000, days:[35000,35000,35000,35000,35000,35000,35000]},
-    {name:'惠州柏万',  mgr:'林启梁', tgt:255000, days:[35000,35000,35000,35000,40000,40000,35000]},
-    {name:'惠州巨浪',  mgr:'肖立铭', tgt:230000, days:[30000,30000,30000,30000,30000,35000,35000]},
-    {name:'惠安广通',  mgr:'尤云生', tgt:155000, days:[20000,20000,20000,20000,25000,25000,25000]},
-    {name:'泉州小花猫',mgr:'康子诚', tgt:230000, days:[25000,30000,30000,30000,35000,35000,35000]},
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:230000, days:[28000,28000,32000,32000,32000,35000,35000]},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:255000, days:[35000,35000,35000,35000,35000,40000,40000]},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:260000, days:[35000,35000,35000,35000,40000,40000,40000]},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:250000, days:[30000,30000,30000,30000,35000,40000,55000]},
+    {name:'惠安广通',  mgr:'尤云生', tgt:165000, days:[20000,20000,20000,20000,25000,25000,25000]},
+    {name:'泉州小花猫',mgr:'康子诚', tgt:235000, days:[25000,30000,30000,30000,35000,35000,50000]},
   ],
   newsgn: [
-    {name:'义乌汐洋',  mgr:'陈铨',   tgt:15, cur:12},
-    {name:'慈溪哲光',  mgr:'孙浩',   tgt:15, cur:6},
-    {name:'惠州柏万',  mgr:'林启梁', tgt:0,  cur:0},
-    {name:'惠州巨浪',  mgr:'肖立铭', tgt:13, cur:17},
-    {name:'惠安广通',  mgr:'尤云生', tgt:8,  cur:5},
-    {name:'泉州小花猫',mgr:'陈彩凤', tgt:12, cur:15},
+    {name:'义乌汐洋',  mgr:'陈铨',   tgt:3, cur:0},
+    {name:'慈溪哲光',  mgr:'孙浩',   tgt:1, cur:0},
+    {name:'惠州柏万',  mgr:'林启梁', tgt:0, cur:0},
+    {name:'惠州巨浪',  mgr:'肖立铭', tgt:1, cur:0},
+    {name:'惠安广通',  mgr:'尤云生', tgt:0, cur:0},
+    {name:'泉州小花猫',mgr:'康子诚', tgt:0, cur:0},
   ],
 };
 
@@ -1170,7 +1205,7 @@ function renderWeek(){
   }
 
   // 从 localStorage 读取本周已填数据
-  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+  const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
 
   ['gtv','cpc','coupon'].forEach(type=>{
     const tbodyId = 'week-'+type+'-tbody';
@@ -1194,7 +1229,7 @@ function renderWeek(){
 
 function openWeekEdit(tbodyId, name, field){
   const type = tbodyId.replace('week-','').replace('-tbody','');
-  const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+  const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
   if(!ws[type]) ws[type]={};
   if(!ws[type][name]) ws[type][name]={};
   const key = field==='cur'?'cur':(field==='forecast'?'forecast':('d'+field));
@@ -1229,11 +1264,11 @@ function saveEdit(){
     if(isNaN(val)){closeEdit();return;}
     // forecast 输入的是百分比数字（如 85），存为小数（0.85）
     if(key==='forecast') val = val/100;
-    const ws = JSON.parse(localStorage.getItem('week_data_v1')||'{}');
+    const ws = JSON.parse(localStorage.getItem('week_data_v3')||'{}');
     if(!ws[type]) ws[type]={};
     if(!ws[type][name]) ws[type][name]={};
     ws[type][name][key]=val;
-    localStorage.setItem('week_data_v1', JSON.stringify(ws));
+    localStorage.setItem('week_data_v3', JSON.stringify(ws));
     delete fields.dataset.weekMode;
     closeEdit(); renderWeek();
     return;
@@ -1296,12 +1331,53 @@ function renderBml(){
   document.getElementById('bml-tbody').innerHTML=html;
 }
 
+
+// ════════════════════════════════════════════════════════════
+// 渲染：旺铺通
+// ════════════════════════════════════════════════════════════
+function renderWpt(){
+  let html="", totGood=0, totOpen=0, totOpenDay=0, totGoodOpen=0, totGoodNot=0, totConsume=0;
+  AGENTS.forEach(a=>{
+    const good = g(a.name,"wpu_good")||0, open = g(a.name,"wpu_open")||0;
+    const openDay = g(a.name,"wpt_open_day")||0, goodOpen = g(a.name,"wpu_good_open")||0;
+    const goodNot = good-goodOpen, goodRate = good>0?goodOpen/good:0;
+    const consume = g(a.name,"wpu_consume")||0;
+    totGood+=good;totOpen+=open;totOpenDay+=openDay;totGoodOpen+=goodOpen;totGoodNot+=goodNot;totConsume+=consume;
+    const rateBg = goodRate>=0.2?"#d1fae5":goodRate>=0.15?"#fef3c7":"#fee2e2";
+    const rateColor = goodRate>=0.2?"#166534":goodRate>=0.15?"#a16207":"#991b1b";
+    html += `<tr>
+      <td class="tn">${a.name}</td>
+      <td>${a.mgr}</td>
+      <td style="color:#1e40af;font-weight:700">${good||"—"}</td>
+      <td style="color:#1e40af;font-weight:700">${open||"—"}</td>
+      <td style="color:${openDay>0?"#16a34a":openDay<0?"#dc2626":"#6b7280"};font-weight:700">${openDay?(openDay>0?"+"+openDay:""+openDay):"—"}</td>
+      <td style="color:#166534;font-weight:700">${goodOpen||"—"}</td>
+      <td style="color:#991b1b;font-weight:700">${goodNot||"—"}</td>
+      <td style="background:${rateBg};color:${rateColor};font-weight:700">${(goodRate*100).toFixed(1)}%</td>
+      <td style="color:#854d0e;font-weight:700">${consume?fmtMoney(consume):"—"}</td>
+    </tr>`;
+  });
+  document.getElementById("wpt-tbody").innerHTML=html;
+  const totRate=totGood>0?totGoodOpen/totGood:0;
+  makeCards("wpt-cards",[
+    {name:"旺铺通开通",pct:String(totOpen),cls:"sb",barW:"100",sub:"总开通数"},
+    {name:"今日净增",pct:(totOpenDay>0?"+"+totOpenDay:""+totOpenDay),cls:totOpenDay>=0?"sg":"sr",barW:"100",sub:"日变化"},
+    {name:"好店开通率",pct:fmtPct(totRate),cls:totRate>=0.2?"sg":totRate>=0.15?"sy":"sr",barW:Math.min(100,totRate*100).toFixed(1),sub:`${totGoodOpen}/${totGood}`},
+    {name:"旺铺通消耗额",pct:fmtMoney(totConsume),cls:"sb",barW:"100",sub:"合计消耗"}
+  ]);
+}
+
 function renderAll(){
-  renderGtv(); renderCpc(); renderMem();
-  renderScore(); renderDongxiao();
-  renderVisit(); renderOrder(); renderMemrate();
-  renderAurora(); renderExam(); renderZrq();
-  renderWeek(); renderBml(); renderWpt();
+  const tasks=[
+    ['renderGtv',renderGtv],['renderCpc',renderCpc],['renderMem',renderMem],
+    ['renderScore',renderScore],['renderDongxiao',renderDongxiao],
+    ['renderVisit',renderVisit],['renderOrder',renderOrder],['renderMemrate',renderMemrate],
+    ['renderAurora',renderAurora],['renderExam',renderExam],['renderZrq',renderZrq],
+    ['renderWeek',renderWeek],['renderBml',renderBml],['renderWpt',renderWpt],
+  ];
+  tasks.forEach(([name,fn])=>{
+    try{ fn(); }catch(e){ console.error(name, e); }
+  });
   updateStatusBar();
   const {pct:tp}=timePct();
   const b=document.getElementById('perf-badge');
@@ -1314,25 +1390,111 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  // 每次都强制用HTML嵌入数据覆盖（保留用户手动编辑的字段）
-  const EMBED_VER = '2026-05-15z';
-  const D={
-    '惠州巨浪':  {gtv:1568911, gtv_y:90901, gtv_excl:4.3, cpc:34762, cpc_newsgn:15, cpc_wpu:12480, mem:86458.0, memrate:41.8, memrenew:23, memexpire:55, memurgent:34, memrenew_day:0, mem_visit_all:13.3, mem_visit_renew:28.6, mem_visit_break:0.0, mem_visit_pend:11.4, zrq_shops:2538, zrq_bind:670, zrq_bindrate:26.4, zrq_bind_inc_m:20, zrq_bind_inc_d:4, zrq_dong:120, zrq_dongrate:4.7, zrq_gtv:294928, zrq_gtv_y:21982, zrq_pct:18.8, zrq_pct_y:26.8, zrq_pay:1567747, zrq_pay_y:90901.41, zrq_aov:171, bml_lose_n:5, bml_lose_pct:25.0, cps:97277, cpc_y:1071, cpc_y2:2442, score:236, score_day:-3, score_near:306, dongxiao:95, dongxiao_day:9, dongxiao_gtv:1263214, visit:0, order:136, aurora_total:6, aurora_act_done:5, aurora_act_pend:1, aurora_res_done:6, aurora_res_pend:0, bml_high:4, bml_mid:1, bml_low:0, bml_days:20, wpt_hd:890, wpt_open:156, wpt_open_day:-76, wpt_hd_open:156, wpt_hd_not:734, wpt_amt:15451, order_day:0},
-  '惠州柏万':  {gtv:1429496, gtv_y:102038, gtv_excl:2.2, cpc:44131, cpc_newsgn:12, cpc_wpu:11404, mem:63058.0, memrate:44.1, memrenew:26, memexpire:59, memurgent:33, memrenew_day:0, mem_visit_all:20.0, mem_visit_renew:31.8, mem_visit_break:14.3, mem_visit_pend:13.3, zrq_shops:1659, zrq_bind:553, zrq_bindrate:33.3, zrq_bind_inc_m:44, zrq_bind_inc_d:10, zrq_dong:116, zrq_dongrate:7.0, zrq_gtv:397266, zrq_gtv_y:43228, zrq_pct:27.7, zrq_pct_y:42.4, zrq_pay:1434716, zrq_pay_y:102038.21, zrq_aov:212, bml_lose_n:2, bml_lose_pct:9.1, cps:85532, cpc_y:2057, cpc_y2:2841, score:158, score_day:0, score_near:182, dongxiao:80, dongxiao_day:3, dongxiao_gtv:1144504, visit:0, order:86, aurora_total:7, aurora_act_done:4, aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:5, bml_high:0, bml_mid:1, bml_low:1, bml_days:22, wpt_hd:535, wpt_open:86, wpt_open_day:-64, wpt_hd_open:86, wpt_hd_not:449, wpt_amt:13618, order_day:0},
-  '泉州小花猫':  {gtv:1166778, gtv_y:70924, gtv_excl:2.5, cpc:45774, cpc_newsgn:12, cpc_wpu:10626, mem:35000.0, memrate:22.0, memrenew:9, memexpire:41, memurgent:32, memrenew_day:0, mem_visit_all:19.6, mem_visit_renew:28.6, mem_visit_break:42.9, mem_visit_pend:14.8, zrq_shops:1790, zrq_bind:591, zrq_bindrate:33.0, zrq_bind_inc_m:25, zrq_bind_inc_d:3, zrq_dong:146, zrq_dongrate:8.2, zrq_gtv:324346, zrq_gtv_y:29217, zrq_pct:27.8, zrq_pct_y:41.8, zrq_pay:1164626, zrq_pay_y:70923.96, zrq_aov:198, bml_lose_n:8, bml_lose_pct:40.0, cps:70961, cpc_y:2065, cpc_y2:2640, score:172, score_day:4, score_near:236, dongxiao:92, dongxiao_day:6, dongxiao_gtv:953513, visit:0, order:116, aurora_total:15, aurora_act_done:4, aurora_act_pend:11, aurora_res_done:4, aurora_res_pend:11, bml_high:4, bml_mid:0, bml_low:4, bml_days:20, wpt_hd:670, wpt_open:95, wpt_open_day:-70, wpt_hd_open:95, wpt_hd_not:575, wpt_amt:12581, order_day:0},
-  '惠安广通':  {gtv:882398, gtv_y:64210, gtv_excl:1.43, cpc:29373, cpc_newsgn:1, cpc_wpu:7430, mem:40729.0, memrate:35.9, memrenew:14, memexpire:39, memurgent:26, memrenew_day:0, mem_visit_all:23.9, mem_visit_renew:27.3, mem_visit_break:22.2, mem_visit_pend:30.0, zrq_shops:1566, zrq_bind:471, zrq_bindrate:30.1, zrq_bind_inc_m:14, zrq_bind_inc_d:4, zrq_dong:96, zrq_dongrate:6.1, zrq_gtv:177534, zrq_gtv_y:26128, zrq_pct:20.3, zrq_pct_y:41.9, zrq_pay:876681, zrq_pay_y:64210.07, zrq_aov:130, bml_lose_n:6, bml_lose_pct:25.0, cps:55796, cpc_y:1130, cpc_y2:1614, score:121, score_day:-1, score_near:199, dongxiao:65, dongxiao_day:3, dongxiao_gtv:701600, visit:0, order:60, aurora_total:10, aurora_act_done:7, aurora_act_pend:3, aurora_res_done:2, aurora_res_pend:8, bml_high:3, bml_mid:1, bml_low:2, bml_days:24, wpt_hd:450, wpt_open:91, wpt_open_day:-43, wpt_hd_open:91, wpt_hd_not:359, wpt_amt:8952, order_day:0},
-  '慈溪哲光':  {gtv:1207293, gtv_y:84211, gtv_excl:4.0, cpc:58030, cpc_newsgn:16, cpc_wpu:5942, mem:45048.0, memrate:33.3, memrenew:16, memexpire:48, memurgent:33, memrenew_day:0, mem_visit_all:13.5, mem_visit_renew:13.3, mem_visit_break:16.7, mem_visit_pend:14.3, zrq_shops:1771, zrq_bind:560, zrq_bindrate:31.6, zrq_bind_inc_m:2, zrq_bind_inc_d:-2, zrq_dong:75, zrq_dongrate:4.2, zrq_gtv:208839, zrq_gtv_y:22472, zrq_pct:17.5, zrq_pct_y:29.6, zrq_pay:1195564, zrq_pay_y:84210.85, zrq_aov:172, bml_lose_n:4, bml_lose_pct:23.5, cps:78375, cpc_y:4447, cpc_y2:4792, score:163, score_day:1, score_near:204, dongxiao:70, dongxiao_day:9, dongxiao_gtv:949516, visit:0, order:124, aurora_total:20, aurora_act_done:12, aurora_act_pend:8, aurora_res_done:5, aurora_res_pend:15, bml_high:0, bml_mid:2, bml_low:2, bml_days:17, wpt_hd:613, wpt_open:48, wpt_open_day:-46, wpt_hd_open:48, wpt_hd_not:565, wpt_amt:7353, order_day:0},
-  '义乌汐洋':  {gtv:1348878, gtv_y:94323, gtv_excl:1.61, cpc:66154, cpc_newsgn:16, cpc_wpu:11136, mem:48480.0, memrate:41.0, memrenew:16, memexpire:39, memurgent:23, memrenew_day:0, mem_visit_all:51.2, mem_visit_renew:53.8, mem_visit_break:66.7, mem_visit_pend:52.2, zrq_shops:1680, zrq_bind:656, zrq_bindrate:39.0, zrq_bind_inc_m:19, zrq_bind_inc_d:3, zrq_dong:112, zrq_dongrate:6.7, zrq_gtv:390762, zrq_gtv_y:35952, zrq_pct:28.8, zrq_pct_y:37.8, zrq_pay:1357236, zrq_pay_y:94322.83, zrq_aov:236, bml_lose_n:0, bml_lose_pct:0.0, cps:84898, cpc_y:3790, cpc_y2:4475, score:160, score_day:4, score_near:181, dongxiao:69, dongxiao_day:3, dongxiao_gtv:1073777, visit:0, order:89, aurora_total:15, aurora_act_done:14, aurora_act_pend:1, aurora_res_done:1, aurora_res_pend:14, bml_high:0, bml_mid:0, bml_low:0, bml_days:9, wpt_hd:530, wpt_open:78, wpt_open_day:-33, wpt_hd_open:78, wpt_hd_not:452, wpt_amt:13425, order_day:0},
+  const EMBED_VER = '2026-05-26d';
+    const D={
+  "惠州巨浪": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:11,bml_high:14,bml_lose:0,bml_meet:3,cpc:68794,cpc_newsgn:0,cpc_wpu:29887,cpc_y:1865,cpc_y2:0,dongxiao:180,dongxiao_day:10,gtv:3010940,gtv_excl:5.11,gtv_y:106782,mem:136987,memexpire:53,memrate:65.45,memrenew:34,memrenew_day:1,memurgent:19,score:274,score_near:278,zrq_aov:185,zrq_bind:704,zrq_bind_inc_d:8,zrq_bind_inc_m:54,zrq_bindrate:28.1,zrq_dong:167,zrq_dongrate:6.7,zrq_gtv:702894,zrq_gtv_y:33871,zrq_pay:3014869,zrq_pay_y:104402,zrq_pct:23.3,zrq_pct_y:32.4,zrq_shops:2507},
+  "惠州柏万": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:6,bml_high:13,bml_lose:1,bml_meet:6,cpc:86357,cpc_newsgn:0,cpc_wpu:24638,cpc_y:2685,cpc_y2:0,dongxiao:144,dongxiao_day:7,gtv:2705240,gtv_excl:3.17,gtv_y:103730,mem:102187,memexpire:59,memrate:56.67,memrenew:33,memrenew_day:1,memurgent:26,score:174,score_near:166,zrq_aov:218,zrq_bind:598,zrq_bind_inc_d:2,zrq_bind_inc_m:89,zrq_bindrate:36.5,zrq_dong:158,zrq_dongrate:9.7,zrq_gtv:828115,zrq_gtv_y:42229,zrq_pay:2705736,zrq_pay_y:104699,zrq_pct:30.6,zrq_pct_y:40.3,zrq_shops:1637},
+  "泉州小花猫": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:8,bml_high:14,bml_lose:5,bml_meet:1,cpc:87322,cpc_newsgn:0,cpc_wpu:23083,cpc_y:2562,cpc_y2:0,dongxiao:155,dongxiao_day:11,gtv:2202744,gtv_excl:2.72,gtv_y:110336,mem:68096,memexpire:40,memrate:46.34,memrenew:18,memrenew_day:2,memurgent:22,score:192,score_near:224,zrq_aov:222,zrq_bind:600,zrq_bind_inc_d:0,zrq_bind_inc_m:34,zrq_bindrate:34.1,zrq_dong:148,zrq_dongrate:8.4,zrq_gtv:685111,zrq_gtv_y:62689,zrq_pay:2189168,zrq_pay_y:112283,zrq_pct:31.3,zrq_pct_y:55.8,zrq_shops:1762},
+  "惠安广通": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:8,bml_high:13,bml_lose:4,bml_meet:1,cpc:60066,cpc_newsgn:0,cpc_wpu:17385,cpc_y:1170,cpc_y2:0,dongxiao:104,dongxiao_day:5,gtv:1843278,gtv_excl:3.09,gtv_y:98014,mem:60529,memexpire:39,memrate:47.50,memrenew:18,memrenew_day:0,memurgent:21,score:140,score_near:181,zrq_aov:183,zrq_bind:498,zrq_bind_inc_d:3,zrq_bind_inc_m:41,zrq_bindrate:32.0,zrq_dong:122,zrq_dongrate:7.8,zrq_gtv:547836,zrq_gtv_y:53957,zrq_pay:1845754,zrq_pay_y:96771,zrq_pct:29.7,zrq_pct_y:55.8,zrq_shops:1555},
+  "慈溪哲光": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:10,bml_high:21,bml_lose:6,bml_meet:5,cpc:116966,cpc_newsgn:0,cpc_wpu:14305,cpc_y:4164,cpc_y2:0,dongxiao:139,dongxiao_day:13,gtv:2453278,gtv_excl:4.38,gtv_y:107910,mem:72256,memexpire:48,memrate:46.94,memrenew:22,memrenew_day:0,memurgent:26,score:169,score_near:195,zrq_aov:211,zrq_bind:575,zrq_bind_inc_d:9,zrq_bind_inc_m:17,zrq_bindrate:32.7,zrq_dong:112,zrq_dongrate:6.4,zrq_gtv:582969,zrq_gtv_y:28224,zrq_pay:2437247,zrq_pay_y:100283,zrq_pct:23.9,zrq_pct_y:28.1,zrq_shops:1760},
+  "义乌汐洋": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:7,bml_high:12,bml_lose:4,bml_meet:1,cpc:130948,cpc_newsgn:0,cpc_wpu:22972,cpc_y:4517,cpc_y2:0,dongxiao:151,dongxiao_day:10,gtv:2486856,gtv_excl:1.53,gtv_y:88574,mem:77000,memexpire:39,memrate:64.10,memrenew:25,memrenew_day:0,memurgent:14,score:181,score_near:168,zrq_aov:237,zrq_bind:671,zrq_bind_inc_d:0,zrq_bind_inc_m:34,zrq_bindrate:40.4,zrq_dong:169,zrq_dongrate:10.2,zrq_gtv:749675,zrq_gtv_y:29474,zrq_pay:2493542,zrq_pay_y:88101,zrq_pct:30.1,zrq_pct_y:33.5,zrq_shops:1661}
   };
-  const ns={_updated: '17:16',_dataDate: '2026-05-15a'};
-  Object.entries(D).forEach(([k,v])=>{ ns[k]=v; });
+const ns={...(ex||{}), _updated: '13:35', _dataDate: '2026-05-26d'};
+  // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
+  Object.entries(D).forEach(([k,v])=>{
+    ns[k] = {...((ex||{})[k]||{}), ...v};
+  });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
+  S = ns; // 立即同步内存态，避免首次加载表头有数据但明细空白
+
+    // 旺铺通日变化（2026-05-21）
+  ns["惠州巨浪"].wpt_open_day = 65;
+  ns["惠州柏万"].wpt_open_day = 37;
+  ns["泉州小花猫"].wpt_open_day = 66;
+  ns["惠安广通"].wpt_open_day = 40;
+  ns["慈溪哲光"].wpt_open_day = 35;
+  ns["义乌汐洋"].wpt_open_day = 29;
+
+  // 职人码日变化（2026-05-21，来自职人码分析表）
+  ns["惠州巨浪"].zrq_bind_inc_d = 1;
+  ns["惠州柏万"].zrq_bind_inc_d = -1;
+  ns["泉州小花猫"].zrq_bind_inc_d = 0;
+  ns["惠安广通"].zrq_bind_inc_d = 1;
+  ns["慈溪哲光"].zrq_bind_inc_d = -1;
+  ns["义乌汐洋"].zrq_bind_inc_d = 1;
+
+  // MEM续约展示口径修正（2026-05-25）
+  ns["惠州巨浪"].memrate = 0.623;
+  ns["惠州柏万"].memrate = 0.542;
+  ns["泉州小花猫"].memrate = 0.39;
+  ns["惠安广通"].memrate = 0.462;
+  ns["慈溪哲光"].memrate = 0.458;
+  ns["义乌汐洋"].memrate = 0.641;
+
+  localStorage.setItem(LS_KEY, JSON.stringify(ns));
+  S = ns; // 立即同步内存态
+})();
+
+// ── 周目标数据种子（2026-05-18，英杰截图更新）──
+(function seedWeekData(){
+  const WD = {
+    gtv: {
+      '惠州巨浪':  {cur:1050000, forecast:1.0, days:[130000, 130000, 130000, 140000, 170000, 180000, 170000]},
+      '惠州柏万':  {cur:770000, forecast:1.04, days:[90000, 90000, 80000, 80000, 90000, 120000, 120000]},
+      '泉州小花猫':  {cur:683007, forecast:1.0, days:[80000, 90000, 90000, 90000, 90000, 120000, 120000]},
+      '惠安广通':  {cur:620000, forecast:1.0, days:[85000, 85000, 85000, 85000, 90000, 95000, 95000]},
+      '慈溪哲光':  {cur:760000, forecast:1.01, days:[108000, 108000, 108000, 108000, 108000, 110000, 110000]},
+      '义乌汐洋':  {cur:650000, forecast:1.015, days:[90000, 85000, 85000, 90000, 95000, 105000, 100000]}
+    },
+    cpc: {
+      '惠州巨浪':  {cur:22500, forecast:1.01, days:[2800, 2800, 2800, 2800, 3100, 4000, 4000]},
+      '惠州柏万':  {cur:29400, forecast:1.01, days:[3900, 3900, 3900, 3900, 4600, 4600, 4600]},
+      '泉州小花猫':  {cur:40000, forecast:1.0, days:[3000, 3000, 6000, 6000, 6000, 6000, 6000]},
+      '惠安广通':  {cur:15300, forecast:1.0, days:[2000, 2000, 2000, 2000, 2300, 2500, 2500]},
+      '慈溪哲光':  {cur:42898, forecast:1.0, days:[6200, 6200, 6200, 6200, 6200, 6200, 6200]},
+      '义乌汐洋':  {cur:32000, forecast:1.07, days:[4500, 4500, 4500, 4500, 4500, 5000, 5000]}
+    },
+  };
+  let old = {};
+  try{ old = JSON.parse(localStorage.getItem('week_data_v3')||'{}'); }catch(e){ old = {}; }
+  const norm = {...old};
+  ['gtv','cpc'].forEach(type=>{
+    norm[type] = norm[type] || {};
+    Object.entries(WD[type]).forEach(([name, def])=>{
+      const cur = norm[type][name] || {};
+      const hasDays = Array.isArray(cur.days) && cur.days.length===7;
+      const legacyDays = [cur.d0,cur.d1,cur.d2,cur.d3,cur.d4,cur.d5,cur.d6].every(v=>v!=null)
+        ? [cur.d0,cur.d1,cur.d2,cur.d3,cur.d4,cur.d5,cur.d6] : null;
+      norm[type][name] = {
+        cur: cur.cur ?? def.cur,
+        forecast: cur.forecast ?? def.forecast,
+        days: hasDays ? cur.days : (legacyDays || def.days)
+      };
+    });
+  });
+  localStorage.setItem('week_data_v3', JSON.stringify(norm));
 })();
 
 // ════════════════════════════════════════════════════════════
 // 启动
 // ════════════════════════════════════════════════════════════
 ls();
+// ── BML数据注入（2026-05-19更新）──
+(function(){
+  const BML_DATA = {
+    '惠州巨浪':  {bml_lose_n:0,  bml_lose_pct:0.0, bml_high:14, bml_mid:0, bml_low:0, bml_days:20},
+    '惠州柏万':  {bml_lose_n:1,  bml_lose_pct:7.7, bml_high:13, bml_mid:0, bml_low:0, bml_days:20},
+    '泉州小花猫':  {bml_lose_n:5,  bml_lose_pct:35.7, bml_high:14, bml_mid:0, bml_low:0, bml_days:20},
+    '惠安广通':  {bml_lose_n:4,  bml_lose_pct:30.8, bml_high:13, bml_mid:0, bml_low:0, bml_days:20},
+    '慈溪哲光':  {bml_lose_n:6,  bml_lose_pct:28.6, bml_high:21, bml_mid:0, bml_low:0, bml_days:20},
+    '义乌汐洋':  {bml_lose_n:4,  bml_lose_pct:33.3, bml_high:12, bml_mid:0, bml_low:0, bml_days:20},
+  };
+  for(const [name, vals] of Object.entries(BML_DATA)){
+    if(!S[name]) S[name]={};
+    for(const [k,v] of Object.entries(vals)) S[name][k]=v;
+  }
+  ss();
+})();ls();
 renderAll();
 updateClock();
 setInterval(updateClock,1000);
