@@ -423,12 +423,12 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // 配置：代运营商基础数据
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
-  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:5340000, cpc_tgt:105000,  cpc_newsgn_tgt:26, score_tgt:283, dongxiao_tgt:225, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
-  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:4200000, cpc_tgt:152000, cpc_newsgn_tgt:22, score_tgt:175, dongxiao_tgt:162, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
-  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:3675000, cpc_tgt:128000, cpc_newsgn_tgt:13, score_tgt:195, dongxiao_tgt:193, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
-  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2738000, cpc_tgt:88000,  cpc_newsgn_tgt:14,  score_tgt:139, dongxiao_tgt:132, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
-  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:4140000, cpc_tgt:205000, cpc_newsgn_tgt:17, score_tgt:185, dongxiao_tgt:151, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
-  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3752000, cpc_tgt:180000, cpc_newsgn_tgt:16, score_tgt:184, dongxiao_tgt:162, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
+  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3956557, cpc_tgt:87905,  cpc_newsgn_tgt:15, score_tgt:283, dongxiao_tgt:225, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
+  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3240197, cpc_tgt:110304, cpc_newsgn_tgt:12, score_tgt:175, dongxiao_tgt:162, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
+  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:2774237, cpc_tgt:123755, cpc_newsgn_tgt:12, score_tgt:195, dongxiao_tgt:193, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
+  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2358641, cpc_tgt:73700,  cpc_newsgn_tgt:9,  score_tgt:139, dongxiao_tgt:132, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
+  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3117649, cpc_tgt:155148, cpc_newsgn_tgt:16, score_tgt:185, dongxiao_tgt:151, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
+  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3002361, cpc_tgt:151368, cpc_newsgn_tgt:16, score_tgt:184, dongxiao_tgt:162, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
@@ -1390,7 +1390,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-05-26c';
+  const EMBED_VER = '2026-05-26d';
     const D={
   "惠州巨浪": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:11,bml_high:14,bml_lose:0,bml_meet:3,cpc:68794,cpc_newsgn:0,cpc_wpu:29887,cpc_y:1865,cpc_y2:0,dongxiao:180,dongxiao_day:10,gtv:3010940,gtv_excl:5.11,gtv_y:106782,mem:136987,memexpire:53,memrate:65.45,memrenew:34,memrenew_day:1,memurgent:19,score:274,score_near:278,zrq_aov:185,zrq_bind:704,zrq_bind_inc_d:8,zrq_bind_inc_m:54,zrq_bindrate:28.1,zrq_dong:167,zrq_dongrate:6.7,zrq_gtv:702894,zrq_gtv_y:33871,zrq_pay:3014869,zrq_pay_y:104402,zrq_pct:23.3,zrq_pct_y:32.4,zrq_shops:2507},
   "惠州柏万": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:6,bml_high:13,bml_lose:1,bml_meet:6,cpc:86357,cpc_newsgn:0,cpc_wpu:24638,cpc_y:2685,cpc_y2:0,dongxiao:144,dongxiao_day:7,gtv:2705240,gtv_excl:3.17,gtv_y:103730,mem:102187,memexpire:59,memrate:56.67,memrenew:33,memrenew_day:1,memurgent:26,score:174,score_near:166,zrq_aov:218,zrq_bind:598,zrq_bind_inc_d:2,zrq_bind_inc_m:89,zrq_bindrate:36.5,zrq_dong:158,zrq_dongrate:9.7,zrq_gtv:828115,zrq_gtv_y:42229,zrq_pay:2705736,zrq_pay_y:104699,zrq_pct:30.6,zrq_pct_y:40.3,zrq_shops:1637},
@@ -1399,7 +1399,7 @@ function renderAll(){
   "慈溪哲光": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:10,bml_high:21,bml_lose:6,bml_meet:5,cpc:116966,cpc_newsgn:0,cpc_wpu:14305,cpc_y:4164,cpc_y2:0,dongxiao:139,dongxiao_day:13,gtv:2453278,gtv_excl:4.38,gtv_y:107910,mem:72256,memexpire:48,memrate:46.94,memrenew:22,memrenew_day:0,memurgent:26,score:169,score_near:195,zrq_aov:211,zrq_bind:575,zrq_bind_inc_d:9,zrq_bind_inc_m:17,zrq_bindrate:32.7,zrq_dong:112,zrq_dongrate:6.4,zrq_gtv:582969,zrq_gtv_y:28224,zrq_pay:2437247,zrq_pay_y:100283,zrq_pct:23.9,zrq_pct_y:28.1,zrq_shops:1760},
   "义乌汐洋": {aurora_act_done:0,aurora_act_pend:0,aurora_res_done:0,aurora_res_pend:0,aurora_total:0,bml_beat:7,bml_high:12,bml_lose:4,bml_meet:1,cpc:130948,cpc_newsgn:0,cpc_wpu:22972,cpc_y:4517,cpc_y2:0,dongxiao:151,dongxiao_day:10,gtv:2486856,gtv_excl:1.53,gtv_y:88574,mem:77000,memexpire:39,memrate:64.10,memrenew:25,memrenew_day:0,memurgent:14,score:181,score_near:168,zrq_aov:237,zrq_bind:671,zrq_bind_inc_d:0,zrq_bind_inc_m:34,zrq_bindrate:40.4,zrq_dong:169,zrq_dongrate:10.2,zrq_gtv:749675,zrq_gtv_y:29474,zrq_pay:2493542,zrq_pay_y:88101,zrq_pct:30.1,zrq_pct_y:33.5,zrq_shops:1661}
   };
-const ns={...(ex||{}), _updated: '11:20', _dataDate: '2026-05-26c'};
+const ns={...(ex||{}), _updated: '13:35', _dataDate: '2026-05-26d'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
