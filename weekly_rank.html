@@ -5,318 +5,179 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>粤闽浙代运营商周排名看板</title>
 <style>
-:root {
-  --rank-1: #1a73e8;
-  --rank-2: #34a853;
-  --rank-3: #fbbc04;
-  --rank-4: #ea4335;
-  --rank-5: #ea4335;
-  --rank-6: #ea4335;
-  --card-bg: #fff;
-  --bg: #f5f7fa;
-  --text: #333;
-  --text-secondary: #666;
-  --border: #e0e0e0;
-  --header-bg: #1a237e;
-  --good: #16a34a;
-  --mid: #ca8a04;
-  --bad: #dc2626;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333}
 
-/* Header */
-.header {
-  background: linear-gradient(135deg, var(--header-bg), #283593);
-  color: #fff; padding: 20px 24px; text-align: center;
-}
-.header h1 { font-size: 22px; margin-bottom: 6px; }
-.header .subtitle { font-size: 13px; opacity: 0.85; }
+.hdr{background:linear-gradient(135deg,#1a237e,#283593);color:#fff;padding:18px 20px;text-align:center}
+.hdr h1{font-size:20px;margin-bottom:4px}
+.hdr .dt{font-size:12px;opacity:.8}
 
-/* Mode Switcher */
-.mode-switcher {
-  display: flex; justify-content: center; gap: 0;
-  padding: 12px 20px; background: #fff; border-bottom: 1px solid var(--border);
-}
-.mode-btn {
-  padding: 8px 24px; border: 1px solid var(--header-bg);
-  background: #fff; color: var(--header-bg); font-size: 14px; cursor: pointer;
-  transition: all 0.2s;
-}
-.mode-btn:first-child { border-radius: 6px 0 0 6px; }
-.mode-btn:last-child { border-radius: 0 6px 6px 0; }
-.mode-btn.active {
-  background: var(--header-bg); color: #fff;
-}
-.mode-btn:hover { opacity: 0.8; }
+.tabs{display:flex;gap:0;background:#fff;border-bottom:2px solid #eee;padding:0 16px;overflow-x:auto}
+.tab-btn{padding:12px 20px;border:none;background:none;font-size:14px;cursor:pointer;color:#666;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
+.tab-btn.active{color:#1a237e;border-bottom-color:#1a237e;font-weight:700}
 
-/* Summary Cards */
-.summary {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-  padding: 16px;
-}
-.summary-card {
-  background: var(--card-bg); border-radius: 12px;
-  padding: 16px; text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  border: 1px solid var(--border);
-}
-.summary-card .label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
-.summary-card .value { font-size: 28px; font-weight: 700; }
-.summary-card .value.good { color: var(--good); }
-.summary-card .value.bad { color: var(--bad); }
+.ct{padding:16px;max-width:900px;margin:0 auto}
+.tab-pane{display:none}.tab-pane.active{display:block}
 
-/* Ranking List */
-.ranking-list {
-  padding: 0 16px 16px;
-}
-.rank-card {
-  background: var(--card-bg); border-radius: 12px;
-  margin-bottom: 10px; padding: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  border: 1px solid var(--border);
-  transition: transform 0.2s;
-}
-.rank-card:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+/* summary strip */
+.sum-strip{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.sum-chip{flex:0 0 auto;background:#fff;border-radius:12px;padding:10px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.07);min-width:110px}
+.sum-chip .pos{font-size:11px;color:#999;margin-bottom:2px}
+.sum-chip .nm{font-size:15px;font-weight:700}
+.sum-chip .sc{font-size:11px;color:#aaa;margin-top:1px}
+.sum-chip.gold .nm{color:#c09b0a}
+.sum-chip.silver .nm{color:#607d8b}
+.sum-chip.bronze .nm{color:#8d6e63}
+.sum-chip.warning .nm{color:#e53935}
 
-.rank-header {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
-}
-.rank-badge {
-  width: 36px; height: 36px; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center; color: #fff;
-  font-weight: 700; font-size: 16px; flex-shrink: 0;
-}
-.rank-badge.r1 { background: var(--rank-1); }
-.rank-badge.r2 { background: var(--rank-2); }
-.rank-badge.r3 { background: var(--rank-3); }
-.rank-badge.r4, .rank-badge.r5, .rank-badge.r6 { background: var(--rank-4); }
-.rank-name { font-size: 18px; font-weight: 600; }
-.rank-avg { font-size: 12px; color: var(--text-secondary); }
+/* rank card */
+.rcard{background:#fff;border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:5px solid #e0e0e0;transition:box-shadow .2s}
+.rcard:hover{box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.rcard.r1{border-left-color:#f6c90e}.rcard.r2{border-left-color:#9e9e9e}.rcard.r3{border-left-color:#cd7f32}
+.rcard.r4,.rcard.r5,.rcard.r6{border-left-color:#ef5350}
 
-/* Metric Grid */
-.metric-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
-}
-.metric-item {
-  text-align: center; padding: 8px 4px;
-  border-radius: 8px; background: #f8f9fa;
-}
-.metric-label { font-size: 10px; color: var(--text-secondary); margin-bottom: 2px; }
-.metric-value { font-size: 15px; font-weight: 600; }
-.metric-value.good { color: var(--good); }
-.metric-value.mid { color: var(--mid); }
-.metric-value.bad { color: var(--bad); }
-.metric-rank { font-size: 11px; color: var(--text-secondary); }
-.metric-rank.top { color: var(--good); font-weight: 600; }
-.metric-rank.bottom { color: var(--bad); font-weight: 600; }
+.rcard-hd{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.badge{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:17px;flex-shrink:0}
+.badge.r1{background:#f6c90e;color:#7a6100}.badge.r2{background:#9e9e9e}.badge.r3{background:#cd7f32}
+.badge.r4,.badge.r5,.badge.r6{background:#ef5350}
+.rname{font-size:18px;font-weight:700}
+.ravg{font-size:12px;color:#aaa}
 
-/* Sub-metrics (expandable) */
-.sub-metrics {
-  margin-top: 10px; display: none; grid-template-columns: repeat(10, 1fr);
-  gap: 6px;
-}
-.sub-metrics.open { display: grid; }
-.toggle-sub {
-  display: flex; align-items: center; justify-content: center;
-  margin-top: 8px; color: var(--header-bg); font-size: 12px;
-  cursor: pointer; padding: 6px;
-}
-.toggle-sub:hover { background: #f0f0f0; border-radius: 6px; }
-.toggle-icon { transition: transform 0.2s; margin-left: 4px; }
-.toggle-sub.open .toggle-icon { transform: rotate(180deg); }
+.tagrow{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.tag{font-size:11px;padding:3px 8px;border-radius:10px}
+.tag.good{background:#e8f5e9;color:#2e7d32}
+.tag.bad{background:#ffebee;color:#c62828}
 
-/* Table View */
-.table-view {
-  display: none; padding: 16px;
-}
-.table-view.open { display: block; }
-.data-table {
-  width: 100%; border-collapse: collapse; background: #fff;
-  border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-.data-table th {
-  background: var(--header-bg); color: #fff; padding: 10px 8px;
-  font-size: 12px; text-align: center; position: sticky; top: 0;
-}
-.data-table td {
-  padding: 8px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border);
-}
-.data-table tr:hover { background: #f8f9ff; }
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+@media(min-width:560px){.mgrid{grid-template-columns:repeat(6,1fr)}}
 
-/* Footer */
-.footer {
-  text-align: center; padding: 16px; font-size: 11px;
-  color: var(--text-secondary);
-}
+.mi{text-align:center;padding:8px 4px;border-radius:8px;background:#f8f9fa}
+.mi-lb{font-size:10px;color:#aaa;margin-bottom:2px;line-height:1.2}
+.mi-vl{font-size:14px;font-weight:700}
+.mi-vl.g{color:#2e7d32}.mi-vl.y{color:#e65100}.mi-vl.r{color:#c62828}
+.mi-rk{font-size:10px;color:#bbb}
+.mi-rk.t{color:#2e7d32;font-weight:600}.mi-rk.bt{color:#c62828;font-weight:600}
 
-/* Responsive */
-@media (max-width: 600px) {
-  .summary { grid-template-columns: 1fr; }
-  .metric-grid { grid-template-columns: repeat(3, 1fr); }
-  .sub-metrics { grid-template-columns: repeat(5, 1fr); }
-}
+/* table */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:12px}
+th{background:#1a237e;color:#fff;padding:8px 6px;text-align:center;white-space:nowrap}
+td{padding:7px 5px;text-align:center;border-bottom:1px solid #f0f0f0;white-space:nowrap}
+tr:hover td{background:#f5f6ff}
+.tc-g{color:#2e7d32;font-weight:600}.tc-r{color:#c62828}.tc-y{color:#e65100}
+
+.ftr{text-align:center;padding:16px;font-size:11px;color:#bbb}
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header">
+<div class="hdr">
   <h1>🏆 粤闽浙代运营商周排名看板</h1>
-  <div class="subtitle">数据截至 2026-05-27 · 10项指标平均排名</div>
+  <div class="dt">数据截至 2026-05-27 &nbsp;·&nbsp; 11项指标平均排名（强排）</div>
 </div>
 
-<!-- Mode Switcher -->
-<div class="mode-switcher">
-  <button class="mode-btn active" onclick="switchMode('rank')">周排名</button>
-  <button class="mode-btn" onclick="switchMode('monthly')">月度评分</button>
-  <button class="mode-btn" onclick="switchMode('table')">表格视图</button>
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('rank',this)">📊 周排名</button>
+  <button class="tab-btn" onclick="showTab('table',this)">📋 明细表格</button>
 </div>
 
-<!-- Summary -->
-<div class="summary" id="summary"></div>
+<div class="ct">
 
-<!-- Ranking -->
-<div class="ranking-list" id="rankingList"></div>
+  <div class="tab-pane active" id="rank">
+    <div class="sum-strip" id="sumStrip"></div>
+    <div id="rankCards"></div>
+  </div>
 
-<!-- Table View -->
-<div class="table-view" id="tableView"></div>
+  <div class="tab-pane" id="table">
+    <div class="tbl-wrap"><table id="detailTable"></table></div>
+  </div>
 
-<!-- Footer -->
-<div class="footer">
-  数据来源：PC业绩看板 · 欧若拉待办 · 好店底表 · BML组织明细 · 好店动销明细<br>
-  更新频率：每周一次 · 排名规则：各指标完成率强排取平均
+</div>
+
+<div class="ftr">
+  GTV · CPC新签 · CPC消耗 · MEM续约 · 剔除率 · 感知风控 · 工单闭环 · 满编率 · 经营评分 · 好店动销 · BML<br>
+  数据来源：PC业绩看板 / 好店底表 / BML组织明细 / 经营评分快照 / 动销存档 / 感知风控截图
 </div>
 
 <script src="weekly_rank_data.js"></script>
 <script>
-const ops = RANKING_DATA.operators;
-const metricLabels = {
-  gtv: "GTV", cpc_new: "CPC新签", cpc_consume: "CPC消耗",
-  mem: "MEM续约", loss_rate: "剔除率", work_rate: "工单闭环",
-  staff_rate: "满编率", score_rate: "经营评分", dongxiao_rate: "动销",
-  bml_lose: "BML Lose"
-};
-const metricOrder = ['gtv','cpc_new','cpc_consume','mem','loss_rate','work_rate','staff_rate','score_rate','dongxiao_rate','bml_lose'];
+function vc(rank, inverted){
+  // rank 1=best; inverted means lower source value is better
+  if(rank<=2) return 'g';
+  if(rank<=3) return 'y';
+  return 'r';
+}
+function rc(rank){ return rank<=2?'t':rank>=5?'bt':''; }
+function medalClass(i){ return ['gold','silver','bronze','','warning','warning'][i]||'warning'; }
 
-// Color by rank
-function rankColor(rank) {
-  if (rank === 1) return 'var(--good)';
-  if (rank === 2) return 'var(--good)';
-  if (rank === 3) return 'var(--mid)';
-  return 'var(--bad)';
-}
-function rankClass(rank) {
-  if (rank <= 2) return 'top';
-  if (rank <= 3) return 'mid';
-  return 'bottom';
-}
-function valClass(m, rank) {
-  if (m.inverted) {
-    if (rank <= 2) return 'good';
-    if (rank <= 3) return 'mid';
-    return 'bad';
-  } else {
-    if (rank <= 2) return 'good';
-    if (rank <= 3) return 'mid';
-    return 'bad';
-  }
+function renderStrip(){
+  const el = document.getElementById('sumStrip');
+  el.innerHTML = RANKING_DATA.operators.map((op,i)=>`
+    <div class="sum-chip ${medalClass(i)}">
+      <div class="pos">第${i+1}名</div>
+      <div class="nm">${op.name}</div>
+      <div class="sc">均排 ${op.avgRank}</div>
+    </div>`).join('');
 }
 
-// Render summary
-function renderSummary() {
-  const el = document.getElementById('summary');
-  el.innerHTML = ops.map((op, i) => `
-    <div class="summary-card">
-      <div class="label">第${i+1}名</div>
-      <div class="value ${i < 3 ? 'good' : 'bad'}">${op.name}</div>
-      <div style="font-size:12px;color:#999">均排 ${op.avgRank}</div>
-    </div>
-  `).join('');
-}
-
-// Render ranking cards
-function renderRanking() {
-  const el = document.getElementById('rankingList');
-  el.innerHTML = ops.map(op => {
-    const topMetrics = metricOrder.filter(m => op.metrics[m].rank <= 2);
-    const bottomMetrics = metricOrder.filter(m => op.metrics[m].rank >= 5);
-    
-    return `
-      <div class="rank-card">
-        <div class="rank-header">
-          <div class="rank-badge r${op.rank}">${op.rank}</div>
-          <div>
-            <div class="rank-name">${op.name}</div>
-            <div class="rank-avg">10项指标平均排名 ${op.avgRank}</div>
-          </div>
+function renderCards(){
+  const el = document.getElementById('rankCards');
+  el.innerHTML = RANKING_DATA.operators.map(op=>{
+    const mkeys = METRIC_ORDER;
+    return `<div class="rcard r${op.rank}">
+      <div class="rcard-hd">
+        <div class="badge r${op.rank}">${op.rank}</div>
+        <div>
+          <div class="rname">${op.name}</div>
+          <div class="ravg">11项均排 ${op.avgRank}</div>
         </div>
-        <div class="metric-grid">
-          ${metricOrder.slice(0,5).map(m => {
-            const d = op.metrics[m];
-            const mLabel = metricLabels[m];
-            return `<div class="metric-item">
-              <div class="metric-label">${mLabel}</div>
-              <div class="metric-value ${valClass(d, d.rank)}">${d.value}${d.unit}</div>
-              <div class="metric-rank ${rankClass(d.rank)}">第${d.rank}/6</div>
-            </div>`;
-          }).join('')}
-        </div>
-        <div class="toggle-sub" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
-          查看全部指标 <span class="toggle-icon">▼</span>
-        </div>
-        <div class="sub-metrics">
-          ${metricOrder.slice(5).map(m => {
-            const d = op.metrics[m];
-            return `<div class="metric-item">
-              <div class="metric-label">${metricLabels[m]}</div>
-              <div class="metric-value ${valClass(d, d.rank)}">${d.value}${d.unit}</div>
-              <div class="metric-rank ${rankClass(d.rank)}">第${d.rank}/6</div>
-            </div>`;
-          }).join('')}
-        </div>
-        <div style="margin-top:10px;font-size:11px;color:#999">
-          🏅 强项：${topMetrics.map(m => metricLabels[m]).join('、') || '无'}
-          ${bottomMetrics.length > 0 ? '｜⚠️ 弱项：' + bottomMetrics.map(m => metricLabels[m]).join('、') : ''}
-        </div>
-      </div>`;
+      </div>
+      <div class="tagrow">
+        ${op.highlights.map(h=>`<span class="tag good">💪 ${h}</span>`).join('')}
+        ${op.weaknesses.map(w=>`<span class="tag bad">⚠️ ${w}</span>`).join('')}
+      </div>
+      <div class="mgrid">
+        ${mkeys.map(k=>{
+          const m = op.metrics[k];
+          const cls = vc(m.rank, m.inverted);
+          return `<div class="mi">
+            <div class="mi-lb">${m.label}</div>
+            <div class="mi-vl ${cls}">${m.value}${m.unit}</div>
+            <div class="mi-rk ${rc(m.rank)}">第${m.rank}/6</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
   }).join('');
 }
 
-// Render table
-function renderTable() {
-  const el = document.getElementById('tableView');
-  let html = '<table class="data-table"><thead><tr><th>排名</th><th>代运营商</th>';
-  for (const m of metricOrder) {
-    html += `<th>${metricLabels[m]}</th>`;
-  }
-  html += '<th>综合均排</th></tr></thead><tbody>';
-  for (let i = 0; i < ops.length; i++) {
-    const op = ops[i];
-    html += `<tr><td><strong>${i+1}</strong></td><td>${op.name}</td>`;
-    for (const m of metricOrder) {
-      const d = op.metrics[m];
-      const cls = valClass(d, d.rank);
-      html += `<td class="${cls}">${d.value}${d.unit}<br><span style="font-size:11px;color:#999">第${d.rank}/6</span></td>`;
+function renderTable(){
+  const ops = RANKING_DATA.operators;
+  const mkeys = METRIC_ORDER;
+  let html = '<thead><tr><th>排名</th><th>代运营商</th><th>均排</th>';
+  for(const k of mkeys) html += `<th>${ops[0].metrics[k].label}</th>`;
+  html += '</tr></thead><tbody>';
+  for(const op of ops){
+    html += `<tr><td><b>${op.rank}</b></td><td style="font-weight:600">${op.name}</td><td><b>${op.avgRank}</b></td>`;
+    for(const k of mkeys){
+      const m = op.metrics[k];
+      html += `<td class="tc-${vc(m.rank)}">${m.value}${m.unit}<br><span style="font-size:10px;color:#bbb">第${m.rank}</span></td>`;
     }
-    html += `<td><strong>${op.avgRank}</strong></td></tr>`;
+    html += '</tr>';
   }
-  html += '</tbody></table>';
-  el.innerHTML = html;
+  html += '</tbody>';
+  document.getElementById('detailTable').innerHTML = html;
 }
 
-function switchMode(mode) {
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  
-  document.getElementById('summary').style.display = mode === 'rank' ? 'grid' : 'none';
-  document.getElementById('rankingList').style.display = mode === 'rank' ? 'block' : 'none';
-  document.getElementById('tableView').style.display = mode === 'table' ? 'block' : 'none';
+function showTab(id, btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
 }
 
-// Init
-renderSummary();
-renderRanking();
+renderStrip();
+renderCards();
 renderTable();
 </script>
 </body>
