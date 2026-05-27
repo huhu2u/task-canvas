@@ -55,6 +55,27 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .mi-rk{font-size:10px;color:#ccc}
 .mi-rk.t{color:#2e7d32;font-weight:600}.mi-rk.bt{color:#c62828;font-weight:600}
 
+/* 周排名积分明细表 */
+.wk-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+.wk-tbl thead th{background:#e8eaf6;color:#333;padding:5px 4px;font-size:11px;font-weight:600;text-align:center;white-space:nowrap}
+.wk-tbl tbody td{padding:4px 4px;text-align:center;border-bottom:1px solid #f5f5f5;white-space:nowrap}
+.wk-tbl tbody tr:hover td{background:#f5f6ff}
+.wk-metric{text-align:left;font-size:11px;color:#444}
+.wk-raw{font-size:13px;font-weight:700}
+.wk-raw.g{color:#16a34a}.wk-raw.y{color:#e65100}.wk-raw.r{color:#c62828}
+.wk-pts{font-size:13px;font-weight:700}
+.wk-pts.g{color:#1a237e}.wk-pts.y{color:#e65100}.wk-pts.r{color:#c62828}
+.wk-rk{font-size:12px;font-weight:700}
+.wk-rk.t{color:#16a34a}.wk-rk.bt{color:#c62828}
+.wk-wt{font-size:9px;color:#aaa;white-space:nowrap}
+.wk-raw-bar{display:inline-block;height:10px;border-radius:3px;background:#e0e0e0;vertical-align:middle;margin-right:4px;width:40px}
+.wk-raw-fill{height:100%;border-radius:3px}
+.wk-raw-fill.g{background:#4caf50}.wk-raw-fill.y{background:#ff9800}.wk-raw-fill.r{background:#f44336}
+.wk-cat-label{font-size:11px;font-weight:700;margin:8px 0 4px;padding:3px 8px;border-radius:6px;display:inline-block}
+.wk-cat-core{background:#e3f2fd;color:#1565c0}
+.wk-cat-health{background:#e8f5e9;color:#2e7d32}
+.wk-cat-process{background:#f3e5f5;color:#6a1b9a}
+
 /* ===== MONTHLY SCORE ===== */
 .ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 .ms-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
@@ -253,6 +274,42 @@ function renderWeekly(){
       return `<div style="flex:1;background:${catColors[cat]};opacity:${0.3+pct/100*0.7};border-radius:6px;text-align:center;color:#fff;font-size:11px;font-weight:600;padding:4px 0">${catLabels[cat]} ${pts}/${mx}</div>`;
     }).join('');
 
+    // 积分明细表
+    const CAT_ORDER = ['core','health','process'];
+    const CAT_KEYS = {core:['gtv','cpc_new','cpc_consume','mem'], health:['loss','fengkong'], process:['work','staff','score','dongxiao','bml']};
+    const CAT_LABELS = {core:'核心业绩', health:'健康度', process:'过程管理'};
+    const CAT_COLORS = {core:'#1565c0', health:'#2e7d32', process:'#6a1b9a'};
+    const CAT_MAX = {core:40, health:20, process:40};
+    const CAT_RAW_COLORS = {core:'#bbdefb', health:'#c8e6c9', process:'#e1bee7'};
+
+    const detailRows = CAT_ORDER.map(cat=>{
+      const keys = CAT_KEYS[cat];
+      const catPts = w.cats[cat].pts;
+      const catMx = CAT_MAX[cat];
+      const catRawColor = CAT_RAW_COLORS[cat];
+      const catFillColor = CAT_COLORS[cat];
+      return `<tr><td colspan="5" style="padding:6px 4px;text-align:left;background:${catRawColor}">
+        <span class="wk-cat-label wk-cat-${cat}" style="background:${catRawColor};color:${catFillColor}">${CAT_LABELS[cat]} · ${catPts}/${catMx}分</span>
+      </td></tr>` +
+        keys.map(k=>{
+          const it = items[k];
+          const rawVal = op.raw[k];
+          const rawDisp = (rawVal*100).toFixed(1)+'%';
+          const rawScore = it.rawScore;
+          const rawPct = Math.min(rawScore, 100);
+          const rawBarColor = rawScore>=80?'g':rawScore>=60?'y':'r';
+          const rk = it.rank;
+          const wt = PERF_DATA.weights[k];
+          const ptsColor = it.pts>=wt*0.8?'g':it.pts>=wt*0.6?'y':'r';
+          return `<tr>
+            <td class="wk-metric">${ML[k].replace('完成率','')}</td>
+            <td><span class="wk-raw-bar"><span class="wk-raw-fill ${rawBarColor}" style="width:${rawPct}%"></span></span><span class="wk-raw ${rawBarColor}">${rawScore}分</span></td>
+            <td><span class="wk-pts ${ptsColor}">${it.pts}</span><span class="wk-wt">/${wt}</span></td>
+            <td class="wk-rk ${rkClass(rk)}">第${rk}</td>
+          </tr>`;
+        }).join('');
+    }).join('');
+
     return `<div class="rcard r${r}">
       <div class="rcard-hd">
         <div class="badge r${r}">${r}</div>
@@ -262,24 +319,19 @@ function renderWeekly(){
         </div>
       </div>
       <div style="display:flex;gap:4px;margin-bottom:10px">${catBar}</div>
-      <div class="tagrow">
+      ${topK.length||botK.length?`<div class="tagrow">
         ${topK.map(k=>`<span class="tag g">💪 ${k}</span>`).join('')}
         ${botK.map(k=>`<span class="tag r">⚠️ ${k}</span>`).join('')}
-      </div>
-      <div class="mgrid">
-        ${MKEYS.map(k=>{
-          const it = items[k];
-          const raw = op.raw[k];
-          const disp = (raw*100).toFixed(1)+'%';
-          const rk = it.rank;
-          return `<div class="mi">
-            <div class="mi-lb">${ML[k].replace('完成率','')}</div>
-            <div class="mi-vl ${rkColor(rk)}">${disp}</div>
-            <div style="font-size:11px;color:${rkColor(rk)=="g"?'#2e7d32':rkColor(rk)=="y"?'#e65100':'#c62828'};font-weight:700">${it.pts}/${PERF_DATA.weights[k]}分</div>
-            <div class="mi-rk ${rkClass(rk)}">第${rk}/6</div>
-          </div>`;
-        }).join('')}
-      </div>
+      </div>`:''}
+      <table class="wk-tbl">
+        <thead><tr>
+          <th style="text-align:left">指标</th>
+          <th>原始得分</th>
+          <th>积分(权重)</th>
+          <th>排名</th>
+        </tr></thead>
+        <tbody>${detailRows}</tbody>
+      </table>
     </div>`;
   }).join('');
 }
