@@ -192,44 +192,90 @@ function rkColor(r){ return r<=2?'g':r<=3?'y':'r'; }
 function rkClass(r){ return r<=2?'t':r>=5?'bt':''; }
 
 // ---------- WEEKLY ----------
+function calcWeekly(op){
+  const d = op.raw;
+  const T = PERF_DATA.thresholds;
+  const W = PERF_DATA.weights;
+  const s = {};
+  MKEYS.forEach(k=>{
+    const t = T[k];
+    const pts = t.invert ? scoreLow(d[k], t.bad, t.good) : scoreRate(d[k], t.base, t.full);
+    s[k] = {rawScore: Math.round(pts), pts: Math.round(pts * W[k] / 100 * 10)/10, rank: 0};
+  });
+  // compute ranks
+  const inverted = {loss:true, fengkong:true, bml:true};
+  MKEYS.forEach(k=>{
+    const sorted = [...OPS].sort((a,b)=> inverted[k] ? a.raw[k]-b.raw[k] : b.raw[k]-a.raw[k]);
+    const rmap = {};
+    sorted.forEach((o,i)=>rmap[o.name]=i+1);
+    s[k].rank = rmap[op.name];
+  });
+  // category scores
+  const catKeys = {core:['gtv','cpc_new','cpc_consume','mem'], health:['loss','fengkong'], process:['work','staff','score','dongxiao','bml']};
+  const catMax = {core:40, health:20, process:40};
+  const cats = {};
+  Object.entries(catKeys).forEach(([cat,keys])=>{
+    const pts = keys.reduce((a,k)=>a+s[k].pts,0);
+    cats[cat] = {pts: Math.round(pts*10)/10, max: catMax[cat]};
+  });
+  const total = Math.round(Object.values(cats).reduce((a,c)=>a+c.pts,0)*10)/10;
+  return {items: s, cats, total};
+}
+
 function renderWeekly(){
-  const {ranks, avgRanks} = computeWeekRanks();
-  const sorted = [...OPS].sort((a,b)=>avgRanks[a.name]-avgRanks[b.name]);
+  const scored = OPS.map(op=>({...op, weekly: calcWeekly(op)})).sort((a,b)=>b.weekly.total-a.weekly.total);
 
   // strip
   const medals=['c1','c2','c3','c4','c5','c6'];
-  document.getElementById('sumStrip').innerHTML = sorted.map((op,i)=>`
+  document.getElementById('sumStrip').innerHTML = scored.map((op,i)=>`
     <div class="sum-chip ${medals[i]}">
       <div class="pos">第${i+1}名</div>
       <div class="nm">${op.name}</div>
-      <div class="sc">加权均排 ${avgRanks[op.name]}</div>
+      <div class="sc">${op.weekly.total}分</div>
     </div>`).join('');
 
   // cards
-  const inverted = {loss:true, fengkong:true, bml:true};
-  document.getElementById('rankCards').innerHTML = sorted.map((op,idx)=>{
+  document.getElementById('rankCards').innerHTML = scored.map((op,idx)=>{
     const r = idx+1;
-    const myRanks = ranks[op.name];
-    const topK = MKEYS.filter(k=>myRanks[k]<=2).map(k=>ML[k].replace('完成率',''));
-    const botK = MKEYS.filter(k=>myRanks[k]>=5).map(k=>ML[k].replace('完成率',''));
+    const w = op.weekly;
+    const items = w.items;
+    const topK = MKEYS.filter(k=>items[k].rank<=2).map(k=>ML[k].replace('完成率',''));
+    const botK = MKEYS.filter(k=>items[k].rank>=5).map(k=>ML[k].replace('完成率',''));
+
+    // category bar
+    const catKeys = {core:['gtv','cpc_new','cpc_consume','mem'], health:['loss','fengkong'], process:['work','staff','score','dongxiao','bml']};
+    const catColors = {core:'#1565c0', health:'#2e7d32', process:'#6a1b9a'};
+    const catLabels = {core:'核心', health:'健康', process:'过程'};
+    const catBar = Object.entries(catKeys).map(([cat,keys])=>{
+      const pts = w.cats[cat].pts;
+      const mx = w.cats[cat].max;
+      const pct = pts/mx*100;
+      return `<div style="flex:1;background:${catColors[cat]};opacity:${0.3+pct/100*0.7};border-radius:6px;text-align:center;color:#fff;font-size:11px;font-weight:600;padding:4px 0">${catLabels[cat]} ${pts}/${mx}</div>`;
+    }).join('');
+
     return `<div class="rcard r${r}">
       <div class="rcard-hd">
         <div class="badge r${r}">${r}</div>
-        <div><div class="rname">${op.name}</div><div class="ravg">加权均排 ${avgRanks[op.name]}（核心40%+健康20%+过程40%）</div></div>
+        <div>
+          <div class="rname">${op.name}</div>
+          <div class="ravg" style="font-size:11px">核心40%+健康20%+过程40% → 总分 ${w.total}分</div>
+        </div>
       </div>
+      <div style="display:flex;gap:4px;margin-bottom:10px">${catBar}</div>
       <div class="tagrow">
         ${topK.map(k=>`<span class="tag g">💪 ${k}</span>`).join('')}
         ${botK.map(k=>`<span class="tag r">⚠️ ${k}</span>`).join('')}
       </div>
       <div class="mgrid">
         ${MKEYS.map(k=>{
-          const inv = !!inverted[k];
+          const it = items[k];
           const raw = op.raw[k];
-          const disp = (k==='loss'||k==='fengkong'||k==='bml') ? (raw*100).toFixed(1)+'%' : (raw*100).toFixed(1)+'%';
-          const rk = myRanks[k];
+          const disp = (raw*100).toFixed(1)+'%';
+          const rk = it.rank;
           return `<div class="mi">
             <div class="mi-lb">${ML[k].replace('完成率','')}</div>
             <div class="mi-vl ${rkColor(rk)}">${disp}</div>
+            <div style="font-size:11px;color:${rkColor(rk)=="g"?'#2e7d32':rkColor(rk)=="y"?'#e65100':'#c62828'};font-weight:700">${it.pts}/${PERF_DATA.weights[k]}分</div>
             <div class="mi-rk ${rkClass(rk)}">第${rk}/6</div>
           </div>`;
         }).join('')}
@@ -359,18 +405,20 @@ function applyRules(){
 
 // ---------- TABLE ----------
 function renderTable(){
-  const scored = OPS.map(op=>({...op, ms: calcMonthly(op)})).sort((a,b)=>b.ms.total-a.ms.total);
-  const {ranks} = computeWeekRanks();
-  let html = '<thead><tr><th>月度排名</th><th>代运营商</th><th>月度评分</th><th>周排名</th>';
+  const weekScored = OPS.map(op=>({...op, weekly: calcWeekly(op)})).sort((a,b)=>b.weekly.total-a.weekly.total);
+  const monthScored = OPS.map(op=>({...op, ms: calcMonthly(op)})).sort((a,b)=>b.ms.total-a.ms.total);
+  let html = '<thead><tr><th>周排名</th><th>月度排名</th><th>代运营商</th><th>周积分</th><th>月积分</th>';
   MKEYS.forEach(k=>html+=`<th>${ML[k].replace('完成率','')}</th>`);
   html += '</tr></thead><tbody>';
-  scored.forEach((op,i)=>{
-    const myRanks = ranks[op.name];
-    html += `<tr><td><b>${i+1}</b></td><td style="font-weight:600">${op.name}</td><td><b>${op.ms.total}</b></td><td>${op.weekRank||'?'}</td>`;
+  weekScored.forEach((op,i)=>{
+    const w = op.weekly;
+    const ms = op.ms;
+    const monthIdx = monthScored.findIndex(o=>o.name===op.name)+1;
+    html += `<tr><td><b>${i+1}</b></td><td>${monthIdx}</td><td style="font-weight:600">${op.name}</td><td><b>${w.total}</b></td><td><b>${ms.total}</b></td>`;
     MKEYS.forEach(k=>{
-      const rk = myRanks[k];
-      const cls = rk<=2?'tc-g':rk>=5?'tc-r':'tc-y';
-      html += `<td class="${cls}">${(op.raw[k]*100).toFixed(1)}%<br><span style="font-size:10px;color:#bbb">第${rk}</span></td>`;
+      const it = w.items[k];
+      const rk = it.rank;
+      html += `<td class="${rk<=2?'tc-g':rk>=5?'tc-r':'tc-y'}">${(op.raw[k]*100).toFixed(1)}%<br><span style="font-size:10px;color:#bbb">${it.pts}/${PERF_DATA.weights[k]}分 第${rk}</span></td>`;
     });
     html += '</tr>';
   });
