@@ -95,7 +95,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
   <div class="sec"><h2>📈 综合评分排名</h2><div id="home-bars"></div></div>
   <div class="sec">
     <h2>📊 维度对比</h2>
-    <table class="tbl"><thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>上级评分(10%)</th><th>综合评分</th></tr></thead><tbody id="rank-body"></tbody></table>
+    <table class="tbl"><thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>满编率+上级(10%)</th><th>综合评分</th></tr></thead><tbody id="rank-body"></tbody></table>
   </div>
 </div>
 <div class="ft">粤闽浙代运营商绩效管理看板 · 周更新</div>
@@ -150,19 +150,21 @@ let RULES = {
      type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:95,s:80},{th:90,s:70},{th:85,s:60},{th:80,s:45}]},
     {key:"mem",   weight:5,  name:"MEM续约率",          dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
      type:"tier", tiers:[{th:60,s:100},{th:56,s:90},{th:53,s:80},{th:52,s:60},{th:51,s:45}]},
-    {key:"loss",  weight:20, name:"业绩剔除率",          dim:"health",  rev:true,  unit:"%", hint:"越低越好",
+    {key:"loss",  weight:10, name:"业绩剔除率",          dim:"health",  rev:true,  unit:"%", hint:"越低越好",
      type:"tier_rev", tiers:[{th:6,s:100},{th:7,s:90},{th:8,s:80},{th:9,s:70},{th:10,s:60},{th:12,s:45}]},
-    {key:"sc_i",  weight:6,  name:"经营评分达标净增",    dim:"process", rev:false, unit:"%", hint:"阶梯得分",
+    {key:"risk",  weight:10, name:"感知风控率",          dim:"health",  rev:true,  unit:"%", hint:"≤15%满分，15-20%80分，20-25%60分，25-30%40分，30%以上0分",
+     type:"tier_rev", tiers:[{th:15,s:100},{th:20,s:80},{th:25,s:60},{th:30,s:40}]},
+    {key:"sc_i",  weight:7.5, name:"经营评分达标净增",    dim:"process", rev:false, unit:"%", hint:"阶梯得分",
      type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:90,s:80},{th:80,s:60}]},
-    {key:"dx_i",  weight:6,  name:"好店动销达标净增",    dim:"process", rev:false, unit:"%", hint:"阶梯得分",
+    {key:"dx_i",  weight:7.5, name:"好店动销达标净增",    dim:"process", rev:false, unit:"%", hint:"阶梯得分",
      type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:90,s:80},{th:80,s:60}]},
-    {key:"bml",   weight:6,  name:"BML高销Lose率",      dim:"process", rev:true,  unit:"%", hint:"越低越好",
+    {key:"bml",   weight:7.5, name:"BML高销Lose率",      dim:"process", rev:true,  unit:"%", hint:"越低越好",
      type:"tier_rev", tiers:[{th:30,s:100},{th:35,s:90},{th:40,s:75},{th:45,s:60}]},
-    {key:"cpc_w", weight:6,  name:"CPC工单闭环",        dim:"process", rev:false, unit:"%", hint:"阶梯得分",
+    {key:"cpc_w", weight:7.5, name:"CPC工单闭环",        dim:"process", rev:false, unit:"%", hint:"阶梯得分",
      type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:90,s:80},{th:80,s:60}]},
-    {key:"bd",    weight:6,  name:"有效BD人数占比",      dim:"process", rev:false, unit:"%", hint:"阶梯得分",
-     type:"tier", tiers:[{th:100,s:100},{th:90,s:90},{th:80,s:80},{th:70,s:60}]},
-    {key:"judge", weight:10, name:"区域管理判断",        dim:"judge",   rev:false, unit:"分",hint:"0-100强排",
+    {key:"staff", weight:5,  name:"满编率",              dim:"judge",   rev:false, unit:"%", hint:"100%满分，85-100%80分，70-85%60分，<70%0分",
+     type:"tier", tiers:[{th:100,s:100},{th:85,s:80},{th:70,s:60}]},
+    {key:"judge", weight:5,  name:"区域管理判断",        dim:"judge",   rev:false, unit:"分",hint:"0-100强排",
      type:"linear", linearMin:0},
   ]
 };
@@ -183,7 +185,7 @@ const OPS = [
 function rand(a,b){return a+Math.random()*(b-a)}
 function genData(){
   const d={};
-  for(const o of OPS){d[o.name]={gtv:rand(78,112),cpc_n:rand(78,112),cpc_c:rand(78,112),mem:rand(49,65),loss:rand(4,14),sc_i:rand(75,112),dx_i:rand(75,112),bml:rand(22,50),cpc_w:rand(75,112),bd:rand(68,105),judge:rand(65,98)};}
+  for(const o of OPS){d[o.name]={gtv:rand(78,112),cpc_n:rand(78,112),cpc_c:rand(78,112),mem:rand(49,65),loss:rand(4,14),risk:rand(10,35),sc_i:rand(75,112),dx_i:rand(75,112),bml:rand(22,50),cpc_w:rand(75,112),staff:rand(60,105),judge:rand(65,98)};}
   return d;
 }
 let DATA=genData(), RES={}, RANKED=[];
