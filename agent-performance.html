@@ -144,9 +144,9 @@ let RULES = {
   metrics: [
     {key:"gtv",   weight:15, name:"实付验证GTV达成率", dim:"gt",      rev:false, unit:"%", hint:"≥80%线性得分",
      type:"linear", linearMin:80},
-    {key:"cpc_n", weight:15, name:"CPC有效新完成率",   dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
+    {key:"cpc_n", weight:5,  name:"CPC有效新完成率",   dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
      type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:95,s:80},{th:90,s:70},{th:85,s:60},{th:80,s:45}]},
-    {key:"cpc_c", weight:5,  name:"CPC消耗额",         dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
+    {key:"cpc_c", weight:15, name:"CPC消耗额",         dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
      type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:95,s:80},{th:90,s:70},{th:85,s:60},{th:80,s:45}]},
     {key:"mem",   weight:5,  name:"MEM续约率",          dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
      type:"tier", tiers:[{th:60,s:100},{th:56,s:90},{th:53,s:80},{th:52,s:60},{th:51,s:45}]},
