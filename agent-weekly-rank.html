@@ -80,7 +80,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
   <div class="sec">
     <h2>📊 综合排名</h2>
     <table class="tbl">
-      <thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>满编+上级(10%)</th><th>综合得分</th></tr></thead>
+      <thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(40%)</th><th>综合得分</th></tr></thead>
       <tbody id="rank-body"></tbody>
     </table>
   </div>
@@ -123,8 +123,7 @@ const RULES = {
   dims: {
     gt:      {name:"核心业绩", weight:40, color:"#0984e3", icon:"💰"},
     health:  {name:"健康度",   weight:20, color:"#00b894", icon:"🩺"},
-    process: {name:"过程项目", weight:30, color:"#6c5ce7", icon:"📋"},
-    judge:   {name:"满编+上级", weight:10, color:"#f39c12", icon:"⭐"},
+    process: {name:"过程项目", weight:40, color:"#6c5ce7", icon:"📋"},
   },
   metrics: [
     {key:"gtv",   weight:15, name:"实付验证GTV达成率", dim:"gt",      rev:false, unit:"%"},
@@ -133,12 +132,11 @@ const RULES = {
     {key:"mem",   weight:5,  name:"MEM续约率",          dim:"gt",      rev:false, unit:"%"},
     {key:"loss",  weight:10, name:"业绩剔除率",          dim:"health",  rev:true,  unit:"%"},
     {key:"risk",  weight:10, name:"感知风控率",          dim:"health",  rev:true,  unit:"%"},
-    {key:"sc_i",  weight:7.5, name:"经营评分达标净增",  dim:"process", rev:false, unit:"%"},
-    {key:"dx_i",  weight:7.5, name:"好店动销达标净增",  dim:"process", rev:false, unit:"%"},
-    {key:"bml",   weight:7.5, name:"BML高销Lose率",      dim:"process", rev:true,  unit:"%"},
-    {key:"cpc_w", weight:7.5, name:"CPC工单闭环",        dim:"process", rev:false, unit:"%"},
-    {key:"staff", weight:5,  name:"满编率",              dim:"judge",   rev:false, unit:"%"},
-    {key:"judge", weight:5,  name:"区域管理判断",        dim:"judge",   rev:false, unit:"分"},
+    {key:"sc_i",  weight:8, name:"经营评分达标净增",  dim:"process", rev:false, unit:"%"},
+    {key:"dx_i",  weight:8, name:"好店动销达标净增",  dim:"process", rev:false, unit:"%"},
+    {key:"bml",   weight:8, name:"BML高销Lose率",      dim:"process", rev:true,  unit:"%"},
+    {key:"cpc_w", weight:8, name:"CPC工单闭环",        dim:"process", rev:false, unit:"%"},
+    {key:"staff", weight:8, name:"满编率",              dim:"process", rev:false, unit:"%"},
   ]
 };
 
