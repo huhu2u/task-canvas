@@ -6,162 +6,303 @@
 <title>粤闽浙代运营商绩效管理看板</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333}
-.hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
-.hdr h1{font-size:18px;font-weight:600}
-.hdr .dt{font-size:13px;opacity:0.9}
-.ct{padding:16px;max-width:1200px;margin:0 auto}
-.cd{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:20px}
-.card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;transition:transform .2s,box-shadow .2s;border:2px solid transparent}
-.card:hover{transform:translateY(-3px);box-shadow:0 4px 16px rgba(0,0,0,.12)}
-.card .nm{font-size:18px;font-weight:700;margin-bottom:4px}
-.card .pn{font-size:13px;color:#666;margin-bottom:12px}
-.card .sc{font-size:32px;font-weight:800;margin:8px 0}
-.card .dm{display:flex;gap:6px;flex-wrap:wrap;font-size:11px}
-.card .dm span{padding:3px 8px;border-radius:10px;background:#f5f5f5}
-.card .rk{font-size:20px}
-.sc-tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:12px;font-weight:600}
-.rank-b{inline:block;width:32px;height:32px;border-radius:50%;text-align:center;line-height:32px;font-size:14px;font-weight:700;color:#fff}
-.cg{color:#00b894}.cy{color:#fdcb6e}.cr{color:#e17055}
-.bgg{background:linear-gradient(90deg,#00b894,#00cec9)}
-.bgy{background:linear-gradient(90deg,#f39c12,#fdcb6e)}
-.bgr{background:linear-gradient(90deg,#d63031,#e17055)}
-.bgp{background:linear-gradient(90deg,#6c5ce7,#a29bfe)}
-.bgb{background:linear-gradient(90deg,#0984e3,#74b9ff)}
-.sec{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.sec h2{font-size:15px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid}
-.mt{margin-bottom:10px}
-.mt .inf{display:flex;justify-content:space-between;margin-bottom:4px}
-.mt .lb{font-size:13px;font-weight:500}
-.mt .lb .wt{color:#999;font-weight:400}
-.mt .vl{font-size:13px;font-weight:600}
-.mb{height:18px;background:#f0f0f0;border-radius:9px;overflow:hidden;position:relative}
-.mb-fill{height:100%;border-radius:9px;transition:width .5s}
-.mb-txt{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
-.sct{display:none}
-.sct.active{display:block}
-.hm{display:block}
-.hm.hidden{display:none}
-.bk{background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:14px}
-.bk:hover{background:#f5f5f5}
-.dtl-hdr{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.dtl-hdr .sr{display:flex;align-items:center;gap:16px;margin-top:12px;flex-wrap:wrap}
-.dtl-hdr .bs{font-size:48px;font-weight:800}
-.dtl-hdr .tb{flex:1;min-width:200px;height:24px;background:#eee;border-radius:12px;overflow:hidden;position:relative}
-.dtl-hdr .tbf{height:100%;border-radius:12px;transition:width .5s}
-.sec h2 .pct{font-size:12px;font-weight:400}
-.sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
-.cc{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:16px}
-.cc .cb{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.cc .cbl{width:80px;font-size:12px;text-align:right}
-.cc .cbt{flex:1;height:20px;background:#f0f0f0;border-radius:10px;overflow:hidden}
-.cc .cbf{height:100%;border-radius:10px}
-.cc .cbv{width:50px;font-size:12px;font-weight:600;text-align:right}
-.tbl{width:100%;border-collapse:collapse;margin-top:16px}
-.tbl th{background:#f8f9fa;padding:10px 8px;font-size:12px;text-align:center;border:1px solid #e9ecef}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+.hdr .dt{font-size:13px;opacity:.9}
+.ct{padding:16px;max-width:1280px;margin:0 auto}
+/* 首页卡片 */
+.grid6{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:16px}
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);cursor:pointer;transition:transform .18s,box-shadow .18s;border-top:4px solid #e0e0e0}
+.card:hover{transform:translateY(-4px);box-shadow:0 6px 20px rgba(0,0,0,.13)}
+.card.top1{border-top-color:#f6c90e}.card.top2{border-top-color:#b0b0b0}.card.top3{border-top-color:#cd7f32}
+.card .c-head{display:flex;justify-content:space-between;align-items:flex-start}
+.card .c-name{font-size:18px;font-weight:700}.card .c-person{font-size:12px;color:#888;margin-top:2px}
+.card .c-rank{font-size:24px}
+.card .c-score{font-size:36px;font-weight:800;margin:10px 0 6px}
+.card .c-dims{display:flex;flex-wrap:wrap;gap:5px}
+.card .c-dim{font-size:11px;padding:3px 9px;border-radius:10px;background:#f4f6f8;color:#555}
+.sec{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:16px}
+.sec h2{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eee;display:flex;align-items:center;gap:6px}
+/* 柱图 */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-row .bl{width:90px;font-size:12px;text-align:right;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-row .bt{flex:1;height:22px;background:#f0f0f0;border-radius:11px;overflow:hidden;position:relative}
+.bar-row .bf{height:100%;border-radius:11px;transition:width .5s}
+.bar-row .bv{width:44px;font-size:13px;font-weight:700;text-align:right}
+/* 排名表 */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:#f8f9fa;padding:9px 8px;font-size:12px;text-align:center;border:1px solid #e9ecef;white-space:nowrap}
 .tbl td{padding:8px;text-align:center;border:1px solid #e9ecef;font-size:13px}
-.tbl tr:nth-child(even){background:#f8f9fa}
-.tbl .rc{font-weight:700;font-size:16px}
-.ft{text-align:center;padding:20px;font-size:12px;color:#999}
+.tbl tr:nth-child(even) td{background:#fafafa}
+/* 详情页 */
+.page{display:none}.page.active{display:block}
+.back{background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:13px}
+.back:hover{background:#f0f0f0}
+.d-hero{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.07);display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.d-hero .d-score{font-size:52px;font-weight:800}
+.d-hero .d-info{flex:1;min-width:200px}
+.d-hero .d-name{font-size:22px;font-weight:700}.d-hero .d-person{font-size:14px;color:#888;margin-top:2px}
+.d-hero .d-bar{height:28px;background:#eee;border-radius:14px;overflow:hidden;margin-top:10px;position:relative}
+.d-hero .d-bar-fill{height:100%;border-radius:14px}
+.d-hero .d-bar-txt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.d-hero .d-dims{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.d-hero .d-dim{text-align:center;background:#f8f9fa;border-radius:10px;padding:8px 14px}
+.d-hero .d-dim .dn{font-size:11px;color:#888}.d-hero .d-dim .dv{font-size:20px;font-weight:700}
+.sections{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.dsec{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.dsec h3{font-size:14px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid}
+.mt{margin-bottom:12px}
+.mt .mi{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.mt .ml{font-size:13px;font-weight:500}
+.mt .ml .mw{font-size:11px;color:#aaa;margin-left:4px;font-weight:400}
+.mt .mr{font-size:12px;font-weight:600}
+.mt .mb{height:16px;background:#f0f0f0;border-radius:8px;overflow:hidden;position:relative}
+.mt .mbf{height:100%;border-radius:8px}
+.mt .mbt{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;color:#fff;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.mt .m-sub{display:flex;justify-content:space-between;margin-top:3px;font-size:11px;color:#aaa}
+/* 颜色 */
+.cg{color:#00b894}.cy{color:#f0b429}.cr{color:#e17055}
+.grad-g{background:linear-gradient(90deg,#00b894,#55efc4)}
+.grad-y{background:linear-gradient(90deg,#f0b429,#ffeaa7)}
+.grad-r{background:linear-gradient(90deg,#d63031,#e17055)}
+.ft{text-align:center;padding:20px;font-size:12px;color:#aaa}
 </style>
 </head>
 <body>
-<div id="home" class="hm">
-<div class="hdr"><h1>🏢 粤闽浙代运营商绩效管理看板</h1><span class="dt" id="hdrDt">2026年5月</span></div>
+
+<div id="pg-home" class="page active">
+<div class="hdr">
+  <h1>🏢 粤闽浙代运营商绩效管理看板</h1>
+  <span class="dt">2026年5月 | 模拟数据</span>
+</div>
 <div class="ct">
-<div class="cd" id="cds" style="display:grid"></div>
-<div class="sec" style="grid-column:1/-1">
-<h2 style="border-bottom-color:#6c5ce7">📊 综合排名对比</h2>
-<table class="tbl" id="rkTbl"><thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>上级评分(10%)</th><th>综合评分</th></tr></thead><tbody id="rkBody"></tbody></table>
+  <div class="grid6" id="home-cards"></div>
+  <div class="sec">
+    <h2>📈 综合评分排名</h2>
+    <div id="home-bars"></div>
+  </div>
+  <div class="sec">
+    <h2>📊 维度对比</h2>
+    <table class="tbl" id="rank-tbl">
+      <thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>上级评分(10%)</th><th>综合评分</th></tr></thead>
+      <tbody id="rank-body"></tbody>
+    </table>
+  </div>
 </div>
-<div class="cc">
-<h3 style="margin-bottom:12px;font-size:15px">📈 综合评分对比</h3>
-<div id="chrt"></div>
+<div class="ft">粤闽浙代运营商绩效管理看板 · 周更新</div>
 </div>
+
+<div id="pg-detail" class="page">
+<div class="hdr">
+  <button class="back" onclick="showPage('home')">← 返回首页</button>
+  <span class="dt" id="d-date">2026年5月</span>
 </div>
-</div>
-<div id="dlt" class="sct">
-<div class="hdr"><button class="bk" onclick="shwHm()">← 返回首页</button><h1 id="dltNm" style="margin-top:12px;font-size:22px"></h1></div>
 <div class="ct">
-<div class="dtl-hdr"><div id="dltScRw"></div></div>
-<div class="sections" id="sects"></div>
+  <div class="d-hero" id="d-hero"></div>
+  <div class="sections" id="d-sections"></div>
 </div>
+<div class="ft">粤闽浙代运营商绩效管理看板 · 周更新</div>
 </div>
+
 <script>
-const OPS=[{name:"惠州巨浪",person:"肖立铭"},{name:"惠州柏万",person:"林启梁"},{name:"泉州小花猫",person:"陈彩凤"},{name:"惠安广通",person:"尤云生"},{name:"慈溪哲光",person:"孙浩"},{name:"义乌汐洋",person:"陈铨"}];
-const MTS={gtv:{w:15,n:"实付验证GTV达成率",d:"gt",s:sf1},cpc_n:{w:15,n:"CPC有效新完成率",d:"gt",s:sf2},cpc_c:{w:5,n:"CPC消耗额",d:"gt",s:sf2},mem:{w:5,n:"MEM续约率",d:"gt",s:sf6},loss:{w:20,n:"业绩剔除率",d:"health",s:sf3,rev:true},sc_i:{w:6,n:"经营评分达标净增",d:"process",s:sf4},dx_i:{w:6,n:"好店动销达标净增",d:"process",s:sf4},bml:{w:6,n:"BML高销Lose率",d:"process",s:sf5,rev:true},cpc_w:{w:6,n:"CPC工单闭环",d:"process",s:sf4},bd:{w:6,n:"有效BD人数占比",d:"process",s:sf7},judge:{w:10,n:"区域管理判断",d:"judge",s:sf8}};
-const DM={gt:{n:"核心业绩",w:40,c:"#0984e3"},health:{n:"健康度",w:20,c:"#00b894"},process:{n:"过程项目",w:30,c:"#6c5ce7"},judge:{n:"上级评分",w:10,c:"#f39c12"}};
-function sf1(v){return v>=80?Math.round(v*100)/100:0}
-function sf2(v){if(v>=105)return 100;if(v>=100)return 90;if(v>=95)return 80;if(v>=90)return 70;if(v>=85)return 60;if(v>=80)return 45;return 0}
-function sf3(v){if(v<=6)return 100;if(v<=7)return 90;if(v<=8)return 80;if(v<=9)return 70;if(v<=10)return 60;if(v<=12)return 45;return 0}
-function sf4(v){if(v>=105)return 100;if(v>=100)return 90;if(v>=90)return 80;if(v>=80)return 60;return 0}
-function sf5(v){if(v<=30)return 100;if(v<=35)return 90;if(v<=40)return 75;if(v<=45)return 60;return 0}
-function sf6(v){if(v>=60)return 100;if(v>=56)return 90;if(v>=53)return 80;if(v>=52)return 60;if(v>=51)return 45;return 0}
-function sf7(v){if(v>=100)return 100;if(v>=90)return 90;if(v>=80)return 80;if(v>=70)return 60;return 0}
-function sf8(v){return Math.min(100,Math.round(v))}
-function sc(v){if(v>=85)return"cg bgg";if(v>=70)return"cy bgy";return"cr bgr"}
-function csc(v){if(v>=85)return"cg";if(v>=70)return"cy";return"cr"}
-function genD(){
-const d={};
-for(const o of OPS){
-d[o.name]={gtv:82+Math.random()*28,cpc_n:82+Math.random()*28,cpc_c:82+Math.random()*28,mem:50+Math.random()*15,loss:5+Math.random()*10,sc_i:82+Math.random()*28,dx_i:82+Math.random()*28,bml:25+Math.random()*25,cpc_w:82+Math.random()*28,bd:75+Math.random()*30,judge:70+Math.random()*30}}
-return d}
-function calc(d){
-const r={};
-for(const[op,dd]of Object.entries(d)){
-const s={};
-let t=0,wSum=0;
-for(const[k,m]of Object.entries(MTS)){
-const v=dd[k];const sc=m.s(v);const ws=m.w/100;
-s[k]={v,sc,ws};
-t+=sc*ws;wSum+=ws}
-const dmS={};
-for(const[dk,dv]of Object.entries(DM)){
-let ds=0,dw=0;
-for(const[k,m]of Object.entries(MTS)){if(m.d===dk){ds+=s[k].sc*(m.w/dv.w)*dv.w/100;dw+=dv.w/100}}
-dmS[dk]=Math.round(ds/dw*100)/100}
-r[op]={scores:s,total:Math.round(t*100)/100,dims:dmS}}
-return r}
-const DATA=genD();
-const RES=calc(DATA);
-const RKS=Object.entries(RES).sort((a,b)=>b[1].total-a[1].total);
-const RL=["🏆","🥈","🥉","④","⑤","⑥"];
-function shwHm(){
-home.classList.remove("hidden");
-home.classList.add("hm");
-dlt.classList.remove("active")}
-function shwD(op){
-home.classList.add("hidden");
-dlt.classList.add("active");
-document.getElementById("dltNm").textContent=op;
-const rs=RES[op];
-let h='<div class="sr"><div class="bs '+csc(rs.total)+'">'+rs.total+'</div><div class="tb"><div class="tbf '+sc(rs.total)+'" style="width:'+Math.min(rs.total,100)+'%"></div></div><div style="font-size:13px;color:#666">综合评分</div></div>';
-let sh='';
-for(const[dk,dv]of Object.entries(DM)){
-const ms=Object.entries(MTS).filter(([,m])=>m.d===dk);
-sh+='<div class="sec"><h2 style="border-bottom-color:'+dv.c+'" class="dim-'+dk+'">'+dv.n+' <span class="pct">('+dv.w+'%)</span></h2>';
-let dimTotal=0;
-for(const[k,m]of ms){
-const sc=rs.scores[k];
-const pct=sc.v;
-const s=sc.sc;
-dimTotal+=s*(m.w/dv.w)*dv.w/100;
-sh+='<div class="mt"><div class="inf"><span class="lb">'+m.n+' <span class="wt">('+m.w+'%)</span></span><span class="vl '+csc(s)+'">'+pct.toFixed(2)+'% → '+s+'分</span></div><div class="mb"><div class="mb-fill '+sc(s)+'" style="width:'+Math.min(pct,100)+'%"></div><div class="mb-txt">'+pct.toFixed(1)+'%</div></div></div>'}
-sh+='<div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #eee;font-size:13px;font-weight:700"><span>'+dv.n+'得分</span><span class="'+csc(dimTotal)+'">'+Math.round(dimTotal*100)/100+'分</span></div></div>'}
-document.getElementById("dltScRw").innerHTML=h;
-document.getElementById("sects").innerHTML=sh}
-const cds=document.getElementById("cds");
-const rkBody=document.getElementById("rkBody");
-const chrt=document.getElementById("chrt");
-let chh='';
-for(let i=0;i<RKS.length;i++){
-const[op,rs]=RKS[i];
-const c=sc(rs.total);
-chh+='<div class="cb"><div class="cbl">'+op+'</div><div class="cbt"><div class="cbf '+c+'" style="width:'+Math.min(rs.total,100)+'%"></div></div><div class="cbv '+csc(rs.total)+'">'+rs.total+'</div></div>'}
-chrt.innerHTML=chh;
-cds.innerHTML=RKS.map(([op,rs],i)=>`<div class="card" onclick="shwD('${op}')"><div class="rk rank-b '+sc(rs.total)+'">${RL[i]}</div><div class="nm">${op}</div><div class="pn">负责人：${OPS.find(o=>o.name===op).person}</div><div class="sc '+csc(rs.total)+'">${rs.total}</div><div class="dm">${Object.entries(rs.dims).map(([k,v])=>'<span>'+DM[k].n+':'+v+'分</span>').join('')}</div></div>`).join('');
-rkBody.innerHTML=RKS.map(([op,rs],i)=>`<tr><td class="rc ${sc(rs.total)}">${RL[i]}</td><td>${op}</td><td>${OPS.find(o=>o.name===op).person}</td><td class="${csc(rs.dims.gt)}">${rs.dims.gt}</td><td class="${csc(rs.dims.health)}">${rs.dims.health}</td><td class="${csc(rs.dims.process)}">${rs.dims.process}</td><td class="${csc(rs.dims.judge)}">${rs.dims.judge}</td><td class="${csc(rs.total)}">${rs.total}</td></tr>`).join('')}
+// ── 评分函数 ──
+function sfGTV(v){return v>=80?Math.round(v*100)/100:0}
+function sfTier(v){if(v>=105)return 100;if(v>=100)return 90;if(v>=95)return 80;if(v>=90)return 70;if(v>=85)return 60;if(v>=80)return 45;return 0}
+function sfLoss(v){if(v<=6)return 100;if(v<=7)return 90;if(v<=8)return 80;if(v<=9)return 70;if(v<=10)return 60;if(v<=12)return 45;return 0}
+function sfProc(v){if(v>=105)return 100;if(v>=100)return 90;if(v>=90)return 80;if(v>=80)return 60;return 0}
+function sfBML(v){if(v<=30)return 100;if(v<=35)return 90;if(v<=40)return 75;if(v<=45)return 60;return 0}
+function sfMEM(v){if(v>=60)return 100;if(v>=56)return 90;if(v>=53)return 80;if(v>=52)return 60;if(v>=51)return 45;return 0}
+function sfBD(v){if(v>=100)return 100;if(v>=90)return 90;if(v>=80)return 80;if(v>=70)return 60;return 0}
+function sfJudge(v){return Math.min(100,Math.round(v))}
+
+// ── 指标配置 ──
+const DIMS = {
+  gt:      {name:"核心业绩",  weight:40, color:"#0984e3", icon:"💰"},
+  health:  {name:"健康度",    weight:20, color:"#00b894", icon:"🩺"},
+  process: {name:"过程项目",  weight:30, color:"#6c5ce7", icon:"📋"},
+  judge:   {name:"上级评分",  weight:10, color:"#f39c12", icon:"⭐"},
+};
+const METRICS = [
+  {key:"gtv",    weight:15, name:"实付验证GTV达成率", dim:"gt",      fn:sfGTV,   rev:false, unit:"%",  hint:"达成≥80%线性得分"},
+  {key:"cpc_n",  weight:15, name:"CPC有效新完成率",   dim:"gt",      fn:sfTier,  rev:false, unit:"%",  hint:"≥105%→100，阶梯"},
+  {key:"cpc_c",  weight:5,  name:"CPC消耗额",         dim:"gt",      fn:sfTier,  rev:false, unit:"%",  hint:"≥105%→100，阶梯"},
+  {key:"mem",    weight:5,  name:"MEM续约率",          dim:"gt",      fn:sfMEM,   rev:false, unit:"%",  hint:"≥60%→100"},
+  {key:"loss",   weight:20, name:"业绩剔除率",          dim:"health",  fn:sfLoss,  rev:true,  unit:"%",  hint:"≤6%→100，越低越好"},
+  {key:"sc_i",   weight:6,  name:"经营评分达标净增",    dim:"process", fn:sfProc,  rev:false, unit:"%",  hint:"≥105%→100"},
+  {key:"dx_i",   weight:6,  name:"好店动销达标净增",    dim:"process", fn:sfProc,  rev:false, unit:"%",  hint:"≥105%→100"},
+  {key:"bml",    weight:6,  name:"BML高销Lose率",      dim:"process", fn:sfBML,   rev:true,  unit:"%",  hint:"≤30%→100，越低越好"},
+  {key:"cpc_w",  weight:6,  name:"CPC工单闭环",        dim:"process", fn:sfProc,  rev:false, unit:"%",  hint:"≥105%→100"},
+  {key:"bd",     weight:6,  name:"有效BD人数占比",      dim:"process", fn:sfBD,    rev:false, unit:"%",  hint:"≥100%→100"},
+  {key:"judge",  weight:10, name:"区域管理判断",        dim:"judge",   fn:sfJudge, rev:false, unit:"分", hint:"强排，0-100分"},
+];
+const OPS = [
+  {name:"惠州巨浪",  person:"肖立铭"},
+  {name:"惠州柏万",  person:"林启梁"},
+  {name:"泉州小花猫",person:"陈彩凤"},
+  {name:"惠安广通",  person:"尤云生"},
+  {name:"慈溪哲光",  person:"孙浩"},
+  {name:"义乌汐洋",  person:"陈铨"},
+];
+
+// ── 模拟数据（每次刷新不同，实际使用时改为固定数据） ──
+function genData(){
+  const d={};
+  for(const o of OPS){
+    d[o.name]={
+      gtv:    rand(78,112),
+      cpc_n:  rand(78,112),
+      cpc_c:  rand(78,112),
+      mem:    rand(49,65),
+      loss:   rand(4,14),
+      sc_i:   rand(75,112),
+      dx_i:   rand(75,112),
+      bml:    rand(22,50),
+      cpc_w:  rand(75,112),
+      bd:     rand(68,105),
+      judge:  rand(65,98),
+    };
+  }
+  return d;
+}
+function rand(a,b){return a+Math.random()*(b-a)}
+
+// ── 计算 ──
+function calcAll(data){
+  const res={};
+  for(const op of OPS){
+    const d=data[op.name], ms={}, dimS={}, dimW={};
+    let total=0;
+    for(const m of METRICS){
+      const v=d[m.key], s=m.fn(v);
+      ms[m.key]={v, s};
+      total+=s*(m.weight/100);
+    }
+    for(const [dk,dv] of Object.entries(DIMS)){
+      const mms=METRICS.filter(m=>m.dim===dk);
+      const sumW=mms.reduce((a,m)=>a+m.weight,0);
+      const sumS=mms.reduce((a,m)=>a+ms[m.key].s*m.weight,0);
+      dimS[dk]=Math.round(sumS/sumW*10)/10;
+      dimW[dk]=sumW;
+    }
+    res[op.name]={raw:d, ms, dimS, total:Math.round(total*10)/10};
+  }
+  return res;
+}
+
+// ── 颜色工具 ──
+function clr(v){return v>=85?'#00b894':v>=70?'#f0b429':'#e17055'}
+function grad(v){return v>=85?'grad-g':v>=70?'grad-y':'grad-r'}
+function ctext(v){return v>=85?'cg':v>=70?'cy':'cr'}
+const MEDALS=['🏆','🥈','🥉','④','⑤','⑥'];
+
+// ── 渲染首页 ──
+const DATA=genData();
+const RES=calcAll(DATA);
+const RANKED=OPS.slice().sort((a,b)=>RES[b.name].total-RES[a.name].total);
+
+function renderHome(){
+  // 卡片
+  const cds=document.getElementById('home-cards');
+  cds.innerHTML=RANKED.map((op,i)=>{
+    const r=RES[op.name];
+    const cls=i<3?` top${i+1}`:'';
+    return `<div class="card${cls}" onclick="showDetail('${op.name}')">
+      <div class="c-head">
+        <div><div class="c-name">${op.name}</div><div class="c-person">负责人：${op.person}</div></div>
+        <span class="c-rank">${MEDALS[i]}</span>
+      </div>
+      <div class="c-score ${ctext(r.total)}">${r.total}</div>
+      <div class="c-dims">
+        ${Object.entries(DIMS).map(([k,d])=>`<span class="c-dim">${d.icon}${d.name}<b class="${ctext(r.dimS[k])}" style="margin-left:4px">${r.dimS[k]}</b></span>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // 柱图
+  const bars=document.getElementById('home-bars');
+  bars.innerHTML=RANKED.map((op,i)=>{
+    const r=RES[op.name];
+    return `<div class="bar-row">
+      <span class="bl">${MEDALS[i]} ${op.name}</span>
+      <div class="bt"><div class="bf ${grad(r.total)}" style="width:${Math.min(r.total,100)}%"></div></div>
+      <span class="bv ${ctext(r.total)}">${r.total}</span>
+    </div>`;
+  }).join('');
+
+  // 表格
+  const tb=document.getElementById('rank-body');
+  tb.innerHTML=RANKED.map((op,i)=>{
+    const r=RES[op.name];
+    return `<tr>
+      <td style="font-size:18px">${MEDALS[i]}</td>
+      <td style="font-weight:600">${op.name}</td>
+      <td style="color:#666">${op.person}</td>
+      ${Object.keys(DIMS).map(k=>`<td class="${ctext(r.dimS[k])}" style="font-weight:600">${r.dimS[k]}</td>`).join('')}
+      <td style="font-size:16px;font-weight:800" class="${ctext(r.total)}">${r.total}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── 渲染详情页 ──
+function showDetail(opName){
+  const op=OPS.find(o=>o.name===opName);
+  const r=RES[opName];
+  const ri=RANKED.findIndex(o=>o.name===opName);
+
+  // Hero
+  document.getElementById('d-hero').innerHTML=`
+    <div class="d-score ${ctext(r.total)}">${r.total}<span style="font-size:18px;color:#aaa"> 分</span></div>
+    <div class="d-info">
+      <div class="d-name">${MEDALS[ri]} ${opName}</div>
+      <div class="d-person">负责人：${op.person}</div>
+      <div class="d-bar">
+        <div class="d-bar-fill ${grad(r.total)}" style="width:${Math.min(r.total,100)}%"></div>
+        <div class="d-bar-txt">综合评分 ${r.total}/100</div>
+      </div>
+      <div class="d-dims">
+        ${Object.entries(DIMS).map(([k,d])=>`<div class="d-dim"><div class="dn">${d.icon} ${d.name}</div><div class="dv ${ctext(r.dimS[k])}">${r.dimS[k]}</div></div>`).join('')}
+      </div>
+    </div>`;
+
+  // 四大板块
+  const sects=document.getElementById('d-sections');
+  sects.innerHTML=Object.entries(DIMS).map(([dk,dv])=>{
+    const mms=METRICS.filter(m=>m.dim===dk);
+    const rows=mms.map(m=>{
+      const ms=r.ms[m.key];
+      const barW=m.rev?Math.max(0,100-ms.v):Math.min(ms.v,120);
+      const dispV=m.rev?ms.v.toFixed(1)+'%':(ms.v.toFixed(1)+'%');
+      return `<div class="mt">
+        <div class="mi">
+          <span class="ml">${m.name}<span class="mw">(${m.weight}%)</span></span>
+          <span class="mr ${ctext(ms.s)}">${ms.s}分</span>
+        </div>
+        <div class="mb">
+          <div class="mbf ${grad(ms.s)}" style="width:${Math.min(barW,100)}%"></div>
+          <div class="mbt">${dispV}</div>
+        </div>
+        <div class="m-sub"><span>${m.hint}</span><span>实际：${dispV}</span></div>
+      </div>`;
+    }).join('');
+    const dimScore=r.dimS[dk];
+    return `<div class="dsec">
+      <h3 style="border-bottom-color:${dv.color}">${dv.icon} ${dv.name} <span style="font-size:11px;font-weight:400;color:#aaa">(权重${dv.weight}%)</span>
+        <span style="float:right;font-size:16px;font-weight:800" class="${ctext(dimScore)}">${dimScore}分</span>
+      </h3>
+      ${rows}
+    </div>`;
+  }).join('');
+
+  showPage('detail');
+}
+
+function showPage(p){
+  document.getElementById('pg-home').classList.toggle('active',p==='home');
+  document.getElementById('pg-detail').classList.toggle('active',p==='detail');
+}
+
+renderHome();
 </script>
-<div class="ft">粤闽浙代运营商绩效管理看板 | 数据截止: 2026年5月 | 模拟数据</div>
 </body>
 </html>
