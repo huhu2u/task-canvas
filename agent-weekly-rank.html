@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>粤闽浙代运营商周排名看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#0066cc,#0099ff);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.hdr h1{font-size:17px;font-weight:700;flex:1}
+.hdr .dt{font-size:12px;opacity:.85}
+.ct{padding:16px;max-width:1280px;margin:0 auto}
+.grid6{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:16px}
+.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);cursor:pointer;transition:transform .18s,box-shadow .18s;border-top:4px solid #e0e0e0}
+.card:hover{transform:translateY(-4px);box-shadow:0 6px 20px rgba(0,0,0,.13)}
+.card.top1{border-top-color:#f6c90e}.card.top2{border-top-color:#b0b0b0}.card.top3{border-top-color:#cd7f32}
+.card .c-head{display:flex;justify-content:space-between;align-items:flex-start}
+.card .c-name{font-size:17px;font-weight:700}.card .c-person{font-size:12px;color:#888;margin-top:2px}
+.card .c-rank{font-size:22px}
+.card .c-score{font-size:34px;font-weight:800;margin:8px 0 6px}
+.card .c-dims{display:flex;flex-wrap:wrap;gap:4px}
+.card .c-dim{font-size:11px;padding:3px 8px;border-radius:10px;background:#f4f6f8;color:#555}
+.sec{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:16px}
+.sec h2{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eee}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:#f8f9fa;padding:9px 8px;font-size:12px;text-align:center;border:1px solid #e9ecef;white-space:nowrap}
+.tbl td{padding:8px;text-align:center;border:1px solid #e9ecef;font-size:13px}
+.tbl tr:nth-child(even) td{background:#fafafa}
+.tbl .rank-1{color:#d4af37;font-weight:800;background:#fffdf0}
+.tbl .rank-2{color:#808080;font-weight:700;background:#f8f8f8}
+.tbl .rank-3{color:#cd7f32;font-weight:700;background:#fff8f0}
+.tbl .rank-4,.tbl .rank-5,.tbl .rank-6{color:#999}
+.rank-num{font-size:20px;font-weight:800;display:inline-block;width:28px;text-align:center}
+.hero{display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:linear-gradient(135deg,#0066cc,#0099ff);color:#fff;border-radius:14px;padding:24px;margin-bottom:16px}
+.hero .h-score{font-size:60px;font-weight:800}
+.hero .h-info{flex:1}
+.hero .h-name{font-size:24px;font-weight:700}.hero .h-desc{font-size:13px;opacity:.85;margin-top:4px}
+.d-sec{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px}
+.d-sec h3{font-size:14px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid;display:flex;align-items:center;gap:6px}
+.m-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:8px;margin-bottom:4px;background:#f8f9fa}
+.m-row .m-name{flex:1;font-size:13px;font-weight:500}
+.m-row .m-name .mw{font-size:11px;color:#aaa;margin-left:4px;font-weight:400}
+.m-row .m-rank{flex-shrink:0;width:30px;text-align:center;font-size:16px;font-weight:800}
+.m-row .m-val{flex-shrink:0;width:50px;text-align:right;font-size:13px;font-weight:600}
+.m-row .m-bar{flex:2;height:16px;background:#eee;border-radius:8px;overflow:hidden;margin:0 10px}
+.m-row .m-bar-f{height:100%;border-radius:8px}
+.m-row .m-score{flex-shrink:0;width:42px;text-align:right;font-size:13px;font-weight:700}
+.detail-page{display:none}
+.detail-page.active{display:block}
+.back-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:7px;padding:6px 14px;cursor:pointer;font-size:13px}
+.back-btn:hover{background:rgba(255,255,255,.35)}
+.cg{color:#00b894}.cy{color:#f0b429}.cr{color:#e17055}
+.grad-g{background:linear-gradient(90deg,#00b894,#55efc4)}
+.grad-y{background:linear-gradient(90deg,#f0b429,#ffeaa7)}
+.grad-r{background:linear-gradient(90deg,#d63031,#e17055)}
+.ft{text-align:center;padding:20px;font-size:12px;color:#aaa}
+.label-badge{font-size:11px;padding:2px 8px;border-radius:10px;background:#e8f4fd;color:#0066cc;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- 首页 -->
+<div id="pg-home" class="active">
+<div class="hdr">
+  <h1>🏆 粤闽浙代运营商周排名看板</h1>
+  <span class="dt" id="home-date">2026年5月 · 模拟数据</span>
+</div>
+<div class="ct">
+  <div class="hero">
+    <div class="h-score" id="hero-score">-</div>
+    <div class="h-info">
+      <div class="h-name">综合排名看板</div>
+      <div class="h-desc">按完成率强排1-6名，第1名100分 / 第2名85分 / 第3名70分 / 第4名55分 / 第5名40分 / 第6名0分</div>
+    </div>
+  </div>
+
+  <div class="grid6" id="home-cards"></div>
+
+  <div class="sec">
+    <h2>📊 综合排名</h2>
+    <table class="tbl">
+      <thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>满编+上级(10%)</th><th>综合得分</th></tr></thead>
+      <tbody id="rank-body"></tbody>
+    </table>
+  </div>
+</div>
+<div class="ft">粤闽浙代运营商周排名看板 · 周更新 · 强排模式</div>
+</div>
+
+<!-- 详情页 -->
+<div id="pg-detail" class="detail-page">
+<div class="hdr" style="background:linear-gradient(135deg,#0066cc,#0099ff)">
+  <button class="back-btn" onclick="showDetail(null)">← 返回首页</button>
+  <h1 id="d-title" style="font-size:16px"></h1>
+</div>
+<div class="ct">
+  <div class="hero" style="background:linear-gradient(135deg,#0066cc,#0099ff)">
+    <div class="h-score" id="d-score">-</div>
+    <div class="h-info">
+      <div class="h-name" id="d-name"></div>
+      <div class="h-desc" id="d-person"></div>
+    </div>
+  </div>
+  <div id="d-sections"></div>
+</div>
+<div class="ft">粤闽浙代运营商周排名看板 · 周更新 · 强排模式</div>
+</div>
+
+<script>
+const OPS = [
+  {name:"惠州巨浪",person:"肖立铭"},{name:"惠州柏万",person:"林启梁"},
+  {name:"泉州小花猫",person:"陈彩凤"},{name:"惠安广通",person:"尤云生"},
+  {name:"慈溪哲光",person:"孙浩"},{name:"义乌汐洋",person:"陈铨"},
+];
+
+// 强排分值：第1名100 / 第2名85 / 第3名70 / 第4名55 / 第5名40 / 第6名0
+const RANK_SCORES = [100, 85, 70, 55, 40, 0];
+const MEDALS = ['🏆','🥈','🥉','④','⑤','⑥'];
+
+// 规则：维度 + 指标 + 权重（同月版，评分改为强排）
+const RULES = {
+  dims: {
+    gt:      {name:"核心业绩", weight:40, color:"#0984e3", icon:"💰"},
+    health:  {name:"健康度",   weight:20, color:"#00b894", icon:"🩺"},
+    process: {name:"过程项目", weight:30, color:"#6c5ce7", icon:"📋"},
+    judge:   {name:"满编+上级", weight:10, color:"#f39c12", icon:"⭐"},
+  },
+  metrics: [
+    {key:"gtv",   weight:15, name:"实付验证GTV达成率", dim:"gt",      rev:false, unit:"%"},
+    {key:"cpc_n", weight:5,  name:"CPC有效新完成率",   dim:"gt",      rev:false, unit:"%"},
+    {key:"cpc_c", weight:15, name:"CPC消耗额完成率",   dim:"gt",      rev:false, unit:"%"},
+    {key:"mem",   weight:5,  name:"MEM续约率",          dim:"gt",      rev:false, unit:"%"},
+    {key:"loss",  weight:10, name:"业绩剔除率",          dim:"health",  rev:true,  unit:"%"},
+    {key:"risk",  weight:10, name:"感知风控率",          dim:"health",  rev:true,  unit:"%"},
+    {key:"sc_i",  weight:7.5, name:"经营评分达标净增",  dim:"process", rev:false, unit:"%"},
+    {key:"dx_i",  weight:7.5, name:"好店动销达标净增",  dim:"process", rev:false, unit:"%"},
+    {key:"bml",   weight:7.5, name:"BML高销Lose率",      dim:"process", rev:true,  unit:"%"},
+    {key:"cpc_w", weight:7.5, name:"CPC工单闭环",        dim:"process", rev:false, unit:"%"},
+    {key:"staff", weight:5,  name:"满编率",              dim:"judge",   rev:false, unit:"%"},
+    {key:"judge", weight:5,  name:"区域管理判断",        dim:"judge",   rev:false, unit:"分"},
+  ]
+};
+
+function rand(a,b){return a+Math.random()*(b-a)}
+function genData(){
+  const d={};
+  for(const o of OPS){d[o.name]={gtv:rand(78,112),cpc_n:rand(78,112),cpc_c:rand(78,112),mem:rand(49,65),loss:rand(4,14),risk:rand(10,35),sc_i:rand(75,112),dx_i:rand(75,112),bml:rand(22,50),cpc_w:rand(75,112),staff:rand(60,105),judge:rand(65,98)};}
+  return d;
+}
+
+let DATA=genData(), RES={}, RANKED=[];
+
+function calcAll(){
+  RES={};
+  // 对每个指标，6家按完成率排序，分配强排分值
+  for(const m of RULES.metrics){
+    const vals = OPS.map(op => ({name:op.name, v:DATA[op.name][m.key]}));
+    if(m.rev) vals.sort((a,b) => a.v - b.v); // 越低越好：升序
+    else vals.sort((a,b) => b.v - a.v);       // 越高越好：降序
+    vals.forEach((item, i) => {
+      if(!RES[item.name]) RES[item.name]={raw:DATA[item.name], ms:{}, dimS:{}, total:0};
+      RES[item.name].ms[m.key] = {v: item.v, rank: i+1, score: RANK_SCORES[i]};
+    });
+  }
+
+  // 算维度分和总分
+  for(const op of OPS){
+    const r = RES[op.name];
+    let total = 0;
+    for(const [dk, dv] of Object.entries(RULES.dims)){
+      const mms = RULES.metrics.filter(m => m.dim === dk);
+      const sumW = mms.reduce((a, m) => a + m.weight, 0);
+      const sumS = mms.reduce((a, m) => a + r.ms[m.key].score * m.weight, 0);
+      r.dimS[dk] = Math.round(sumS / sumW * 10) / 10;
+      total += r.dimS[dk] * dv.weight / 100;
+    }
+    r.total = Math.round(total * 10) / 10;
+  }
+
+  RANKED = OPS.slice().sort((a,b) => RES[b.name].total - RES[a.name].total);
+}
+
+function grad(v){return v>=85?'grad-g':v>=70?'grad-y':'grad-r'}
+function ctext(v){return v>=85?'cg':v>=70?'cy':'cr'}
+function rankClass(r){return 'rank-' + r}
+
+function renderHome(){
+  calcAll();
+  // 卡片
+  document.getElementById('home-cards').innerHTML = RANKED.map((op,i) => {
+    const r = RES[op.name];
+    return `<div class="card${i<3?' top'+(i+1):''}" onclick="showDetail('${op.name}')">
+      <div class="c-head"><div><div class="c-name">${op.name}</div><div class="c-person">负责人：${op.person}</div></div><span class="c-rank">${MEDALS[i]}</span></div>
+      <div class="c-score ${ctext(r.total)}">${r.total}</div>
+      <div class="c-dims">${Object.entries(RULES.dims).map(([k,d]) =>
+        `<span class="c-dim">${d.icon}${d.name}<b class="${ctext(r.dimS[k])}" style="margin-left:3px">${r.dimS[k]}</b></span>`
+      ).join('')}</div>
+    </div>`;
+  }).join('');
+
+  // 排名表
+  document.getElementById('rank-body').innerHTML = RANKED.map((op,i) => {
+    const r = RES[op.name];
+    return `<tr><td class="${rankClass(i+1)}"><span class="rank-num">${i+1}</span></td><td style="font-weight:600">${op.name}</td><td style="color:#666">${op.person}</td>
+      ${Object.keys(RULES.dims).map(k => `<td class="${ctext(r.dimS[k])}" style="font-weight:600">${r.dimS[k]}</td>`).join('')}
+      <td style="font-size:16px;font-weight:800" class="${ctext(r.total)}">${r.total}</td></tr>`;
+  }).join('');
+}
+
+function showDetail(opName){
+  document.getElementById('pg-home').classList.toggle('active', !opName);
+  document.getElementById('pg-detail').classList.toggle('active', !!opName);
+  if(!opName) return;
+
+  const op = OPS.find(o => o.name === opName);
+  const r = RES[opName];
+  const ri = RANKED.findIndex(o => o.name === opName);
+
+  document.getElementById('d-title').textContent = opName;
+  document.getElementById('d-name').textContent = `${MEDALS[ri]} ${opName}`;
+  document.getElementById('d-person').textContent = `负责人：${op.person} · 综合得分 ${r.total}`;
+  document.getElementById('d-score').textContent = r.total;
+
+  // 维度详情
+  document.getElementById('d-sections').innerHTML = Object.entries(RULES.dims).map(([dk, dv]) => {
+    const mms = RULES.metrics.filter(m => m.dim === dk);
+    const rows = mms.map(m => {
+      const ms = r.ms[m.key];
+      const rankIcon = ms.rank <= 3 ? MEDALS[ms.rank - 1].replace('🏆','🥇').replace('🥈','🥈').replace('🥉','🥉') : ms.rank;
+      const barW = ms.score;
+      const bg = ms.rank <= 3 ? '#fffdf0' : '#f8f9fa';
+      return `<div class="m-row" style="background:${bg}">
+        <span class="m-rank" style="color:${ms.rank<=3?'#333':'#999'}">${ms.rank}</span>
+        <span class="m-name">${m.name}<span class="mw">(${m.weight}%)</span></span>
+        <div class="m-bar" style="background:#eee"><div class="m-bar-f ${grad(ms.score)}" style="width:${barW}%"></div></div>
+        <span class="m-score ${ctext(ms.score)}">${ms.score}</span>
+        <span class="m-val ${ctext(ms.score)}">${ms.v.toFixed(1)}${m.unit}</span>
+      </div>`;
+    }).join('');
+    return `<div class="d-sec"><h3 style="border-bottom-color:${dv.color}">${dv.icon} ${dv.name}
+      <span style="font-size:11px;font-weight:400;color:#aaa;margin-left:6px">(权重${dv.weight}%)</span>
+      <span style="float:right;font-size:15px;font-weight:800" class="${ctext(r.dimS[dk])}">${r.dimS[dk]}</span>
+    </h3>${rows}</div>`;
+  }).join('');
+}
+
+renderHome();
+</script>
+</body>
+</html>
