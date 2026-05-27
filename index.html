@@ -169,10 +169,21 @@ function computeWeekRanks(){
     const rmap = rankAll(OPS, k, !!inverted[k]);
     OPS.forEach(op=>ranks[op.name][k]=rmap[op.name]);
   });
+  // 维度加权：核心40% + 健康20% + 过程40%
+  const CAT_KEYS = {
+    core:    ['gtv','cpc_new','cpc_consume','mem'],
+    health:  ['loss','fengkong'],
+    process: ['work','staff','score','dongxiao','bml']
+  };
+  const CAT_W = { core:0.40, health:0.20, process:0.40 };
   const avgRanks = {};
   OPS.forEach(op=>{
-    const vals = Object.values(ranks[op.name]);
-    avgRanks[op.name] = Math.round(vals.reduce((a,b)=>a+b,0)/vals.length * 10)/10;
+    let total = 0;
+    Object.entries(CAT_KEYS).forEach(([cat, keys])=>{
+      const catAvg = keys.reduce((s,k)=>s+ranks[op.name][k],0)/keys.length;
+      total += catAvg * CAT_W[cat];
+    });
+    avgRanks[op.name] = Math.round(total*100)/100;
   });
   return {ranks, avgRanks};
 }
@@ -191,7 +202,7 @@ function renderWeekly(){
     <div class="sum-chip ${medals[i]}">
       <div class="pos">第${i+1}名</div>
       <div class="nm">${op.name}</div>
-      <div class="sc">均排 ${avgRanks[op.name]}</div>
+      <div class="sc">加权均排 ${avgRanks[op.name]}</div>
     </div>`).join('');
 
   // cards
@@ -204,7 +215,7 @@ function renderWeekly(){
     return `<div class="rcard r${r}">
       <div class="rcard-hd">
         <div class="badge r${r}">${r}</div>
-        <div><div class="rname">${op.name}</div><div class="ravg">11项均排 ${avgRanks[op.name]}</div></div>
+        <div><div class="rname">${op.name}</div><div class="ravg">加权均排 ${avgRanks[op.name]}（核心40%+健康20%+过程40%）</div></div>
       </div>
       <div class="tagrow">
         ${topK.map(k=>`<span class="tag g">💪 ${k}</span>`).join('')}
