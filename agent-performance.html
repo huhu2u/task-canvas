@@ -7,49 +7,47 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
-.hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
-.hdr h1{font-size:18px;font-weight:700;letter-spacing:.5px}
-.hdr .dt{font-size:13px;opacity:.9}
+.hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.hdr h1{font-size:17px;font-weight:700;flex:1}
+.hdr .dt{font-size:12px;opacity:.85}
+.hdr-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:7px;padding:6px 14px;cursor:pointer;font-size:13px;white-space:nowrap}
+.hdr-btn:hover{background:rgba(255,255,255,.3)}
 .ct{padding:16px;max-width:1280px;margin:0 auto}
-/* 首页卡片 */
-.grid6{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:16px}
+.grid6{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:16px}
 .card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);cursor:pointer;transition:transform .18s,box-shadow .18s;border-top:4px solid #e0e0e0}
 .card:hover{transform:translateY(-4px);box-shadow:0 6px 20px rgba(0,0,0,.13)}
 .card.top1{border-top-color:#f6c90e}.card.top2{border-top-color:#b0b0b0}.card.top3{border-top-color:#cd7f32}
 .card .c-head{display:flex;justify-content:space-between;align-items:flex-start}
-.card .c-name{font-size:18px;font-weight:700}.card .c-person{font-size:12px;color:#888;margin-top:2px}
-.card .c-rank{font-size:24px}
-.card .c-score{font-size:36px;font-weight:800;margin:10px 0 6px}
-.card .c-dims{display:flex;flex-wrap:wrap;gap:5px}
-.card .c-dim{font-size:11px;padding:3px 9px;border-radius:10px;background:#f4f6f8;color:#555}
+.card .c-name{font-size:17px;font-weight:700}.card .c-person{font-size:12px;color:#888;margin-top:2px}
+.card .c-rank{font-size:22px}
+.card .c-score{font-size:34px;font-weight:800;margin:8px 0 6px}
+.card .c-dims{display:flex;flex-wrap:wrap;gap:4px}
+.card .c-dim{font-size:11px;padding:3px 8px;border-radius:10px;background:#f4f6f8;color:#555}
 .sec{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:16px}
-.sec h2{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eee;display:flex;align-items:center;gap:6px}
-/* 柱图 */
+.sec h2{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eee}
 .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.bar-row .bl{width:90px;font-size:12px;text-align:right;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar-row .bt{flex:1;height:22px;background:#f0f0f0;border-radius:11px;overflow:hidden;position:relative}
+.bar-row .bl{width:88px;font-size:12px;text-align:right;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-row .bt{flex:1;height:22px;background:#f0f0f0;border-radius:11px;overflow:hidden}
 .bar-row .bf{height:100%;border-radius:11px;transition:width .5s}
 .bar-row .bv{width:44px;font-size:13px;font-weight:700;text-align:right}
-/* 排名表 */
 .tbl{width:100%;border-collapse:collapse}
 .tbl th{background:#f8f9fa;padding:9px 8px;font-size:12px;text-align:center;border:1px solid #e9ecef;white-space:nowrap}
 .tbl td{padding:8px;text-align:center;border:1px solid #e9ecef;font-size:13px}
 .tbl tr:nth-child(even) td{background:#fafafa}
-/* 详情页 */
 .page{display:none}.page.active{display:block}
-.back{background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:13px}
-.back:hover{background:#f0f0f0}
+.back{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:7px;padding:6px 14px;cursor:pointer;font-size:13px}
+.back:hover{background:rgba(255,255,255,.35)}
 .d-hero{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.07);display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .d-hero .d-score{font-size:52px;font-weight:800}
 .d-hero .d-info{flex:1;min-width:200px}
 .d-hero .d-name{font-size:22px;font-weight:700}.d-hero .d-person{font-size:14px;color:#888;margin-top:2px}
-.d-hero .d-bar{height:28px;background:#eee;border-radius:14px;overflow:hidden;margin-top:10px;position:relative}
-.d-hero .d-bar-fill{height:100%;border-radius:14px}
+.d-hero .d-bar{height:26px;background:#eee;border-radius:13px;overflow:hidden;margin-top:10px;position:relative}
+.d-hero .d-bar-fill{height:100%;border-radius:13px}
 .d-hero .d-bar-txt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .d-hero .d-dims{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
 .d-hero .d-dim{text-align:center;background:#f8f9fa;border-radius:10px;padding:8px 14px}
 .d-hero .d-dim .dn{font-size:11px;color:#888}.d-hero .d-dim .dv{font-size:20px;font-weight:700}
-.sections{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.sections{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .dsec{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
 .dsec h3{font-size:14px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid}
 .mt{margin-bottom:12px}
@@ -61,42 +59,54 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .mt .mbf{height:100%;border-radius:8px}
 .mt .mbt{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;color:#fff;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .mt .m-sub{display:flex;justify-content:space-between;margin-top:3px;font-size:11px;color:#aaa}
-/* 颜色 */
+.cfg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.cfg-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.cfg-card h3{font-size:14px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cfg-row{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:10px}
+.cfg-name{font-size:13px;font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.cfg-tiers{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px}
+.cfg-tier{display:flex;align-items:center;gap:4px;font-size:12px}
+.cfg-tier .cfg-score{font-weight:700;color:#0984e3;width:38px;text-align:center}
+.num-in{width:56px;border:1px solid #dde;border-radius:6px;padding:3px 7px;font-size:12px;text-align:center}
+.num-in:focus{outline:none;border-color:#4285f4}
+.save-btn{background:linear-gradient(135deg,#00b894,#00cec9);color:#fff;border:none;border-radius:10px;padding:13px 32px;font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:16px}
+.save-btn:hover{opacity:.9}.save-btn:active{transform:scale(.98)}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2d3436;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
 .cg{color:#00b894}.cy{color:#f0b429}.cr{color:#e17055}
 .grad-g{background:linear-gradient(90deg,#00b894,#55efc4)}
 .grad-y{background:linear-gradient(90deg,#f0b429,#ffeaa7)}
 .grad-r{background:linear-gradient(90deg,#d63031,#e17055)}
 .ft{text-align:center;padding:20px;font-size:12px;color:#aaa}
+.warn{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;font-size:12px;color:#856404;margin-bottom:14px}
 </style>
 </head>
 <body>
 
+<!-- 首页 -->
 <div id="pg-home" class="page active">
 <div class="hdr">
   <h1>🏢 粤闽浙代运营商绩效管理看板</h1>
-  <span class="dt">2026年5月 | 模拟数据</span>
+  <span class="dt" id="home-date">2026年5月 · 模拟数据</span>
+  <button class="hdr-btn" onclick="showPage('cfg')">⚙️ 规则设置</button>
 </div>
 <div class="ct">
   <div class="grid6" id="home-cards"></div>
-  <div class="sec">
-    <h2>📈 综合评分排名</h2>
-    <div id="home-bars"></div>
-  </div>
+  <div class="sec"><h2>📈 综合评分排名</h2><div id="home-bars"></div></div>
   <div class="sec">
     <h2>📊 维度对比</h2>
-    <table class="tbl" id="rank-tbl">
-      <thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>上级评分(10%)</th><th>综合评分</th></tr></thead>
-      <tbody id="rank-body"></tbody>
-    </table>
+    <table class="tbl"><thead><tr><th>排名</th><th>代运营商</th><th>负责人</th><th>核心业绩(40%)</th><th>健康度(20%)</th><th>过程项目(30%)</th><th>上级评分(10%)</th><th>综合评分</th></tr></thead><tbody id="rank-body"></tbody></table>
   </div>
 </div>
 <div class="ft">粤闽浙代运营商绩效管理看板 · 周更新</div>
 </div>
 
+<!-- 详情页 -->
 <div id="pg-detail" class="page">
 <div class="hdr">
   <button class="back" onclick="showPage('home')">← 返回首页</button>
-  <span class="dt" id="d-date">2026年5月</span>
+  <h1 id="d-title" style="font-size:16px"></h1>
+  <button class="hdr-btn" onclick="showPage('cfg')">⚙️ 规则设置</button>
 </div>
 <div class="ct">
   <div class="d-hero" id="d-hero"></div>
@@ -105,227 +115,208 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <div class="ft">粤闽浙代运营商绩效管理看板 · 周更新</div>
 </div>
 
+<!-- 规则设置页 -->
+<div id="pg-cfg" class="page">
+<div class="hdr">
+  <button class="back" onclick="showPage('home')">← 返回首页</button>
+  <h1 style="font-size:16px">⚙️ 评分规则设置</h1>
+  <span class="dt">改完点「保存并重新计算」</span>
+</div>
+<div class="ct">
+  <div class="warn">⚠️ 修改规则后点保存，所有代运营商评分实时重算。刷新页面恢复默认规则。如需永久保存，请联系管理员更新看板文件。</div>
+  <div class="cfg-grid" id="cfg-content"></div>
+  <button class="save-btn" onclick="saveRules()">💾 保存并重新计算所有评分</button>
+</div>
+<div class="ft">粤闽浙代运营商绩效管理看板 · 周更新</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-// ── 评分函数 ──
-function sfGTV(v){return v>=80?Math.round(v*100)/100:0}
-function sfTier(v){if(v>=105)return 100;if(v>=100)return 90;if(v>=95)return 80;if(v>=90)return 70;if(v>=85)return 60;if(v>=80)return 45;return 0}
-function sfLoss(v){if(v<=6)return 100;if(v<=7)return 90;if(v<=8)return 80;if(v<=9)return 70;if(v<=10)return 60;if(v<=12)return 45;return 0}
-function sfProc(v){if(v>=105)return 100;if(v>=100)return 90;if(v>=90)return 80;if(v>=80)return 60;return 0}
-function sfBML(v){if(v<=30)return 100;if(v<=35)return 90;if(v<=40)return 75;if(v<=45)return 60;return 0}
-function sfMEM(v){if(v>=60)return 100;if(v>=56)return 90;if(v>=53)return 80;if(v>=52)return 60;if(v>=51)return 45;return 0}
-function sfBD(v){if(v>=100)return 100;if(v>=90)return 90;if(v>=80)return 80;if(v>=70)return 60;return 0}
-function sfJudge(v){return Math.min(100,Math.round(v))}
-
-// ── 指标配置 ──
-const DIMS = {
-  gt:      {name:"核心业绩",  weight:40, color:"#0984e3", icon:"💰"},
-  health:  {name:"健康度",    weight:20, color:"#00b894", icon:"🩺"},
-  process: {name:"过程项目",  weight:30, color:"#6c5ce7", icon:"📋"},
-  judge:   {name:"上级评分",  weight:10, color:"#f39c12", icon:"⭐"},
+// ── 规则配置（可通过页面编辑覆盖） ──
+let RULES = {
+  dims: {
+    gt:      {name:"核心业绩", weight:40, color:"#0984e3", icon:"💰"},
+    health:  {name:"健康度",   weight:20, color:"#00b894", icon:"🩺"},
+    process: {name:"过程项目", weight:30, color:"#6c5ce7", icon:"📋"},
+    judge:   {name:"上级评分", weight:10, color:"#f39c12", icon:"⭐"},
+  },
+  metrics: [
+    {key:"gtv",   weight:15, name:"实付验证GTV达成率", dim:"gt",      rev:false, unit:"%", hint:"≥80%线性得分",
+     type:"linear", linearMin:80},
+    {key:"cpc_n", weight:15, name:"CPC有效新完成率",   dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
+     type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:95,s:80},{th:90,s:70},{th:85,s:60},{th:80,s:45}]},
+    {key:"cpc_c", weight:5,  name:"CPC消耗额",         dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
+     type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:95,s:80},{th:90,s:70},{th:85,s:60},{th:80,s:45}]},
+    {key:"mem",   weight:5,  name:"MEM续约率",          dim:"gt",      rev:false, unit:"%", hint:"阶梯得分",
+     type:"tier", tiers:[{th:60,s:100},{th:56,s:90},{th:53,s:80},{th:52,s:60},{th:51,s:45}]},
+    {key:"loss",  weight:20, name:"业绩剔除率",          dim:"health",  rev:true,  unit:"%", hint:"越低越好",
+     type:"tier_rev", tiers:[{th:6,s:100},{th:7,s:90},{th:8,s:80},{th:9,s:70},{th:10,s:60},{th:12,s:45}]},
+    {key:"sc_i",  weight:6,  name:"经营评分达标净增",    dim:"process", rev:false, unit:"%", hint:"阶梯得分",
+     type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:90,s:80},{th:80,s:60}]},
+    {key:"dx_i",  weight:6,  name:"好店动销达标净增",    dim:"process", rev:false, unit:"%", hint:"阶梯得分",
+     type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:90,s:80},{th:80,s:60}]},
+    {key:"bml",   weight:6,  name:"BML高销Lose率",      dim:"process", rev:true,  unit:"%", hint:"越低越好",
+     type:"tier_rev", tiers:[{th:30,s:100},{th:35,s:90},{th:40,s:75},{th:45,s:60}]},
+    {key:"cpc_w", weight:6,  name:"CPC工单闭环",        dim:"process", rev:false, unit:"%", hint:"阶梯得分",
+     type:"tier", tiers:[{th:105,s:100},{th:100,s:90},{th:90,s:80},{th:80,s:60}]},
+    {key:"bd",    weight:6,  name:"有效BD人数占比",      dim:"process", rev:false, unit:"%", hint:"阶梯得分",
+     type:"tier", tiers:[{th:100,s:100},{th:90,s:90},{th:80,s:80},{th:70,s:60}]},
+    {key:"judge", weight:10, name:"区域管理判断",        dim:"judge",   rev:false, unit:"分",hint:"0-100强排",
+     type:"linear", linearMin:0},
+  ]
 };
-const METRICS = [
-  {key:"gtv",    weight:15, name:"实付验证GTV达成率", dim:"gt",      fn:sfGTV,   rev:false, unit:"%",  hint:"达成≥80%线性得分"},
-  {key:"cpc_n",  weight:15, name:"CPC有效新完成率",   dim:"gt",      fn:sfTier,  rev:false, unit:"%",  hint:"≥105%→100，阶梯"},
-  {key:"cpc_c",  weight:5,  name:"CPC消耗额",         dim:"gt",      fn:sfTier,  rev:false, unit:"%",  hint:"≥105%→100，阶梯"},
-  {key:"mem",    weight:5,  name:"MEM续约率",          dim:"gt",      fn:sfMEM,   rev:false, unit:"%",  hint:"≥60%→100"},
-  {key:"loss",   weight:20, name:"业绩剔除率",          dim:"health",  fn:sfLoss,  rev:true,  unit:"%",  hint:"≤6%→100，越低越好"},
-  {key:"sc_i",   weight:6,  name:"经营评分达标净增",    dim:"process", fn:sfProc,  rev:false, unit:"%",  hint:"≥105%→100"},
-  {key:"dx_i",   weight:6,  name:"好店动销达标净增",    dim:"process", fn:sfProc,  rev:false, unit:"%",  hint:"≥105%→100"},
-  {key:"bml",    weight:6,  name:"BML高销Lose率",      dim:"process", fn:sfBML,   rev:true,  unit:"%",  hint:"≤30%→100，越低越好"},
-  {key:"cpc_w",  weight:6,  name:"CPC工单闭环",        dim:"process", fn:sfProc,  rev:false, unit:"%",  hint:"≥105%→100"},
-  {key:"bd",     weight:6,  name:"有效BD人数占比",      dim:"process", fn:sfBD,    rev:false, unit:"%",  hint:"≥100%→100"},
-  {key:"judge",  weight:10, name:"区域管理判断",        dim:"judge",   fn:sfJudge, rev:false, unit:"分", hint:"强排，0-100分"},
-];
-const OPS = [
-  {name:"惠州巨浪",  person:"肖立铭"},
-  {name:"惠州柏万",  person:"林启梁"},
-  {name:"泉州小花猫",person:"陈彩凤"},
-  {name:"惠安广通",  person:"尤云生"},
-  {name:"慈溪哲光",  person:"孙浩"},
-  {name:"义乌汐洋",  person:"陈铨"},
-];
 
-// ── 模拟数据（每次刷新不同，实际使用时改为固定数据） ──
+// ── 评分计算 ──
+function calcScore(m, v) {
+  if (m.type === 'linear') return v >= m.linearMin ? Math.round(v*100)/100 : 0;
+  if (m.type === 'tier') { for (const t of m.tiers) { if (v >= t.th) return t.s; } return 0; }
+  if (m.type === 'tier_rev') { for (const t of m.tiers) { if (v <= t.th) return t.s; } return 0; }
+  return 0;
+}
+
+const OPS = [
+  {name:"惠州巨浪",person:"肖立铭"},{name:"惠州柏万",person:"林启梁"},
+  {name:"泉州小花猫",person:"陈彩凤"},{name:"惠安广通",person:"尤云生"},
+  {name:"慈溪哲光",person:"孙浩"},{name:"义乌汐洋",person:"陈铨"},
+];
+function rand(a,b){return a+Math.random()*(b-a)}
 function genData(){
   const d={};
-  for(const o of OPS){
-    d[o.name]={
-      gtv:    rand(78,112),
-      cpc_n:  rand(78,112),
-      cpc_c:  rand(78,112),
-      mem:    rand(49,65),
-      loss:   rand(4,14),
-      sc_i:   rand(75,112),
-      dx_i:   rand(75,112),
-      bml:    rand(22,50),
-      cpc_w:  rand(75,112),
-      bd:     rand(68,105),
-      judge:  rand(65,98),
-    };
-  }
+  for(const o of OPS){d[o.name]={gtv:rand(78,112),cpc_n:rand(78,112),cpc_c:rand(78,112),mem:rand(49,65),loss:rand(4,14),sc_i:rand(75,112),dx_i:rand(75,112),bml:rand(22,50),cpc_w:rand(75,112),bd:rand(68,105),judge:rand(65,98)};}
   return d;
 }
-function rand(a,b){return a+Math.random()*(b-a)}
-
-// ── 计算 ──
-function calcAll(data){
-  const res={};
+let DATA=genData(), RES={}, RANKED=[];
+function calcAll(){
+  RES={};
   for(const op of OPS){
-    const d=data[op.name], ms={}, dimS={}, dimW={};
-    let total=0;
-    for(const m of METRICS){
-      const v=d[m.key], s=m.fn(v);
-      ms[m.key]={v, s};
-      total+=s*(m.weight/100);
-    }
-    for(const [dk,dv] of Object.entries(DIMS)){
-      const mms=METRICS.filter(m=>m.dim===dk);
+    const d=DATA[op.name],ms={};let total=0;
+    for(const m of RULES.metrics){const v=d[m.key],s=calcScore(m,v);ms[m.key]={v,s};total+=s*(m.weight/100);}
+    const dimS={};
+    for(const[dk,dv]of Object.entries(RULES.dims)){
+      const mms=RULES.metrics.filter(m=>m.dim===dk);
       const sumW=mms.reduce((a,m)=>a+m.weight,0);
       const sumS=mms.reduce((a,m)=>a+ms[m.key].s*m.weight,0);
       dimS[dk]=Math.round(sumS/sumW*10)/10;
-      dimW[dk]=sumW;
     }
-    res[op.name]={raw:d, ms, dimS, total:Math.round(total*10)/10};
+    RES[op.name]={raw:d,ms,dimS,total:Math.round(total*10)/10};
   }
-  return res;
+  RANKED=OPS.slice().sort((a,b)=>RES[b.name].total-RES[a.name].total);
 }
-
-// ── 颜色工具 ──
-function clr(v){return v>=85?'#00b894':v>=70?'#f0b429':'#e17055'}
+const MEDALS=['🏆','🥈','🥉','④','⑤','⑥'];
 function grad(v){return v>=85?'grad-g':v>=70?'grad-y':'grad-r'}
 function ctext(v){return v>=85?'cg':v>=70?'cy':'cr'}
-const MEDALS=['🏆','🥈','🥉','④','⑤','⑥'];
 
-// ── 渲染首页 ──
-const DATA=genData();
-const RES=calcAll(DATA);
-const RANKED=OPS.slice().sort((a,b)=>RES[b.name].total-RES[a.name].total);
-
+// ── 首页渲染 ──
 function renderHome(){
-  // 卡片
-  const cds=document.getElementById('home-cards');
-  cds.innerHTML=RANKED.map((op,i)=>{
+  calcAll();
+  document.getElementById('home-cards').innerHTML=RANKED.map((op,i)=>{
     const r=RES[op.name];
-    const cls=i<3?` top${i+1}`:'';
-    return `<div class="card${cls}" onclick="showDetail('${op.name}')">
-      <div class="c-head">
-        <div><div class="c-name">${op.name}</div><div class="c-person">负责人：${op.person}</div></div>
-        <span class="c-rank">${MEDALS[i]}</span>
-      </div>
+    return `<div class="card${i<3?' top'+(i+1):''}" onclick="showDetail('${op.name}')">
+      <div class="c-head"><div><div class="c-name">${op.name}</div><div class="c-person">负责人：${op.person}</div></div><span class="c-rank">${MEDALS[i]}</span></div>
       <div class="c-score ${ctext(r.total)}">${r.total}</div>
-      <div class="c-dims">
-        ${Object.entries(DIMS).map(([k,d])=>`<span class="c-dim">${d.icon}${d.name}<b class="${ctext(r.dimS[k])}" style="margin-left:4px">${r.dimS[k]}</b></span>`).join('')}
-      </div>
+      <div class="c-dims">${Object.entries(RULES.dims).map(([k,d])=>`<span class="c-dim">${d.icon}${d.name}<b class="${ctext(r.dimS[k])}" style="margin-left:3px">${r.dimS[k]}</b></span>`).join('')}</div>
     </div>`;
   }).join('');
-
-  // 柱图
-  const bars=document.getElementById('home-bars');
-  bars.innerHTML=RANKED.map((op,i)=>{
+  document.getElementById('home-bars').innerHTML=RANKED.map((op,i)=>{
     const r=RES[op.name];
-    return `<div class="bar-row">
-      <span class="bl">${MEDALS[i]} ${op.name}</span>
-      <div class="bt"><div class="bf ${grad(r.total)}" style="width:${Math.min(r.total,100)}%"></div></div>
-      <span class="bv ${ctext(r.total)}">${r.total}</span>
-    </div>`;
+    return `<div class="bar-row"><span class="bl">${MEDALS[i]} ${op.name}</span><div class="bt"><div class="bf ${grad(r.total)}" style="width:${Math.min(r.total,100)}%"></div></div><span class="bv ${ctext(r.total)}">${r.total}</span></div>`;
   }).join('');
-
-  // 表格
-  const tb=document.getElementById('rank-body');
-  tb.innerHTML=RANKED.map((op,i)=>{
+  document.getElementById('rank-body').innerHTML=RANKED.map((op,i)=>{
     const r=RES[op.name];
-    return `<tr>
-      <td style="font-size:18px">${MEDALS[i]}</td>
-      <td style="font-weight:600">${op.name}</td>
-      <td style="color:#666">${op.person}</td>
-      ${Object.keys(DIMS).map(k=>`<td class="${ctext(r.dimS[k])}" style="font-weight:600">${r.dimS[k]}</td>`).join('')}
-      <td style="font-size:16px;font-weight:800" class="${ctext(r.total)}">${r.total}</td>
-    </tr>`;
+    return `<tr><td style="font-size:16px">${MEDALS[i]}</td><td style="font-weight:600">${op.name}</td><td style="color:#666">${op.person}</td>${Object.keys(RULES.dims).map(k=>`<td class="${ctext(r.dimS[k])}" style="font-weight:600">${r.dimS[k]}</td>`).join('')}<td style="font-size:15px;font-weight:800" class="${ctext(r.total)}">${r.total}</td></tr>`;
   }).join('');
 }
 
-// ── 渲染详情页 ──
+// ── 详情页 ──
 function showDetail(opName){
-  const op=OPS.find(o=>o.name===opName);
-  const r=RES[opName];
-  const ri=RANKED.findIndex(o=>o.name===opName);
-
-  // Hero
+  const op=OPS.find(o=>o.name===opName),r=RES[opName],ri=RANKED.findIndex(o=>o.name===opName);
+  document.getElementById('d-title').textContent=opName;
   document.getElementById('d-hero').innerHTML=`
-    <div class="d-score ${ctext(r.total)}">${r.total}<span style="font-size:18px;color:#aaa"> 分</span></div>
-    <div class="d-info">
-      <div class="d-name">${MEDALS[ri]} ${opName}</div>
-      <div class="d-person">负责人：${op.person}</div>
-      <div class="d-bar">
-        <div class="d-bar-fill ${grad(r.total)}" style="width:${Math.min(r.total,100)}%"></div>
-        <div class="d-bar-txt">综合评分 ${r.total}/100</div>
-      </div>
-      <div class="d-dims">
-        ${Object.entries(DIMS).map(([k,d])=>`<div class="d-dim"><div class="dn">${d.icon} ${d.name}</div><div class="dv ${ctext(r.dimS[k])}">${r.dimS[k]}</div></div>`).join('')}
-      </div>
+    <div class="d-score ${ctext(r.total)}">${r.total}<span style="font-size:16px;color:#aaa"> 分</span></div>
+    <div class="d-info"><div class="d-name">${MEDALS[ri]} ${opName}</div><div class="d-person">负责人：${op.person}</div>
+      <div class="d-bar"><div class="d-bar-fill ${grad(r.total)}" style="width:${Math.min(r.total,100)}%"></div><div class="d-bar-txt">综合评分 ${r.total}/100</div></div>
+      <div class="d-dims">${Object.entries(RULES.dims).map(([k,d])=>`<div class="d-dim"><div class="dn">${d.icon} ${d.name}</div><div class="dv ${ctext(r.dimS[k])}">${r.dimS[k]}</div></div>`).join('')}</div>
     </div>`;
-
-  // 规则说明
-  const rules=`<div class="sec" style="grid-column:1/-1">
-    <h2 style="border-bottom-color:#e74c3c">📖 评分规则说明</h2>
-    <div style="font-size:13px;line-height:1.8;color:#444">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
-        <div><b style="color:#0984e3">💰 核心业绩（40%）</b>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>GTV达成率(15%)</b><br>≥80%线性得分 | &lt;80%→0</div>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>CPC有效新(15%)</b><br>≥105%→100 | [100,105)→90 | [95,100)→80 | [90,95)→70 | [85,90)→60 | [80,85)→45 | &lt;80→0</div>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>CPC消耗额(5%)</b><br>同CPC有效新</div>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>MEM续约率(5%)</b><br>≥60%→100 | [56,60)→90 | [53,56)→80 | [52,53)→60 | [51,52)→45 | &lt;51→0</div></div>
-        <div><b style="color:#00b894">🩺 健康度（20%）</b>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>业绩剔除率(20%)</b><br>≤6%→100 | (6,7]→90 | (7,8]→80 | (8,9]→70 | (9,10]→60 | (10,12]→45 | &gt;12→0</div></div>
-        <div><b style="color:#6c5ce7">📋 过程项目（30%）</b>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>经营评分净增(6%)</b><br>≥105%→100 | [100,105)→90 | [90,100)→80 | [80,90)→60 | &lt;80→0</div>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>好店动销净增(6%)</b><br>同经营评分</div>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>BML Lose率(6%)</b><br>≤30%→100 | (30,35]→90 | (35,40]→75 | (40,45]→60 | &gt;45→0</div>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>CPC工单闭环(6%)</b><br>同经营评分</div>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>有效BD人数(6%)</b><br>≥100%→100 | [90,100)→90 | [80,90)→80 | [70,80)→60 | &lt;70→0</div></div>
-        <div><b style="color:#f39c12">⭐ 上级评分（10%）</b>
-          <div style="margin-top:6px;padding:8px;background:#f8f9fa;border-radius:8px;font-size:12px"><b>区域管理判断(10%)</b><br>强排打分 0-100分</div></div>
-      </div>
-    </div>
-  </div>`;
-
-  // 四大板块
-  const sects=document.getElementById('d-sections');
-  sects.innerHTML=rules + Object.entries(DIMS).map(([dk,dv])=>{
-    const mms=METRICS.filter(m=>m.dim===dk);
+  document.getElementById('d-sections').innerHTML=Object.entries(RULES.dims).map(([dk,dv])=>{
+    const mms=RULES.metrics.filter(m=>m.dim===dk);
     const rows=mms.map(m=>{
-      const ms=r.ms[m.key];
-      const barW=m.rev?Math.max(0,100-ms.v):Math.min(ms.v,120);
-      const dispV=m.rev?ms.v.toFixed(1)+'%':(ms.v.toFixed(1)+'%');
-      return `<div class="mt">
-        <div class="mi">
-          <span class="ml">${m.name}<span class="mw">(${m.weight}%)</span></span>
-          <span class="mr ${ctext(ms.s)}">${ms.s}分</span>
-        </div>
-        <div class="mb">
-          <div class="mbf ${grad(ms.s)}" style="width:${Math.min(barW,100)}%"></div>
-          <div class="mbt">${dispV}</div>
-        </div>
-        <div class="m-sub"><span>${m.hint}</span><span>实际：${dispV}</span></div>
-      </div>`;
+      const ms=r.ms[m.key],barW=m.rev?Math.max(0,100-ms.v):Math.min(ms.v,110);
+      return `<div class="mt"><div class="mi"><span class="ml">${m.name}<span class="mw">(${m.weight}%)</span></span><span class="mr ${ctext(ms.s)}">${ms.s}分</span></div>
+        <div class="mb"><div class="mbf ${grad(ms.s)}" style="width:${Math.min(barW,100)}%"></div><div class="mbt">${ms.v.toFixed(1)}${m.unit}</div></div>
+        <div class="m-sub"><span>${m.hint}</span><span>实际：${ms.v.toFixed(1)}${m.unit}</span></div></div>`;
     }).join('');
-    const dimScore=r.dimS[dk];
-    return `<div class="dsec">
-      <h3 style="border-bottom-color:${dv.color}">${dv.icon} ${dv.name} <span style="font-size:11px;font-weight:400;color:#aaa">(权重${dv.weight}%)</span>
-        <span style="float:right;font-size:16px;font-weight:800" class="${ctext(dimScore)}">${dimScore}分</span>
-      </h3>
-      ${rows}
-    </div>`;
+    return `<div class="dsec"><h3 style="border-bottom-color:${dv.color}">${dv.icon} ${dv.name} <span style="font-size:11px;font-weight:400;color:#aaa">(权重${dv.weight}%)</span><span style="float:right;font-size:15px;font-weight:800" class="${ctext(r.dimS[dk])}">${r.dimS[dk]}分</span></h3>${rows}</div>`;
   }).join('');
-
   showPage('detail');
 }
 
-function showPage(p){
-  document.getElementById('pg-home').classList.toggle('active',p==='home');
-  document.getElementById('pg-detail').classList.toggle('active',p==='detail');
+// ── 规则设置页 ──
+function renderCfg(){
+  const dims=RULES.dims, metrics=RULES.metrics;
+  let html='';
+  for(const[dk,dv]of Object.entries(dims)){
+    const mms=metrics.filter(m=>m.dim===dk);
+    html+=`<div class="cfg-card"><h3 style="border-bottom-color:${dv.color}">${dv.icon} ${dv.name}
+      <span style="font-size:11px;font-weight:400;color:#777;margin-left:6px">维度权重</span>
+      <input type="number" id="dw_${dk}" value="${dv.weight}" min="0" max="100" class="num-in" style="width:48px"> %
+    </h3>`;
+    for(const m of mms){
+      html+=`<div class="cfg-row"><div class="cfg-name"><b>${m.name}</b>
+        <span style="font-size:12px;color:#888;font-weight:400">权重 <input type="number" id="mw_${m.key}" value="${m.weight}" min="0" max="100" class="num-in" style="width:44px"> %</span>
+      </div>`;
+      if(m.type==='linear'){
+        html+=`<div style="font-size:12px;color:#666;margin-top:4px">最低达标线：<input type="number" id="ml_${m.key}" value="${m.linearMin}" class="num-in"> %，以上线性得分</div>`;
+      } else {
+        const dir=m.type==='tier_rev'?'≤':'≥';
+        const note=m.type==='tier_rev'?'越低越好：阈值从小到大':'越高越好：阈值从大到小';
+        html+=`<div style="font-size:11px;color:#999;margin:4px 0">${note}</div><div class="cfg-tiers">`;
+        m.tiers.forEach((t,i)=>{
+          html+=`<div class="cfg-tier">${dir}<input type="number" id="tt_${m.key}_${i}" value="${t.th}" class="num-in">%<span class="cfg-score">→${t.s}分</span></div>`;
+        });
+        html+=`</div>`;
+      }
+      html+=`</div>`;
+    }
+    html+=`</div>`;
+  }
+  document.getElementById('cfg-content').innerHTML=html;
 }
 
+function saveRules(){
+  // 读取维度权重
+  for(const dk of Object.keys(RULES.dims)){
+    const el=document.getElementById('dw_'+dk);
+    if(el) RULES.dims[dk].weight=parseFloat(el.value)||RULES.dims[dk].weight;
+  }
+  // 读取指标权重和阈值
+  for(const m of RULES.metrics){
+    const wEl=document.getElementById('mw_'+m.key);
+    if(wEl) m.weight=parseFloat(wEl.value)||m.weight;
+    if(m.type==='linear'){
+      const el=document.getElementById('ml_'+m.key);
+      if(el) m.linearMin=parseFloat(el.value);
+    } else if(m.tiers){
+      m.tiers.forEach((t,i)=>{
+        const el=document.getElementById('tt_'+m.key+'_'+i);
+        if(el) t.th=parseFloat(el.value);
+      });
+    }
+  }
+  renderHome();
+  showToast('✅ 规则已保存，所有评分已重新计算');
+  showPage('home');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+function showPage(p){
+  ['home','detail','cfg'].forEach(id=>document.getElementById('pg-'+id).classList.toggle('active',id===p));
+  if(p==='cfg') renderCfg();
+}
 renderHome();
 </script>
 </body>
