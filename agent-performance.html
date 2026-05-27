@@ -147,18 +147,17 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <body>
 
 <div class="mode-bar">
-  <button class="mode-btn active" onclick="setMode('monthly')">📊 月维度评分<br><span class="mb-desc">阈值得分 + 规则可编辑</span></button>
-  <button class="mode-btn" onclick="setMode('weekly')">🏆 周排名强排<br><span class="mb-desc">完成率强排 × 权重</span></button>
+  <button class="mode-btn active" onclick="setMode('weekly')">🏆 周排名强排<br><span class="mb-desc">完成率强排 × 权重</span></button>
+  <button class="mode-btn" onclick="setMode('monthly')">📊 月维度评分<br><span class="mb-desc">阈值得分 + 规则可编辑</span></button>
 </div>
-<div id="mode-monthly" class="mode-page active">
+<div id="mode-weekly" class="mode-page">
 
 
 <!-- 首页 -->
-<div id="pg-home" class="m-page active">
+<div id="w-pg-home" class="active">
 <div class="hdr">
-  <h1>🏢 粤闽浙代运营商绩效管理看板</h1>
-  <span class="dt" id="home-date">2026年5月 · 模拟数据</span>
-  <button class="hdr-btn" onclick="showPage('cfg')">⚙️ 规则设置</button>
+  <h1>🏆 粤闽浙代运营商周排名看板</h1>
+  <span class="dt" id="w-home-date">2026年5月 · 模拟数据</span>
 </div>
 <div class="ct">
   <div class="grid6" id="home-cards"></div>
@@ -393,14 +392,15 @@ renderHome();
 </script>
 
 </div>
-<div id="mode-weekly" class="mode-page">
+<div id="mode-monthly" class="mode-page active">
 
 
 <!-- 首页 -->
-<div id="w-pg-home" class="active">
+<div id="pg-home" class="m-page active">
 <div class="hdr">
-  <h1>🏆 粤闽浙代运营商周排名看板</h1>
-  <span class="dt" id="w-home-date">2026年5月 · 模拟数据</span>
+  <h1>🏢 粤闽浙代运营商绩效管理看板</h1>
+  <span class="dt" id="home-date">2026年5月 · 模拟数据</span>
+  <button class="hdr-btn" onclick="showPage('cfg')">⚙️ 规则设置</button>
 </div>
 <div class="ct">
   <div class="hero">
