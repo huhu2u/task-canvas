@@ -30,21 +30,27 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 @media(max-width:600px){.score-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* 排名卡片 */
-.sc{background:#fff;border-radius:12px;padding:14px 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:pointer;transition:.18s;border-top:4px solid #e0e0e0;position:relative}
-.sc:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.14)}
-.sc.top1{border-top-color:#f6c90e}
+.sc{background:#fff;border-radius:12px;padding:16px 14px 14px;box-shadow:0 2px 10px rgba(0,0,0,.09);cursor:pointer;transition:.18s;border-top:4px solid #e0e0e0;position:relative;border:1px solid #eef0f5;border-top-width:4px}
+.sc:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.15)}
+.sc.top1{border-top-color:#f6c90e;box-shadow:0 2px 14px rgba(246,201,14,.18)}
 .sc.top2{border-top-color:#b0b0b0}
 .sc.top3{border-top-color:#cd7f32}
-.sc .sc-rank{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.sc .sc-rank{font-size:36px;font-weight:900;line-height:1;margin-bottom:2px}
 .sc .r1{color:#f6c90e}.sc .r2{color:#b0b0b0}.sc .r3{color:#cd7f32}.sc .r4{color:#1a73e8}.sc .r5{color:#888}.sc .r6{color:#aaa}
-.sc .sc-name{font-size:14px;font-weight:700}
-.sc .sc-person{font-size:11px;color:#888;margin-bottom:8px}
-.sc .sc-score-val{font-size:26px;font-weight:800;color:#1a73e8;margin:4px 0 2px}
-.sc .sc-score-lbl{font-size:10px;color:#aaa}
-.sc .sc-dims{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:3px 8px}
-.sc .sc-dim{font-size:11px;color:#555}
-.sc .sc-dim span{color:#888;font-size:10px}
-.sc .sc-arrow{position:absolute;bottom:10px;right:12px;font-size:11px;color:#1a73e8;opacity:.7}
+.sc .sc-name{font-size:15px;font-weight:700;margin-top:2px}
+.sc .sc-person{font-size:12px;color:#999;margin-bottom:6px}
+.sc .sc-score-val{font-size:30px;font-weight:900;color:#1a73e8;margin:4px 0 1px}
+.sc .sc-score-lbl{font-size:10px;color:#aaa;margin-bottom:8px}
+.sc .sc-divider{border:none;border-top:1px solid #f0f2f5;margin:8px 0 6px}
+.sc .sc-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11.5px}
+.sc .sc-row .sc-kv{display:flex;flex-direction:column;align-items:center;flex:1}
+.sc .sc-row .sc-kv .sc-v{font-weight:700;font-size:12.5px;color:#333}
+.sc .sc-row .sc-kv .sc-k{font-size:9.5px;color:#aaa;margin-top:1px}
+.sc .sc-row2{display:flex;justify-content:space-between;margin-top:3px;font-size:11px;padding-top:4px;border-top:1px dashed #f0f2f5}
+.sc .sc-row2 .sc-kv2{display:flex;flex-direction:column;align-items:center;flex:1}
+.sc .sc-row2 .sc-kv2 .sc-v2{font-weight:700;font-size:12px;color:#555}
+.sc .sc-row2 .sc-kv2 .sc-k2{font-size:9px;color:#bbb;margin-top:1px}
+.sc .sc-arrow{position:absolute;top:10px;right:12px;font-size:10px;color:#1a73e8;opacity:.5}
 
 /* 明细表 */
 .sec{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:14px}
@@ -210,7 +216,7 @@ const PROJ = {
   '慈溪哲光': {score:27.5, dx:{val:145,target:151,rate:96.0}, zrq:{st:27.44,mat:22.39}, bml:28.57, wpt:{hdOpen:84,hd:758,hdRate:11.1}},
   '义乌汐洋': {score:33.8, dx:{val:158,target:162,rate:97.5}, zrq:{st:30.72,mat:28.57}, bml:33.33, wpt:{hdOpen:112,hd:578,hdRate:19.4}},
 };
-const FILL_RATE = {'惠州巨浪':null,'惠州柏万':null,'泉州小花猫':null,'惠安广通':null,'慈溪哲光':null,'义乌汐洋':null};
+const FILL_RATE = {'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100};
 
 // ============ 评分计算 ============
 function calcPerfScore(op) {
@@ -227,7 +233,7 @@ const PROJ_METRICS = [
   {key:'zrq',   label:'职人码店转渗透率',sort:'desc',val:(op)=>PROJ[op].zrq.st, detail:(op)=>`渗透${PROJ[op].zrq.st}% / 物料${PROJ[op].zrq.mat}%`},
   {key:'bml',   label:'BML Lose率',    sort:'asc',  val:(op)=>PROJ[op].bml,     detail:(op)=>`${PROJ[op].bml.toFixed(1)}%`},
   {key:'wpt',   label:'旺铺通好店开通率',sort:'desc',val:(op)=>PROJ[op].wpt.hdRate, detail:(op)=>`${PROJ[op].wpt.hdOpen}/${PROJ[op].wpt.hd}（${PROJ[op].wpt.hdRate}%）`},
-  {key:'fill',  label:'真实满编率',    sort:'desc',  val:(op)=>FILL_RATE[op]||0,detail:(op)=>FILL_RATE[op]?`${FILL_RATE[op]}%`:'N/A'},
+  {key:'fill',  label:'真实满编率',    sort:'desc',  val:(op)=>FILL_RATE[op]||0,detail:(op)=>FILL_RATE[op]?`${FILL_RATE[op]}%`:'100%'},
 ];
 
 function calcProjRanks() {
@@ -249,6 +255,10 @@ const fmt = (n,dec=0)=>n==null?'-':(n<0?'-':'')+Math.abs(n).toLocaleString('zh-C
 const fmtRate = v=>v==null?'-':v.toFixed(2)+'%';
 const rateColor = v=>v>=100?'dp-rate-g':v>=80?'dp-rate-y':'dp-rate-r';
 
+// 颜色辅助
+function vc(v,good,warn){return v>=good?'#4caf50':v>=warn?'#ff9800':'#f44336';}
+function vc2(v,bad,warn){return v<=bad?'#4caf50':v<=warn?'#ff9800':'#f44336';}
+
 // ============ 渲染核心业绩卡片 ============
 function renderPerfCards() {
   const order=[...OPS].sort((a,b)=>calcPerfScore(b)-calcPerfScore(a));
@@ -257,20 +267,23 @@ function renderPerfCards() {
     const d=PERF[op]; const rank=i+1;
     const score=calcPerfScore(op);
     html+=`<div class="sc ${rank<=3?'top'+rank:''}" onclick="openDetail('${op}')">
+      <div class="sc-arrow">详情 →</div>
       <div class="sc-rank r${rank}">${rank}</div>
       <div class="sc-name">${op}</div>
       <div class="sc-person">${PERSONS[op]}</div>
       <div class="sc-score-val">${score}</div>
       <div class="sc-score-lbl">综合得分</div>
-      <div class="sc-dims">
-        <div class="sc-dim"><span>GTV </span>${d.gtv_rate}%</div>
-        <div class="sc-dim"><span>CPC </span>${d.cpc_rate}%</div>
-        <div class="sc-dim"><span>MEM </span>${d.mem_renewal}%</div>
-        <div class="sc-dim"><span>新签 </span>${d.cpc_new_rate}%</div>
-        <div class="sc-dim"><span>剔除 </span>${d.elim}%</div>
-        <div class="sc-dim"><span>风控 </span>${d.risk}%</div>
+      <hr class="sc-divider">
+      <div class="sc-row">
+        <div class="sc-kv"><span class="sc-v" style="color:${vc(d.gtv_rate,100,80)}">${d.gtv_rate}%</span><span class="sc-k">GTV完成</span></div>
+        <div class="sc-kv"><span class="sc-v" style="color:${vc(d.cpc_rate,100,80)}">${d.cpc_rate}%</span><span class="sc-k">CPC消耗</span></div>
+        <div class="sc-kv"><span class="sc-v" style="color:${vc(d.mem_renewal,70,50)}">${d.mem_renewal}%</span><span class="sc-k">MEM续约</span></div>
       </div>
-      <div class="sc-arrow">点击详情 →</div>
+      <div class="sc-row2">
+        <div class="sc-kv2"><span class="sc-v2" style="color:${vc(d.cpc_new_rate,100,80)}">${d.cpc_new_rate}%</span><span class="sc-k2">CPC新签</span></div>
+        <div class="sc-kv2"><span class="sc-v2" style="color:${vc2(d.elim,5,8)}">${d.elim}%</span><span class="sc-k2">剔除率</span></div>
+        <div class="sc-kv2"><span class="sc-v2" style="color:${vc2(d.risk,15,20)}">${d.risk}%</span><span class="sc-k2">感知风控</span></div>
+      </div>
     </div>`;
   });
   document.getElementById('perf-cards').innerHTML=html;
@@ -301,22 +314,27 @@ function renderPerfTable() {
 
 // ============ 渲染项目排名卡片 ============
 function renderProjCards() {
-  const {pts}=calcProjRanks();
+  const {ranks,pts}=calcProjRanks();
   const order=[...OPS].sort((a,b)=>pts[b]-pts[a]);
   let html='';
   order.forEach((op,i)=>{
-    const rank=i+1;
+    const rank=i+1; const d=PROJ[op];
     html+=`<div class="sc ${rank<=3?'top'+rank:''}">
       <div class="sc-rank r${rank}">${rank}</div>
       <div class="sc-name">${op}</div>
       <div class="sc-person">${PERSONS[op]}</div>
       <div class="sc-score-val" style="color:#0d47a1">${pts[op]}</div>
       <div class="sc-score-lbl">项目总积分</div>
-      <div class="sc-dims">
-        <div class="sc-dim"><span>评分 </span>${PROJ[op].score}%</div>
-        <div class="sc-dim"><span>动销 </span>${PROJ[op].dx.rate}%</div>
-        <div class="sc-dim"><span>渗透 </span>${PROJ[op].zrq.st}%</div>
-        <div class="sc-dim"><span>BML </span>${PROJ[op].bml.toFixed(1)}%</div>
+      <hr class="sc-divider">
+      <div class="sc-row">
+        <div class="sc-kv"><span class="sc-v">${d.score}%</span><span class="sc-k">经营评分</span></div>
+        <div class="sc-kv"><span class="sc-v">${d.dx.rate}%</span><span class="sc-k">好店动销</span></div>
+        <div class="sc-kv"><span class="sc-v">${d.zrq.st}%</span><span class="sc-k">职人码渗透</span></div>
+      </div>
+      <div class="sc-row2">
+        <div class="sc-kv2"><span class="sc-v2">${d.bml.toFixed(1)}%</span><span class="sc-k2">BML Lose</span></div>
+        <div class="sc-kv2"><span class="sc-v2">${d.wpt.hdRate}%</span><span class="sc-k2">旺铺通开通</span></div>
+        <div class="sc-kv2"><span class="sc-v2">100%</span><span class="sc-k2">满编率</span></div>
       </div>
     </div>`;
   });
@@ -339,7 +357,7 @@ function renderProjTable() {
       <td class="${cc(ranks.zrq[op])}">${d.zrq.st}% / ${d.zrq.mat}%<br><span class="sub">#${ranks.zrq[op]}</span></td>
       <td class="${cc(ranks.bml[op])}">${d.bml.toFixed(1)}%<br><span class="sub">#${ranks.bml[op]}</span></td>
       <td class="${cc(ranks.wpt[op])}">${d.wpt.hdOpen}/${d.wpt.hd}<br><span class="sub">${d.wpt.hdRate}% #${ranks.wpt[op]}</span></td>
-      <td style="color:#aaa">N/A</td>
+      <td class="cg">100%<br><span class="sub">#1</span></td>
       <td class="cb" style="font-size:18px;font-weight:900">${pts[op]}</td>
     </tr>`;
   });
