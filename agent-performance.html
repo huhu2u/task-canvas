@@ -8,510 +8,456 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
 
-.hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
-.hdr h1{font-size:20px;font-weight:800;flex:1}
-.hdr .dt{font-size:13px;opacity:.85}
-.tab-bar{display:flex;gap:0;margin-bottom:20px;position:sticky;top:60px;z-index:99;background:#f0f2f5;padding:10px 0 0}
-.tab-btn{padding:10px 30px;border:none;background:transparent;color:#666;font-size:15px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:.2s}
+/* 顶栏 */
+.hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:16px}
+.hdr h1{font-size:18px;font-weight:800;flex:1}
+.hdr .dt{font-size:12px;opacity:.85}
+
+/* Tab */
+.tab-bar{display:flex;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:0 20px}
+.tab-btn{padding:13px 28px;border:none;background:transparent;color:#666;font-size:14px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:.2s}
 .tab-btn.active{color:#1a73e8;border-bottom-color:#1a73e8}
 .tab-btn:hover{color:#1a73e8}
 
-.ct{padding:0 20px 40px;max-width:1200px;margin:0 auto}
-.sec{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:20px}
-.sec h2{font-size:17px;font-weight:700;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #e8eaf0}
-
-/* 核心业绩排名 */
-.rank-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
-.rank-table th{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;font-size:13px;padding:12px 8px;text-align:center;white-space:nowrap}
-.rank-table td{font-size:13px;padding:10px 8px;text-align:center;border-bottom:1px solid #f0f0f0}
-.rank-table tr:hover td{background:#fafbff}
-.rank-table .op-name{font-weight:700;font-size:14px;text-align:left;padding-left:12px}
-.rank-table .op-person{font-size:11px;color:#888}
-.rank-table .rank-num{font-size:20px;font-weight:800}
-.rank-table .rank-1{color:#f6c90e}
-.rank-table .rank-2{color:#b0b0b0}
-.rank-table .rank-3{color:#cd7f32}
-.rank-table .rank-4{color:#1a73e8}
-.rank-table .rank-5{color:#888}
-.rank-table .rank-6{color:#aaa}
-
-.score-bar{display:inline-block;width:100px;height:22px;background:#f0f0f0;border-radius:11px;overflow:hidden;vertical-align:middle;margin:0 6px}
-.score-bar .fill{height:100%;border-radius:11px;transition:width .5s ease}
-.score-bar .fill.g{color:#4caf50}
-.score-bar .fill.y{color:#ff9800}
-.score-bar .fill.r{color:#f44336}
-.score-val{font-weight:700;font-size:14px;display:inline-block;width:50px;text-align:left}
-
-/* 项目排名 */
-.proj-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
-.proj-table th{background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;font-size:13px;padding:12px 8px;text-align:center;white-space:nowrap}
-.proj-table td{font-size:13px;padding:10px 8px;text-align:center;border-bottom:1px solid #f0f0f0}
-.proj-table .op-name{font-weight:700;font-size:14px;text-align:left;padding-left:12px}
-.proj-table .op-person{font-size:11px;color:#888}
-.proj-table .rank-num{font-size:20px;font-weight:800}
-.proj-table .rank-1{color:#f6c90e}
-.proj-table .rank-2{color:#b0b0b0}
-.proj-table .rank-3{color:#cd7f32}
-.proj-table .rank-4{color:#1a73e8}
-.proj-table .rank-5{color:#888}
-.proj-table .rank-6{color:#aaa}
-
-/* 颜色 */
-.c-green{color:#4caf50;font-weight:700}
-.c-yellow{color:#ff9800;font-weight:700}
-.c-red{color:#f44336;font-weight:700}
-.c-blue{color:#1a73e8;font-weight:700}
-
-/* 职人码双指标 */
-.zrq-dual{display:flex;gap:6px;justify-content:center}
-.zrq-dual .zrq-item{font-size:12px;padding:3px 8px;border-radius:6px;background:#e3f2fd;color:#1565c0}
-.zrq-dual .zrq-item .label{font-size:10px;color:#90a4ae}
-
-/* 健康度双指标 */
-.health-dual{display:flex;gap:6px;justify-content:center}
-.health-dual .hl-item{font-size:12px;padding:3px 8px;border-radius:6px}
-.health-dual .hl-item.elim{background:#fff3e0;color:#e65100}
-.health-dual .hl-item.risk{background:#fce4ec;color:#c62828}
-
-/* 综合得分卡片 */
-.score-card{display:flex;gap:16px;justify-content:space-around;flex-wrap:wrap;margin-bottom:20px}
-.score-card .sc{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 10px rgba(0,0,0,.08);text-align:center;min-width:160px;flex:1;border-top:4px solid #e0e0e0}
-.score-card .sc.top1{border-top-color:#f6c90e}
-.score-card .sc.top2{border-top-color:#b0b0b0}
-.score-card .sc.top3{border-top-color:#cd7f32}
-.score-card .sc .sc-rank{font-size:32px;font-weight:900;margin-bottom:4px}
-.score-card .sc .sc-rank.r1{color:#f6c90e}
-.score-card .sc .sc-rank.r2{color:#b0b0b0}
-.score-card .sc .sc-rank.r3{color:#cd7f32}
-.score-card .sc .sc-rank.r4{color:#1a73e8}
-.score-card .sc .sc-rank.r5{color:#888}
-.score-card .sc .sc-rank.r6{color:#aaa}
-.score-card .sc .sc-name{font-size:14px;font-weight:700;margin-bottom:2px}
-.score-card .sc .sc-person{font-size:11px;color:#888;margin-bottom:8px}
-.score-card .sc .sc-score{font-size:28px;font-weight:800;color:#1a73e8}
-.score-card .sc .sc-score-label{font-size:11px;color:#888;margin-top:2px}
-
-/* 维度得分明细 */
-.dims{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.dims .d-item{text-align:left}
-.dims .d-label{font-size:11px;color:#888}
-.dims .d-val{font-size:13px;font-weight:600}
-
-/* 隐藏 */
+/* 内容区 */
+.ct{padding:16px 20px 40px;max-width:1280px;margin:0 auto}
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* 说明 */
-.legend{font-size:12px;color:#888;margin-top:14px;display:flex;gap:16px;flex-wrap:wrap}
-.legend .l-item{display:flex;align-items:center;gap:4px}
-.legend .l-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.l-dot.g{background:#4caf50}
-.l-dot.y{background:#ff9800}
-.l-dot.r{background:#f44336}
+/* 卡片网格 */
+.score-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:900px){.score-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.score-grid{grid-template-columns:repeat(2,1fr)}}
 
-/* 项目积分标识 */
-.proj-score{font-size:18px;font-weight:800;color:#0d47a1}
-.proj-score-label{font-size:10px;color:#888}
-.proj-rank-badge{display:inline-block;width:22px;height:22px;border-radius:50%;color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center;margin:0 2px}
-.proj-rank-badge.r1{background:#f6c90e;color:#333}
-.proj-rank-badge.r2{background:#b0b0b0;color:#fff}
-.proj-rank-badge.r3{background:#cd7f32;color:#fff}
-.proj-rank-badge.r4{background:#1a73e8;color:#fff}
-.proj-rank-badge.r5{background:#888;color:#fff}
-.proj-rank-badge.r6{background:#bbb;color:#fff}
+/* 排名卡片 */
+.sc{background:#fff;border-radius:12px;padding:14px 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:pointer;transition:.18s;border-top:4px solid #e0e0e0;position:relative}
+.sc:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.sc.top1{border-top-color:#f6c90e}
+.sc.top2{border-top-color:#b0b0b0}
+.sc.top3{border-top-color:#cd7f32}
+.sc .sc-rank{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.sc .r1{color:#f6c90e}.sc .r2{color:#b0b0b0}.sc .r3{color:#cd7f32}.sc .r4{color:#1a73e8}.sc .r5{color:#888}.sc .r6{color:#aaa}
+.sc .sc-name{font-size:14px;font-weight:700}
+.sc .sc-person{font-size:11px;color:#888;margin-bottom:8px}
+.sc .sc-score-val{font-size:26px;font-weight:800;color:#1a73e8;margin:4px 0 2px}
+.sc .sc-score-lbl{font-size:10px;color:#aaa}
+.sc .sc-dims{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:3px 8px}
+.sc .sc-dim{font-size:11px;color:#555}
+.sc .sc-dim span{color:#888;font-size:10px}
+.sc .sc-arrow{position:absolute;bottom:10px;right:12px;font-size:11px;color:#1a73e8;opacity:.7}
 
-/* 项目积分表 */
-.proj-score-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);margin-top:10px}
-.proj-score-table th{background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;font-size:13px;padding:12px 8px;text-align:center;white-space:nowrap}
-.proj-score-table td{font-size:13px;padding:10px 8px;text-align:center;border-bottom:1px solid #f0f0f0}
-.proj-score-table .op-name{font-weight:700;font-size:14px;text-align:left;padding-left:12px}
-.proj-score-table .op-person{font-size:11px;color:#888}
-.proj-score-table .rank-num{font-size:20px;font-weight:800}
-.proj-score-table .rank-1{color:#f6c90e}
-.proj-score-table .rank-2{color:#b0b0b0}
-.proj-score-table .rank-3{color:#cd7f32}
-.proj-score-table .rank-4{color:#1a73e8}
-.proj-score-table .rank-5{color:#888}
-.proj-score-table .rank-6{color:#aaa}
-.proj-score-table .metric-name{text-align:left;font-size:12px;padding-left:10px}
-.detail-row{background:#fafbfc}
-.detail-row td{font-size:12px;color:#666}
-.detail-metric{font-weight:600;color:#333}
+/* 明细表 */
+.sec{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:14px}
+.sec h2{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eef0f5;display:flex;align-items:center;gap:8px}
+.rtable{width:100%;border-collapse:collapse;font-size:13px}
+.rtable th{background:#f5f7fb;color:#555;padding:10px 8px;text-align:center;font-weight:600;white-space:nowrap;border-bottom:2px solid #e8eaee}
+.rtable td{padding:9px 8px;text-align:center;border-bottom:1px solid #f2f2f2}
+.rtable tr:hover td{background:#fafbff}
+.rtable .tdl{text-align:left;padding-left:12px}
+.rk{font-size:18px;font-weight:800}
+.rk.r1{color:#f6c90e}.rk.r2{color:#b0b0b0}.rk.r3{color:#cd7f32}.rk.r4{color:#1a73e8}.rk.r5{color:#888}.rk.r6{color:#aaa}
+.cg{color:#4caf50;font-weight:700}.cy{color:#ff9800;font-weight:700}.cr{color:#f44336;font-weight:700}.cb{color:#1a73e8;font-weight:700}
+.badge{display:inline-block;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;line-height:20px;text-align:center}
+.badge.b1{background:#f6c90e;color:#333}.badge.b2{background:#bbb;color:#fff}.badge.b3{background:#cd7f32;color:#fff}
+.badge.b4{background:#1a73e8;color:#fff}.badge.b5{background:#888;color:#fff}.badge.b6{background:#ccc;color:#fff}
+.sub{font-size:10px;color:#aaa}
 
+/* 详情覆盖层 */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;overflow-y:auto}
+.overlay.show{display:block}
+.overlay-box{background:#fff;border-radius:14px;margin:20px auto;max-width:1160px;padding:0;overflow:hidden}
+.overlay-hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:14px 20px;display:flex;align-items:center}
+.overlay-hdr h2{font-size:16px;font-weight:700;flex:1}
+.overlay-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:0 4px;line-height:1}
+
+/* 数据面板（图2样式）*/
+.dp-wrap{padding:16px}
+.dp-title{text-align:center;font-size:15px;font-weight:700;color:#333;margin-bottom:12px}
+.dp-sub{text-align:center;font-size:12px;color:#888;margin-bottom:14px}
+.dp-table{width:100%;border-collapse:collapse;font-size:12px}
+.dp-table th{background:#2c5282;color:#fff;padding:8px 6px;text-align:center;white-space:nowrap;border:1px solid #3a6494}
+.dp-table .th-gtv{background:#c53030;color:#fff}
+.dp-table .th-cpc{background:#276749;color:#fff}
+.dp-table .th-mem{background:#744210;color:#fff}
+.dp-table td{padding:7px 6px;text-align:right;border:1px solid #e2e8f0;white-space:nowrap}
+.dp-table .td-name{text-align:left;font-weight:700;background:#ebf8ff;color:#2b6cb0}
+.dp-table .td-person{text-align:left;color:#666;background:#f7fafc}
+.dp-table tr:last-child td{background:#fef3c7;font-weight:700}
+.dp-rate-g{color:#2f855a;font-weight:700}
+.dp-rate-y{color:#c05621;font-weight:700}
+.dp-rate-r{color:#c53030;font-weight:700}
+.dp-gap-neg{color:#c53030}
+.dp-gap-pos{color:#2f855a}
+
+/* 项目明细条 */
+.proj-item{margin-bottom:14px;border:1px solid #e8eaee;border-radius:10px;overflow:hidden}
+.proj-item-hdr{background:#f0f4fb;padding:10px 14px;font-size:13px;font-weight:700;color:#1a73e8;display:flex;justify-content:space-between}
+.proj-item-hdr span{font-size:11px;color:#888;font-weight:400}
+.proj-rtable{width:100%;border-collapse:collapse;font-size:12px}
+.proj-rtable th{background:#f8f9fa;color:#555;padding:7px 10px;text-align:center;font-size:11px}
+.proj-rtable td{padding:7px 10px;text-align:center;border-bottom:1px solid #f0f0f0}
+
+/* 图例 */
+.legend{font-size:11px;color:#999;margin-top:10px;display:flex;gap:14px;flex-wrap:wrap}
+.legend .li{display:flex;align-items:center;gap:4px}
+.li-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <h1>粤闽浙代运营商绩效排名</h1>
-  <div class="dt">数据日期：2026-05-31 | 核心业绩：5月MTD | 项目数据：5月最新</div>
+  <div class="dt" id="hdr-date">数据更新：2026-05-31</div>
 </div>
 
 <div class="tab-bar">
-  <button class="tab-btn active" onclick="showTab('perf')">核心业绩排名</button>
-  <button class="tab-btn" onclick="showTab('proj')">项目排名</button>
+  <button class="tab-btn active" onclick="showTab('perf',this)">核心业绩排名</button>
+  <button class="tab-btn" onclick="showTab('proj',this)">项目排名</button>
 </div>
 
 <div class="ct">
 
-<!-- ============ 核心业绩排名 ============ -->
+<!-- ===== 核心业绩 ===== -->
 <div id="perf-tab" class="tab-content active">
-
-  <!-- 综合得分卡片 -->
+  <div class="score-grid" id="perf-cards"></div>
   <div class="sec">
-    <h2>📊 核心业绩综合得分</h2>
-    <div class="score-card" id="perf-score-card"></div>
-  </div>
-
-  <!-- 排名明细表 -->
-  <div class="sec">
-    <h2>📋 核心业绩排名明细</h2>
-    <table class="rank-table">
+    <h2>📋 排名明细 <span style="font-size:12px;color:#aaa;font-weight:400">点击行名查看完整数据面板</span></h2>
+    <table class="rtable">
       <thead>
         <tr>
-          <th>排名</th>
-          <th>代运营商</th>
-          <th>GTV完成率<br><span style="font-size:10px;font-weight:400">权重30%</span></th>
-          <th>CPC消耗完成率<br><span style="font-size:10px;font-weight:400">权重30%</span></th>
-          <th>MEM续约率<br><span style="font-size:10px;font-weight:400">权重10%</span></th>
-          <th>CPC新签完成率<br><span style="font-size:10px;font-weight:400">权重10%</span></th>
-          <th>业绩健康度<br><span style="font-size:10px;font-weight:400">剔除率+感知风控(20%)</span></th>
+          <th>名次</th><th>代运营商</th>
+          <th>GTV完成率<br><span class="sub">权重30%</span></th>
+          <th>CPC消耗完成率<br><span class="sub">权重30%</span></th>
+          <th>MEM续约率<br><span class="sub">权重10%</span></th>
+          <th>CPC新签完成率<br><span class="sub">权重10%</span></th>
+          <th>剔除率<br><span class="sub">健康度20%</span></th>
+          <th>感知风控</th>
           <th>综合得分</th>
         </tr>
       </thead>
       <tbody id="perf-tbody"></tbody>
     </table>
-    <div class="legend">
-      <div class="l-item"><span class="l-dot g"></span> 达标(≥目标)</div>
-      <div class="l-item"><span class="l-dot y"></span> 接近目标(≥80%)</div>
-      <div class="l-item"><span class="l-dot r"></span> 未达标(&lt;80%)</div>
-    </div>
+    <div class="legend"><div class="li"><span class="li-dot" style="background:#4caf50"></span>≥100%</div><div class="li"><span class="li-dot" style="background:#ff9800"></span>≥80%</div><div class="li"><span class="li-dot" style="background:#f44336"></span>&lt;80%</div></div>
   </div>
-
 </div>
 
-<!-- ============ 项目排名 ============ -->
+<!-- ===== 项目排名 ===== -->
 <div id="proj-tab" class="tab-content">
-
-  <!-- 项目综合积分卡片 -->
+  <div class="score-grid" id="proj-cards"></div>
   <div class="sec">
-    <h2>📊 项目综合积分（6项均分，积分强排）</h2>
-    <div class="score-card" id="proj-score-card"></div>
-  </div>
-
-  <!-- 项目积分排名表 -->
-  <div class="sec">
-    <h2>📋 项目积分排名明细</h2>
-    <table class="proj-score-table">
+    <h2>📋 积分明细 <span style="font-size:12px;color:#aaa;font-weight:400">每项排名1-6对应6-1分，均分权重</span></h2>
+    <table class="rtable">
       <thead>
         <tr>
-          <th>排名</th>
-          <th>代运营商</th>
-          <th>经营评分<br>达标率</th>
-          <th>好店动销<br>达标数</th>
-          <th>职人码<br>渗透率/物料率</th>
-          <th>BML<br>Lose率</th>
-          <th>旺铺通<br>好店开通率</th>
+          <th>名次</th><th>代运营商</th>
+          <th>经营评分达标率</th>
+          <th>好店动销达标数</th>
+          <th>职人码<br><span class="sub">店转渗透率/物料率</span></th>
+          <th>BML Lose率</th>
+          <th>旺铺通好店开通率</th>
           <th>真实满编率</th>
           <th>项目总积分</th>
         </tr>
       </thead>
-      <tbody id="proj-score-body"></tbody>
+      <tbody id="proj-tbody"></tbody>
     </table>
   </div>
-
-  <!-- 代运营商达成明细（可展开） -->
-  <div class="sec" id="proj-detail-sec">
-    <h2>📋 各项目达成明细</h2>
-    <div id="proj-detail-content"></div>
-  </div>
+  <div id="proj-details"></div>
+</div>
 
 </div>
 
+<!-- ===== 详情覆盖层：核心业绩数据面板 ===== -->
+<div class="overlay" id="detail-overlay" onclick="closeDetail(event)">
+  <div class="overlay-box" onclick="event.stopPropagation()">
+    <div class="overlay-hdr">
+      <h2 id="detail-title">核心业绩数据面板</h2>
+      <button class="overlay-close" onclick="closeOverlay()">✕</button>
+    </div>
+    <div class="dp-wrap">
+      <div class="dp-title" id="dp-title">粤闽浙城市群代运营销售数据面板</div>
+      <div class="dp-sub" id="dp-sub">2026-05-31 &nbsp;|&nbsp; 时间进度：96.77%（30/31天）</div>
+      <div id="dp-table-wrap"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-// ============ 数据 ============ 
+// ============ 数据 ============
+const DATA_DATE = '2026-05-31';
+const TIME_PROGRESS = '96.77%（30/31天）';
 const OPS = ['惠州巨浪','惠州柏万','泉州小花猫','惠安广通','慈溪哲光','义乌汐洋'];
-const PERSONS = { '惠州巨浪':'肖立铭', '惠州柏万':'林启梁', '泉州小花猫':'康子诚', '惠安广通':'尤云生', '慈溪哲光':'孙浩', '义乌汐洋':'陈铨' };
+const PERSONS = {'惠州巨浪':'肖立铭','惠州柏万':'林启梁','泉州小花猫':'康子诚','惠安广通':'尤云生','慈溪哲光':'孙浩','义乌汐洋':'陈铨'};
 
-// 核心业绩数据（完成率%）
+// 核心业绩（来自PC业绩看板）
 const PERF = {
-  '惠州巨浪': {gtv: 91.5, cpc: 97.44, mem: 70.9, cpc_new: 120.0, elim: 5.73, risk: 18.0},
-  '惠州柏万': {gtv: 99.47, cpc: 100.03, mem: 63.3, cpc_new: 158.3, elim: 3.33, risk: 12.0},
-  '泉州小花猫': {gtv: 97.43, cpc: 98.70, mem: 52.5, cpc_new: 116.7, elim: 3.21, risk: 15.0},
-  '惠安广通': {gtv: 96.63, cpc: 101.76, mem: 50.0, cpc_new: 122.2, elim: 3.91, risk: 14.0},
-  '慈溪哲光': {gtv: 97.51, cpc: 94.86, mem: 55.1, cpc_new: 106.3, elim: 5.00, risk: 20.0},
-  '义乌汐洋': {gtv: 98.16, cpc: 105.77, mem: 69.2, cpc_new: 100.0, elim: 1.47, risk: 16.0},
+  '惠州巨浪': {gtv:3620250,gtv_target:3956557,gtv_rate:91.50,gtv_gap:336307,gtv_yday:147396,elim:5.73,cpc_mtd:85655,wpt_mtd:35586,cpc_target:87905,cpc_rate:97.44,cpc_gap:2250,cpc_yday:3468,wpt_yday:2050,day_cpc:5517,cpc_new:18,cpc_new_eff:15,cpc_new_sign:15,mem_rev:151187,mem_renewal:70.9,risk:18.0,cpc_new_rate:120.0},
+  '义乌汐洋': {gtv:2947118,gtv_target:3002361,gtv_rate:98.16,gtv_gap:55243,gtv_yday:107347,elim:1.47,cpc_mtd:160102,wpt_mtd:27746,cpc_target:151368,cpc_rate:105.77,cpc_gap:-8733,cpc_yday:5243,wpt_yday:934,day_cpc:6176,cpc_new:18,cpc_new_eff:16,cpc_new_sign:16,mem_rev:88400,mem_renewal:69.2,risk:16.0,cpc_new_rate:100.0},
+  '惠安广通': {gtv:2279155,gtv_target:2358641,gtv_rate:96.63,gtv_gap:79486,gtv_yday:105980,elim:3.91,cpc_mtd:74997,wpt_mtd:20983,cpc_target:73700,cpc_rate:101.76,cpc_gap:-1297,cpc_yday:3846,wpt_yday:886,day_cpc:4733,cpc_new:15,cpc_new_eff:11,cpc_new_sign:9,mem_rev:76529,mem_renewal:50.0,risk:14.0,cpc_new_rate:122.2},
+  '惠州柏万': {gtv:3223024,gtv_target:3240197,gtv_rate:99.47,gtv_gap:17173,gtv_yday:131226,elim:3.33,cpc_mtd:110337,wpt_mtd:30728,cpc_target:110304,cpc_rate:100.03,cpc_gap:-33,cpc_yday:5543,wpt_yday:1873,day_cpc:7416,cpc_new:25,cpc_new_eff:19,cpc_new_sign:12,mem_rev:117533,mem_renewal:63.3,risk:12.0,cpc_new_rate:158.3},
+  '泉州小花猫': {gtv:2702939,gtv_target:2774237,gtv_rate:97.43,gtv_gap:71297,gtv_yday:83928,elim:3.21,cpc_mtd:122146,wpt_mtd:27765,cpc_target:123755,cpc_rate:98.70,cpc_gap:1608,cpc_yday:7103,wpt_yday:1430,day_cpc:8534,cpc_new:17,cpc_new_eff:14,cpc_new_sign:12,mem_rev:78496,mem_renewal:52.5,risk:15.0,cpc_new_rate:116.7},
+  '慈溪哲光': {gtv:3040020,gtv_target:3117649,gtv_rate:97.51,gtv_gap:77629,gtv_yday:144393,elim:5.00,cpc_mtd:147173,wpt_mtd:17895,cpc_target:155148,cpc_rate:94.86,cpc_gap:7974,cpc_yday:6001,wpt_yday:941,day_cpc:6941,cpc_new:18,cpc_new_eff:17,cpc_new_sign:16,mem_rev:87456,mem_renewal:55.1,risk:20.0,cpc_new_rate:106.3},
 };
+// 汇总行
+const TOTAL = {gtv:17811284,gtv_target:18449642,gtv_rate:96.54,gtv_gap:638357,gtv_yday:720270,elim:3.87,cpc_mtd:700425,wpt_mtd:160703,cpc_target:702180,cpc_rate:99.75,cpc_gap:1755,cpc_yday:31204,wpt_yday:8113,day_cpc:39317,cpc_new:117,cpc_new_eff:95,cpc_new_sign:80,mem_rev:597407,mem_renewal:60.78,risk:null,cpc_new_rate:null};
 
 // 项目数据
 const PROJ = {
-  '惠州巨浪': {score: 30.3, dx: {val: 187, target: 225, rate: 83.1}, zrq: {st: 26.12, mat: 31.09}, bml: 0.00, wpt: {open: 321, hd: 901, hdOpen: 211, hdRate: 23.4}},
-  '惠州柏万': {score: 32.4, dx: {val: 151, target: 162, rate: 93.2}, zrq: {st: 31.04, mat: 34.05}, bml: 7.69, wpt: {open: 209, hd: 534, hdOpen: 120, hdRate: 22.5}},
-  '泉州小花猫': {score: 28.8, dx: {val: 176, target: 193, rate: 91.2}, zrq: {st: 34.84, mat: 33.39}, bml: 35.71, wpt: {open: 217, hd: 929, hdOpen: 148, hdRate: 15.9}},
-  '惠安广通': {score: 30.2, dx: {val: 113, target: 132, rate: 85.6}, zrq: {st: 33.24, mat: 33.20}, bml: 30.77, wpt: {open: 183, hd: 512, hdOpen: 120, hdRate: 23.4}},
-  '慈溪哲光': {score: 27.5, dx: {val: 145, target: 151, rate: 96.0}, zrq: {st: 27.44, mat: 22.39}, bml: 28.57, wpt: {open: 146, hd: 758, hdOpen: 84, hdRate: 11.1}},
-  '义乌汐洋': {score: 33.8, dx: {val: 158, target: 162, rate: 97.5}, zrq: {st: 30.72, mat: 28.57}, bml: 33.33, wpt: {open: 152, hd: 578, hdOpen: 112, hdRate: 19.4}},
+  '惠州巨浪': {score:30.3, dx:{val:187,target:225,rate:83.1}, zrq:{st:26.12,mat:31.09}, bml:0.00, wpt:{hdOpen:211,hd:901,hdRate:23.4}},
+  '惠州柏万': {score:32.4, dx:{val:151,target:162,rate:93.2}, zrq:{st:31.04,mat:34.05}, bml:7.69, wpt:{hdOpen:120,hd:534,hdRate:22.5}},
+  '泉州小花猫': {score:28.8, dx:{val:176,target:193,rate:91.2}, zrq:{st:34.84,mat:33.39}, bml:35.71, wpt:{hdOpen:148,hd:929,hdRate:15.9}},
+  '惠安广通': {score:30.2, dx:{val:113,target:132,rate:85.6}, zrq:{st:33.24,mat:33.20}, bml:30.77, wpt:{hdOpen:120,hd:512,hdRate:23.4}},
+  '慈溪哲光': {score:27.5, dx:{val:145,target:151,rate:96.0}, zrq:{st:27.44,mat:22.39}, bml:28.57, wpt:{hdOpen:84,hd:758,hdRate:11.1}},
+  '义乌汐洋': {score:33.8, dx:{val:158,target:162,rate:97.5}, zrq:{st:30.72,mat:28.57}, bml:33.33, wpt:{hdOpen:112,hd:578,hdRate:19.4}},
 };
+const FILL_RATE = {'惠州巨浪':null,'惠州柏万':null,'泉州小花猫':null,'惠安广通':null,'慈溪哲光':null,'义乌汐洋':null};
 
-// 满编率（暂缺，显示N/A）
-const FILL_RATE = {
-  '惠州巨浪': null,
-  '惠州柏万': null,
-  '泉州小花猫': null,
-  '惠安广通': null,
-  '慈溪哲光': null,
-  '义乌汐洋': null,
-};
-
-// ============ 核心业绩综合得分计算 ============
-// GTV 30% + CPC消耗 30% + MEM续约 10% + CPC新签 10% + 健康度 20%
-// 健康度 = 剔除率(10%) + 感知风控(10%)
-// 剔除率：越低越好 → 得分 = 100 - 剔除率*1000 (上限100, 下限0)
-// 感知风控：越低越好 → 同剔除率
-// 各项完成率直接作为得分（上限100）
+// ============ 评分计算 ============
 function calcPerfScore(op) {
   const d = PERF[op];
-  // 剔除率得分：<2%满分, 2-5%线性, >10%0分
-  let elimScore = 100 - d.elim * 20;
-  if (elimScore < 0) elimScore = 0;
-  if (elimScore > 100) elimScore = 100;
-  // 感知风控得分：<15%满分, 15-25%线性, >30%0分
-  let riskScore = 100 - (d.risk - 15) * 10;
-  if (riskScore < 0) riskScore = 0;
-  if (riskScore > 100) riskScore = 100;
-  const healthScore = (elimScore + riskScore) / 2;
-  const total = d.gtv * 0.30 + d.cpc * 0.30 + d.mem * 0.10 + d.cpc_new * 0.10 + healthScore * 0.20;
-  return Math.round(total * 10) / 10;
+  let elimS = Math.min(100, Math.max(0, 100 - d.elim * 20));
+  let riskS = Math.min(100, Math.max(0, 100 - (d.risk - 15) * 10));
+  const healthS = (elimS + riskS) / 2;
+  return Math.round((d.gtv_rate*0.30 + d.cpc_rate*0.30 + d.mem_renewal*0.10 + d.cpc_new_rate*0.10 + healthS*0.20)*10)/10;
 }
 
-// ============ 渲染 ============
-function render() {
-  renderPerfScoreCard();
-  renderPerfTable();
-  renderProjScoreCard();
-  renderProjTable();
-  renderProjDetail();
-}
-
-// 渲染核心业绩综合得分卡片
-function renderPerfScoreCard() {
-  const order = [...OPS].sort((a, b) => calcPerfScore(b) - calcPerfScore(a));
-  let html = '';
-  const scores = {};
-  for (const op of OPS) scores[op] = calcPerfScore(op);
-  for (let i = 0; i < order.length; i++) {
-    const op = order[i];
-    const rank = i + 1;
-    const score = scores[op];
-    const cls = rank <= 3 ? 'top' + rank : '';
-    const dimCls = rank <= 3 ? 'r' + rank : 'r' + rank;
-    html += `<div class="sc ${cls}">
-      <div class="sc-rank ${dimCls}">${rank}</div>
-      <div class="sc-name">${op}</div>
-      <div class="sc-person">${PERSONS[op]}</div>
-      <div class="sc-score">${score}</div>
-      <div class="sc-score-label">综合得分</div>
-      <div class="dims">
-        <div class="d-item"><span class="d-label">GTV</span><span class="d-val">${PERF[op].gtv}%</span></div>
-        <div class="d-item"><span class="d-label">CPC消耗</span><span class="d-val">${PERF[op].cpc}%</span></div>
-        <div class="d-item"><span class="d-label">MEM续约</span><span class="d-val">${PERF[op].mem}%</span></div>
-        <div class="d-item"><span class="d-label">CPC新签</span><span class="d-val">${PERF[op].cpc_new}%</span></div>
-        <div class="d-item"><span class="d-label">剔除率</span><span class="d-val">${PERF[op].elim}%</span></div>
-        <div class="d-item"><span class="d-label">感知风控</span><span class="d-val">${PERF[op].risk}%</span></div>
-      </div>
-    </div>`;
-  }
-  document.getElementById('perf-score-card').innerHTML = html;
-}
-
-// 渲染核心业绩排名表
-function renderPerfTable() {
-  const order = [...OPS].sort((a, b) => calcPerfScore(b) - calcPerfScore(a));
-  let html = '';
-  for (let i = 0; i < order.length; i++) {
-    const op = order[i];
-    const d = PERF[op];
-    const score = calcPerfScore(op);
-    const rankCls = 'rank-' + (i+1);
-    // 颜色
-    const gtvColor = d.gtv >= 100 ? 'c-green' : d.gtv >= 80 ? 'c-yellow' : 'c-red';
-    const cpcColor = d.cpc >= 100 ? 'c-green' : d.cpc >= 80 ? 'c-yellow' : 'c-red';
-    const memColor = d.mem >= 100 ? 'c-green' : d.mem >= 80 ? 'c-yellow' : 'c-red';
-    const newColor = d.cpc_new >= 100 ? 'c-green' : d.cpc_new >= 80 ? 'c-yellow' : 'c-red';
-    html += `<tr>
-      <td><span class="rank-num ${rankCls}">${i+1}</span></td>
-      <td class="op-name">${op}<br><span class="op-person">${PERSONS[op]}</span></td>
-      <td class="${gtvColor}">${d.gtv}%</td>
-      <td class="${cpcColor}">${d.cpc}%</td>
-      <td class="${memColor}">${d.mem}%</td>
-      <td class="${newColor}">${d.cpc_new}%</td>
-      <td>
-        <div class="health-dual">
-          <span class="hl-item elim">剔${d.elim}%</span>
-          <span class="hl-item risk">风${d.risk}%</span>
-        </div>
-      </td>
-      <td><span class="c-blue" style="font-size:16px">${score}</span></td>
-    </tr>`;
-  }
-  document.getElementById('perf-tbody').innerHTML = html;
-}
-
-// ============ 项目排名（积分制，6项均分） ============
 const PROJ_METRICS = [
-  {key: 'score', label: '经营评分达标率', sort: 'desc', unit: '%', detail: (op) => `${PROJ[op].score}%`},
-  {key: 'dx', label: '好店动销达标数', sort: 'desc', unit: '', detail: (op) => `${PROJ[op].dx.val}/${PROJ[op].dx.target}(${PROJ[op].dx.rate}%)`},
-  {key: 'zrq', label: '职人码店转渗透率', sort: 'desc', unit: '%', detail: (op) => `${PROJ[op].zrq.st}%`},
-  {key: 'bml', label: 'BML Lose率', sort: 'asc', unit: '%', detail: (op) => `${PROJ[op].bml.toFixed(1)}%`},
-  {key: 'wpt', label: '旺铺通好店开通率', sort: 'desc', unit: '%', detail: (op) => `${PROJ[op].wpt.hdOpen}/${PROJ[op].wpt.hd}(${PROJ[op].wpt.hdRate}%)`},
-  {key: 'fill', label: '真实满编率', sort: 'desc', unit: '%', detail: (op) => FILL_RATE[op] !== null ? `${FILL_RATE[op]}%` : 'N/A'},
+  {key:'score', label:'经营评分达标率', sort:'desc', val:(op)=>PROJ[op].score, detail:(op)=>`${PROJ[op].score}%`},
+  {key:'dx',    label:'好店动销达标数', sort:'desc', val:(op)=>PROJ[op].dx.val,  detail:(op)=>`${PROJ[op].dx.val}/${PROJ[op].dx.target}（${PROJ[op].dx.rate}%）`},
+  {key:'zrq',   label:'职人码店转渗透率',sort:'desc',val:(op)=>PROJ[op].zrq.st, detail:(op)=>`渗透${PROJ[op].zrq.st}% / 物料${PROJ[op].zrq.mat}%`},
+  {key:'bml',   label:'BML Lose率',    sort:'asc',  val:(op)=>PROJ[op].bml,     detail:(op)=>`${PROJ[op].bml.toFixed(1)}%`},
+  {key:'wpt',   label:'旺铺通好店开通率',sort:'desc',val:(op)=>PROJ[op].wpt.hdRate, detail:(op)=>`${PROJ[op].wpt.hdOpen}/${PROJ[op].wpt.hd}（${PROJ[op].wpt.hdRate}%）`},
+  {key:'fill',  label:'真实满编率',    sort:'desc',  val:(op)=>FILL_RATE[op]||0,detail:(op)=>FILL_RATE[op]?`${FILL_RATE[op]}%`:'N/A'},
 ];
 
-// 计算排名和积分（第1名6分，第2名5分，...第6名1分）
-function calcProjRanksAndScores() {
-  const result = {};
-  // 计算每项排名
-  const ranks = {};
-  for (const m of PROJ_METRICS) {
-    const vals = OPS.map(op => ({
-      op,
-      val: m.key === 'fill' ? (FILL_RATE[op] || -1) :
-           (m.key === 'dx' ? PROJ[op][m.key].val : PROJ[op][m.key])
-    }));
-    vals.sort((a, b) => m.sort === 'desc' ? b.val - a.val : a.val - b.val);
-    ranks[m.key] = {};
-    for (let i = 0; i < vals.length; i++) {
-      ranks[m.key][vals[i].op] = i + 1;
-    }
+function calcProjRanks() {
+  const ranks={}, pts={};
+  for(const m of PROJ_METRICS){
+    const s=[...OPS].sort((a,b)=>m.sort==='desc'?m.val(b)-m.val(a):m.val(a)-m.val(b));
+    ranks[m.key]={};
+    s.forEach((op,i)=>ranks[m.key][op]=i+1);
   }
-  // 计算每项积分（排名1=6分，2=5分，...6=1分）
-  const scores = {};
-  for (const op of OPS) {
-    let total = 0;
-    for (const m of PROJ_METRICS) {
-      const r = ranks[m.key][op];
-      const pts = 7 - r;  // rank 1 -> 6 pts, rank 6 -> 1 pt
-      total += pts;
-    }
-    scores[op] = total;
+  for(const op of OPS){
+    pts[op]=0;
+    for(const m of PROJ_METRICS) pts[op]+=(7-ranks[m.key][op]);
   }
-  // 综合积分排名
-  const order = [...OPS].sort((a, b) => scores[b] - scores[a]);
-  return { ranks, scores, order };
+  return {ranks, pts};
 }
 
-// 渲染项目综合积分卡片
-function renderProjScoreCard() {
-  const { scores, order } = calcProjRanksAndScores();
-  let html = '';
-  for (let i = 0; i < order.length; i++) {
-    const op = order[i];
-    const rank = i + 1;
-    const pts = scores[op];
-    const cls = rank <= 3 ? 'top' + rank : '';
-    const dimCls = rank <= 3 ? 'r' + rank : 'r' + rank;
-    html += `<div class="sc ${cls}">
-      <div class="sc-rank ${dimCls}">${rank}</div>
+// ============ 工具函数 ============
+const fmt = (n,dec=0)=>n==null?'-':(n<0?'-':'')+Math.abs(n).toLocaleString('zh-CN',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+const fmtRate = v=>v==null?'-':v.toFixed(2)+'%';
+const rateColor = v=>v>=100?'dp-rate-g':v>=80?'dp-rate-y':'dp-rate-r';
+
+// ============ 渲染核心业绩卡片 ============
+function renderPerfCards() {
+  const order=[...OPS].sort((a,b)=>calcPerfScore(b)-calcPerfScore(a));
+  let html='';
+  order.forEach((op,i)=>{
+    const d=PERF[op]; const rank=i+1;
+    const score=calcPerfScore(op);
+    html+=`<div class="sc ${rank<=3?'top'+rank:''}" onclick="openDetail('${op}')">
+      <div class="sc-rank r${rank}">${rank}</div>
       <div class="sc-name">${op}</div>
       <div class="sc-person">${PERSONS[op]}</div>
-      <div class="proj-score">${pts}</div>
-      <div class="sc-score-label">项目总积分</div>
-      <div class="dims">
-        <div class="d-item"><span class="d-label">经营评分</span><span class="d-val">${PROJ[op].score}%</span></div>
-        <div class="d-item"><span class="d-label">好店动销</span><span class="d-val">${PROJ[op].dx.val}/${PROJ[op].dx.target}</span></div>
-        <div class="d-item"><span class="d-label">职人码渗透</span><span class="d-val">${PROJ[op].zrq.st}%</span></div>
-        <div class="d-item"><span class="d-label">BML Lose</span><span class="d-val">${PROJ[op].bml.toFixed(1)}%</span></div>
-        <div class="d-item"><span class="d-label">旺铺通</span><span class="d-val">${PROJ[op].wpt.hdRate}%</span></div>
-        <div class="d-item"><span class="d-label">满编率</span><span class="d-val">${FILL_RATE[op] !== null ? FILL_RATE[op]+'%' : 'N/A'}</span></div>
+      <div class="sc-score-val">${score}</div>
+      <div class="sc-score-lbl">综合得分</div>
+      <div class="sc-dims">
+        <div class="sc-dim"><span>GTV </span>${d.gtv_rate}%</div>
+        <div class="sc-dim"><span>CPC </span>${d.cpc_rate}%</div>
+        <div class="sc-dim"><span>MEM </span>${d.mem_renewal}%</div>
+        <div class="sc-dim"><span>新签 </span>${d.cpc_new_rate}%</div>
+        <div class="sc-dim"><span>剔除 </span>${d.elim}%</div>
+        <div class="sc-dim"><span>风控 </span>${d.risk}%</div>
+      </div>
+      <div class="sc-arrow">点击详情 →</div>
+    </div>`;
+  });
+  document.getElementById('perf-cards').innerHTML=html;
+}
+
+// ============ 渲染核心业绩明细表 ============
+function renderPerfTable() {
+  const order=[...OPS].sort((a,b)=>calcPerfScore(b)-calcPerfScore(a));
+  let html='';
+  order.forEach((op,i)=>{
+    const d=PERF[op]; const score=calcPerfScore(op);
+    const rk=i+1;
+    const cc=v=>v>=100?'cg':v>=80?'cy':'cr';
+    html+=`<tr>
+      <td><span class="rk r${rk}">${rk}</span></td>
+      <td class="tdl" style="cursor:pointer;color:#1a73e8" onclick="openDetail('${op}')">${op}<br><span class="sub">${PERSONS[op]}</span></td>
+      <td class="${cc(d.gtv_rate)}">${d.gtv_rate}%</td>
+      <td class="${cc(d.cpc_rate)}">${d.cpc_rate}%</td>
+      <td class="${cc(d.mem_renewal)}">${d.mem_renewal}%</td>
+      <td class="${cc(d.cpc_new_rate)}">${d.cpc_new_rate}%</td>
+      <td class="${d.elim<=5?'cg':d.elim<=8?'cy':'cr'}">${d.elim}%</td>
+      <td class="${d.risk<=15?'cg':d.risk<=20?'cy':'cr'}">${d.risk}%</td>
+      <td class="cb" style="font-size:16px;font-weight:800">${score}</td>
+    </tr>`;
+  });
+  document.getElementById('perf-tbody').innerHTML=html;
+}
+
+// ============ 渲染项目排名卡片 ============
+function renderProjCards() {
+  const {pts}=calcProjRanks();
+  const order=[...OPS].sort((a,b)=>pts[b]-pts[a]);
+  let html='';
+  order.forEach((op,i)=>{
+    const rank=i+1;
+    html+=`<div class="sc ${rank<=3?'top'+rank:''}">
+      <div class="sc-rank r${rank}">${rank}</div>
+      <div class="sc-name">${op}</div>
+      <div class="sc-person">${PERSONS[op]}</div>
+      <div class="sc-score-val" style="color:#0d47a1">${pts[op]}</div>
+      <div class="sc-score-lbl">项目总积分</div>
+      <div class="sc-dims">
+        <div class="sc-dim"><span>评分 </span>${PROJ[op].score}%</div>
+        <div class="sc-dim"><span>动销 </span>${PROJ[op].dx.rate}%</div>
+        <div class="sc-dim"><span>渗透 </span>${PROJ[op].zrq.st}%</div>
+        <div class="sc-dim"><span>BML </span>${PROJ[op].bml.toFixed(1)}%</div>
       </div>
     </div>`;
-  }
-  document.getElementById('proj-score-card').innerHTML = html;
+  });
+  document.getElementById('proj-cards').innerHTML=html;
 }
 
-// 渲染项目积分排名表
+// ============ 渲染项目积分明细表 ============
 function renderProjTable() {
-  const { ranks, scores, order } = calcProjRanksAndScores();
-  let html = '';
-  for (let i = 0; i < order.length; i++) {
-    const op = order[i];
-    const d = PROJ[op];
-    const rankCls = 'rank-' + (i+1);
-    const cellColor = (r) => r <= 2 ? 'c-green' : r <= 4 ? 'c-yellow' : 'c-red';
-    html += `<tr>
-      <td><span class="rank-num ${rankCls}">${i+1}</span></td>
-      <td class="op-name">${op}<br><span class="op-person">${PERSONS[op]}</span></td>
-      ${PROJ_METRICS.map(m => {
-        if (m.key === 'fill') {
-          const r = ranks[m.key][op];
-          const detail = FILL_RATE[op] !== null ? `${FILL_RATE[op]}%` : 'N/A';
-          return `<td>${detail}<br><span class="rank-num ${cellColor(r)}" style="font-size:11px">#${r}</span></td>`;
-        }
-        const r = ranks[m.key][op];
-        const detail = m.detail(op);
-        return `<td class="${cellColor(r)}">${detail}<br><span class="rank-num ${cellColor(r)}" style="font-size:11px">#${r}</span></td>`;
-      }).join('')}
-      <td><span style="font-size:20px;font-weight:800;color:#0d47a1">${scores[op]}</span></td>
+  const {ranks,pts}=calcProjRanks();
+  const order=[...OPS].sort((a,b)=>pts[b]-pts[a]);
+  let html='';
+  order.forEach((op,i)=>{
+    const d=PROJ[op]; const rk=i+1;
+    const cc=r=>r<=2?'cg':r<=4?'cy':'cr';
+    html+=`<tr>
+      <td><span class="rk r${rk}">${rk}</span></td>
+      <td class="tdl">${op}<br><span class="sub">${PERSONS[op]}</span></td>
+      <td class="${cc(ranks.score[op])}">${d.score}%<br><span class="sub">#${ranks.score[op]}</span></td>
+      <td class="${cc(ranks.dx[op])}">${d.dx.val}/${d.dx.target}<br><span class="sub">${d.dx.rate}% #${ranks.dx[op]}</span></td>
+      <td class="${cc(ranks.zrq[op])}">${d.zrq.st}% / ${d.zrq.mat}%<br><span class="sub">#${ranks.zrq[op]}</span></td>
+      <td class="${cc(ranks.bml[op])}">${d.bml.toFixed(1)}%<br><span class="sub">#${ranks.bml[op]}</span></td>
+      <td class="${cc(ranks.wpt[op])}">${d.wpt.hdOpen}/${d.wpt.hd}<br><span class="sub">${d.wpt.hdRate}% #${ranks.wpt[op]}</span></td>
+      <td style="color:#aaa">N/A</td>
+      <td class="cb" style="font-size:18px;font-weight:900">${pts[op]}</td>
     </tr>`;
-  }
-  document.getElementById('proj-score-body').innerHTML = html;
+  });
+  document.getElementById('proj-tbody').innerHTML=html;
 }
 
-// 渲染项目达成明细（按项目分组，每行显示所有代运营商达成值+排名+积分）
-function renderProjDetail() {
-  const { ranks, scores } = calcProjRanksAndScores();
-  let html = '';
-  for (const m of PROJ_METRICS) {
-    // 按该项排名排序
-    const vals = OPS.map(op => ({
-      op,
-      val: m.key === 'fill' ? (FILL_RATE[op] || -1) :
-           (m.key === 'dx' ? PROJ[op][m.key].val : PROJ[op][m.key]),
-      detail: m.detail(op),
-      rank: ranks[m.key][op],
-      pts: 7 - ranks[m.key][op],
-    }));
-    vals.sort((a, b) => m.sort === 'desc' ? b.val - a.val : a.val - b.val);
-    html += `<div style="margin-bottom:20px;border:1px solid #e0e0e0;border-radius:10px;overflow:hidden">
-      <div style="background:#f5f1d6;padding:10px 16px;font-size:15px;font-weight:700;color:#0d47a1">
-        📌 ${m.label}（每项满分6分）
-      </div>
-      <table style="width:100%;border-collapse:collapse">
-        <thead><tr style="background:#f0f2f5">
-          <th style="padding:8px 12px;text-align:center;font-size:12px">排名</th>
-          <th style="padding:8px 12px;text-align:left;font-size:12px">代运营商</th>
-          <th style="padding:8px 12px;text-align:center;font-size:12px">达成值</th>
-          <th style="padding:8px 12px;text-align:center;font-size:12px">积分</th>
-        </tr></thead>
+// ============ 渲染项目逐项明细 ============
+function renderProjDetails() {
+  const {ranks}=calcProjRanks();
+  let html='';
+  for(const m of PROJ_METRICS){
+    const sorted=[...OPS].sort((a,b)=>m.sort==='desc'?m.val(b)-m.val(a):m.val(a)-m.val(b));
+    html+=`<div class="proj-item">
+      <div class="proj-item-hdr">${m.label}<span>排名决定积分（第1名6分→第6名1分）</span></div>
+      <table class="proj-rtable">
+        <thead><tr><th>排名</th><th>代运营商</th><th>达成值</th><th>积分</th></tr></thead>
         <tbody>`;
-    for (let i = 0; i < vals.length; i++) {
-      const v = vals[i];
-      const cellColor = v.rank <= 2 ? 'c-green' : v.rank <= 4 ? 'c-yellow' : 'c-red';
-      html += `<tr style="border-bottom:1px solid #f0f0f0">
-        <td style="padding:8px 12px;text-align:center"><span class="proj-rank-badge r${v.rank}">${v.rank}</span></td>
-        <td style="padding:8px 12px;font-weight:600">${v.op}（${PERSONS[v.op]}）</td>
-        <td style="padding:8px 12px;text-align:center" class="${cellColor}">${v.detail}</td>
-        <td style="padding:8px 12px;text-align:center"><span style="font-size:16px;font-weight:800;color:#0d47a1">${v.pts}</span></td>
+    sorted.forEach((op,i)=>{
+      const r=ranks[m.key][op]; const p=7-r;
+      const cc=r<=2?'cg':r<=4?'cy':'cr';
+      html+=`<tr>
+        <td><span class="badge b${r}">${r}</span></td>
+        <td style="text-align:left;padding-left:14px;font-weight:600">${op}（${PERSONS[op]}）</td>
+        <td class="${cc}">${m.detail(op)}</td>
+        <td style="font-weight:800;color:#0d47a1;font-size:15px">${p}</td>
       </tr>`;
-    }
-    html += `</tbody></table></div>`;
+    });
+    html+=`</tbody></table></div>`;
   }
-  document.getElementById('proj-detail-content').innerHTML = html;
+  document.getElementById('proj-details').innerHTML=html;
 }
 
-// ============ 标签切换 ============
-function showTab(name) {
-  document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
-  document.getElementById(name + '-tab').classList.add('active');
-  event.target.classList.add('active');
-  render();  // 重新渲染当前tab
+// ============ 详情面板（图2数据面板格式）============
+function openDetail(op) {
+  const d=PERF[op];
+  document.getElementById('detail-title').textContent=`${op}（${PERSONS[op]}）核心业绩数据面板`;
+  document.getElementById('dp-title').textContent='粤闽浙城市群代运营销售数据面板  '+DATA_DATE;
+  document.getElementById('dp-sub').textContent='时间进度：'+TIME_PROGRESS;
+
+  // 生成完整面板表格
+  const rows=[...OPS.map(o=>[o,PERF[o]]),['粤闽浙城市群',TOTAL]];
+  const isHighlight=(o)=>o===op;
+  let t=`<div style="overflow-x:auto">
+  <table class="dp-table">
+  <thead>
+    <tr>
+      <th rowspan=2>代运营商</th><th rowspan=2>操盘手</th>
+      <th colspan=7 class="th-gtv">🏆 GTV指标</th>
+      <th colspan=9 class="th-cpc">📶 CPC流量数据</th>
+      <th colspan=2 class="th-mem">💰 MEM</th>
+    </tr>
+    <tr>
+      <th class="th-gtv">本月GTV</th><th class="th-gtv">月度目标</th><th class="th-gtv">GTV进度</th><th class="th-gtv">GTV缺口</th><th class="th-gtv">昨日GTV</th><th class="th-gtv">GTV剔除率</th><th class="th-gtv">月CPC&amp;QCPS</th>
+      <th class="th-cpc">CPC目标</th><th class="th-cpc">CPC进度</th><th class="th-cpc">CPC缺口</th><th class="th-cpc">昨日CPC</th><th class="th-cpc">昨日旺铺通</th><th class="th-cpc">日CPC</th><th class="th-cpc">CPC有效新签</th><th class="th-cpc">CPC新签目标</th><th class="th-cpc">效新签目标</th>
+      <th class="th-mem">MEM收款额</th><th class="th-mem">MEM续约率</th>
+    </tr>
+  </thead>
+  <tbody>`;
+
+  rows.forEach(([name,d])=>{
+    const isTotal=(name==='粤闽浙城市群');
+    const isMe=(name===op);
+    const rowStyle=isMe?'background:#e3f2fd;font-weight:700':isTotal?'':'';
+    const rc=v=>v==null?'-':v>=100?'dp-rate-g':v>=80?'dp-rate-y':'dp-rate-r';
+    t+=`<tr style="${rowStyle}">
+      <td class="td-name">${name}</td>
+      <td class="td-person">${isTotal?'胡英杰':PERSONS[name]||''}</td>
+      <td>${fmt(d.gtv)}</td>
+      <td>${fmt(d.gtv_target)}</td>
+      <td class="${rc(d.gtv_rate)}"><b>${fmtRate(d.gtv_rate)}</b></td>
+      <td class="${d.gtv_gap>0?'dp-gap-neg':'dp-gap-pos'}">${fmt(d.gtv_gap)}</td>
+      <td>${fmt(d.gtv_yday)}</td>
+      <td class="${d.elim<=5?'dp-rate-g':d.elim<=8?'dp-rate-y':'dp-rate-r'}">${d.elim!=null?d.elim+'%':'-'}</td>
+      <td>${fmt(d.cpc_mtd)}</td>
+      <td>${fmt(d.cpc_target)}</td>
+      <td class="${rc(d.cpc_rate)}"><b>${fmtRate(d.cpc_rate)}</b></td>
+      <td class="${d.cpc_gap>0?'dp-gap-neg':'dp-gap-pos'}">${fmt(d.cpc_gap)}</td>
+      <td>${fmt(d.cpc_yday)}</td>
+      <td>${fmt(d.wpt_yday)}</td>
+      <td>${fmt(d.day_cpc)}</td>
+      <td>${d.cpc_new!=null?d.cpc_new:'-'}</td>
+      <td>${d.cpc_new_eff!=null?d.cpc_new_eff:'-'}</td>
+      <td>${fmt(d.mem_rev)}</td>
+      <td class="${d.mem_renewal>=70?'dp-rate-g':d.mem_renewal>=50?'dp-rate-y':'dp-rate-r'}">${d.mem_renewal!=null?d.mem_renewal+'%':'-'}</td>
+    </tr>`;
+  });
+  t+=`</tbody></table></div>`;
+  document.getElementById('dp-table-wrap').innerHTML=t;
+  document.getElementById('detail-overlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function closeOverlay(){
+  document.getElementById('detail-overlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+function closeDetail(e){
+  if(e.target===document.getElementById('detail-overlay')) closeOverlay();
+}
+
+// ============ Tab切换 ============
+function showTab(name,btn){
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.getElementById(name+'-tab').classList.add('active');
+  btn.classList.add('active');
 }
 
 // ============ 初始化 ============
-document.addEventListener('DOMContentLoaded', render);
+document.addEventListener('DOMContentLoaded',()=>{
+  renderPerfCards();
+  renderPerfTable();
+  renderProjCards();
+  renderProjTable();
+  renderProjDetails();
+  document.getElementById('hdr-date').textContent='数据更新：'+DATA_DATE;
+});
 </script>
 </body>
 </html>
