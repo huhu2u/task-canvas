@@ -850,28 +850,34 @@ function openDetail(op) {
   ],hm);
   t+=`</div>`;
 
-  // 全区对比条形图
+  // 全区对比排名表
   t+=`<div style="background:#f8faff;border-radius:10px;padding:14px 16px;border:1px solid #e0e8f8">`;
-  t+=`<div style="font-size:13px;font-weight:700;color:#1a73e8;margin-bottom:10px">📊 全区对比</div>`;
+  t+=`<div style="font-size:13px;font-weight:700;color:#1a73e8;margin-bottom:12px">📊 全区对比（按指标排名）</div>`;
   const compareRows=[
-    {label:'GTV进度', vals:OPS.map(o=>PERF[o].gtv_rate), unit:'%', key:op},
-    {label:'CPC进度', vals:OPS.map(o=>PERF[o].cpc_rate), unit:'%', key:op},
-    {label:'MEM续约率', vals:OPS.map(o=>PERF[o].mem_renewal), unit:'%', key:op},
-    {label:'剔除率', vals:OPS.map(o=>PERF[o].elim), unit:'%', key:op, reverse:true},
+    {label:'GTV进度', getData:o=>PERF[o].gtv_rate, unit:'%', reverse:false},
+    {label:'CPC进度', getData:o=>PERF[o].cpc_rate, unit:'%', reverse:false},
+    {label:'MEM续约率', getData:o=>PERF[o].mem_renewal, unit:'%', reverse:false},
+    {label:'CPC新签', getData:o=>PERF[o].cpc_new_rate, unit:'%', reverse:false},
+    {label:'剔除率', getData:o=>PERF[o].elim, unit:'%', reverse:true},
   ];
   compareRows.forEach(row=>{
-    const max=Math.max(...row.vals);
-    t+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px">`;
-    t+=`<span style="width:70px;flex-shrink:0;color:#555">${row.label}</span>`;
-    OPS.forEach((o,i)=>{
-      const v=row.vals[i];
-      const pct=max>0?v/max*100:0;
-      const isMe=o===op;
-      const barColor=isMe?'#1a73e8':row.reverse?(v<=5?'#4caf50':v<=8?'#ff9800':'#ef5350'):(v>=100?'#4caf50':v>=80?'#ff9800':'#ef5350');
-      t+=`<div style="display:flex;flex-direction:column;align-items:center;flex:1">`;
-      t+=`<div style="width:100%;height:20px;background:#f0f2f5;border-radius:4px;overflow:hidden;border:${isMe?'2px solid #1a73e8':'1px solid #e8eaee'}">`;
+    const items=OPS.map(o=>({op:o,val:row.getData(o)}));
+    items.sort((a,b)=>row.reverse?a.val-b.val:b.val-a.val);
+    const maxVal=Math.max(...items.map(x=>x.val));
+    t+=`<div style="margin-bottom:14px">`;
+    t+=`<div style="font-size:11px;font-weight:600;color:#555;margin-bottom:5px">${row.label}</div>`;
+    items.forEach((it,idx)=>{
+      const isMe=it.op===op;
+      const pct=maxVal>0?(it.val/maxVal*100):0;
+      const good=row.reverse?(it.val<=3):(it.val>=100);
+      const warn=row.reverse?(it.val<=5):(it.val>=90);
+      const barColor=isMe?'#1a73e8':good?'#4caf50':warn?'#ff9800':'#ef5350';
+      t+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:12px;${isMe?'background:#e8f0fe;border-radius:4px;padding:2px 6px;margin-left:-6px;margin-right:-6px':''}">`;
+      t+=`<span style="width:14px;font-weight:700;color:${idx<3?'#1a73e8':'#999'};font-size:11px">${idx+1}</span>`;
+      t+=`<span style="width:55px;font-weight:${isMe?'800':'500'};color:${isMe?'#1a73e8':'#333'};flex-shrink:0">${SHORT[it.op]}</span>`;
+      t+=`<div style="flex:1;height:18px;background:#f0f2f5;border-radius:4px;overflow:hidden">`;
       t+=`<div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px;transition:.4s"></div></div>`;
-      t+=`<span style="font-size:10px;font-weight:${isMe?'800':'400'};color:${isMe?'#1a73e8':'#666'};margin-top:1px">${SHORT[o]}</span>`;
+      t+=`<span style="width:55px;text-align:right;font-weight:${isMe?'800':'600'};color:${isMe?'#1a73e8':'#333'}">${it.val}${row.unit}</span>`;
       t+=`</div>`;
     });
     t+=`</div>`;
