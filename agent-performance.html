@@ -108,6 +108,36 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .l-dot.g{background:#4caf50}
 .l-dot.y{background:#ff9800}
 .l-dot.r{background:#f44336}
+
+/* 项目积分标识 */
+.proj-score{font-size:18px;font-weight:800;color:#0d47a1}
+.proj-score-label{font-size:10px;color:#888}
+.proj-rank-badge{display:inline-block;width:22px;height:22px;border-radius:50%;color:#fff;font-size:12px;font-weight:700;line-height:22px;text-align:center;margin:0 2px}
+.proj-rank-badge.r1{background:#f6c90e;color:#333}
+.proj-rank-badge.r2{background:#b0b0b0;color:#fff}
+.proj-rank-badge.r3{background:#cd7f32;color:#fff}
+.proj-rank-badge.r4{background:#1a73e8;color:#fff}
+.proj-rank-badge.r5{background:#888;color:#fff}
+.proj-rank-badge.r6{background:#bbb;color:#fff}
+
+/* 项目积分表 */
+.proj-score-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);margin-top:10px}
+.proj-score-table th{background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;font-size:13px;padding:12px 8px;text-align:center;white-space:nowrap}
+.proj-score-table td{font-size:13px;padding:10px 8px;text-align:center;border-bottom:1px solid #f0f0f0}
+.proj-score-table .op-name{font-weight:700;font-size:14px;text-align:left;padding-left:12px}
+.proj-score-table .op-person{font-size:11px;color:#888}
+.proj-score-table .rank-num{font-size:20px;font-weight:800}
+.proj-score-table .rank-1{color:#f6c90e}
+.proj-score-table .rank-2{color:#b0b0b0}
+.proj-score-table .rank-3{color:#cd7f32}
+.proj-score-table .rank-4{color:#1a73e8}
+.proj-score-table .rank-5{color:#888}
+.proj-score-table .rank-6{color:#aaa}
+.proj-score-table .metric-name{text-align:left;font-size:12px;padding-left:10px}
+.detail-row{background:#fafbfc}
+.detail-row td{font-size:12px;color:#666}
+.detail-metric{font-weight:600;color:#333}
+
 </style>
 </head>
 <body>
@@ -163,29 +193,37 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <!-- ============ 项目排名 ============ -->
 <div id="proj-tab" class="tab-content">
 
-  <!-- 项目排名表 -->
+  <!-- 项目综合积分卡片 -->
   <div class="sec">
-    <h2>📋 项目强排明细（完成100%排名一致）</h2>
-    <table class="proj-table">
+    <h2>📊 项目综合积分（6项均分，积分强排）</h2>
+    <div class="score-card" id="proj-score-card"></div>
+  </div>
+
+  <!-- 项目积分排名表 -->
+  <div class="sec">
+    <h2>📋 项目积分排名明细</h2>
+    <table class="proj-score-table">
       <thead>
         <tr>
           <th>排名</th>
           <th>代运营商</th>
-          <th>经营评分达标率</th>
-          <th>好店动销达标数</th>
-          <th>职人码<br><span style="font-size:10px;font-weight:400">店转渗透率+物料覆盖率</span></th>
-          <th>BML Lose率</th>
-          <th>旺铺通开通</th>
+          <th>经营评分<br>达标率</th>
+          <th>好店动销<br>达标数</th>
+          <th>职人码<br>渗透率/物料率</th>
+          <th>BML<br>Lose率</th>
+          <th>旺铺通<br>好店开通率</th>
           <th>真实满编率</th>
+          <th>项目总积分</th>
         </tr>
       </thead>
-      <tbody id="proj-tbody"></tbody>
+      <tbody id="proj-score-body"></tbody>
     </table>
-    <div class="legend" style="margin-top:10px">
-      <div class="l-item"><span class="l-dot g"></span> 排名1-2</div>
-      <div class="l-item"><span class="l-dot y"></span> 排名3-4</div>
-      <div class="l-item"><span class="l-dot r"></span> 排名5-6</div>
-    </div>
+  </div>
+
+  <!-- 代运营商达成明细（可展开） -->
+  <div class="sec" id="proj-detail-sec">
+    <h2>📋 各项目达成明细</h2>
+    <div id="proj-detail-content"></div>
   </div>
 
 </div>
@@ -252,7 +290,9 @@ function calcPerfScore(op) {
 function render() {
   renderPerfScoreCard();
   renderPerfTable();
+  renderProjScoreCard();
   renderProjTable();
+  renderProjDetail();
 }
 
 // 渲染核心业绩综合得分卡片
@@ -319,51 +359,146 @@ function renderPerfTable() {
   document.getElementById('perf-tbody').innerHTML = html;
 }
 
-// 渲染项目排名表（强排，完成100%排名一致）
-function renderProjTable() {
-  // 每个项目单独排名1-6
-  const metrics = [
-    {key: 'score', label: '经营评分达标率', sort: 'desc', unit: '%'},
-    {key: 'dx', label: '好店动销达标数', sort: 'desc', unit: '', accessor: (d) => d.val},
-    {key: 'zrq', label: '职人码店转渗透率', sort: 'desc', unit: '%', accessor: (d) => d.st},
-    {key: 'bml', label: 'BML Lose率', sort: 'asc', unit: '%'},
-    {key: 'wpt', label: '旺铺通好店开通率', sort: 'desc', unit: '%', accessor: (d) => d.hdRate},
-    {key: 'fill', label: '真实满编率', sort: 'desc', unit: '%', accessor: (d) => d},
-  ];
-  // 计算每个指标排名
+// ============ 项目排名（积分制，6项均分） ============
+const PROJ_METRICS = [
+  {key: 'score', label: '经营评分达标率', sort: 'desc', unit: '%', detail: (op) => `${PROJ[op].score}%`},
+  {key: 'dx', label: '好店动销达标数', sort: 'desc', unit: '', detail: (op) => `${PROJ[op].dx.val}/${PROJ[op].dx.target}(${PROJ[op].dx.rate}%)`},
+  {key: 'zrq', label: '职人码店转渗透率', sort: 'desc', unit: '%', detail: (op) => `${PROJ[op].zrq.st}%`},
+  {key: 'bml', label: 'BML Lose率', sort: 'asc', unit: '%', detail: (op) => `${PROJ[op].bml.toFixed(1)}%`},
+  {key: 'wpt', label: '旺铺通好店开通率', sort: 'desc', unit: '%', detail: (op) => `${PROJ[op].wpt.hdOpen}/${PROJ[op].wpt.hd}(${PROJ[op].wpt.hdRate}%)`},
+  {key: 'fill', label: '真实满编率', sort: 'desc', unit: '%', detail: (op) => FILL_RATE[op] !== null ? `${FILL_RATE[op]}%` : 'N/A'},
+];
+
+// 计算排名和积分（第1名6分，第2名5分，...第6名1分）
+function calcProjRanksAndScores() {
+  const result = {};
+  // 计算每项排名
   const ranks = {};
-  for (const m of metrics) {
-    const vals = OPS.map(op => ({op, val: m.accessor ? m.accessor(PROJ[op][m.key]) : PROJ[op][m.key]}));
+  for (const m of PROJ_METRICS) {
+    const vals = OPS.map(op => ({
+      op,
+      val: m.key === 'fill' ? (FILL_RATE[op] || -1) :
+           (m.key === 'dx' ? PROJ[op][m.key].val : PROJ[op][m.key])
+    }));
     vals.sort((a, b) => m.sort === 'desc' ? b.val - a.val : a.val - b.val);
     ranks[m.key] = {};
     for (let i = 0; i < vals.length; i++) {
       ranks[m.key][vals[i].op] = i + 1;
     }
   }
-  // 渲染
+  // 计算每项积分（排名1=6分，2=5分，...6=1分）
+  const scores = {};
+  for (const op of OPS) {
+    let total = 0;
+    for (const m of PROJ_METRICS) {
+      const r = ranks[m.key][op];
+      const pts = 7 - r;  // rank 1 -> 6 pts, rank 6 -> 1 pt
+      total += pts;
+    }
+    scores[op] = total;
+  }
+  // 综合积分排名
+  const order = [...OPS].sort((a, b) => scores[b] - scores[a]);
+  return { ranks, scores, order };
+}
+
+// 渲染项目综合积分卡片
+function renderProjScoreCard() {
+  const { scores, order } = calcProjRanksAndScores();
   let html = '';
-  for (let i = 0; i < OPS.length; i++) {
-    const op = OPS[i];
+  for (let i = 0; i < order.length; i++) {
+    const op = order[i];
+    const rank = i + 1;
+    const pts = scores[op];
+    const cls = rank <= 3 ? 'top' + rank : '';
+    const dimCls = rank <= 3 ? 'r' + rank : 'r' + rank;
+    html += `<div class="sc ${cls}">
+      <div class="sc-rank ${dimCls}">${rank}</div>
+      <div class="sc-name">${op}</div>
+      <div class="sc-person">${PERSONS[op]}</div>
+      <div class="proj-score">${pts}</div>
+      <div class="sc-score-label">项目总积分</div>
+      <div class="dims">
+        <div class="d-item"><span class="d-label">经营评分</span><span class="d-val">${PROJ[op].score}%</span></div>
+        <div class="d-item"><span class="d-label">好店动销</span><span class="d-val">${PROJ[op].dx.val}/${PROJ[op].dx.target}</span></div>
+        <div class="d-item"><span class="d-label">职人码渗透</span><span class="d-val">${PROJ[op].zrq.st}%</span></div>
+        <div class="d-item"><span class="d-label">BML Lose</span><span class="d-val">${PROJ[op].bml.toFixed(1)}%</span></div>
+        <div class="d-item"><span class="d-label">旺铺通</span><span class="d-val">${PROJ[op].wpt.hdRate}%</span></div>
+        <div class="d-item"><span class="d-label">满编率</span><span class="d-val">${FILL_RATE[op] !== null ? FILL_RATE[op]+'%' : 'N/A'}</span></div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('proj-score-card').innerHTML = html;
+}
+
+// 渲染项目积分排名表
+function renderProjTable() {
+  const { ranks, scores, order } = calcProjRanksAndScores();
+  let html = '';
+  for (let i = 0; i < order.length; i++) {
+    const op = order[i];
     const d = PROJ[op];
     const rankCls = 'rank-' + (i+1);
     const cellColor = (r) => r <= 2 ? 'c-green' : r <= 4 ? 'c-yellow' : 'c-red';
     html += `<tr>
       <td><span class="rank-num ${rankCls}">${i+1}</span></td>
       <td class="op-name">${op}<br><span class="op-person">${PERSONS[op]}</span></td>
-      <td class="${cellColor(ranks.score[op])}">${d.score}%<br><span style="font-size:10px;color:#aaa">#${ranks.score[op]}</span></td>
-      <td class="${cellColor(ranks.dx[op])}">${d.dx.val}/${d.dx.target}<br><span style="font-size:10px;color:#aaa">${d.dx.rate}% #${ranks.dx[op]}</span></td>
-      <td>
-        <div class="zrq-dual">
-          <span class="zrq-item ${cellColor(ranks.zrq[op])}">渗透${d.zrq.st}%<br><span style="font-size:10px">#${ranks.zrq[op]}</span></span>
-          <span class="zrq-item">物料${d.zrq.mat}%</span>
-        </div>
-      </td>
-      <td class="${cellColor(ranks.bml[op])}">${d.bml.toFixed(1)}%<br><span style="font-size:10px;color:#aaa">#${ranks.bml[op]}</span></td>
-      <td class="${cellColor(ranks.wpt[op])}">${d.wpt.hdOpen}/${d.wpt.hd}<br><span style="font-size:10px;color:#aaa">${d.wpt.hdRate}% #${ranks.wpt[op]}</span></td>
-      <td style="color:#aaa">N/A</td>
+      ${PROJ_METRICS.map(m => {
+        if (m.key === 'fill') {
+          const r = ranks[m.key][op];
+          const detail = FILL_RATE[op] !== null ? `${FILL_RATE[op]}%` : 'N/A';
+          return `<td>${detail}<br><span class="rank-num ${cellColor(r)}" style="font-size:11px">#${r}</span></td>`;
+        }
+        const r = ranks[m.key][op];
+        const detail = m.detail(op);
+        return `<td class="${cellColor(r)}">${detail}<br><span class="rank-num ${cellColor(r)}" style="font-size:11px">#${r}</span></td>`;
+      }).join('')}
+      <td><span style="font-size:20px;font-weight:800;color:#0d47a1">${scores[op]}</span></td>
     </tr>`;
   }
-  document.getElementById('proj-tbody').innerHTML = html;
+  document.getElementById('proj-score-body').innerHTML = html;
+}
+
+// 渲染项目达成明细（按项目分组，每行显示所有代运营商达成值+排名+积分）
+function renderProjDetail() {
+  const { ranks, scores } = calcProjRanksAndScores();
+  let html = '';
+  for (const m of PROJ_METRICS) {
+    // 按该项排名排序
+    const vals = OPS.map(op => ({
+      op,
+      val: m.key === 'fill' ? (FILL_RATE[op] || -1) :
+           (m.key === 'dx' ? PROJ[op][m.key].val : PROJ[op][m.key]),
+      detail: m.detail(op),
+      rank: ranks[m.key][op],
+      pts: 7 - ranks[m.key][op],
+    }));
+    vals.sort((a, b) => m.sort === 'desc' ? b.val - a.val : a.val - b.val);
+    html += `<div style="margin-bottom:20px;border:1px solid #e0e0e0;border-radius:10px;overflow:hidden">
+      <div style="background:#f5f1d6;padding:10px 16px;font-size:15px;font-weight:700;color:#0d47a1">
+        📌 ${m.label}（每项满分6分）
+      </div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:#f0f2f5">
+          <th style="padding:8px 12px;text-align:center;font-size:12px">排名</th>
+          <th style="padding:8px 12px;text-align:left;font-size:12px">代运营商</th>
+          <th style="padding:8px 12px;text-align:center;font-size:12px">达成值</th>
+          <th style="padding:8px 12px;text-align:center;font-size:12px">积分</th>
+        </tr></thead>
+        <tbody>`;
+    for (let i = 0; i < vals.length; i++) {
+      const v = vals[i];
+      const cellColor = v.rank <= 2 ? 'c-green' : v.rank <= 4 ? 'c-yellow' : 'c-red';
+      html += `<tr style="border-bottom:1px solid #f0f0f0">
+        <td style="padding:8px 12px;text-align:center"><span class="proj-rank-badge r${v.rank}">${v.rank}</span></td>
+        <td style="padding:8px 12px;font-weight:600">${v.op}（${PERSONS[v.op]}）</td>
+        <td style="padding:8px 12px;text-align:center" class="${cellColor}">${v.detail}</td>
+        <td style="padding:8px 12px;text-align:center"><span style="font-size:16px;font-weight:800;color:#0d47a1">${v.pts}</span></td>
+      </tr>`;
+    }
+    html += `</tbody></table></div>`;
+  }
+  document.getElementById('proj-detail-content').innerHTML = html;
 }
 
 // ============ 标签切换 ============
@@ -372,6 +507,7 @@ function showTab(name) {
   document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
   document.getElementById(name + '-tab').classList.add('active');
   event.target.classList.add('active');
+  render();  // 重新渲染当前tab
 }
 
 // ============ 初始化 ============
