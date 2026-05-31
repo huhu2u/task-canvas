@@ -1062,29 +1062,6 @@ function scoreToRank(scoreVal){
 
 function renderHeatmap(){
   const {ranks,pts}=calcProjRanks();
-  // 同时把核心业绩指标也加进来
-  const perfRanks = {};
-  // GTV完成率 高→好
-  const perfMetrics = [
-    {key:'gtv_rate', label:'GTV完成进度', sort:'desc', val:op=>PERF[op].gtv_rate},
-    {key:'cpc_rate', label:'CPC消耗进度', sort:'desc', val:op=>PERF[op].cpc_rate},
-    {key:'cpc_new_rate', label:'CPC有效新签进度', sort:'desc', val:op=>PERF[op].cpc_new_rate},
-    {key:'mem_renewal', label:'MEM续约率', sort:'desc', val:op=>PERF[op].mem_renewal},
-    {key:'elim', label:'GTV剔除率', sort:'asc', val:op=>PERF[op].elim},
-  ];
-  for(const m of perfMetrics){
-    const s=[...OPS].sort((a,b)=>m.sort==='desc'?m.val(b)-m.val(a):m.val(a)-m.val(b));
-    perfRanks[m.key]={};
-    let i=0;
-    while(i<s.length){
-      let j=i;
-      while(j<s.length && m.val(s[j])===m.val(s[i])) j++;
-      const avg=[...Array(j-i)].reduce((sum,_,k)=>sum+(i+k+1),0)/(j-i);
-      for(let k=i;k<j;k++) perfRanks[m.key][s[k]]=avg;
-      i=j;
-    }
-  }
-
   // 列顺序按综合积分排名（项目积分）
   const order=[...OPS].sort((a,b)=>pts[b]-pts[a]);
 
@@ -1097,28 +1074,7 @@ function renderHeatmap(){
     {label:'BML Lose率',        key:'bml',   ranks, rankKey:'bml',   src:'proj'},
     {label:'旺铺通好店开通率',   key:'wpt',   ranks, rankKey:'wpt',   src:'proj'},
     {label:'真实满编率',         key:'fill',  ranks, rankKey:'fill',  src:'proj'},
-    // 分隔行
-    {sep:true, label:'── 核心业绩 ──'},
-    // 业绩排名行
-    {label:'GTV完成进度',        key:'gtv_rate',     ranks:perfRanks, rankKey:'gtv_rate',     src:'perf'},
-    {label:'CPC消耗进度',        key:'cpc_rate',     ranks:perfRanks, rankKey:'cpc_rate',     src:'perf'},
-    {label:'CPC有效新签进度',    key:'cpc_new_rate', ranks:perfRanks, rankKey:'cpc_new_rate', src:'perf'},
-    {label:'MEM续约率',          key:'mem_renewal',  ranks:perfRanks, rankKey:'mem_renewal',  src:'perf'},
-    {label:'GTV剔除率',          key:'elim',         ranks:perfRanks, rankKey:'elim',         src:'perf'},
   ];
-
-  // 各列综合排名（项目积分 + 业绩积分平均）
-  const totalRankByOp = {};
-  const allPerfPts = {};
-  for(const op of OPS){
-    let pp=0;
-    for(const m of perfMetrics) pp += (7-perfRanks[m.key][op]);
-    allPerfPts[op]=Math.round(pp*10/perfMetrics.length)/10;
-    totalRankByOp[op] = {
-      proj: pts[op],
-      perf: allPerfPts[op],
-    };
-  }
 
   let html=`<table class="hmap-table"><thead><tr>`;
   html+=`<th class="hmap-label">指标</th>`;
