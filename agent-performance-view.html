@@ -201,12 +201,12 @@ const DX_DETAIL = {
 };
 
 const SALES_BOARD = [
-  {op:'惠州巨浪',person:'肖立铭',gtv:3620250,target:3956557,rate:91.50,gap:336307,ygtv:147396,elim:5.73,cpcqcps:85655,wpt_m:35586,cpc_target:87905,cpc_rate:97.44,cpc_gap:2250,cpc_d:3468,wpt_d:2050,cpcqcps_d:5517,cpc_eff:18,mem_amt:151187,mem_rate:70.91},
-  {op:'义乌汐洋',person:'陈铨',gtv:2947118,target:3002361,rate:98.16,gap:55243,ygtv:107347,elim:1.47,cpcqcps:160102,wpt_m:27746,cpc_target:151368,cpc_rate:105.77,cpc_gap:-8733,cpc_d:5243,wpt_d:934,cpcqcps_d:6176,cpc_eff:16,mem_amt:88400,mem_rate:69.23},
-  {op:'惠安广通',person:'尤云生',gtv:2279155,target:2358641,rate:96.63,gap:79486,ygtv:105980,elim:3.91,cpcqcps:74997,wpt_m:20983,cpc_target:73700,cpc_rate:101.76,cpc_gap:-1297,cpc_d:3846,wpt_d:886,cpcqcps_d:4733,cpc_eff:11,mem_amt:76529,mem_rate:50.00},
-  {op:'惠州柏万',person:'林启梁',gtv:3223024,target:3240197,rate:99.47,gap:17173,ygtv:131226,elim:3.33,cpcqcps:110337,wpt_m:30728,cpc_target:110304,cpc_rate:100.03,cpc_gap:-33,cpc_d:5543,wpt_d:1873,cpcqcps_d:7416,cpc_eff:19,mem_amt:117533,mem_rate:63.33},
-  {op:'泉州小花猫',person:'康子诚',gtv:2702939,target:2774237,rate:97.43,gap:71297,ygtv:83928,elim:3.21,cpcqcps:122146,wpt_m:27765,cpc_target:123755,cpc_rate:98.70,cpc_gap:1608,cpc_d:7103,wpt_d:1430,cpcqcps_d:8534,cpc_eff:14,mem_amt:78496,mem_rate:52.50},
-  {op:'慈溪哲光',person:'孙浩',gtv:3040020,target:3117649,rate:97.51,gap:77629,ygtv:144393,elim:4.98,cpcqcps:147173,wpt_m:17895,cpc_target:155148,cpc_rate:94.86,cpc_gap:7974,cpc_d:6001,wpt_d:941,cpcqcps_d:6941,cpc_eff:17,mem_amt:87456,mem_rate:55.10},
+  {op:'惠州巨浪',person:'肖立铭',gtv:3620250,target:3956557,rate:91.50,gap:336307,ygtv:147396,elim:5.73,cpcqcps:85655,wpt_m:35586,cpc_target:87905,cpc_rate:97.44,cpc_gap:2250,cpc_d:3468,wpt_d:2050,cpcqcps_d:5517,cpc_eff:15,cpc_eff_target:15,cpc_eff_rate:120.0,mem_amt:151187,mem_rate:70.91},
+  {op:'义乌汐洋',person:'陈铨',gtv:2947118,target:3002361,rate:98.16,gap:55243,ygtv:107347,elim:1.47,cpcqcps:160102,wpt_m:27746,cpc_target:151368,cpc_rate:105.77,cpc_gap:-8733,cpc_d:5243,wpt_d:934,cpcqcps_d:6176,cpc_eff:16,cpc_eff_target:16,cpc_eff_rate:100.0,mem_amt:88400,mem_rate:69.23},
+  {op:'惠安广通',person:'尤云生',gtv:2279155,target:2358641,rate:96.63,gap:79486,ygtv:105980,elim:3.91,cpcqcps:74997,wpt_m:20983,cpc_target:73700,cpc_rate:101.76,cpc_gap:-1297,cpc_d:3846,wpt_d:886,cpcqcps_d:4733,cpc_eff:11,cpc_eff_target:9,cpc_eff_rate:122.2,mem_amt:76529,mem_rate:50.00},
+  {op:'惠州柏万',person:'林启梁',gtv:3223024,target:3240197,rate:99.47,gap:17173,ygtv:131226,elim:3.33,cpcqcps:110337,wpt_m:30728,cpc_target:110304,cpc_rate:100.03,cpc_gap:-33,cpc_d:5543,wpt_d:1873,cpcqcps_d:7416,cpc_eff:19,cpc_eff_target:12,cpc_eff_rate:158.3,mem_amt:117533,mem_rate:63.33},
+  {op:'泉州小花猫',person:'康子诚',gtv:2702939,target:2774237,rate:97.43,gap:71297,ygtv:83928,elim:3.21,cpcqcps:122146,wpt_m:27765,cpc_target:123755,cpc_rate:98.70,cpc_gap:1608,cpc_d:7103,wpt_d:1430,cpcqcps_d:8534,cpc_eff:14,cpc_eff_target:12,cpc_eff_rate:116.7,mem_amt:78496,mem_rate:52.50},
+  {op:'慈溪哲光',person:'孙浩',gtv:3040020,target:3117649,rate:97.51,gap:77629,ygtv:144393,elim:4.98,cpcqcps:147173,wpt_m:17895,cpc_target:155148,cpc_rate:94.86,cpc_gap:7974,cpc_d:6001,wpt_d:941,cpcqcps_d:6941,cpc_eff:17,cpc_eff_target:16,cpc_eff_rate:106.3,mem_amt:87456,mem_rate:55.10},
 ];
 
 const FINANCE_BOARD = [
@@ -464,7 +464,7 @@ function renderDashboard(op){
       html += '<div class="board-label">核心业绩看板</div>';
       html += '<div style="overflow-x:auto"><table class="board-table"><thead><tr>';
       html += '<th>GTV达成</th><th>GTV目标</th><th>达成率</th><th>缺口</th><th>昨日GTV</th><th>剔除率</th><th>CPC&QCPS</th>';
-      html += '<th>CPC目标</th><th>CPC达成率</th><th>昨日CPC</th><th>旺铺通MTD</th><th>CPC有效新</th><th>MEM续约额</th><th>MEM续约率</th>';
+      html += '<th>CPC目标</th><th>CPC达成率</th><th>昨日CPC</th><th>旺铺通MTD</th><th>CPC有效新</th><th>有效新目标</th><th>有效新完成率</th><th>MEM续约额</th><th>MEM续约率</th>';
       html += '</tr></thead><tbody><tr>';
       html += '<td>' + fmtFull(myBoard.gtv) + '</td>';
       html += '<td>' + fmtFull(myBoard.target) + '</td>';
@@ -478,6 +478,8 @@ function renderDashboard(op){
       html += '<td>' + fmtFull(myBoard.cpc_d) + '</td>';
       html += '<td>' + fmtFull(myBoard.wpt_m) + '</td>';
       html += '<td>' + myBoard.cpc_eff + '</td>';
+      html += '<td>' + myBoard.cpc_eff_target + '</td>';
+      html += '<td>' + myBoard.cpc_eff_rate.toFixed(1) + '%</td>';
       html += '<td>' + fmtFull(myBoard.mem_amt) + '</td>';
       html += '<td>' + myBoard.mem_rate.toFixed(2) + '%</td>';
       html += '</tr></tbody></table></div>';
