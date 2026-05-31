@@ -330,6 +330,7 @@ function renderDashboard(op){
   // Top Card
   html+=`
   <div class="top-card">
+    <div style="font-size:12px;opacity:.8;margin-bottom:4px">核心业绩排名</div>
     <div class="top-name">${op}</div>
     <div class="top-person">负责人：${PERSONS[op]}</div>
     <div class="top-rank">#${overallRank}<span> /6</span></div>
@@ -375,6 +376,52 @@ function renderDashboard(op){
     </div>
   </div>`;
   
+  // ===== Board (moved here: after core performance, before project rankings) =====
+  const myBoard = SALES_BOARD.find(d => d.op === op);
+  const myFinance = FINANCE_BOARD.find(d => d.op === op);
+  if(myBoard || myFinance) {
+    html += '<div class="section"><div class="section-title">📋 总看板</div>';
+    if(myBoard) {
+      html += '<div class="board-label">核心业绩看板</div>';
+      html += '<div style="overflow-x:auto"><table class="board-table"><thead><tr>';
+      html += '<th>GTV达成</th><th>GTV目标</th><th>达成率</th><th>缺口</th><th>昨日GTV</th><th>剔除率</th><th>CPC&QCPS</th>';
+      html += '<th>CPC目标</th><th>CPC达成率</th><th>昨日CPC</th><th>旺铺通MTD</th><th>CPC有效新</th><th>有效新目标</th><th>有效新完成率</th><th>MEM续约额</th><th>MEM续约率</th>';
+      html += '</tr></thead><tbody><tr>';
+      html += '<td>' + fmtFull(myBoard.gtv) + '</td>';
+      html += '<td>' + fmtFull(myBoard.target) + '</td>';
+      html += '<td>' + myBoard.rate.toFixed(2) + '%</td>';
+      html += '<td>' + (myBoard.gap<=0 ? '已达标' : fmtFull(myBoard.gap)) + '</td>';
+      html += '<td>' + fmtFull(myBoard.ygtv) + '</td>';
+      html += '<td>' + myBoard.elim + '%</td>';
+      html += '<td>' + fmtFull(myBoard.cpcqcps) + '</td>';
+      html += '<td>' + fmtFull(myBoard.cpc_target) + '</td>';
+      html += '<td>' + myBoard.cpc_rate.toFixed(2) + '%</td>';
+      html += '<td>' + fmtFull(myBoard.cpc_d) + '</td>';
+      html += '<td>' + fmtFull(myBoard.wpt_m) + '</td>';
+      html += '<td>' + myBoard.cpc_eff + '</td>';
+      html += '<td>' + myBoard.cpc_eff_target + '</td>';
+      html += '<td>' + myBoard.cpc_eff_rate.toFixed(1) + '%</td>';
+      html += '<td>' + fmtFull(myBoard.mem_amt) + '</td>';
+      html += '<td>' + myBoard.mem_rate.toFixed(2) + '%</td>';
+      html += '</tr></tbody></table></div>';
+    }
+    if(myFinance) {
+      html += '<div class="board-label">财收看板</div>';
+      html += '<div style="overflow-x:auto"><table class="board-table"><thead><tr>';
+      html += '<th>CPS_GTV</th><th>CPS佣金</th><th>佣金率</th><th>CPC</th><th>旺铺通</th><th>MEM</th><th>总财收</th>';
+      html += '</tr></thead><tbody><tr>';
+      html += '<td>' + fmtFull(myFinance.cps_gtv) + '</td>';
+      html += '<td>' + fmtFull(myFinance.cps_income) + '</td>';
+      html += '<td>' + myFinance.cps_rate + '%</td>';
+      html += '<td>' + fmtFull(myFinance.cpc) + '</td>';
+      html += '<td>' + fmtFull(myFinance.wpt) + '</td>';
+      html += '<td>' + fmtFull(myFinance.mem) + '</td>';
+      html += '<td>' + fmtFull(myFinance.total) + '</td>';
+      html += '</tr></tbody></table></div>';
+    }
+    html += '</div>';
+  }
+
   // Project Rankings
   const metrics = PROJ_METRICS;
   html+=`
@@ -453,52 +500,6 @@ function renderDashboard(op){
       html += '<button class="show-all-btn" id="showAllBtn" onclick="showAllStores(\'' + op + '\')">查看全部 ' + storeData.length + ' 家门店</button>';
     }
     html += '</div></div>';
-  }
-
-  // ===== Module 3: Board (Sales + Finance) =====
-  const myBoard = SALES_BOARD.find(d => d.op === op);
-  const myFinance = FINANCE_BOARD.find(d => d.op === op);
-  if(myBoard || myFinance) {
-    html += '<div class="section"><div class="section-title">📋 总看板</div>';
-    if(myBoard) {
-      html += '<div class="board-label">核心业绩看板</div>';
-      html += '<div style="overflow-x:auto"><table class="board-table"><thead><tr>';
-      html += '<th>GTV达成</th><th>GTV目标</th><th>达成率</th><th>缺口</th><th>昨日GTV</th><th>剔除率</th><th>CPC&QCPS</th>';
-      html += '<th>CPC目标</th><th>CPC达成率</th><th>昨日CPC</th><th>旺铺通MTD</th><th>CPC有效新</th><th>有效新目标</th><th>有效新完成率</th><th>MEM续约额</th><th>MEM续约率</th>';
-      html += '</tr></thead><tbody><tr>';
-      html += '<td>' + fmtFull(myBoard.gtv) + '</td>';
-      html += '<td>' + fmtFull(myBoard.target) + '</td>';
-      html += '<td>' + myBoard.rate.toFixed(2) + '%</td>';
-      html += '<td>' + (myBoard.gap<=0 ? '已达标' : fmtFull(myBoard.gap)) + '</td>';
-      html += '<td>' + fmtFull(myBoard.ygtv) + '</td>';
-      html += '<td>' + myBoard.elim + '%</td>';
-      html += '<td>' + fmtFull(myBoard.cpcqcps) + '</td>';
-      html += '<td>' + fmtFull(myBoard.cpc_target) + '</td>';
-      html += '<td>' + myBoard.cpc_rate.toFixed(2) + '%</td>';
-      html += '<td>' + fmtFull(myBoard.cpc_d) + '</td>';
-      html += '<td>' + fmtFull(myBoard.wpt_m) + '</td>';
-      html += '<td>' + myBoard.cpc_eff + '</td>';
-      html += '<td>' + myBoard.cpc_eff_target + '</td>';
-      html += '<td>' + myBoard.cpc_eff_rate.toFixed(1) + '%</td>';
-      html += '<td>' + fmtFull(myBoard.mem_amt) + '</td>';
-      html += '<td>' + myBoard.mem_rate.toFixed(2) + '%</td>';
-      html += '</tr></tbody></table></div>';
-    }
-    if(myFinance) {
-      html += '<div class="board-label">财收看板</div>';
-      html += '<div style="overflow-x:auto"><table class="board-table"><thead><tr>';
-      html += '<th>CPS_GTV</th><th>CPS佣金</th><th>佣金率</th><th>CPC</th><th>旺铺通</th><th>MEM</th><th>总财收</th>';
-      html += '</tr></thead><tbody><tr>';
-      html += '<td>' + fmtFull(myFinance.cps_gtv) + '</td>';
-      html += '<td>' + fmtFull(myFinance.cps_income) + '</td>';
-      html += '<td>' + myFinance.cps_rate + '%</td>';
-      html += '<td>' + fmtFull(myFinance.cpc) + '</td>';
-      html += '<td>' + fmtFull(myFinance.wpt) + '</td>';
-      html += '<td>' + fmtFull(myFinance.mem) + '</td>';
-      html += '<td>' + fmtFull(myFinance.total) + '</td>';
-      html += '</tr></tbody></table></div>';
-    }
-    html += '</div>';
   }
 
   // ===== Module 4: Bar Chart Comparison =====
