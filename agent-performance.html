@@ -72,7 +72,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 /* 详情覆盖层 */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;overflow-y:auto}
 .overlay.show{display:block}
-.overlay-box{background:#fff;border-radius:14px;margin:20px auto;max-width:1160px;padding:0;overflow:hidden}
+.overlay-box{background:#fff;border-radius:14px;margin:20px auto;max-width:800px;padding:0;overflow:hidden}
 .overlay-hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:14px 20px;display:flex;align-items:center}
 .overlay-hdr h2{font-size:16px;font-weight:700;flex:1}
 .overlay-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:0 4px;line-height:1}
@@ -141,13 +141,23 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .li-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
 
 /* 雷达图区域 */
-.radar-wrap{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:14px}
-.radar-wrap h2{font-size:15px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #eef0f5}
-.radar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media(max-width:900px){.radar-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.radar-grid{grid-template-columns:1fr}}
-.radar-card{background:#f8faff;border-radius:10px;padding:12px 8px 8px;border:1px solid #e8edf8;text-align:center}
-.radar-card h4{font-size:11px;color:#555;margin-bottom:8px;font-weight:700}
+/* 热力图排名表 */
+.hmap-wrap{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:14px}
+.hmap-wrap h2{font-size:15px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #eef0f5}
+.hmap-table{width:100%;border-collapse:collapse;font-size:13px}
+.hmap-table th{background:#f5f7fb;color:#444;padding:10px 8px;text-align:center;font-weight:700;border-bottom:2px solid #dde2ee;white-space:nowrap}
+.hmap-table th.hmap-label{text-align:left;padding-left:14px;min-width:110px}
+.hmap-table td{padding:9px 8px;text-align:center;border-bottom:1px solid #f0f2f5;font-size:15px;font-weight:700}
+.hmap-table td.hmap-label{text-align:left;padding-left:14px;font-size:13px;font-weight:600;color:#444}
+.hmap-table .total-row td{background:#eef3fb;font-size:14px;color:#1a73e8;font-weight:900;border-top:2px solid #c5d3ee}
+.hmap-table .total-row td.hmap-label{color:#333}
+.hm1{background:#c8e6c9;color:#1b5e20} /* 排名1 深绿 */
+.hm2{background:#dcedc8;color:#33691e} /* 排名2 浅绿 */
+.hm3{background:#fff9c4;color:#827717} /* 排名3 浅黄 */
+.hm4{background:#fff3e0;color:#e65100} /* 排名4 浅橙 */
+.hm5{background:#ffccbc;color:#bf360c} /* 排名5 浅红 */
+.hm6{background:#ef9a9a;color:#b71c1c} /* 排名6 深红 */
+.hmap-table tr:hover td{opacity:.88}
 
 /* 规则管理 */
 .rules-group{margin-bottom:16px;border:1px solid #e8edf8;border-radius:10px;overflow:hidden}
@@ -227,9 +237,9 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <!-- ===== 项目排名 ===== -->
 <div id="proj-tab" class="tab-content">
   <div class="score-grid" id="proj-cards"></div>
-  <div class="radar-wrap">
-    <h2>🕸️ 多维雷达图 <span style="font-size:12px;color:#aaa;font-weight:400">各代运营商6项目综合对比</span></h2>
-    <div class="radar-grid" id="radar-grid"></div>
+  <div class="hmap-wrap">
+    <h2>🔥 核心指标排名热力图 <span style="font-size:12px;color:#aaa;font-weight:400">各指标全区排名（数字越小越好）&nbsp;&nbsp;<span class="hm1" style="padding:1px 8px;border-radius:4px;font-size:11px">1-2</span>&nbsp;<span class="hm3" style="padding:1px 8px;border-radius:4px;font-size:11px">3-4</span>&nbsp;<span class="hm6" style="padding:1px 8px;border-radius:4px;font-size:11px">5-6</span></span></h2>
+    <div id="hmap-container"></div>
   </div>
   <div class="sec">
     <h2>📋 积分明细 <span style="font-size:12px;color:#aaa;font-weight:400">每项排名1-6对应6-1分，均分权重</span></h2>
@@ -411,12 +421,12 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <div class="overlay" id="detail-overlay" onclick="closeDetail(event)">
   <div class="overlay-box" onclick="event.stopPropagation()">
     <div class="overlay-hdr">
-      <h2 id="detail-title">核心业绩数据面板</h2>
+      <h2 id="detail-title">核心业绩详情</h2>
       <button class="overlay-close" onclick="closeOverlay()">✕</button>
     </div>
     <div class="dp-wrap">
-      <div class="dp-title" id="dp-title">粤闽浙城市群代运营销售数据面板</div>
-      <div class="dp-sub" id="dp-sub">2026-05-31 &nbsp;|&nbsp; 时间进度：96.77%（30/31天）</div>
+      <div id="dp-title"></div>
+      <div id="dp-sub"></div>
       <div id="dp-table-wrap"></div>
     </div>
   </div>
@@ -484,7 +494,7 @@ function calcProjRanks() {
     while(i<s.length){
       let j=i;
       while(j<s.length && sortVal(s[j])===sortVal(s[i])) j++;
-      const avgScore = [...Array(j-i)].reduce((sum,_,k)=>sum+(7-(i+k)),0)/(j-i);
+      const avgScore = [...Array(j-i)].reduce((sum,_,k)=>sum+(OPS.length-i-k),0)/(j-i); // rank1→6分, rank6→1分
       for(let k=i;k<j;k++) ranks[m.key][s[k]]=avgScore;
       i=j;
     }
@@ -641,61 +651,118 @@ function renderProjDetails() {
 // ============ 详情面板（图2数据面板格式）============
 function openDetail(op) {
   const d=PERF[op];
-  document.getElementById('detail-title').textContent=`${op}（${PERSONS[op]}）核心业绩数据面板`;
-  document.getElementById('dp-title').textContent='粤闽浙城市群代运营销售数据面板  '+DATA_DATE;
-  document.getElementById('dp-sub').textContent='时间进度：'+TIME_PROGRESS;
+  const score=calcPerfScore(op);
+  const perfOrder=[...OPS].sort((a,b)=>calcPerfScore(b)-calcPerfScore(a));
+  const perfRank=perfOrder.indexOf(op)+1;
+  document.getElementById('detail-title').textContent=`${op}（${PERSONS[op]}）核心业绩详情`;
+  document.getElementById('dp-title').textContent='';
+  document.getElementById('dp-sub').textContent='';
 
-  // 生成完整面板表格
-  const rows=[...OPS.map(o=>[o,PERF[o]]),['粤闽浙城市群',TOTAL]];
-  const isHighlight=(o)=>o===op;
-  let t=`<div style="overflow-x:auto">
-  <table class="dp-table">
-  <thead>
-    <tr>
-      <th rowspan=2>代运营商</th><th rowspan=2>操盘手</th>
-      <th colspan=7 class="th-gtv">🏆 GTV指标</th>
-      <th colspan=9 class="th-cpc">📶 CPC流量数据</th>
-      <th colspan=2 class="th-mem">💰 MEM</th>
-    </tr>
-    <tr>
-      <th class="th-gtv">本月GTV</th><th class="th-gtv">月度目标</th><th class="th-gtv">GTV进度</th><th class="th-gtv">GTV缺口</th><th class="th-gtv">昨日GTV</th><th class="th-gtv">GTV剔除率</th><th class="th-gtv">月CPC&amp;QCPS</th>
-      <th class="th-cpc">CPC目标</th><th class="th-cpc">CPC进度</th><th class="th-cpc">CPC缺口</th><th class="th-cpc">昨日CPC</th><th class="th-cpc">昨日旺铺通</th><th class="th-cpc">日CPC</th><th class="th-cpc">CPC有效新签</th><th class="th-cpc">CPC新签目标</th><th class="th-cpc">效新签目标</th>
-      <th class="th-mem">MEM收款额</th><th class="th-mem">MEM续约率</th>
-    </tr>
-  </thead>
-  <tbody>`;
+  // 跟其他家对比表（每项指标对比所有人）
+  const rkFn=(arr,desc=true)=>{
+    const sorted=[...arr].sort((a,b)=>desc?b[1]-a[1]:a[1]-b[1]);
+    const map={}; sorted.forEach(([k],i)=>map[k]=i+1); return map;
+  };
+  const gtvRk=rkFn(OPS.map(o=>[o,PERF[o].gtv_rate]));
+  const cpcRk=rkFn(OPS.map(o=>[o,PERF[o].cpc_rate]));
+  const memRk=rkFn(OPS.map(o=>[o,PERF[o].mem_renewal]));
+  const newRk=rkFn(OPS.map(o=>[o,PERF[o].cpc_new_rate]));
+  const elimRk=rkFn(OPS.map(o=>[o,PERF[o].elim]),false);
+  const riskRk=rkFn(OPS.map(o=>[o,PERF[o].risk]),false);
 
-  rows.forEach(([name,d])=>{
-    const isTotal=(name==='粤闽浙城市群');
-    const isMe=(name===op);
-    const rowStyle=isMe?'background:#e3f2fd;font-weight:700':isTotal?'':'';
-    const rc=v=>v==null?'-':v>=100?'dp-rate-g':v>=80?'dp-rate-y':'dp-rate-r';
-    t+=`<tr style="${rowStyle}">
-      <td class="td-name">${name}</td>
-      <td class="td-person">${isTotal?'胡英杰':PERSONS[name]||''}</td>
-      <td>${fmt(d.gtv)}</td>
-      <td>${fmt(d.gtv_target)}</td>
-      <td class="${rc(d.gtv_rate)}"><b>${fmtRate(d.gtv_rate)}</b></td>
-      <td class="${d.gtv_gap>0?'dp-gap-neg':'dp-gap-pos'}">${fmt(d.gtv_gap)}</td>
-      <td>${fmt(d.gtv_yday)}</td>
-      <td class="${d.elim<=5?'dp-rate-g':d.elim<=8?'dp-rate-y':'dp-rate-r'}">${d.elim!=null?d.elim+'%':'-'}</td>
-      <td>${fmt(d.cpc_mtd)}</td>
-      <td>${fmt(d.cpc_target)}</td>
-      <td class="${rc(d.cpc_rate)}"><b>${fmtRate(d.cpc_rate)}</b></td>
-      <td class="${d.cpc_gap>0?'dp-gap-neg':'dp-gap-pos'}">${fmt(d.cpc_gap)}</td>
-      <td>${fmt(d.cpc_yday)}</td>
-      <td>${fmt(d.wpt_yday)}</td>
-      <td>${fmt(d.day_cpc)}</td>
-      <td>${d.cpc_new!=null?d.cpc_new:'-'}</td>
-      <td>${d.cpc_new_eff!=null?d.cpc_new_eff:'-'}</td>
-      <td>${fmt(d.mem_rev)}</td>
-      <td class="${d.mem_renewal>=70?'dp-rate-g':d.mem_renewal>=50?'dp-rate-y':'dp-rate-r'}">${d.mem_renewal!=null?d.mem_renewal+'%':'-'}</td>
-    </tr>`;
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
+  const hm=(rk)=>{const bg=['#c8e6c9','#dcedc8','#fff9c4','#fff3e0','#ffccbc','#ef9a9a'][rk-1];const fg=['#1b5e20','#33691e','#827717','#e65100','#bf360c','#b71c1c'][rk-1];return `style="background:${bg};color:${fg};font-weight:700;border-radius:6px;padding:2px 10px"`;};
+
+  let t=`<div style="padding:4px">`;
+  // 头部评分卡
+  t+=`<div style="display:flex;align-items:center;gap:18px;background:#f0f6ff;border-radius:12px;padding:14px 20px;margin-bottom:16px">`;
+  t+=`<div style="font-size:48px;font-weight:900;color:#1a73e8;line-height:1">${score}</div>`;
+  t+=`<div><div style="font-size:13px;color:#888">综合得分</div><div style="font-size:22px;font-weight:800">${medals[perfRank-1]}业绩排名第${perfRank}名</div><div style="font-size:12px;color:#999;margin-top:2px">${DATA_DATE} &nbsp;|  时间进度：${TIME_PROGRESS}</div></div>`;
+  t+=`</div>`;
+
+  // GTV区域
+  t+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">`;
+  t+=compBlock('🏆 GTV 指标',[
+    ['本月GTV',fmt(d.gtv)+'',gtvRk[op]],
+    ['月度目标',fmt(d.gtv_target)+'',null],
+    ['GTV进度',d.gtv_rate+'%',gtvRk[op]],
+    ['GTV缺口',fmt(d.gtv_gap)+'',null],
+    ['昨日GTV',fmt(d.gtv_yday)+'',null],
+    ['GTV剔除率',d.elim+'%',elimRk[op]],
+  ],hm);
+  // CPC区域
+  t+=compBlock('📶 CPC 流量',[
+    ['月CPC&QCPS',fmt(d.cpc_mtd)+'',cpcRk[op]],
+    ['CPC目标',fmt(d.cpc_target)+'',null],
+    ['CPC进度',d.cpc_rate+'%',cpcRk[op]],
+    ['CPC缺口',fmt(d.cpc_gap)+'',null],
+    ['昨日CPC',fmt(d.cpc_yday)+'',null],
+    ['日CPC目标',fmt(d.day_cpc)+'',null],
+  ],hm);
+  t+=compBlock('🌟 CPC新签',[
+    ['有效新签',d.cpc_new+'',null],
+    ['实际新签',d.cpc_new_eff+'',null],
+    ['目标新签',d.cpc_new_sign+'',null],
+    ['CPC新签达成率',d.cpc_new_rate+'%',newRk[op]],
+    ['昨日旺铺通',fmt(d.wpt_yday)+'',null],
+    ['月旺铺通',fmt(d.wpt_mtd)+'',null],
+  ],hm);
+  t+=compBlock('💰 MEM / 将5局',[
+    ['MEM收款额',fmt(d.mem_rev)+'',memRk[op]],
+    ['MEM续约率',d.mem_renewal+'%',memRk[op]],
+    ['感知风控率',d.risk+'%',riskRk[op]],
+    ['GTV剔除率',d.elim+'%',elimRk[op]],
+  ],hm);
+  t+=`</div>`;
+
+  // 全区对比条形图
+  t+=`<div style="background:#f8faff;border-radius:10px;padding:14px 16px;border:1px solid #e0e8f8">`;
+  t+=`<div style="font-size:13px;font-weight:700;color:#1a73e8;margin-bottom:10px">📊 全区对比</div>`;
+  const compareRows=[
+    {label:'GTV进度', vals:OPS.map(o=>PERF[o].gtv_rate), unit:'%', key:op},
+    {label:'CPC进度', vals:OPS.map(o=>PERF[o].cpc_rate), unit:'%', key:op},
+    {label:'MEM续约率', vals:OPS.map(o=>PERF[o].mem_renewal), unit:'%', key:op},
+    {label:'剔除率', vals:OPS.map(o=>PERF[o].elim), unit:'%', key:op, reverse:true},
+  ];
+  compareRows.forEach(row=>{
+    const max=Math.max(...row.vals);
+    t+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px">`;
+    t+=`<span style="width:70px;flex-shrink:0;color:#555">${row.label}</span>`;
+    OPS.forEach((o,i)=>{
+      const v=row.vals[i];
+      const pct=max>0?v/max*100:0;
+      const isMe=o===op;
+      const barColor=isMe?'#1a73e8':row.reverse?(v<=5?'#4caf50':v<=8?'#ff9800':'#ef5350'):(v>=100?'#4caf50':v>=80?'#ff9800':'#ef5350');
+      t+=`<div style="display:flex;flex-direction:column;align-items:center;flex:1">`;
+      t+=`<div style="width:100%;height:20px;background:#f0f2f5;border-radius:4px;overflow:hidden;border:${isMe?'2px solid #1a73e8':'1px solid #e8eaee'}">`;
+      t+=`<div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px;transition:.4s"></div></div>`;
+      t+=`<span style="font-size:10px;font-weight:${isMe?'800':'400'};color:${isMe?'#1a73e8':'#666'};margin-top:1px">${SHORT[o]}</span>`;
+      t+=`</div>`;
+    });
+    t+=`</div>`;
   });
-  t+=`</tbody></table></div>`;
+  t+=`</div>`;
+
+  t+=`</div>`;
   document.getElementById('dp-table-wrap').innerHTML=t;
   document.getElementById('detail-overlay').classList.add('show');
   document.body.style.overflow='hidden';
+}
+
+function compBlock(title, kvs, hm){
+  let s=`<div style="background:#fff;border-radius:10px;border:1px solid #e8edf8;padding:12px 14px">`;
+  s+=`<div style="font-size:12px;font-weight:700;color:#1a73e8;margin-bottom:8px">${title}</div>`;
+  s+=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px">`;
+  kvs.forEach(([k,v,rk])=>{
+    s+=`<div style="display:flex;flex-direction:column;background:#f8faff;border-radius:6px;padding:6px 8px">`;
+    s+=`<span style="font-size:10px;color:#aaa;margin-bottom:2px">${k}</span>`;
+    s+=`<div style="display:flex;align-items:center;gap:6px">`;
+    s+=`<span style="font-size:14px;font-weight:700;color:#333">${v}</span>`;
+    if(rk) s+=`<span ${hm(rk)} style="font-size:10px">#${rk}</span>`;
+    s+=`</div></div>`;
+  });
+  s+=`</div></div>`;
+  return s;
 }
 
 function closeOverlay(){
@@ -797,131 +864,116 @@ function showTab(name,btn){
   btn.classList.add('active');
 }
 
-// ============ 雷达图 ============
-const RADAR_COLORS = {
-  '惠州巨浪':  {bg:'rgba(255,99,132,0.15)',  bd:'rgba(255,99,132,0.9)'},
-  '惠州柏万':  {bg:'rgba(54,162,235,0.15)',  bd:'rgba(54,162,235,0.9)'},
-  '泉州小花猫':{bg:'rgba(75,192,192,0.15)',  bd:'rgba(75,192,192,0.9)'},
-  '惠安广通':  {bg:'rgba(255,159,64,0.15)',  bd:'rgba(255,159,64,0.9)'},
-  '慈溪哲光':  {bg:'rgba(153,102,255,0.15)', bd:'rgba(153,102,255,0.9)'},
-  '义乌汐洋':  {bg:'rgba(255,205,86,0.15)',  bd:'rgba(255,205,86,0.9)'},
-};
+// ============ 热力图排名表 ============
+// 短名映射
+const SHORT = {'惠州巨浪':'巨浪','惠州柏万':'柏万','泉州小花猫':'小花猫','惠安广通':'广通','慈溪哲光':'哲光','义乌汐洋':'汐洋'};
 
-// 将原始值归一化到0-100（用于雷达图展示）
-function normalizeProj(op){
-  // 每个维度：先收集所有值，按比例映射到20-100
-  const minmax=(arr)=>{const mn=Math.min(...arr),mx=Math.max(...arr);return{mn,mx}};
-  const norm=(v,mn,mx)=>mx===mn?60:Math.round(20+(v-mn)/(mx-mn)*80);
-
-  const vals={
-    score: OPS.map(o=>PROJ[o].score),
-    dx:    OPS.map(o=>PROJ[o].dx.rate),
-    zrq:   OPS.map(o=>PROJ[o].zrq.st),
-    bml:   OPS.map(o=>PROJ[o].bml),   // 越低越好，反转
-    wpt:   OPS.map(o=>PROJ[o].wpt.hdRate),
-    fill:  OPS.map(o=>FILL_RATE[o]||0),
-  };
-  const idx=OPS.indexOf(op);
-  const {mn:smn,mx:smx}=minmax(vals.score);
-  const {mn:dmn,mx:dmx}=minmax(vals.dx);
-  const {mn:zmn,mx:zmx}=minmax(vals.zrq);
-  const {mn:bmn,mx:bmx}=minmax(vals.bml);
-  const {mn:wmn,mx:wmx}=minmax(vals.wpt);
-  const {mn:fmn,mx:fmx}=minmax(vals.fill);
-  return [
-    norm(vals.score[idx],smn,smx),
-    norm(vals.dx[idx],dmn,dmx),
-    norm(vals.zrq[idx],zmn,zmx),
-    norm(vals.bml[idx],bmx,bmn), // BML反转：低值→高分
-    norm(vals.wpt[idx],wmn,wmx),
-    norm(vals.fill[idx],fmn,fmx),
-  ];
+// rank: 1=最好, 6=最差
+function hmClass(rank){
+  if(rank<=1.5) return 'hm1';
+  if(rank<=2.5) return 'hm2';
+  if(rank<=3.5) return 'hm3';
+  if(rank<=4.5) return 'hm4';
+  if(rank<=5.5) return 'hm5';
+  return 'hm6';
+}
+// 积分转排名位次：积分越高排名越前
+function scoreToRank(scoreVal){
+  // 积分 6→1名, 1→6名; 并列少小分数
+  return Math.round((7-scoreVal)*10)/10;
 }
 
-const RADAR_LABELS = ['经营评分','好店动销','职人码渗透','BML(低更好)','旺铺通开通','满编率'];
+function renderHeatmap(){
+  const {ranks,pts}=calcProjRanks();
+  // 同时把核心业绩指标也加进来
+  const perfRanks = {};
+  // GTV完成率 高→好
+  const perfMetrics = [
+    {key:'gtv_rate', label:'GTV完成进度', sort:'desc', val:op=>PERF[op].gtv_rate},
+    {key:'cpc_rate', label:'CPC消耗进度', sort:'desc', val:op=>PERF[op].cpc_rate},
+    {key:'cpc_new_rate', label:'CPC有效新签进度', sort:'desc', val:op=>PERF[op].cpc_new_rate},
+    {key:'mem_renewal', label:'MEM续约率', sort:'desc', val:op=>PERF[op].mem_renewal},
+    {key:'elim', label:'GTV剔除率', sort:'asc', val:op=>PERF[op].elim},
+  ];
+  for(const m of perfMetrics){
+    const s=[...OPS].sort((a,b)=>m.sort==='desc'?m.val(b)-m.val(a):m.val(a)-m.val(b));
+    perfRanks[m.key]={};
+    let i=0;
+    while(i<s.length){
+      let j=i;
+      while(j<s.length && m.val(s[j])===m.val(s[i])) j++;
+      const avg=[...Array(j-i)].reduce((sum,_,k)=>sum+(i+k+1),0)/(j-i);
+      for(let k=i;k<j;k++) perfRanks[m.key][s[k]]=avg;
+      i=j;
+    }
+  }
 
-function renderRadar(){
-  const {pts}=calcProjRanks();
+  // 列顺序按综合积分排名（项目积分）
   const order=[...OPS].sort((a,b)=>pts[b]-pts[a]);
-  const grid=document.getElementById('radar-grid');
-  grid.innerHTML='';
 
-  // 图1：全部代运营商对比（大图）
-  const allCard=document.createElement('div');
-  allCard.className='radar-card';
-  allCard.style.cssText='grid-column:1/-1;background:#fff;border:2px solid #e0e8f8;padding:16px';
-  allCard.innerHTML='<h4 style="font-size:14px;color:#1a73e8">📊 全代运营商综合雷达对比</h4><canvas id="radar-all" height="260"></canvas>';
-  grid.appendChild(allCard);
+  // 行：项目指标 + 核心业绩指标
+  const rows=[
+    // 项目排名行
+    {label:'经营评分增量达标率', key:'score', ranks, rankKey:'score', src:'proj'},
+    {label:'好店动销达标率',     key:'dx',    ranks, rankKey:'dx',    src:'proj'},
+    {label:'职人码店转渗透率',   key:'zrq',   ranks, rankKey:'zrq',   src:'proj'},
+    {label:'BML Lose率',        key:'bml',   ranks, rankKey:'bml',   src:'proj'},
+    {label:'旺铺通好店开通率',   key:'wpt',   ranks, rankKey:'wpt',   src:'proj'},
+    {label:'真实满编率',         key:'fill',  ranks, rankKey:'fill',  src:'proj'},
+    // 分隔行
+    {sep:true, label:'── 核心业绩 ──'},
+    // 业绩排名行
+    {label:'GTV完成进度',        key:'gtv_rate',     ranks:perfRanks, rankKey:'gtv_rate',     src:'perf'},
+    {label:'CPC消耗进度',        key:'cpc_rate',     ranks:perfRanks, rankKey:'cpc_rate',     src:'perf'},
+    {label:'CPC有效新签进度',    key:'cpc_new_rate', ranks:perfRanks, rankKey:'cpc_new_rate', src:'perf'},
+    {label:'MEM续约率',          key:'mem_renewal',  ranks:perfRanks, rankKey:'mem_renewal',  src:'perf'},
+    {label:'GTV剔除率',          key:'elim',         ranks:perfRanks, rankKey:'elim',         src:'perf'},
+  ];
 
-  setTimeout(()=>{
-    const ctx=document.getElementById('radar-all').getContext('2d');
-    new Chart(ctx,{
-      type:'radar',
-      data:{
-        labels:RADAR_LABELS,
-        datasets:OPS.map(op=>({
-          label:op,
-          data:normalizeProj(op),
-          backgroundColor:RADAR_COLORS[op].bg,
-          borderColor:RADAR_COLORS[op].bd,
-          borderWidth:2,
-          pointRadius:3,
-          pointHoverRadius:5,
-        }))
-      },
-      options:{
-        responsive:true,
-        plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:12}}},
-        scales:{r:{
-          min:0,max:100,
-          ticks:{display:false},
-          grid:{color:'rgba(0,0,0,.08)'},
-          pointLabels:{font:{size:11}}
-        }}
-      }
+  // 各列综合排名（项目积分 + 业绩积分平均）
+  const totalRankByOp = {};
+  const allPerfPts = {};
+  for(const op of OPS){
+    let pp=0;
+    for(const m of perfMetrics) pp += (7-perfRanks[m.key][op]);
+    allPerfPts[op]=Math.round(pp*10/perfMetrics.length)/10;
+    totalRankByOp[op] = {
+      proj: pts[op],
+      perf: allPerfPts[op],
+    };
+  }
+
+  let html=`<table class="hmap-table"><thead><tr>`;
+  html+=`<th class="hmap-label">指标</th>`;
+  order.forEach(op=>{ html+=`<th>${SHORT[op]}</th>`; });
+  html+=`</tr></thead><tbody>`;
+
+  rows.forEach(row=>{
+    if(row.sep){
+      html+=`<tr><td class="hmap-label" colspan="${order.length+1}" style="background:#f0f4ff;color:#1a73e8;font-size:12px;font-weight:600;padding:6px 14px;border-top:1px solid #c5d3ee">${row.label}</td></tr>`;
+      return;
+    }
+    html+=`<tr><td class="hmap-label">${row.label}</td>`;
+    order.forEach(op=>{
+      const raw = row.ranks[row.rankKey][op];
+      // proj ranks 存的是积分(6=第1名)，perf ranks 存的是排名位次(1=第1名)
+      const rk = row.src==='proj' ? scoreToRank(raw) : raw;
+      const cls = hmClass(rk);
+      const disp = Number.isInteger(rk) ? rk : rk.toFixed(1);
+      html+=`<td class="${cls}">${disp}</td>`;
     });
-  },50);
-
-  // 图2-7：每家单独雷达图（vs 平均）
-  order.forEach((op,idx)=>{
-    const c=document.createElement('div');
-    c.className='radar-card';
-    const rk=idx+1;
-    const medals=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
-    const canvasId='radar-op-'+idx;
-    c.innerHTML=`<h4>${medals[idx]} ${op}（${PERSONS[op]}）积分${pts[op]}</h4><canvas id="${canvasId}" height="180"></canvas>`;
-    grid.appendChild(c);
-
-    setTimeout(()=>{
-      const ctx2=document.getElementById('radar-op-'+idx).getContext('2d');
-      // 计算平均值
-      const avgData=RADAR_LABELS.map((_,i)=>Math.round(OPS.reduce((s,o)=>s+normalizeProj(o)[i],0)/OPS.length));
-      new Chart(ctx2,{
-        type:'radar',
-        data:{
-          labels:RADAR_LABELS,
-          datasets:[
-            {label:op, data:normalizeProj(op),
-             backgroundColor:RADAR_COLORS[op].bg, borderColor:RADAR_COLORS[op].bd,
-             borderWidth:2,pointRadius:3},
-            {label:'平均', data:avgData,
-             backgroundColor:'rgba(200,200,200,0.1)', borderColor:'rgba(150,150,150,0.6)',
-             borderWidth:1, borderDash:[4,4],pointRadius:2},
-          ]
-        },
-        options:{
-          responsive:true,
-          plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}}},
-          scales:{r:{
-            min:0,max:100,
-            ticks:{display:false},
-            grid:{color:'rgba(0,0,0,.07)'},
-            pointLabels:{font:{size:9.5}}
-          }}
-        }
-      });
-    },100+idx*20);
+    html+=`</tr>`;
   });
+
+  // 综合排名行：显示项目排名名次 + 积分
+  html+=`<tr class="total-row"><td class="hmap-label">📊 综吆排名（项目积分）</td>`;
+  order.forEach((op,i)=>{
+    html+=`<td>${i+1}<span style="font-size:10px;font-weight:400;color:#888;margin-left:3px">(${pts[op]}分)</span></td>`;
+  });
+  html+=`</tr>`;
+
+  html+=`</tbody></table>`;
+  document.getElementById('hmap-container').innerHTML=html;
 }
 
 // ============ 规则管理 ============
@@ -975,7 +1027,7 @@ function saveTargets(){
   renderProjCards();
   renderProjTable();
   renderProjDetails();
-  renderRadar();
+  renderHeatmap();
   // 提示
   const msg=document.getElementById('save-msg')||document.createElement('div');
   msg.id='save-msg'; msg.className='save-msg'; msg.textContent='✅ 目标值已保存，排名已重新计算！';
@@ -992,7 +1044,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderProjCards();
   renderProjTable();
   renderProjDetails();
-  renderRadar();
+  renderHeatmap();
   renderTargetTable();
   document.getElementById('hdr-date').textContent='数据更新：'+DATA_DATE;
 });
