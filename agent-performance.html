@@ -255,11 +255,21 @@ function calcProjRanks() {
   for(const m of PROJ_METRICS){
     const s=[...OPS].sort((a,b)=>m.sort==='desc'?m.val(b)-m.val(a):m.val(a)-m.val(b));
     ranks[m.key]={};
-    s.forEach((op,i)=>ranks[m.key][op]=i+1);
+    // 并列处理：相同值给相同名次（取最高名次对应的积分平均）
+    let i=0;
+    while(i<s.length){
+      let j=i;
+      while(j<s.length && m.val(s[j])===m.val(s[i])) j++;
+      // i到j-1并列，积分取 (7-(i)) 到 (7-(j-1)) 的平均
+      const avgScore = [...Array(j-i)].reduce((sum,_,k)=>sum+(7-(i+k)),0)/(j-i);
+      for(let k=i;k<j;k++) ranks[m.key][s[k]]=avgScore;
+      i=j;
+    }
   }
   for(const op of OPS){
     pts[op]=0;
-    for(const m of PROJ_METRICS) pts[op]+=(7-ranks[m.key][op]);
+    for(const m of PROJ_METRICS) pts[op]+=ranks[m.key][op];
+    pts[op]=Math.round(pts[op]*10)/10;
   }
   return {ranks, pts};
 }
