@@ -228,19 +228,36 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
         <tr>
           <th rowspan="2" style="background:#4caf50;color:#fff">代运营商</th>
           <th rowspan="2" style="background:#4caf50;color:#fff">操盘手</th>
-          <th colspan="7" style="background:#4caf50;color:#fff">📈 GTV 指标</th>
-          <th colspan="9" style="background:#2196f3;color:#fff">📊 CPC 流量数据</th>
-          <th colspan="3" style="background:#ff9800;color:#fff">🔄 MEM</th>
+          <th colspan="6" style="background:#4caf50;color:#fff">📊 GTV 指标</th>
+          <th colspan="9" style="background:#2196f3;color:#fff">📈 CPC 流量数据</th>
+          <th colspan="2" style="background:#ff9800;color:#fff">💰 MEM</th>
         </tr>
         <tr>
-          <th>本月GTV</th><th>月度目标</th><th>GTV进度</th><th>GTV日缺口</th><th>昨日EGTV</th><th>GTV剔除率</th><th>昨CPC&amp;QCPS</th>
-          <th>月旺铺通消耗</th><th>CPC目标</th><th>CPC进度</th><th>CPC日缺口</th>
-          <th>昨BCPC进度</th><th>昨日旺铺消耗</th><th>旺BCPC&amp;QCPS</th>
-          <th>CPC新签</th><th>CPC有效新签</th><th>有效新签目标</th>
+          <th>本月GTV</th><th>月度目标</th><th>GTV进度</th><th>GTV日缺口</th><th>昨日GTV</th><th>GTV剔除率</th>
+          <th>月CPC&amp;QCPS</th><th>月旺铺通消耗</th><th>CPC目标</th><th>CPC进度</th><th>CPC日缺口</th>
+          <th>昨日CPC消耗</th><th>昨日旺铺通</th><th>昨日CPC&amp;QCPS</th>
+          <th>月CPC有效新签</th>
           <th>MEM收款额</th><th>MEM续约率</th>
         </tr>
       </thead>
       <tbody id="sales-board-body"></tbody>
+    </table>
+    <h3 style="font-size:14px;font-weight:700;color:#9c27b0;margin:20px 0 12px">粤闽浙城市群财收看板 2026-05-31</h3>
+    <table class="rtable" style="font-size:12px;white-space:nowrap">
+      <thead>
+        <tr>
+          <th style="background:#9c27b0;color:#fff">代运营商</th>
+          <th style="background:#9c27b0;color:#fff">操盘手</th>
+          <th style="background:#9c27b0;color:#fff">CPS月达成GTV</th>
+          <th style="background:#9c27b0;color:#fff">月CPS交易收入</th>
+          <th style="background:#9c27b0;color:#fff">CPS费率</th>
+          <th style="background:#9c27b0;color:#fff">CPC消耗</th>
+          <th style="background:#9c27b0;color:#fff">旺铺通消耗</th>
+          <th style="background:#9c27b0;color:#fff">MEM收款额</th>
+          <th style="background:#9c27b0;color:#fff">💎 财收合计</th>
+        </tr>
+      </thead>
+      <tbody id="finance-board-body"></tbody>
     </table>
   </div>
   <div class="sec">
@@ -1106,64 +1123,104 @@ function scoreToRank(scoreVal){
 
 // ============ 总看板数据（来自PC业绩看板） ============
 const SALES_BOARD = [
-  {op:'惠州巨浪',person:'肖立铭',gtv:3620250,target:3956557,rate:91.50,gap:336307,egtv:147396,elim:5.73,cpcqcps:85655,wpt_m:35586,cpc_target:87905,cpc_rate:94.44,cpc_gap:2250,bcpc:3468,bcpc_d:2050,bcpc_qcps:5517,cpc_new:24,cpc_eff:18,eff_target:15,mem_amt:151187,mem_rate:70.91},
-  {op:'义乌汐洋',person:'陈铨',gtv:2947118,target:3002361,rate:98.16,gap:55243,egtv:107347,elim:1.47,cpcqcps:160102,wpt_m:27746,cpc_target:151368,cpc_rate:105.77,cpc_gap:-8733,bcpc:5243,bcpc_d:934,bcpc_qcps:6176,cpc_new:24,cpc_eff:18,eff_target:16,mem_amt:88400,mem_rate:69.23},
-  {op:'惠安广通',person:'尤云生',gtv:2279155,target:2358641,rate:96.63,gap:79486,egtv:105980,elim:3.91,cpcqcps:74997,wpt_m:20983,cpc_target:73700,cpc_rate:101.76,cpc_gap:-1297,bcpc:3846,bcpc_d:886,bcpc_qcps:4733,cpc_new:15,cpc_eff:11,eff_target:9,mem_amt:76529,mem_rate:50.00},
-  {op:'惠州柏万',person:'林启梁',gtv:3223024,target:3240197,rate:99.47,gap:17173,egtv:131226,elim:3.33,cpcqcps:110337,wpt_m:30728,cpc_target:110304,cpc_rate:100.03,cpc_gap:-33,bcpc:5443,bcpc_d:1873,bcpc_qcps:7416,cpc_new:25,cpc_eff:19,eff_target:17,mem_amt:117533,mem_rate:63.33},
-  {op:'泉州小花猫',person:'康子诚',gtv:2702939,target:2774237,rate:97.43,gap:71297,egtv:83928,elim:3.21,cpcqcps:122146,wpt_m:27765,cpc_target:123755,cpc_rate:98.70,cpc_gap:1608,bcpc:7103,bcpc_d:1430,bcpc_qcps:8534,cpc_new:17,cpc_eff:14,eff_target:12,mem_amt:78496,mem_rate:55.10},
-  {op:'慈溪哲光',person:'孙浩',gtv:3040020,target:3117649,rate:97.51,gap:77629,egtv:144393,elim:4.98,cpcqcps:147173,wpt_m:17895,cpc_target:155148,cpc_rate:94.86,cpc_gap:1755,bcpc:4177,bcpc_d:941,bcpc_qcps:6941,cpc_new:18,cpc_eff:17,eff_target:16,mem_amt:87456,mem_rate:55.10},
+  {op:'惠州巨浪',person:'肖立铭',gtv:362.0,target:395.7,rate:91.50,gap:336307,ygtv:14.7,elim:5.73,cpcqcps:8.6,wpt_m:3.6,cpc_target:8.8,cpc_rate:97.44,cpc_gap:2250,cpc_d:3468,wpt_d:2050,cpcqcps_d:5517,cpc_eff:18,mem_amt:15.1,mem_rate:70.91},
+  {op:'义乌汐洋',person:'陈铨',gtv:294.7,target:300.2,rate:98.16,gap:55243,ygtv:10.8,elim:1.47,cpcqcps:16.0,wpt_m:2.8,cpc_target:15.1,cpc_rate:105.77,cpc_gap:-8733,cpc_d:5243,wpt_d:934,cpcqcps_d:6176,cpc_eff:16,mem_amt:8.8,mem_rate:69.23},
+  {op:'惠安广通',person:'尤云生',gtv:227.9,target:235.9,rate:96.63,gap:79486,ygtv:10.6,elim:3.91,cpcqcps:7.5,wpt_m:2.1,cpc_target:7.4,cpc_rate:101.76,cpc_gap:-1297,cpc_d:3846,wpt_d:886,cpcqcps_d:4733,cpc_eff:11,mem_amt:7.7,mem_rate:50.00},
+  {op:'惠州柏万',person:'林启梁',gtv:322.3,target:324.0,rate:99.47,gap:17173,ygtv:13.1,elim:3.33,cpcqcps:11.0,wpt_m:3.1,cpc_target:11.0,cpc_rate:100.03,cpc_gap:-33,cpc_d:5543,wpt_d:1873,cpcqcps_d:7416,cpc_eff:19,mem_amt:11.8,mem_rate:63.33},
+  {op:'泉州小花猫',person:'康子诚',gtv:270.3,target:277.4,rate:97.43,gap:71297,ygtv:8.4,elim:3.21,cpcqcps:12.2,wpt_m:2.8,cpc_target:12.4,cpc_rate:98.70,cpc_gap:1608,cpc_d:7103,wpt_d:1430,cpcqcps_d:8534,cpc_eff:14,mem_amt:7.8,mem_rate:52.50},
+  {op:'慈溪哲光',person:'孙浩',gtv:304.0,target:311.8,rate:97.51,gap:77629,ygtv:14.4,elim:4.98,cpcqcps:14.7,wpt_m:1.8,cpc_target:15.5,cpc_rate:94.86,cpc_gap:7974,cpc_d:6001,wpt_d:941,cpcqcps_d:6941,cpc_eff:17,mem_amt:8.7,mem_rate:55.10},
 ];
-const SALES_BOARD_TOTAL = {op:'粤闽浙城市群',person:'胡英杰',gtv:17811284,target:18449642,rate:96.54,gap:638357,egtv:720270,elim:3.87,cpcqcps:700425,wpt_m:160703,cpc_target:702180,cpc_rate:99.75,cpc_gap:1755,bcpc:31204,bcpc_d:8113,bcpc_qcps:39317,cpc_new:95,cpc_eff:80,eff_target:0,mem_amt:597407,mem_rate:60.78};
+const SALES_BOARD_TOTAL = {op:'粤闽浙城市群',person:'胡英杰',gtv:1781.1,target:1845.0,rate:96.54,gap:638357,ygtv:72.0,elim:3.87,cpcqcps:70.0,wpt_m:16.2,cpc_target:70.2,cpc_rate:99.75,cpc_gap:1755,cpc_d:31204,wpt_d:8113,cpcqcps_d:39317,cpc_eff:95,mem_amt:59.7,mem_rate:60.78};
+
+// 财收看板数据
+const FINANCE_BOARD = [
+  {op:'惠州巨浪',person:'肖立铭',cps_gtv:362.0,cps_income:23.4,cps_rate:6.47,cpc:8.6,wpt:3.6,mem:15.1,total:47.1},
+  {op:'义乌汐洋',person:'陈铨',cps_gtv:294.7,cps_income:20.2,cps_rate:6.84,cpc:16.0,wpt:2.8,mem:8.8,total:45.0},
+  {op:'惠安广通',person:'尤云生',cps_gtv:227.9,cps_income:14.7,cps_rate:6.46,cpc:7.5,wpt:2.1,mem:7.7,total:29.9},
+  {op:'惠州柏万',person:'林启梁',cps_gtv:322.3,cps_income:20.5,cps_rate:6.35,cpc:11.0,wpt:3.1,mem:11.8,total:43.3},
+  {op:'泉州小花猫',person:'康子诚',cps_gtv:270.3,cps_income:16.9,cps_rate:6.24,cpc:12.2,wpt:2.8,mem:7.8,total:36.9},
+  {op:'慈溪哲光',person:'孙浩',cps_gtv:304.0,cps_income:20.5,cps_rate:6.74,cpc:14.7,wpt:1.8,mem:8.7,total:43.9},
+];
+const FINANCE_BOARD_TOTAL = {op:'粤闽浙城市群',person:'胡英杰',cps_gtv:1781.1,cps_income:116.1,cps_rate:6.52,cpc:70.0,wpt:16.1,mem:59.7,total:245.9};
 
 function toggleSalesBoard(){
   const w=document.getElementById('sales-board-wrap');
   if(w.style.display==='none'){
     w.style.display='block';
     renderSalesBoard();
+    renderFinanceBoard();
   } else {
     w.style.display='none';
   }
 }
 function renderSalesBoard(){
-  const fmt=n=>n>=10000?(n/10000).toFixed(1)+'万':n.toLocaleString();
+  const fmtW=n=>n.toFixed(1)+'万';
+  const fmtN=n=>n.toLocaleString();
   const rateClr=(v,g,y)=>v>=g?'#4caf50':v>=y?'#ff9800':'#e53935';
   let h='';
   SALES_BOARD.forEach(d=>{
     h+=`<tr>
       <td class="tdl" style="font-weight:600">${d.op}</td>
       <td>${d.person}</td>
-      <td>${fmt(d.gtv)}</td><td>${fmt(d.target)}</td>
-      <td style="color:${rateClr(d.rate,96,90)};font-weight:700">${d.rate}%</td>
-      <td>${fmt(d.gap)}</td><td>${fmt(d.egtv)}</td>
+      <td>${fmtW(d.gtv)}</td><td>${fmtW(d.target)}</td>
+      <td style="color:${rateClr(d.rate,96.77,90)};font-weight:700">${d.rate}%</td>
+      <td>${fmtN(d.gap)}</td><td>${fmtW(d.ygtv)}</td>
       <td style="color:${d.elim<=3?'#4caf50':d.elim<=5?'#ff9800':'#e53935'};font-weight:700">${d.elim}%</td>
-      <td>${fmt(d.cpcqcps)}</td>
-      <td>${fmt(d.wpt_m)}</td><td>${fmt(d.cpc_target)}</td>
+      <td>${fmtW(d.cpcqcps)}</td><td>${fmtW(d.wpt_m)}</td><td>${fmtW(d.cpc_target)}</td>
       <td style="color:${rateClr(d.cpc_rate,100,90)};font-weight:700">${d.cpc_rate}%</td>
-      <td style="color:${d.cpc_gap<=0?'#4caf50':'#e53935'}">${d.cpc_gap>0?'+':''}${fmt(d.cpc_gap)}</td>
-      <td>${fmt(d.bcpc)}</td><td>${fmt(d.bcpc_d)}</td><td>${fmt(d.bcpc_qcps)}</td>
-      <td>${d.cpc_new}</td><td>${d.cpc_eff}</td><td>${d.eff_target}</td>
-      <td>${fmt(d.mem_amt)}</td>
+      <td style="color:${d.cpc_gap<=0?'#4caf50':'#e53935'};font-weight:600">${d.cpc_gap>0?'+':''}${fmtN(d.cpc_gap)}</td>
+      <td>${fmtN(d.cpc_d)}</td><td>${fmtN(d.wpt_d)}</td><td>${fmtN(d.cpcqcps_d)}</td>
+      <td style="font-weight:600">${d.cpc_eff}</td>
+      <td>${fmtW(d.mem_amt)}</td>
       <td style="color:${rateClr(d.mem_rate,65,50)};font-weight:700">${d.mem_rate}%</td>
     </tr>`;
   });
-  // 合计行
   const d=SALES_BOARD_TOTAL;
   h+=`<tr style="background:#e8f5e9;font-weight:700">
     <td class="tdl">${d.op}</td><td>${d.person}</td>
-    <td>${fmt(d.gtv)}</td><td>${fmt(d.target)}</td>
-    <td style="color:${rateClr(d.rate,96,90)}">${d.rate}%</td>
-    <td>${fmt(d.gap)}</td><td>${fmt(d.egtv)}</td>
+    <td>${fmtW(d.gtv)}</td><td>${fmtW(d.target)}</td>
+    <td style="color:${rateClr(d.rate,96.77,90)}">${d.rate}%</td>
+    <td>${fmtN(d.gap)}</td><td>${fmtW(d.ygtv)}</td>
     <td style="color:${d.elim<=3?'#4caf50':d.elim<=5?'#ff9800':'#e53935'}">${d.elim}%</td>
-    <td>${fmt(d.cpcqcps)}</td>
-    <td>${fmt(d.wpt_m)}</td><td>${fmt(d.cpc_target)}</td>
+    <td>${fmtW(d.cpcqcps)}</td><td>${fmtW(d.wpt_m)}</td><td>${fmtW(d.cpc_target)}</td>
     <td style="color:${rateClr(d.cpc_rate,100,90)}">${d.cpc_rate}%</td>
-    <td style="color:${d.cpc_gap<=0?'#4caf50':'#e53935'}">${d.cpc_gap>0?'+':''}${fmt(d.cpc_gap)}</td>
-    <td>${fmt(d.bcpc)}</td><td>${fmt(d.bcpc_d)}</td><td>${fmt(d.bcpc_qcps)}</td>
-    <td>${d.cpc_new}</td><td>${d.cpc_eff}</td><td>-</td>
-    <td>${fmt(d.mem_amt)}</td>
+    <td style="color:${d.cpc_gap<=0?'#4caf50':'#e53935'}">${d.cpc_gap>0?'+':''}${fmtN(d.cpc_gap)}</td>
+    <td>${fmtN(d.cpc_d)}</td><td>${fmtN(d.wpt_d)}</td><td>${fmtN(d.cpcqcps_d)}</td>
+    <td>${d.cpc_eff}</td>
+    <td>${fmtW(d.mem_amt)}</td>
     <td style="color:${rateClr(d.mem_rate,65,50)}">${d.mem_rate}%</td>
   </tr>`;
   document.getElementById('sales-board-body').innerHTML=h;
+}
+function renderFinanceBoard(){
+  const fmtW=n=>n.toFixed(1)+'万';
+  const rateClr=(v,g,y)=>v>=g?'#4caf50':v>=y?'#ff9800':'#e53935';
+  let h='';
+  FINANCE_BOARD.forEach(d=>{
+    h+=`<tr>
+      <td class="tdl" style="font-weight:600">${d.op}</td>
+      <td>${d.person}</td>
+      <td>${fmtW(d.cps_gtv)}</td>
+      <td>${fmtW(d.cps_income)}</td>
+      <td>${d.cps_rate}%</td>
+      <td>${fmtW(d.cpc)}</td>
+      <td>${fmtW(d.wpt)}</td>
+      <td>${fmtW(d.mem)}</td>
+      <td style="font-weight:700;color:#6a1b9a">${fmtW(d.total)}</td>
+    </tr>`;
+  });
+  const d=FINANCE_BOARD_TOTAL;
+  h+=`<tr style="background:#f3e5f5;font-weight:700">
+    <td class="tdl">${d.op}</td><td>${d.person}</td>
+    <td>${fmtW(d.cps_gtv)}</td>
+    <td>${fmtW(d.cps_income)}</td>
+    <td>${d.cps_rate}%</td>
+    <td>${fmtW(d.cpc)}</td>
+    <td>${fmtW(d.wpt)}</td>
+    <td>${fmtW(d.mem)}</td>
+    <td style="color:#6a1b9a">${fmtW(d.total)}</td>
+  </tr>`;
+  document.getElementById('finance-board-body').innerHTML=h;
 }
 
 function renderHeatmap(){
