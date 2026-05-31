@@ -147,7 +147,42 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 @media(max-width:900px){.radar-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.radar-grid{grid-template-columns:1fr}}
 .radar-card{background:#f8faff;border-radius:10px;padding:12px 8px 8px;border:1px solid #e8edf8;text-align:center}
-.radar-card h4{font-size:12px;color:#555;margin-bottom:8px;font-weight:700}
+.radar-card h4{font-size:11px;color:#555;margin-bottom:8px;font-weight:700}
+
+/* 规则管理 */
+.rules-group{margin-bottom:16px;border:1px solid #e8edf8;border-radius:10px;overflow:hidden}
+.rules-group-hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:10px 16px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.rules-group-hdr span{font-weight:400}
+.rules-content{background:#fff;padding:14px 16px}
+.rules-item{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid #f0f2f5}
+.rules-item:last-child{border-bottom:none}
+.rules-item-title{font-size:13px;font-weight:700;color:#333;flex-shrink:0;min-width:140px}
+.rules-item-desc{font-size:12px;color:#666;line-height:1.6}
+.edit-table-wrap{background:#f8faff;border-radius:8px;padding:12px;border:1px solid #e8edf8}
+.edit-table{width:100%;border-collapse:collapse;font-size:12px}
+.edit-table th{background:#0d47a1;color:#fff;padding:8px 10px;text-align:center;white-space:nowrap}
+.edit-table td{padding:6px 8px;text-align:center;border-bottom:1px solid #e8edf8}
+.edit-table input[type="number"]{width:70px;padding:4px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;text-align:center}
+.edit-table input[type="number"]:focus{outline:2px solid #1a73e8;border-color:#1a73e8}
+.edit-btn{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;border:none;border-radius:6px;padding:8px 20px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s}
+.edit-btn:hover{opacity:.9;transform:translateY(-1px)}
+.edit-btn:active{transform:translateY(0)}
+.edit-table .et-label{font-weight:600;color:#0d47a1;font-size:13px}
+.edit-table .et-label span{font-size:10px;font-weight:400;color:#888}
+.save-msg{font-size:12px;color:#4caf50;margin-top:8px;display:none}
+.save-msg.show{display:block}
+
+/* 可编辑目标值项高亮 */
+.edit-table tr:hover td{background:#f0f4ff}
+
+/* 指标标签 */
+.metric-tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-right:6px}
+.mt-score{background:#ffebee;color:#e53935}
+.mt-dx{background:#fff3e0;color:#f57c00}
+.mt-zrq{background:#e8f5e9;color:#2e7d32}
+.mt-bml{background:#e3f2fd;color:#1565c0}
+.mt-wpt{background:#f3e5f5;color:#6a1b9a}
+.mt-fill{background:#e0f2f1;color:#00695c}
 </style>
 </head>
 <body>
@@ -160,6 +195,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <div class="tab-bar">
   <button class="tab-btn active" onclick="showTab('perf',this)">核心业绩排名</button>
   <button class="tab-btn" onclick="showTab('proj',this)">项目排名</button>
+  <button class="tab-btn" onclick="showTab('rules',this)">📋 规则管理</button>
 </div>
 
 <div class="ct">
@@ -216,6 +252,148 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
   <div id="proj-details"></div>
 </div>
 
+</div>
+
+<!-- ===== 规则管理 ===== -->
+<div id="rules-tab" class="tab-content">
+  <div class="sec" style="max-width:1100px;margin:0 auto">
+    <h2>📋 规则管理 <span style="font-size:12px;color:#aaa;font-weight:400">查看/编辑项目排名规则、权重、口径</span></h2>
+
+    <!-- 规则分组1：项目排名规则 -->
+    <div class="rules-group" style="margin-bottom:20px">
+      <div class="rules-group-hdr">🔷 项目排名规则</div>
+      <div class="rules-content">
+        <div class="rules-item">
+          <div class="rules-item-title">强排规则</div>
+          <div class="rules-item-desc">每项独立排名1-6，对应积分6-1分，并列取平均分</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">好店动销达标率</div>
+          <div class="rules-item-desc">达标率超过100%的代运营商全部并列第1名（同得最高分）</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">经营评分增量达标率</div>
+          <div class="rules-item-desc">按增量达标率从高到低强排，排名决定积分</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">旺铺通好店开通率</div>
+          <div class="rules-item-desc">按好店开通率从高到低强排（好店开通数÷好店池）</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">真实满编率</div>
+          <div class="rules-item-desc">按满编率从高到低强排，当前全部暂按100%</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">BML Lose率</div>
+          <div class="rules-item-desc">按Lose率从低到高强排（越低越好），排名决定积分</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">职人码店转渗透率</div>
+          <div class="rules-item-desc">按店转GTV渗透率从高到低强排</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 规则分组2：核心业绩权重 -->
+    <div class="rules-group" style="margin-bottom:20px">
+      <div class="rules-group-hdr">🏆 核心业绩权重</div>
+      <div class="rules-content">
+        <div class="rules-item">
+          <div class="rules-item-title">GTV完成率</div>
+          <div class="rules-item-desc">权重30%，达成率直接参与加权</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">CPC消耗完成率</div>
+          <div class="rules-item-desc">权重30%，达成率直接参与加权</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">MEM续约率</div>
+          <div class="rules-item-desc">权重10%，达成率直接参与加权</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">CPC新签完成率</div>
+          <div class="rules-item-desc">权重10%，达成率直接参与加权</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">业绩健康度</div>
+          <div class="rules-item-desc">权重20%，剔除率(60%) + 感知风控(40%)综合计算</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 规则分组3：项目目标值（可编辑） -->
+    <div class="rules-group" style="margin-bottom:20px">
+      <div class="rules-group-hdr">🎯 项目目标值 <span style="font-size:11px;font-weight:400;color:#888">（可编辑）</span></div>
+      <div class="rules-content">
+        <div class="edit-table-wrap">
+          <table class="edit-table" id="target-table">
+            <thead>
+              <tr><th>项目</th><th>惠州巨浪</th><th>惠州柏万</th><th>泉州小花猫</th><th>惠安广通</th><th>慈溪哲光</th><th>义乌汐洋</th></tr>
+            </thead>
+            <tbody id="target-tbody"></tbody>
+          </table>
+          <div style="margin-top:10px;text-align:right">
+            <button class="edit-btn" onclick="saveTargets()">💾 保存目标值</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 规则分组4：积分映射表 -->
+    <div class="rules-group" style="margin-bottom:20px">
+      <div class="rules-group-hdr">📊 积分映射表</div>
+      <div class="rules-content">
+        <table class="edit-table" style="max-width:400px">
+          <thead><tr><th>排名</th><th>积分</th></tr></thead>
+          <tbody>
+            <tr><td>🥇 第1名</td><td>6分</td></tr>
+            <tr><td>🥈 第2名</td><td>5分</td></tr>
+            <tr><td>🥉 第3名</td><td>4分</td></tr>
+            <tr><td>4️⃣ 第4名</td><td>3分</td></tr>
+            <tr><td>5️⃣ 第5名</td><td>2分</td></tr>
+            <tr><td>6️⃣ 第6名</td><td>1分</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:8px;font-size:12px;color:#888">并列时取对应排名区间的平均分（如3家并列第1→各得5.5分）</div>
+      </div>
+    </div>
+
+    <!-- 规则分组5：数据来源说明 -->
+    <div class="rules-group">
+      <div class="rules-group-hdr">📎 数据来源</div>
+      <div class="rules-content">
+        <div class="rules-item">
+          <div class="rules-item-title">核心业绩数据</div>
+          <div class="rules-item-desc">PC业绩看板（个人模版指标+全部指标）</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">经营评分</div>
+          <div class="rules-item-desc">好店经营评分达标门店数.xlsx → 门店是否物理好店=1 & 门店是否好店经营评分达标=1</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">好店动销</div>
+          <div class="rules-item-desc">好店码有效动销门店数明细表.xlsx → 优惠码订单量≥4单</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">职人码</div>
+          <div class="rules-item-desc">策略管理-PC-职人码（组织明细）→ 店转GTV渗透率</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">BML</div>
+          <div class="rules-item-desc">BML商户明细/组织明细 → Lose率汇总</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">旺铺通</div>
+          <div class="rules-item-desc">旺铺通xlsx → 旺铺通消耗额>0为开通，好店匹配用shopId</div>
+        </div>
+        <div class="rules-item">
+          <div class="rules-item-title">满编率</div>
+          <div class="rules-item-desc">当前全部暂按100%，后续接入真实数据</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- ===== 项目详情覆盖层 ===== -->
@@ -746,6 +924,67 @@ function renderRadar(){
   });
 }
 
+// ============ 规则管理 ============
+// 目标值数据（可编辑）
+const TARGETS = {
+  score: {label:'经营评分增量达标率%', unit:'%', editable:true,
+    vals:{'惠州巨浪':283,'惠州柏万':175,'泉州小花猫':195,'惠安广通':139,'慈溪哲光':185,'义乌汐洋':184}},
+  dx:   {label:'好店动销达标数', unit:'家', editable:true,
+    vals:{'惠州巨浪':225,'惠州柏万':162,'泉州小花猫':193,'惠安广通':132,'慈溪哲光':151,'义乌汐洋':162}},
+  zrq:  {label:'职人码店转渗透率%', unit:'%', editable:true,
+    vals:{'惠州巨浪':16.5,'惠州柏万':16.5,'泉州小花猫':16.5,'惠安广通':16.5,'慈溪哲光':16.5,'义乌汐洋':16.5}},
+  bml:  {label:'BML Lose率%', unit:'%', editable:true,
+    vals:{'惠州巨浪':0,'惠州柏万':0,'泉州小花猫':0,'惠安广通':0,'慈溪哲光':0,'义乌汐洋':0}},
+  wpt:  {label:'旺铺通好店开通率%', unit:'%', editable:true,
+    vals:{'惠州巨浪':50,'惠州柏万':50,'泉州小花猫':50,'惠安广通':50,'慈溪哲光':50,'义乌汐洋':50}},
+  fill: {label:'真实满编率%', unit:'%', editable:true,
+    vals:{'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100}},
+};
+
+function renderTargetTable(){
+  const tbody=document.getElementById('target-tbody');
+  let html='';
+  const keys=['score','dx','zrq','bml','wpt','fill'];
+  const tags={score:'mt-score',dx:'mt-dx',zrq:'mt-zrq',bml:'mt-bml',wpt:'mt-wpt',fill:'mt-fill'};
+  keys.forEach(k=>{
+    const t=TARGETS[k];
+    const tag=tags[k];
+    html+=`<tr><td class="et-label"><span class="metric-tag ${tag}">${t.label}</span><br><span>${t.unit}</span></td>`;
+    OPS.forEach(op=>{
+      const v=t.vals[op];
+      html+=`<td><input type="number" id="tgt-${k}-${op}" value="${v}" step="0.1" min="0" ${t.editable?'':'readonly'}" data-key="${k}" data-op="${op}"></td>`;
+    });
+    html+=`</tr>`;
+  });
+  tbody.innerHTML=html;
+}
+
+function saveTargets(){
+  for(const k of Object.keys(TARGETS)){
+    OPS.forEach(op=>{
+      const inp=document.getElementById('tgt-'+k+'-'+op);
+      if(inp) TARGETS[k].vals[op]=parseFloat(inp.value)||0;
+    });
+  }
+  // 更新好店动销目标值（影响达标率计算）
+  OPS.forEach(op=>{
+    PROJ[op].dx.target=TARGETS.dx.vals[op];
+    PROJ[op].dx.rate=PROJ[op].dx.val>0?Math.round(PROJ[op].dx.val/TARGETS.dx.vals[op]*1000)/10:0;
+  });
+  // 重新渲染
+  renderProjCards();
+  renderProjTable();
+  renderProjDetails();
+  renderRadar();
+  // 提示
+  const msg=document.getElementById('save-msg')||document.createElement('div');
+  msg.id='save-msg'; msg.className='save-msg'; msg.textContent='✅ 目标值已保存，排名已重新计算！';
+  msg.style.cssText='color:#4caf50;font-size:12px;margin-top:8px;font-weight:600';
+  document.querySelector('.edit-table-wrap').appendChild(msg);
+  msg.classList.add('show');
+  setTimeout(()=>msg.classList.remove('show'),2000);
+}
+
 // ============ 初始化 ============
 document.addEventListener('DOMContentLoaded',()=>{
   renderPerfCards();
@@ -754,6 +993,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderProjTable();
   renderProjDetails();
   renderRadar();
+  renderTargetTable();
   document.getElementById('hdr-date').textContent='数据更新：'+DATA_DATE;
 });
 </script>
