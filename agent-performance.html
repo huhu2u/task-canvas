@@ -212,6 +212,13 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 
 <!-- ===== 核心业绩 ===== -->
 <div id="perf-tab" class="tab-content active">
+  <div id="time-progress-bar" style="background:#fff;border-radius:8px;padding:10px 20px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;align-items:center;gap:20px;flex-wrap:wrap;font-size:13px;font-weight:600;border-top:3px solid #1a73e8">
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1a73e8;margin-right:5px"></span>时间进度 <span style="color:#1a73e8">96.8%</span></span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#333;margin-right:5px"></span>剩余 <span style="color:#333">1天 (31/31)</span></span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#4caf50;margin-right:5px"></span>GTV综合 <span style="color:#4caf50">96.5%</span></span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff9800;margin-right:5px"></span>CPC综合 <span style="color:#ff9800">99.8%</span></span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#9c27b0;margin-right:5px"></span>数据更新 <span style="color:#666">19:00</span></span>
+  </div>
   <div class="score-grid" id="perf-cards"></div>
   <div style="text-align:right;margin:-8px 0 12px"><button onclick="toggleSalesBoard()" style="background:#1a73e8;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 6px rgba(26,115,232,.3)">📊 查看总看板</button></div>
   <div id="sales-board-wrap" style="display:none;background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px;overflow-x:auto">
@@ -633,11 +640,7 @@ function renderPerfCards() {
         <div class="sc-kv"><span class="sc-v" style="color:${vc(d.cpc_rate,100,80)}">${d.cpc_rate}%</span><span class="sc-k">CPC消耗</span></div>
         <div class="sc-kv"><span class="sc-v" style="color:${vc(d.mem_renewal,70,50)}">${d.mem_renewal}%</span><span class="sc-k">MEM续约</span></div>
       </div>
-      <div class="sc-row2">
-        <div class="sc-kv2"><span class="sc-v2" style="color:${vc(d.cpc_new_rate,100,80)}">${d.cpc_new_rate}%</span><span class="sc-k2">CPC新签</span></div>
-        <div class="sc-kv2"><span class="sc-v2" style="color:${vc2(d.elim,5,8)}">${d.elim}%</span><span class="sc-k2">剔除率</span></div>
-        <div class="sc-kv2"><span class="sc-v2" style="color:${vc2(d.risk,15,20)}">${d.risk}%</span><span class="sc-k2">感知风控</span></div>
-      </div>
+
     </div>`;
   });
   document.getElementById('perf-cards').innerHTML=html;
