@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>粤闽浙代运营商绩效排名</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"><\/script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
@@ -107,6 +108,15 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .legend{font-size:11px;color:#999;margin-top:10px;display:flex;gap:14px;flex-wrap:wrap}
 .legend .li{display:flex;align-items:center;gap:4px}
 .li-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* 雷达图区域 */
+.radar-wrap{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:14px}
+.radar-wrap h2{font-size:15px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #eef0f5}
+.radar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.radar-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.radar-grid{grid-template-columns:1fr}}
+.radar-card{background:#f8faff;border-radius:10px;padding:12px 8px 8px;border:1px solid #e8edf8;text-align:center}
+.radar-card h4{font-size:12px;color:#555;margin-bottom:8px;font-weight:700}
 </style>
 </head>
 <body>
@@ -150,6 +160,10 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <!-- ===== 项目排名 ===== -->
 <div id="proj-tab" class="tab-content">
   <div class="score-grid" id="proj-cards"></div>
+  <div class="radar-wrap">
+    <h2>🕸️ 多维雷达图 <span style="font-size:12px;color:#aaa;font-weight:400">各代运营商6项目综合对比</span></h2>
+    <div class="radar-grid" id="radar-grid"></div>
+  </div>
   <div class="sec">
     <h2>📋 积分明细 <span style="font-size:12px;color:#aaa;font-weight:400">每项排名1-6对应6-1分，均分权重</span></h2>
     <table class="rtable">
@@ -228,7 +242,7 @@ function calcPerfScore(op) {
 }
 
 const PROJ_METRICS = [
-  {key:'score', label:'经营评分达标率', sort:'desc', val:(op)=>PROJ[op].score, detail:(op)=>`${PROJ[op].score}%`},
+  {key:'score', label:'经营评分增量达标率', sort:'desc', val:(op)=>PROJ[op].score, detail:(op)=>`${PROJ[op].score}%`},
   {key:'dx',    label:'好店动销达标数', sort:'desc', val:(op)=>PROJ[op].dx.val,  detail:(op)=>`${PROJ[op].dx.val}/${PROJ[op].dx.target}（${PROJ[op].dx.rate}%）`},
   {key:'zrq',   label:'职人码店转渗透率',sort:'desc',val:(op)=>PROJ[op].zrq.st, detail:(op)=>`渗透${PROJ[op].zrq.st}% / 物料${PROJ[op].zrq.mat}%`},
   {key:'bml',   label:'BML Lose率',    sort:'asc',  val:(op)=>PROJ[op].bml,     detail:(op)=>`${PROJ[op].bml.toFixed(1)}%`},
@@ -467,6 +481,132 @@ function showTab(name,btn){
   btn.classList.add('active');
 }
 
+// ============ 雷达图 ============
+const RADAR_COLORS = {
+  '惠州巨浪':  {bg:'rgba(255,99,132,0.15)',  bd:'rgba(255,99,132,0.9)'},
+  '惠州柏万':  {bg:'rgba(54,162,235,0.15)',  bd:'rgba(54,162,235,0.9)'},
+  '泉州小花猫':{bg:'rgba(75,192,192,0.15)',  bd:'rgba(75,192,192,0.9)'},
+  '惠安广通':  {bg:'rgba(255,159,64,0.15)',  bd:'rgba(255,159,64,0.9)'},
+  '慈溪哲光':  {bg:'rgba(153,102,255,0.15)', bd:'rgba(153,102,255,0.9)'},
+  '义乌汐洋':  {bg:'rgba(255,205,86,0.15)',  bd:'rgba(255,205,86,0.9)'},
+};
+
+// 将原始值归一化到0-100（用于雷达图展示）
+function normalizeProj(op){
+  // 每个维度：先收集所有值，按比例映射到20-100
+  const minmax=(arr)=>{const mn=Math.min(...arr),mx=Math.max(...arr);return{mn,mx}};
+  const norm=(v,mn,mx)=>mx===mn?60:Math.round(20+(v-mn)/(mx-mn)*80);
+
+  const vals={
+    score: OPS.map(o=>PROJ[o].score),
+    dx:    OPS.map(o=>PROJ[o].dx.rate),
+    zrq:   OPS.map(o=>PROJ[o].zrq.st),
+    bml:   OPS.map(o=>PROJ[o].bml),   // 越低越好，反转
+    wpt:   OPS.map(o=>PROJ[o].wpt.hdRate),
+    fill:  OPS.map(o=>FILL_RATE[o]||0),
+  };
+  const idx=OPS.indexOf(op);
+  const {mn:smn,mx:smx}=minmax(vals.score);
+  const {mn:dmn,mx:dmx}=minmax(vals.dx);
+  const {mn:zmn,mx:zmx}=minmax(vals.zrq);
+  const {mn:bmn,mx:bmx}=minmax(vals.bml);
+  const {mn:wmn,mx:wmx}=minmax(vals.wpt);
+  const {mn:fmn,mx:fmx}=minmax(vals.fill);
+  return [
+    norm(vals.score[idx],smn,smx),
+    norm(vals.dx[idx],dmn,dmx),
+    norm(vals.zrq[idx],zmn,zmx),
+    norm(vals.bml[idx],bmx,bmn), // BML反转：低值→高分
+    norm(vals.wpt[idx],wmn,wmx),
+    norm(vals.fill[idx],fmn,fmx),
+  ];
+}
+
+const RADAR_LABELS = ['经营评分','好店动销','职人码渗透','BML(低更好)','旺铺通开通','满编率'];
+
+function renderRadar(){
+  const {pts}=calcProjRanks();
+  const order=[...OPS].sort((a,b)=>pts[b]-pts[a]);
+  const grid=document.getElementById('radar-grid');
+  grid.innerHTML='';
+
+  // 图1：全部代运营商对比（大图）
+  const allCard=document.createElement('div');
+  allCard.className='radar-card';
+  allCard.style.cssText='grid-column:1/-1;background:#fff;border:2px solid #e0e8f8;padding:16px';
+  allCard.innerHTML='<h4 style="font-size:14px;color:#1a73e8">📊 全代运营商综合雷达对比</h4><canvas id="radar-all" height="260"></canvas>';
+  grid.appendChild(allCard);
+
+  setTimeout(()=>{
+    const ctx=document.getElementById('radar-all').getContext('2d');
+    new Chart(ctx,{
+      type:'radar',
+      data:{
+        labels:RADAR_LABELS,
+        datasets:OPS.map(op=>({
+          label:op,
+          data:normalizeProj(op),
+          backgroundColor:RADAR_COLORS[op].bg,
+          borderColor:RADAR_COLORS[op].bd,
+          borderWidth:2,
+          pointRadius:3,
+          pointHoverRadius:5,
+        }))
+      },
+      options:{
+        responsive:true,
+        plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:12}}},
+        scales:{r:{
+          min:0,max:100,
+          ticks:{display:false},
+          grid:{color:'rgba(0,0,0,.08)'},
+          pointLabels:{font:{size:11}}
+        }}
+      }
+    });
+  },50);
+
+  // 图2-7：每家单独雷达图（vs 平均）
+  order.forEach((op,idx)=>{
+    const c=document.createElement('div');
+    c.className='radar-card';
+    const rk=idx+1;
+    const medals=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
+    c.innerHTML=`<h4>${medals[idx]} ${op}（${PERSONS[op]}）积分${pts[op]}</h4><canvas id="radar-${op}" height="180"></canvas>`;
+    grid.appendChild(c);
+
+    setTimeout(()=>{
+      const ctx2=document.getElementById('radar-'+op).getContext('2d');
+      // 计算平均值
+      const avgData=RADAR_LABELS.map((_,i)=>Math.round(OPS.reduce((s,o)=>s+normalizeProj(o)[i],0)/OPS.length));
+      new Chart(ctx2,{
+        type:'radar',
+        data:{
+          labels:RADAR_LABELS,
+          datasets:[
+            {label:op, data:normalizeProj(op),
+             backgroundColor:RADAR_COLORS[op].bg, borderColor:RADAR_COLORS[op].bd,
+             borderWidth:2,pointRadius:3},
+            {label:'平均', data:avgData,
+             backgroundColor:'rgba(200,200,200,0.1)', borderColor:'rgba(150,150,150,0.6)',
+             borderWidth:1, borderDash:[4,4],pointRadius:2},
+          ]
+        },
+        options:{
+          responsive:true,
+          plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}}},
+          scales:{r:{
+            min:0,max:100,
+            ticks:{display:false},
+            grid:{color:'rgba(0,0,0,.07)'},
+            pointLabels:{font:{size:9.5}}
+          }}
+        }
+      });
+    },100+idx*20);
+  });
+}
+
 // ============ 初始化 ============
 document.addEventListener('DOMContentLoaded',()=>{
   renderPerfCards();
@@ -474,6 +614,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderProjCards();
   renderProjTable();
   renderProjDetails();
+  renderRadar();
   document.getElementById('hdr-date').textContent='数据更新：'+DATA_DATE;
 });
 </script>
