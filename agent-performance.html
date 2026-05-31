@@ -483,12 +483,12 @@ const TOTAL = {gtv:17811284,gtv_target:18449642,gtv_rate:96.54,gtv_gap:638357,gt
 
 // 项目数据
 const PROJ = {
-  '惠州巨浪': {score:83.33, dx:{val:187,target:225,rate:83.1}, zrq:{st:26.12,mat:31.09}, bml:0.00, wpt:{hdOpen:211,hd:901,hdRate:23.4}},
-  '惠州柏万': {score:114.29, dx:{val:151,target:162,rate:93.2}, zrq:{st:31.04,mat:34.05}, bml:7.69, wpt:{hdOpen:120,hd:534,hdRate:22.5}},
-  '泉州小花猫': {score:89.29, dx:{val:176,target:193,rate:91.2}, zrq:{st:34.84,mat:33.39}, bml:35.71, wpt:{hdOpen:148,hd:929,hdRate:15.9}},
-  '惠安广通': {score:65.00, dx:{val:113,target:132,rate:85.6}, zrq:{st:33.24,mat:33.20}, bml:30.77, wpt:{hdOpen:120,hd:512,hdRate:23.4}},
-  '慈溪哲光': {score:91.67, dx:{val:145,target:151,rate:96.0}, zrq:{st:27.44,mat:22.39}, bml:28.57, wpt:{hdOpen:84,hd:758,hdRate:11.1}},
-  '义乌汐洋': {score:103.70, dx:{val:158,target:162,rate:97.5}, zrq:{st:30.72,mat:28.57}, bml:33.33, wpt:{hdOpen:112,hd:578,hdRate:19.4}},
+  '惠州巨浪': {score:83.33, dx:{val:227,target:225,rate:100.9}, zrq:{st:26.12,mat:31.09}, bml:0.00, wpt:{hdOpen:211,hd:901,hdRate:23.4}},
+  '惠州柏万': {score:114.29, dx:{val:164,target:162,rate:101.2}, zrq:{st:31.04,mat:34.05}, bml:7.69, wpt:{hdOpen:120,hd:534,hdRate:22.5}},
+  '泉州小花猫': {score:89.29, dx:{val:198,target:193,rate:102.6}, zrq:{st:34.84,mat:33.39}, bml:35.71, wpt:{hdOpen:148,hd:929,hdRate:15.9}},
+  '惠安广通': {score:65.00, dx:{val:129,target:132,rate:97.7}, zrq:{st:33.24,mat:33.20}, bml:30.77, wpt:{hdOpen:120,hd:512,hdRate:23.4}},
+  '慈溪哲光': {score:91.67, dx:{val:151,target:151,rate:100.0}, zrq:{st:27.44,mat:22.39}, bml:28.57, wpt:{hdOpen:84,hd:758,hdRate:11.1}},
+  '义乌汐洋': {score:103.70, dx:{val:164,target:162,rate:101.2}, zrq:{st:30.72,mat:28.57}, bml:33.33, wpt:{hdOpen:112,hd:578,hdRate:19.4}},
 };
 const FILL_RATE = {'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100};
 
@@ -578,8 +578,8 @@ function calcPerfScore(op) {
 const PROJ_METRICS = [
   {key:'score', label:'经营评分增量达标率', sort:'desc', val:(op)=>PROJ[op].score, detail:(op)=>`${PROJ[op].score}%`},
   {key:'dx',    label:'好店动销达标率', sort:'desc', val:(op)=>PROJ[op].dx.rate, detail:(op)=>`${PROJ[op].dx.val}/${PROJ[op].dx.target}（${PROJ[op].dx.rate}%）`,
-   // 超100%全部并列第1
-   capped:(op)=>Math.min(PROJ[op].dx.rate, 100)},
+   // 超100%全部并列第1，积分给最高分；未超100%正常强排
+   customRank: true},
   {key:'zrq',   label:'职人码店转渗透率',sort:'desc',val:(op)=>PROJ[op].zrq.st, detail:(op)=>`渗透${PROJ[op].zrq.st}% / 物料${PROJ[op].zrq.mat}%`},
   {key:'bml',   label:'BML Lose率',    sort:'asc',  val:(op)=>PROJ[op].bml,     detail:(op)=>`${PROJ[op].bml.toFixed(1)}%`},
   {key:'wpt',   label:'旺铺通好店开通率',sort:'desc',val:(op)=>PROJ[op].wpt.hdRate, detail:(op)=>`${PROJ[op].wpt.hdOpen}/${PROJ[op].wpt.hd}（${PROJ[op].wpt.hdRate}%）`},
@@ -589,18 +589,36 @@ const PROJ_METRICS = [
 function calcProjRanks() {
   const ranks={}, pts={};
   for(const m of PROJ_METRICS){
-    // 使用 capped 值排序（好店动销：超100%全并列第1）
-    const sortVal = m.capped ? m.capped : m.val;
-    const s=[...OPS].sort((a,b)=>m.sort==='desc'?sortVal(b)-sortVal(a):sortVal(a)-sortVal(b));
     ranks[m.key]={};
-    // 并列处理：相同 capped 值给相同名次（积分取平均）
-    let i=0;
-    while(i<s.length){
-      let j=i;
-      while(j<s.length && sortVal(s[j])===sortVal(s[i])) j++;
-      const avgScore = [...Array(j-i)].reduce((sum,_,k)=>sum+(OPS.length-i-k),0)/(j-i); // rank1→6分, rank6→1分
-      for(let k=i;k<j;k++) ranks[m.key][s[k]]=avgScore;
-      i=j;
+    if(m.customRank){
+      // 好店动销特殊规则：超100%的全部并列第1（最高分），未超100%的按实际值强排
+      const above=OPS.filter(op=>m.val(op)>=100);
+      const below=OPS.filter(op=>m.val(op)<100).sort((a,b)=>m.val(b)-m.val(a));
+      if(above.length===OPS.length){
+        // 全部超100%，所有人积分一致（平均分）
+        const avg=(1+OPS.length)*OPS.length/2/OPS.length;
+        for(const op of OPS) ranks[m.key][op]=avg;
+      } else {
+        // 超100%的全部并列第1，积分=最高分(6)
+        const topScore=OPS.length; // 6分
+        for(const op of above) ranks[m.key][op]=topScore;
+        // 未超100%的从第(above.length+1)名开始排
+        below.forEach((op,idx)=>{
+          ranks[m.key][op]=OPS.length-(above.length+idx);
+        });
+      }
+    } else {
+      // 普通排序逻辑
+      const sortVal = m.val;
+      const s=[...OPS].sort((a,b)=>m.sort==='desc'?sortVal(b)-sortVal(a):sortVal(a)-sortVal(b));
+      let i=0;
+      while(i<s.length){
+        let j=i;
+        while(j<s.length && sortVal(s[j])===sortVal(s[i])) j++;
+        const avgScore = [...Array(j-i)].reduce((sum,_,k)=>sum+(OPS.length-i-k),0)/(j-i);
+        for(let k=i;k<j;k++) ranks[m.key][s[k]]=avgScore;
+        i=j;
+      }
     }
   }
   for(const op of OPS){
