@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>粤闽浙代运营商驾驶舱</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:#f5f7fa;min-height:100vh}
+
+/* ===== Login Page ===== */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:linear-gradient(135deg,#ffd54f 0%,#ffb300 100%)}
+.login-card{background:#fff;border-radius:16px;padding:48px 36px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.12);text-align:center}
+.login-logo{width:56px;height:56px;background:#ffb300;border-radius:12px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.login-title{font-size:22px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.login-sub{font-size:13px;color:#999;margin-bottom:32px}
+.pin-input{width:100%;padding:14px 20px;font-size:24px;letter-spacing:12px;text-align:center;border:2px solid #e8e8e8;border-radius:10px;outline:none;transition:border .2s}
+.pin-input:focus{border-color:#ffb300}
+.login-btn{width:100%;padding:14px;margin-top:20px;background:#ffb300;color:#fff;font-size:16px;font-weight:600;border:none;border-radius:10px;cursor:pointer;transition:background .2s}
+.login-btn:hover{background:#ffa000}
+.login-btn:active{transform:scale(.98)}
+.login-err{color:#e53935;font-size:13px;margin-top:12px;min-height:20px}
+
+/* ===== Dashboard ===== */
+.dash{display:none;padding:16px;max-width:640px;margin:0 auto}
+.dash-hdr{text-align:center;margin-bottom:20px}
+.dash-hdr h1{font-size:18px;color:#333;font-weight:700}
+.dash-hdr .date{font-size:12px;color:#999;margin-top:4px}
+
+/* Top Card */
+.top-card{background:linear-gradient(135deg,#ffb300,#ff8f00);border-radius:14px;padding:24px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden}
+.top-card::after{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,.1);border-radius:50%}
+.top-name{font-size:20px;font-weight:700}
+.top-person{font-size:13px;opacity:.85;margin-top:4px}
+.top-rank{position:absolute;top:20px;right:24px;font-size:36px;font-weight:900;opacity:.9}
+.top-rank span{font-size:13px;font-weight:400;opacity:.7}
+
+/* Section */
+.section{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.section-title{font-size:14px;font-weight:700;color:#333;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* Metric Cards */
+.metric-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.metric-item{background:#f9fafb;border-radius:10px;padding:12px;text-align:center}
+.metric-item .mi-label{font-size:11px;color:#888;margin-bottom:4px}
+.metric-item .mi-val{font-size:16px;font-weight:700;color:#333}
+.metric-item .mi-sub{font-size:10px;color:#999;margin-top:2px}
+.metric-item .mi-rate{font-size:12px;font-weight:600;margin-top:4px;padding:2px 6px;border-radius:4px;display:inline-block}
+.rate-g{background:#e8f5e9;color:#2e7d32}
+.rate-y{background:#fff8e1;color:#f57f17}
+.rate-r{background:#ffebee;color:#c62828}
+
+/* Gap */
+.gap-row{display:flex;justify-content:space-around;margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0}
+.gap-item{text-align:center}
+.gap-item .gi-label{font-size:10px;color:#999}
+.gap-item .gi-val{font-size:13px;font-weight:600;color:#e53935}
+.gap-item .gi-val.ok{color:#43a047}
+
+/* Project Table */
+.proj-table{width:100%;border-collapse:collapse;font-size:12px}
+.proj-table th{background:#f5f5f5;padding:8px 6px;text-align:left;font-weight:600;color:#666;border-bottom:1px solid #eee}
+.proj-table td{padding:10px 6px;border-bottom:1px solid #f5f5f5;vertical-align:middle}
+.proj-table .rank-cell{font-size:18px;font-weight:700;width:40px;text-align:center}
+.rank-g{color:#2e7d32}
+.rank-y{color:#f57f17}
+.rank-r{color:#c62828}
+.proj-table .pts-cell{font-weight:600;color:#555}
+
+/* Summary */
+.summary-card{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:12px;padding:20px;text-align:center}
+.summary-card .sum-label{font-size:13px;color:#2e7d32}
+.summary-card .sum-pts{font-size:32px;font-weight:900;color:#1b5e20;margin:6px 0}
+.summary-card .sum-rank{font-size:14px;color:#333}
+
+/* Footer */
+.dash-footer{text-align:center;padding:16px;font-size:11px;color:#bbb}
+
+/* Responsive */
+@media(max-width:400px){
+  .metric-grid{grid-template-columns:1fr}
+  .top-rank{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-wrap" id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">🏪</div>
+    <div class="login-title">粤闽浙代运营商驾驶舱</div>
+    <div class="login-sub">请输入4位数字口令查看数据</div>
+    <input type="password" class="pin-input" id="pinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="····" autofocus>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">进 入</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div class="dash" id="dashPage">
+  <div class="dash-hdr">
+    <h1>📊 粤闽浙代运营商驾驶舱</h1>
+    <div class="date" id="dashDate"></div>
+  </div>
+  <div id="dashContent"></div>
+  <div class="dash-footer">数据来源：粤闽浙渠道管理看板 · 仅本人可见</div>
+</div>
+
+<script>
+// ===== Data Constants =====
+const DATA_DATE = '2026-05-31';
+const TIME_PROGRESS = '96.77%（30/31天）';
+const OPS = ['惠州巨浪','惠州柏万','泉州小花猫','惠安广通','慈溪哲光','义乌汐洋'];
+const PERSONS = {'惠州巨浪':'肖立铭','惠州柏万':'林启梁','泉州小花猫':'康子诚','惠安广通':'尤云生','慈溪哲光':'孙浩','义乌汐洋':'陈铨'};
+
+const PERF = {
+  '惠州巨浪': {gtv:3620250,gtv_target:3956557,gtv_rate:91.50,gtv_gap:336307,gtv_yday:147396,elim:5.73,cpc_mtd:85655,wpt_mtd:35586,cpc_target:87905,cpc_rate:97.44,cpc_gap:2250,cpc_yday:3468,wpt_yday:2050,day_cpc:5517,cpc_new:18,cpc_new_eff:15,cpc_new_sign:15,mem_rev:151187,mem_renewal:70.9,risk:11.83,cpc_new_rate:120.0},
+  '义乌汐洋': {gtv:2947118,gtv_target:3002361,gtv_rate:98.16,gtv_gap:55243,gtv_yday:107347,elim:1.47,cpc_mtd:160102,wpt_mtd:27746,cpc_target:151368,cpc_rate:105.77,cpc_gap:-8733,cpc_yday:5243,wpt_yday:934,day_cpc:6176,cpc_new:18,cpc_new_eff:16,cpc_new_sign:16,mem_rev:88400,mem_renewal:69.2,risk:8.65,cpc_new_rate:100.0},
+  '惠安广通': {gtv:2279155,gtv_target:2358641,gtv_rate:96.63,gtv_gap:79486,gtv_yday:105980,elim:3.91,cpc_mtd:74997,wpt_mtd:20983,cpc_target:73700,cpc_rate:101.76,cpc_gap:-1297,cpc_yday:3846,wpt_yday:886,day_cpc:4733,cpc_new:15,cpc_new_eff:11,cpc_new_sign:9,mem_rev:76529,mem_renewal:50.0,risk:9.70,cpc_new_rate:122.2},
+  '惠州柏万': {gtv:3223024,gtv_target:3240197,gtv_rate:99.47,gtv_gap:17173,gtv_yday:131226,elim:3.33,cpc_mtd:110337,wpt_mtd:30728,cpc_target:110304,cpc_rate:100.03,cpc_gap:-33,cpc_yday:5543,wpt_yday:1873,day_cpc:7416,cpc_new:25,cpc_new_eff:19,cpc_new_sign:12,mem_rev:117533,mem_renewal:63.3,risk:9.55,cpc_new_rate:158.3},
+  '泉州小花猫': {gtv:2702939,gtv_target:2774237,gtv_rate:97.43,gtv_gap:71297,gtv_yday:83928,elim:3.21,cpc_mtd:122146,wpt_mtd:27765,cpc_target:123755,cpc_rate:98.70,cpc_gap:1608,cpc_yday:7103,wpt_yday:1430,day_cpc:8534,cpc_new:17,cpc_new_eff:14,cpc_new_sign:12,mem_rev:78496,mem_renewal:52.5,risk:10.38,cpc_new_rate:116.7},
+  '慈溪哲光': {gtv:3040020,gtv_target:3117649,gtv_rate:97.51,gtv_gap:77629,gtv_yday:144393,elim:5.00,cpc_mtd:147173,wpt_mtd:17895,cpc_target:155148,cpc_rate:94.86,cpc_gap:7974,cpc_yday:6001,wpt_yday:941,day_cpc:6941,cpc_new:18,cpc_new_eff:17,cpc_new_sign:16,mem_rev:87456,mem_renewal:55.1,risk:10.28,cpc_new_rate:106.3},
+};
+
+const PROJ = {
+  '惠州巨浪': {score:83.33, dx:{val:227,target:225,rate:100.9}, zrq:{st:26.12,mat:31.09}, bml:0.00, wpt:{hdOpen:211,hd:901,hdRate:23.4}},
+  '惠州柏万': {score:114.29, dx:{val:164,target:162,rate:101.2}, zrq:{st:31.04,mat:34.05}, bml:7.69, wpt:{hdOpen:120,hd:534,hdRate:22.5}},
+  '泉州小花猫': {score:89.29, dx:{val:198,target:193,rate:102.6}, zrq:{st:34.84,mat:33.39}, bml:35.71, wpt:{hdOpen:148,hd:929,hdRate:15.9}},
+  '惠安广通': {score:65.00, dx:{val:129,target:132,rate:97.7}, zrq:{st:33.24,mat:33.20}, bml:30.77, wpt:{hdOpen:120,hd:512,hdRate:23.4}},
+  '慈溪哲光': {score:91.67, dx:{val:151,target:151,rate:100.0}, zrq:{st:27.44,mat:22.39}, bml:28.57, wpt:{hdOpen:84,hd:758,hdRate:11.1}},
+  '义乌汐洋': {score:103.70, dx:{val:164,target:162,rate:101.2}, zrq:{st:30.72,mat:28.57}, bml:33.33, wpt:{hdOpen:112,hd:578,hdRate:19.4}},
+};
+
+const FILL_RATE = {'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100};
+
+const TARGETS = {
+  score: {label:'经营评分增量达标率%', vals:{'惠州巨浪':283,'惠州柏万':175,'泉州小花猫':195,'惠安广通':139,'慈溪哲光':185,'义乌汐洋':184}},
+  dx:   {label:'好店动销达标数', vals:{'惠州巨浪':225,'惠州柏万':162,'泉州小花猫':193,'惠安广通':132,'慈溪哲光':151,'义乌汐洋':162}},
+  zrq:  {label:'职人码店转渗透率%', vals:{'惠州巨浪':16.5,'惠州柏万':16.5,'泉州小花猫':16.5,'惠安广通':16.5,'慈溪哲光':16.5,'义乌汐洋':16.5}},
+  bml:  {label:'BML Lose率%', vals:{'惠州巨浪':0,'惠州柏万':0,'泉州小花猫':0,'惠安广通':0,'慈溪哲光':0,'义乌汐洋':0}},
+  wpt:  {label:'旺铺通好店开通率%', vals:{'惠州巨浪':50,'惠州柏万':50,'泉州小花猫':50,'惠安广通':50,'慈溪哲光':50,'义乌汐洋':50}},
+  fill: {label:'真实满编率%', vals:{'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100}},
+};
+
+// ===== Passcode Map =====
+const PASS_MAP = {
+  '9363':'惠州巨浪',
+  '8383':'惠州柏万',
+  '2529':'泉州小花猫',
+  '6141':'惠安广通',
+  '8993':'慈溪哲光',
+  '6587':'义乌汐洋'
+};
+
+// ===== Ranking Logic (same as main dashboard) =====
+const PROJ_METRICS = [
+  {key:'score', label:'经营评分增量达标率', sort:'desc', val:(op)=>PROJ[op].score, customRank:false},
+  {key:'dx',    label:'好店动销达标率', sort:'desc', val:(op)=>PROJ[op].dx.rate, customRank:true},
+  {key:'zrq',   label:'职人码店转渗透率',sort:'desc',val:(op)=>PROJ[op].zrq.st},
+  {key:'bml',   label:'BML Lose率',    sort:'asc',  val:(op)=>PROJ[op].bml},
+  {key:'wpt',   label:'旺铺通好店开通率',sort:'desc',val:(op)=>PROJ[op].wpt.hdRate},
+  {key:'fill',  label:'真实满编率',    sort:'desc',  val:(op)=>FILL_RATE[op]||0},
+];
+
+function calcProjRanks() {
+  const ranks={}, pts={};
+  for(const m of PROJ_METRICS){
+    ranks[m.key]={};
+    if(m.customRank){
+      const above=OPS.filter(op=>m.val(op)>=100);
+      const below=OPS.filter(op=>m.val(op)<100).sort((a,b)=>m.val(b)-m.val(a));
+      if(above.length===OPS.length){
+        const avg=(1+OPS.length)*OPS.length/2/OPS.length;
+        for(const op of OPS) ranks[m.key][op]=avg;
+      } else {
+        const topScore=OPS.length;
+        for(const op of above) ranks[m.key][op]=topScore;
+        below.forEach((op,idx)=>{
+          ranks[m.key][op]=OPS.length-(above.length+idx);
+        });
+      }
+    } else {
+      const sortVal = m.val;
+      const s=[...OPS].sort((a,b)=>m.sort==='desc'?sortVal(b)-sortVal(a):sortVal(a)-sortVal(b));
+      let i=0;
+      while(i<s.length){
+        let j=i;
+        while(j<s.length && sortVal(s[j])===sortVal(s[i])) j++;
+        const avgScore = [...Array(j-i)].reduce((sum,_,k)=>sum+(OPS.length-i-k),0)/(j-i);
+        for(let k=i;k<j;k++) ranks[m.key][s[k]]=avgScore;
+        i=j;
+      }
+    }
+  }
+  for(const op of OPS){
+    pts[op]=0;
+    for(const m of PROJ_METRICS) pts[op]+=ranks[m.key][op];
+    pts[op]=Math.round(pts[op]*10)/10;
+  }
+  return {ranks, pts};
+}
+
+function getOverallRank(targetOp){
+  const {pts}=calcProjRanks();
+  const sorted=[...OPS].sort((a,b)=>pts[b]-pts[a]);
+  return sorted.indexOf(targetOp)+1;
+}
+
+function getProjRankForMetric(targetOp, metricKey){
+  const {ranks}=calcProjRanks();
+  // Convert score to rank position (higher score = better rank)
+  const scores={};
+  OPS.forEach(op=>scores[op]=ranks[metricKey][op]);
+  const sorted=[...OPS].sort((a,b)=>scores[b]-scores[a]);
+  return sorted.indexOf(targetOp)+1;
+}
+
+// ===== Utility =====
+const fmt=(n)=>n==null?'-':Math.abs(n).toLocaleString('zh-CN',{minimumFractionDigits:0,maximumFractionDigits:0});
+const rankColor=(r)=>r<=2?'rank-g':r<=4?'rank-y':'rank-r';
+const rateClass=(v)=>v>=100?'rate-g':v>=90?'rate-y':'rate-r';
+
+// ===== Login =====
+function doLogin(){
+  const pin=document.getElementById('pinInput').value.trim();
+  const op=PASS_MAP[pin];
+  if(!op){
+    document.getElementById('loginErr').textContent='口令错误，请重新输入';
+    document.getElementById('pinInput').value='';
+    document.getElementById('pinInput').focus();
+    return;
+  }
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('dashPage').style.display='block';
+  renderDashboard(op);
+}
+
+// Enter key
+document.getElementById('pinInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter') doLogin();
+});
+
+// ===== Render Dashboard =====
+function renderDashboard(op){
+  const d=PERF[op];
+  const p=PROJ[op];
+  const {ranks,pts}=calcProjRanks();
+  const overallRank=getOverallRank(op);
+  
+  document.getElementById('dashDate').textContent=`数据日期：${DATA_DATE} | 时间进度：${TIME_PROGRESS}`;
+  
+  let html='';
+  
+  // Top Card
+  html+=`
+  <div class="top-card">
+    <div class="top-name">${op}</div>
+    <div class="top-person">负责人：${PERSONS[op]}</div>
+    <div class="top-rank">#${overallRank}<span> /6</span></div>
+  </div>`;
+  
+  // Core Performance - GTV
+  html+=`
+  <div class="section">
+    <div class="section-title">💰 核心业绩</div>
+    <div class="metric-grid">
+      <div class="metric-item">
+        <div class="mi-label">GTV 达成</div>
+        <div class="mi-val">${fmt(d.gtv)}</div>
+        <div class="mi-sub">目标 ${fmt(d.gtv_target)}</div>
+        <div class="mi-rate ${rateClass(d.gtv_rate)}">${d.gtv_rate.toFixed(2)}%</div>
+      </div>
+      <div class="metric-item">
+        <div class="mi-label">CPC 达成</div>
+        <div class="mi-val">${fmt(d.cpc_mtd)}</div>
+        <div class="mi-sub">目标 ${fmt(d.cpc_target)}</div>
+        <div class="mi-rate ${rateClass(d.cpc_rate)}">${d.cpc_rate.toFixed(2)}%</div>
+      </div>
+      <div class="metric-item">
+        <div class="mi-label">MEM 续约收入</div>
+        <div class="mi-val">${fmt(d.mem_rev)}</div>
+        <div class="mi-sub">续约率 ${d.mem_renewal}%</div>
+        <div class="mi-rate ${d.mem_renewal>=60?'rate-g':d.mem_renewal>=50?'rate-y':'rate-r'}">${d.mem_renewal}%</div>
+      </div>
+    </div>
+    <div class="gap-row">
+      <div class="gap-item">
+        <div class="gi-label">GTV 缺口</div>
+        <div class="gi-val ${d.gtv_gap<=0?'ok':''}">${d.gtv_gap<=0?'已达标':fmt(d.gtv_gap)}</div>
+      </div>
+      <div class="gap-item">
+        <div class="gi-label">CPC 缺口</div>
+        <div class="gi-val ${d.cpc_gap<=0?'ok':''}">${d.cpc_gap<=0?'已达标':fmt(d.cpc_gap)}</div>
+      </div>
+      <div class="gap-item">
+        <div class="gi-label">昨日 GTV</div>
+        <div class="gi-val ok">${fmt(d.gtv_yday)}</div>
+      </div>
+    </div>
+  </div>`;
+  
+  // Project Rankings
+  const metrics = PROJ_METRICS;
+  html+=`
+  <div class="section">
+    <div class="section-title">🏆 项目排名</div>
+    <table class="proj-table">
+      <thead><tr><th>排名</th><th>项目</th><th>达成值</th><th>目标</th><th>积分</th></tr></thead>
+      <tbody>`;
+  
+  for(const m of metrics){
+    const myRank = getProjRankForMetric(op, m.key);
+    const myScore = ranks[m.key][op];
+    let valStr='', targetStr='';
+    switch(m.key){
+      case 'score':
+        valStr=p.score+'%'; targetStr=TARGETS.score.vals[op]+'%'; break;
+      case 'dx':
+        valStr=p.dx.val+'家 ('+p.dx.rate+'%)'; targetStr=p.dx.target+'家'; break;
+      case 'zrq':
+        valStr=p.zrq.st+'%'; targetStr=TARGETS.zrq.vals[op]+'%'; break;
+      case 'bml':
+        valStr=p.bml.toFixed(1)+'%'; targetStr=TARGETS.bml.vals[op]+'%'; break;
+      case 'wpt':
+        valStr=p.wpt.hdRate+'% ('+p.wpt.hdOpen+'/'+p.wpt.hd+')'; targetStr=TARGETS.wpt.vals[op]+'%'; break;
+      case 'fill':
+        valStr=(FILL_RATE[op]||100)+'%'; targetStr=TARGETS.fill.vals[op]+'%'; break;
+    }
+    html+=`<tr>
+      <td class="rank-cell ${rankColor(myRank)}">#${myRank}</td>
+      <td>${m.label}</td>
+      <td>${valStr}</td>
+      <td>${targetStr}</td>
+      <td class="pts-cell">${myScore.toFixed(1)}</td>
+    </tr>`;
+  }
+  
+  html+=`</tbody></table>
+  </div>`;
+  
+  // Summary
+  html+=`
+  <div class="summary-card">
+    <div class="sum-label">项目总积分</div>
+    <div class="sum-pts">${pts[op].toFixed(1)}</div>
+    <div class="sum-rank">综合排名 第 <strong>${overallRank}</strong> 名 / 共6家</div>
+  </div>`;
+  
+  document.getElementById('dashContent').innerHTML=html;
+}
+</script>
+</body>
+</html>
