@@ -501,12 +501,12 @@ const TOTAL = {gtv:18550487,gtv_target:18449642,gtv_rate:100.55,gtv_gap:0,gtv_yd
 
 // 项目数据
 const PROJ = {
-  '惠州巨浪': {score:83.33, dx:{val:252,target:225,rate:112.0}, zrq:{st:26.22,mat:31.09}, bml:0.0, wpt:{hdOpen:206,hd:890,hdRate:23.1}},
-  '惠州柏万': {score:114.29, dx:{val:170,target:162,rate:105.0}, zrq:{st:30.65,mat:34.05}, bml:7.69, wpt:{hdOpen:121,hd:535,hdRate:22.6}},
-  '泉州小花猫': {score:89.29, dx:{val:199,target:193,rate:103.0}, zrq:{st:34.61,mat:33.39}, bml:35.71, wpt:{hdOpen:126,hd:670,hdRate:18.8}},
-  '惠安广通': {score:65.0, dx:{val:137,target:132,rate:104.0}, zrq:{st:33.14,mat:33.2}, bml:30.77, wpt:{hdOpen:117,hd:450,hdRate:26.0}},
+  '惠州巨浪': {score:83.33, dx:{val:252,target:275,rate:91.6}, zrq:{st:26.22,mat:31.09}, bml:0.0, wpt:{hdOpen:206,hd:890,hdRate:23.1}},
+  '惠州柏万': {score:114.29, dx:{val:170,target:200,rate:85.0}, zrq:{st:30.65,mat:34.05}, bml:7.69, wpt:{hdOpen:121,hd:535,hdRate:22.6}},
+  '泉州小花猫': {score:89.29, dx:{val:199,target:230,rate:86.5}, zrq:{st:34.61,mat:33.39}, bml:35.71, wpt:{hdOpen:126,hd:670,hdRate:18.8}},
+  '惠安广通': {score:65.0, dx:{val:137,target:157,rate:87.3}, zrq:{st:33.14,mat:33.2}, bml:30.77, wpt:{hdOpen:117,hd:450,hdRate:26.0}},
   '慈溪哲光': {score:91.67, dx:{val:157,target:151,rate:104.0}, zrq:{st:28.09,mat:22.39}, bml:28.57, wpt:{hdOpen:70,hd:613,hdRate:11.4}},
-  '义乌汐洋': {score:103.7, dx:{val:167,target:162,rate:103.0}, zrq:{st:30.24,mat:28.57}, bml:33.33, wpt:{hdOpen:107,hd:530,hdRate:20.2}},
+  '义乌汐洋': {score:103.7, dx:{val:167,target:185,rate:90.3}, zrq:{st:30.24,mat:28.57}, bml:33.33, wpt:{hdOpen:107,hd:530,hdRate:20.2}},
 };
 const FILL_RATE = {'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100};
 
@@ -1306,22 +1306,30 @@ const TARGETS = {
   score: {label:'经营评分增量达标率%', unit:'%', editable:true,
     vals:{'惠州巨浪':283,'惠州柏万':175,'泉州小花猫':195,'惠安广通':139,'慈溪哲光':185,'义乌汐洋':184}},
   dx:   {label:'好店动销达标数', unit:'家', editable:true,
-    vals:{'惠州巨浪':225,'惠州柏万':162,'泉州小花猫':193,'惠安广通':132,'慈溪哲光':151,'义乌汐洋':162}},
+    vals:{'惠州巨浪':275,'惠州柏万':200,'泉州小花猫':230,'惠安广通':157,'慈溪哲光':151,'义乌汐洋':185}},
   zrq:  {label:'职人码店转渗透率%', unit:'%', editable:true,
-    vals:{'惠州巨浪':16.5,'惠州柏万':16.5,'泉州小花猫':16.5,'惠安广通':16.5,'慈溪哲光':16.5,'义乌汐洋':16.5}},
+    vals:{'惠州巨浪':34,'惠州柏万':33,'泉州小花猫':35,'惠安广通':35,'慈溪哲光':33,'义乌汐洋':33}},
   bml:  {label:'BML Lose率%', unit:'%', editable:true,
     vals:{'惠州巨浪':0,'惠州柏万':0,'泉州小花猫':0,'惠安广通':0,'慈溪哲光':0,'义乌汐洋':0}},
   wpt:  {label:'旺铺通好店开通率%', unit:'%', editable:true,
     vals:{'惠州巨浪':50,'惠州柏万':50,'泉州小花猫':50,'惠安广通':50,'慈溪哲光':50,'义乌汐洋':50}},
   fill: {label:'真实满编率%', unit:'%', editable:true,
     vals:{'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100}},
+  cpc_new: {label:'CPC有效新签目标', unit:'家', editable:true,
+    vals:{'惠州巨浪':15,'惠州柏万':15,'泉州小花猫':12,'惠安广通':10,'慈溪哲光':16,'义乌汐洋':16}},
+  mem:  {label:'MEM续约率目标%', unit:'%', editable:true,
+    vals:{'惠州巨浪':65,'惠州柏万':65,'泉州小花猫':65,'惠安广通':65,'慈溪哲光':70,'义乌汐洋':65}},
+  material: {label:'物料铺设闭环率目标%', unit:'%', editable:true,
+    vals:{'惠州巨浪':75,'惠州柏万':75,'泉州小花猫':75,'惠安广通':75,'慈溪哲光':75,'义乌汐洋':75}},
+  wpt_new: {label:'旺铺通本周新开通目标', unit:'家', editable:true,
+    vals:{'惠州巨浪':20,'惠州柏万':30,'泉州小花猫':40,'惠安广通':20,'慈溪哲光':0,'义乌汐洋':14}},
 };
 
 function renderTargetTable(){
   const tbody=document.getElementById('target-tbody');
   let html='';
-  const keys=['score','dx','zrq','bml','wpt','fill'];
-  const tags={score:'mt-score',dx:'mt-dx',zrq:'mt-zrq',bml:'mt-bml',wpt:'mt-wpt',fill:'mt-fill'};
+  const keys=['score','dx','zrq','bml','wpt','fill','cpc_new','mem','material','wpt_new'];
+  const tags={score:'mt-score',dx:'mt-dx',zrq:'mt-zrq',bml:'mt-bml',wpt:'mt-wpt',fill:'mt-fill',cpc_new:'mt-cpc',mem:'mt-mem',material:'mt-material',wpt_new:'mt-wpt'};
   keys.forEach(k=>{
     const t=TARGETS[k];
     const tag=tags[k];
