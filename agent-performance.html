@@ -483,30 +483,30 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <script>
 // ============ 数据 ============
 const DATA_DATE = '2026-05-31';
-const TIME_PROGRESS = '96.77%（30/31天）';
+const TIME_PROGRESS = '100%（31/31天）';
 const OPS = ['惠州巨浪','惠州柏万','泉州小花猫','惠安广通','慈溪哲光','义乌汐洋'];
 const PERSONS = {'惠州巨浪':'肖立铭','惠州柏万':'林启梁','泉州小花猫':'康子诚','惠安广通':'尤云生','慈溪哲光':'孙浩','义乌汐洋':'陈铨'};
 
 // 核心业绩（来自PC业绩看板）
 const PERF = {
-  '惠州巨浪': {gtv:3620250,gtv_target:3956557,gtv_rate:91.50,gtv_gap:336307,gtv_yday:147396,elim:5.73,cpc_mtd:85655,wpt_mtd:35586,cpc_target:87905,cpc_rate:97.44,cpc_gap:2250,cpc_yday:3468,wpt_yday:2050,day_cpc:5517,cpc_new:18,cpc_new_eff:15,cpc_new_sign:15,mem_rev:151187,mem_renewal:70.9,risk:11.83,cpc_new_rate:120.0},
-  '义乌汐洋': {gtv:2947118,gtv_target:3002361,gtv_rate:98.16,gtv_gap:55243,gtv_yday:107347,elim:1.47,cpc_mtd:160102,wpt_mtd:27746,cpc_target:151368,cpc_rate:105.77,cpc_gap:-8733,cpc_yday:5243,wpt_yday:934,day_cpc:6176,cpc_new:18,cpc_new_eff:16,cpc_new_sign:16,mem_rev:88400,mem_renewal:69.2,risk:8.65,cpc_new_rate:100.0},
-  '惠安广通': {gtv:2279155,gtv_target:2358641,gtv_rate:96.63,gtv_gap:79486,gtv_yday:105980,elim:3.91,cpc_mtd:74997,wpt_mtd:20983,cpc_target:73700,cpc_rate:101.76,cpc_gap:-1297,cpc_yday:3846,wpt_yday:886,day_cpc:4733,cpc_new:15,cpc_new_eff:11,cpc_new_sign:9,mem_rev:76529,mem_renewal:50.0,risk:9.70,cpc_new_rate:122.2},
-  '惠州柏万': {gtv:3223024,gtv_target:3240197,gtv_rate:99.47,gtv_gap:17173,gtv_yday:131226,elim:3.33,cpc_mtd:110337,wpt_mtd:30728,cpc_target:110304,cpc_rate:100.03,cpc_gap:-33,cpc_yday:5543,wpt_yday:1873,day_cpc:7416,cpc_new:25,cpc_new_eff:19,cpc_new_sign:12,mem_rev:117533,mem_renewal:63.3,risk:9.55,cpc_new_rate:158.3},
-  '泉州小花猫': {gtv:2702939,gtv_target:2774237,gtv_rate:97.43,gtv_gap:71297,gtv_yday:83928,elim:3.21,cpc_mtd:122146,wpt_mtd:27765,cpc_target:123755,cpc_rate:98.70,cpc_gap:1608,cpc_yday:7103,wpt_yday:1430,day_cpc:8534,cpc_new:17,cpc_new_eff:14,cpc_new_sign:12,mem_rev:78496,mem_renewal:52.5,risk:10.38,cpc_new_rate:116.7},
-  '慈溪哲光': {gtv:3040020,gtv_target:3117649,gtv_rate:97.51,gtv_gap:77629,gtv_yday:144393,elim:5.00,cpc_mtd:147173,wpt_mtd:17895,cpc_target:155148,cpc_rate:94.86,cpc_gap:7974,cpc_yday:6001,wpt_yday:941,day_cpc:6941,cpc_new:18,cpc_new_eff:17,cpc_new_sign:16,mem_rev:87456,mem_renewal:55.1,risk:10.28,cpc_new_rate:106.3},
+  '惠州巨浪': {gtv:3800113,gtv_target:3956557,gtv_rate:96.04,gtv_gap:0,gtv_yday:177762,elim:5.68,cpc_mtd:91586,wpt_mtd:37953,cpc_target:87905,cpc_rate:104.18,cpc_gap:0,cpc_yday:3562,wpt_yday:2367,day_cpc:3562,cpc_new:25,cpc_new_eff:21,cpc_new_sign:21,mem_rev:151187,mem_renewal:70.9,risk:11.83,cpc_new_rate:140.0},
+  '义乌汐洋': {gtv:3059050,gtv_target:3002361,gtv_rate:101.88,gtv_gap:0,gtv_yday:111026,elim:1.44,cpc_mtd:166037,wpt_mtd:28915,cpc_target:151368,cpc_rate:109.69,cpc_gap:0,cpc_yday:4753,wpt_yday:1170,day_cpc:4753,cpc_new:18,cpc_new_eff:16,cpc_new_sign:16,mem_rev:88400,mem_renewal:69.2,risk:8.65,cpc_new_rate:100.0},
+  '惠安广通': {gtv:2381582,gtv_target:2358641,gtv_rate:100.97,gtv_gap:0,gtv_yday:103612,elim:3.96,cpc_mtd:79543,wpt_mtd:21920,cpc_target:73700,cpc_rate:107.92,cpc_gap:0,cpc_yday:3603,wpt_yday:937,day_cpc:3603,cpc_new:15,cpc_new_eff:12,cpc_new_sign:12,mem_rev:83129,mem_renewal:50.0,risk:9.70,cpc_new_rate:133.3},
+  '惠州柏万': {gtv:3349700,gtv_target:3240197,gtv_rate:103.37,gtv_gap:0,gtv_yday:124581,elim:3.27,cpc_mtd:116118,wpt_mtd:32289,cpc_target:110304,cpc_rate:105.27,cpc_gap:0,cpc_yday:4218,wpt_yday:1561,day_cpc:4218,cpc_new:25,cpc_new_eff:20,cpc_new_sign:20,mem_rev:117533,mem_renewal:63.3,risk:9.55,cpc_new_rate:166.7},
+  '泉州小花猫': {gtv:2790591,gtv_target:2774237,gtv_rate:100.58,gtv_gap:0,gtv_yday:85512,elim:3.14,cpc_mtd:126304,wpt_mtd:29111,cpc_target:123755,cpc_rate:102.05,cpc_gap:0,cpc_yday:2812,wpt_yday:1346,day_cpc:2812,cpc_new:17,cpc_new_eff:14,cpc_new_sign:14,mem_rev:78496,mem_renewal:52.5,risk:10.38,cpc_new_rate:116.7},
+  '慈溪哲光': {gtv:3169451,gtv_target:3117649,gtv_rate:101.66,gtv_gap:0,gtv_yday:139457,elim:4.85,cpc_mtd:156766,wpt_mtd:18836,cpc_target:155148,cpc_rate:101.04,cpc_gap:0,cpc_yday:8649,wpt_yday:941,day_cpc:8649,cpc_new:18,cpc_new_eff:18,cpc_new_sign:18,mem_rev:87456,mem_renewal:55.1,risk:10.28,cpc_new_rate:112.5},
 };
 // 汇总行
-const TOTAL = {gtv:17811284,gtv_target:18449642,gtv_rate:96.54,gtv_gap:638357,gtv_yday:720270,elim:3.87,cpc_mtd:700425,wpt_mtd:160703,cpc_target:702180,cpc_rate:99.75,cpc_gap:1755,cpc_yday:31204,wpt_yday:8113,day_cpc:39317,cpc_new:117,cpc_new_eff:95,cpc_new_sign:80,mem_rev:597407,mem_renewal:60.78,risk:null,cpc_new_rate:null};
+const TOTAL = {gtv:18550487,gtv_target:18449642,gtv_rate:100.55,gtv_gap:0,gtv_yday:741950,elim:3.8,cpc_mtd:736354,wpt_mtd:169024,cpc_target:702180,cpc_rate:104.87,cpc_gap:0,cpc_yday:27597,wpt_yday:8322,day_cpc:27597,cpc_new:118,cpc_new_eff:101,cpc_new_sign:101,mem_rev:606201,mem_renewal:60.18,risk:null,cpc_new_rate:null};
 
 // 项目数据
 const PROJ = {
-  '惠州巨浪': {score:83.33, dx:{val:227,target:225,rate:100.9}, zrq:{st:26.12,mat:31.09}, bml:0.00, wpt:{hdOpen:211,hd:901,hdRate:23.4}},
-  '惠州柏万': {score:114.29, dx:{val:164,target:162,rate:101.2}, zrq:{st:31.04,mat:34.05}, bml:7.69, wpt:{hdOpen:120,hd:534,hdRate:22.5}},
-  '泉州小花猫': {score:89.29, dx:{val:198,target:193,rate:102.6}, zrq:{st:34.84,mat:33.39}, bml:35.71, wpt:{hdOpen:148,hd:929,hdRate:15.9}},
-  '惠安广通': {score:65.00, dx:{val:129,target:132,rate:97.7}, zrq:{st:33.24,mat:33.20}, bml:30.77, wpt:{hdOpen:120,hd:512,hdRate:23.4}},
-  '慈溪哲光': {score:91.67, dx:{val:151,target:151,rate:100.0}, zrq:{st:27.44,mat:22.39}, bml:28.57, wpt:{hdOpen:84,hd:758,hdRate:11.1}},
-  '义乌汐洋': {score:103.70, dx:{val:164,target:162,rate:101.2}, zrq:{st:30.72,mat:28.57}, bml:33.33, wpt:{hdOpen:112,hd:578,hdRate:19.4}},
+  '惠州巨浪': {score:83.33, dx:{val:252,target:225,rate:112.0}, zrq:{st:26.22,mat:31.09}, bml:0.0, wpt:{hdOpen:206,hd:890,hdRate:23.1}},
+  '惠州柏万': {score:114.29, dx:{val:170,target:162,rate:105.0}, zrq:{st:30.65,mat:34.05}, bml:7.69, wpt:{hdOpen:121,hd:535,hdRate:22.6}},
+  '泉州小花猫': {score:89.29, dx:{val:199,target:193,rate:103.0}, zrq:{st:34.61,mat:33.39}, bml:35.71, wpt:{hdOpen:126,hd:670,hdRate:18.8}},
+  '惠安广通': {score:65.0, dx:{val:137,target:132,rate:104.0}, zrq:{st:33.14,mat:33.2}, bml:30.77, wpt:{hdOpen:117,hd:450,hdRate:26.0}},
+  '慈溪哲光': {score:91.67, dx:{val:157,target:151,rate:104.0}, zrq:{st:28.09,mat:22.39}, bml:28.57, wpt:{hdOpen:70,hd:613,hdRate:11.4}},
+  '义乌汐洋': {score:103.7, dx:{val:167,target:162,rate:103.0}, zrq:{st:30.24,mat:28.57}, bml:33.33, wpt:{hdOpen:107,hd:530,hdRate:20.2}},
 };
 const FILL_RATE = {'惠州巨浪':100,'惠州柏万':100,'泉州小花猫':100,'惠安广通':100,'慈溪哲光':100,'义乌汐洋':100};
 
