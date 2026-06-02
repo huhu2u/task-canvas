@@ -1390,7 +1390,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-02a';
+  const EMBED_VER = '2026-06-02b';
     const D={
   "惠州巨浪": {
   cpc:3451,
@@ -1403,7 +1403,7 @@ function renderAll(){
   gtv_excl:0.0517,
   gtv_y:121921,
   mem:11400,
-  memrate:0.0588,
+  memrate:0.0462,
   zrq_aov:147,
   zrq_bind:731,
   zrq_bind_inc_d:4,
@@ -1417,7 +1417,11 @@ function renderAll(){
   zrq_pay_y:121921,
   zrq_pct:0.29,
   zrq_pct_y:0.29,
-  zrq_shops:2503
+  zrq_shops:2503,
+  memrenew:3,
+  memexpire:65,
+  memurgent:62,
+  memrenew_day:3
   },
   "惠州柏万": {
   cpc:3072,
@@ -1430,7 +1434,7 @@ function renderAll(){
   gtv_excl:0.0305,
   gtv_y:102385,
   mem:2800,
-  memrate:0.0727,
+  memrate:0.0741,
   zrq_aov:137,
   zrq_bind:602,
   zrq_bind_inc_d:0,
@@ -1444,7 +1448,11 @@ function renderAll(){
   zrq_pay_y:102385,
   zrq_pct:0.3,
   zrq_pct_y:0.3,
-  zrq_shops:1623
+  zrq_shops:1623,
+  memrenew:4,
+  memexpire:54,
+  memurgent:50,
+  memrenew_day:4
   },
   "泉州小花猫": {
   cpc:2541,
@@ -1457,7 +1465,7 @@ function renderAll(){
   gtv_excl:0.0245,
   gtv_y:81688,
   mem:2800,
-  memrate:0.0408,
+  memrate:0.0417,
   zrq_aov:243,
   zrq_bind:598,
   zrq_bind_inc_d:-1,
@@ -1471,7 +1479,11 @@ function renderAll(){
   zrq_pay_y:81688,
   zrq_pct:0.4,
   zrq_pct_y:0.4,
-  zrq_shops:1738
+  zrq_shops:1738,
+  memrenew:2,
+  memexpire:48,
+  memurgent:46,
+  memrenew_day:2
   },
   "惠安广通": {
   cpc:2595,
@@ -1484,7 +1496,7 @@ function renderAll(){
   gtv_excl:0.0392,
   gtv_y:66597,
   mem:2992,
-  memrate:0.1316,
+  memrate:0.1351,
   zrq_aov:155,
   zrq_bind:496,
   zrq_bind_inc_d:-1,
@@ -1498,7 +1510,11 @@ function renderAll(){
   zrq_pay_y:66597,
   zrq_pct:0.26,
   zrq_pct_y:0.26,
-  zrq_shops:1545
+  zrq_shops:1545,
+  memrenew:5,
+  memexpire:37,
+  memurgent:32,
+  memrenew_day:5
   },
   "慈溪哲光": {
   cpc:5847,
@@ -1525,7 +1541,11 @@ function renderAll(){
   zrq_pay_y:78397,
   zrq_pct:0.25,
   zrq_pct_y:0.25,
-  zrq_shops:1756
+  zrq_shops:1756,
+  memrenew:0,
+  memexpire:35,
+  memurgent:35,
+  memrenew_day:0
   },
   "义乌汐洋": {
   cpc:4865,
@@ -1552,7 +1572,11 @@ function renderAll(){
   zrq_pay_y:95489,
   zrq_pct:0.41,
   zrq_pct_y:0.41,
-  zrq_shops:1664
+  zrq_shops:1664,
+  memrenew:1,
+  memexpire:38,
+  memurgent:37,
+  memrenew_day:1
   }
   };
 const ns={...(ex||{}), _updated: '10:12', _dataDate: '2026-06-02a'};
