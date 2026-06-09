@@ -145,7 +145,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">月CPC消耗</th><th class="ht">月目标</th>
       <th class="hp">完成进度</th><th class="hg">日缺口</th>
-      <th class="hd">有效新签(当前/目标)</th><th class="hd">旺铺通</th><th class="hd">昨日CPC消耗</th><th class="hd">昨日CPC&amp;QCPS</th><th class="hd">昨日日目标</th><th class="hd">单日达成率</th>
+      <th class="hd">有效新签(当前/目标)</th><th class="hd">旺铺通</th><th class="hd">昨日旺铺通</th><th class="hd">昨日CPC消耗</th><th class="hd">昨日CPC&amp;QCPS</th><th class="hd">昨日日目标</th><th class="hd">单日达成率</th>
     </tr></thead><tbody id="cpc-tbody"></tbody></table></div>
   </div>
   <div class="sec">
@@ -587,7 +587,7 @@ function renderCpc(){
     const cur=g(a.name,'cpc'), tgt=gt(a.name,'cpc');
     const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
     const dailyGap=tgt>0?Math.ceil((tgt-cur)/Math.max(remain,1)):0;
-    const yCpc=g(a.name,'cpc_y'), yCpcQ=g(a.name,'cpc_y2'), newSgn=g(a.name,'cpc_newsgn'), wpu=g(a.name,'cpc_wpu');
+    const yCpc=g(a.name,'cpc_y'), yCpcQ=g(a.name,'cpc_y2'), newSgn=g(a.name,'cpc_newsgn'), wpu=g(a.name,'cpc_wpu'), wpuY=g(a.name,'cpc_wpu_y');
     const sgnTgt=a.cpc_newsgn_tgt||0;
     const sgnCls=sgnTgt>0?(newSgn>=sgnTgt?'sg':newSgn>=sgnTgt*0.7?'sy':'sr'):'sb';
     const cDayTgt = getYesterdayDayTarget('cpc', a.name);
@@ -606,6 +606,7 @@ function renderCpc(){
         ${newSgn<sgnTgt?`<span class="${sgnCls==='sr'?'gap-r':'gap-y'}" style="font-size:10px;margin-left:2px">差${sgnTgt-newSgn}</span>`:'<span style="font-size:10px;color:#16a34a;margin-left:2px">✅</span>'}
       </td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_wpu')">${wpu?fmtMoney(wpu):'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_wpu_y')">${wpuY?`<span style="color:#0891b2;font-weight:600">${fmtMoney(wpuY)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y')">${yCpc?`<span style="color:#2563eb;font-weight:600">${fmtMoney(yCpc)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','cpc_y2')">${yCpcQ?`<span style="color:#7c3aed;font-weight:600">${fmtMoney(yCpcQ)}</span>`:'<span style="color:#9ca3af">—</span>'}</td>
       <td style="color:#6b7280;font-size:12px">${cDayTgt?fmtMoney(cDayTgt):'<span style="color:#9ca3af">—</span>'}</td>
@@ -934,6 +935,7 @@ const FIELD_META = {
   cpc_y2:      {label:'昨日CPC&QCPS消耗(含旺铺通)'},
   cpc_newsgn:  {label:'CPC有效新签'},
   cpc_wpu:     {label:'旺铺通消耗'},
+  cpc_wpu_y:   {label:'昨日旺铺通消耗'},
   mem:         {label:'MEM收款额'},
   cps:         {label:'CPS交易收入'},
   memrate:     {label:'MEM续约率(%)'},
@@ -1396,6 +1398,7 @@ function renderAll(){
   cpc:28036,
   cpc_newsgn:5,
   cpc_wpu:10843,
+  cpc_wpu_y:1050,
   cpc_y:1609,
   cpc_y2:2659,
   cps:1016027,
@@ -1427,6 +1430,7 @@ function renderAll(){
   cpc:29351,
   cpc_newsgn:1,
   cpc_wpu:9493,
+  cpc_wpu_y:1138,
   cpc_y:2746,
   cpc_y2:3884,
   cps:839968,
@@ -1458,6 +1462,7 @@ function renderAll(){
   cpc:26357,
   cpc_newsgn:4,
   cpc_wpu:8243,
+  cpc_wpu_y:813,
   cpc_y:2120,
   cpc_y2:2933,
   cps:694752,
@@ -1489,6 +1494,7 @@ function renderAll(){
   cpc:14915,
   cpc_newsgn:2,
   cpc_wpu:5246,
+  cpc_wpu_y:765,
   cpc_y:949,
   cpc_y2:1714,
   cps:574858,
@@ -1520,6 +1526,7 @@ function renderAll(){
   cpc:34839,
   cpc_newsgn:2,
   cpc_wpu:4826,
+  cpc_wpu_y:715,
   cpc_y:3593,
   cpc_y2:4308,
   cps:718525,
@@ -1551,6 +1558,7 @@ function renderAll(){
   cpc:40123,
   cpc_newsgn:0,
   cpc_wpu:7505,
+  cpc_wpu_y:1173,
   cpc_y:3414,
   cpc_y2:4587,
   cps:760268,
