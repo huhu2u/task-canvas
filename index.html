@@ -168,9 +168,11 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <div class="sec">
     <div class="sec-hdr c-score"><span>⭐ 经营评分明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">当前达标数</th><th class="ht">W1目标(6/16)</th>
-      <th class="hp">完成进度</th><th class="hg">目标缺口</th>
-      <th class="hd">日变化</th><th class="hd">50~69分门店</th>
+      <th class="hn">代运营商</th><th class="hc">当前达标</th>
+      <th class="ht">W1(6/16)</th><th class="hp">W1进度</th>
+      <th class="ht">W2(6/23)</th><th class="hp">W2进度</th>
+      <th class="ht">W3(6/30)</th><th class="hp">W3进度</th>
+      <th class="hd">日变化</th><th class="hd">50~69分</th>
     </tr></thead><tbody id="score-tbody"></tbody></table></div>
   </div>
 </div>
@@ -656,30 +658,36 @@ function renderMem(){
 // ════════════════════════════════════════════════════════════
 function renderScore(){
   const {pct:tp,day,total}=timePct();
-  let totCur=0, totTgt=0, html='';
+  let totCur=0, totW1=0, totW2=0, totW3=0, html='';
   AGENTS.forEach(a=>{
-    const cur=g(a.name,'score'), tgt=gt(a.name,'score');
-    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const cur=g(a.name,'score');
+    const w1=gt(a.name,'score'), w2=g(a.name,'score_tgt_w2')||gt(a.name,'score_w2'), w3=g(a.name,'score_tgt_w3')||gt(a.name,'score_w3');
+    const p1=w1>0?cur/w1:0, p2=w2>0?cur/w2:0, p3=w3>0?cur/w3:0;
+    const c1=p1>=1?'sg':p1>=0.9?'sy':'sr', c2=p2>=1?'sg':p2>=0.9?'sy':'sr', c3=p3>=1?'sg':p3>=0.9?'sy':'sr';
     const dayChg=g(a.name,'score_day'), near=g(a.name,'score_near');
-    totCur+=cur; totTgt+=tgt;
+    totCur+=cur; totW1+=w1; totW2+=w2; totW3+=w3;
     html+=`<tr>
       <td class="tn">${a.name}</td>
-      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','score')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
-      <td style="color:#6b7280">${tgt}</td>
-      <td>${pctCell(pct,cls)}</td>
-      <td>${gapHtml(cur,tgt,true)}</td>
+      <td class="tc" style="color:${colorText(c1)};cursor:pointer;font-weight:700" onclick="openEdit('${a.name}','score')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="color:#6b7280">${w1}</td>
+      <td>${pctCell(p1,c1)}</td>
+      <td style="color:#6b7280">${w2}</td>
+      <td>${pctCell(p2,c2)}</td>
+      <td style="color:#6b7280">${w3}</td>
+      <td>${pctCell(p3,c3)}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','score_day')">${dayHtml(dayChg,'')}</td>
       <td style="cursor:pointer;color:#d97706;font-weight:700" onclick="openEdit('${a.name}','score_near')">${near||'<span style="color:#9ca3af">—</span>'}</td>
     </tr>`;
   });
   document.getElementById('score-tbody').innerHTML=html;
-  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  const p1All=totW1>0?totCur/totW1:0, c1All=p1All>=1?'sg':p1All>=0.9?'sy':'sr';
   makeCards('score-cards',[
-    {name:'评分综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
-    {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+    {name:'W1达成(6/16)',pct:fmtPct(p1All),cls:c1All,barW:Math.min(100,p1All*100).toFixed(1),sub:`${totCur} / ${totW1}`},
+    {name:'W2目标(6/23)',pct:`${totCur}/${totW2}`,cls:totCur>=totW2?'sg':'sy',barW:Math.min(100,(totCur/totW2*100)).toFixed(1),sub:fmtPct(totW2>0?totCur/totW2:0)},
+    {name:'W3目标(6/30)',pct:`${totCur}/${totW3}`,cls:totCur>=totW3?'sg':'sr',barW:Math.min(100,(totCur/totW3*100)).toFixed(1),sub:fmtPct(totW3>0?totCur/totW3:0)},
   ]);
   const b=document.getElementById('score-badge');
-  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+  if(b) b.textContent=`W1 ${fmtPct(p1All)} | 当前${totCur}家`;
 }
 
 // ════════════════════════════════════════════════════════════
@@ -943,6 +951,8 @@ const FIELD_META = {
   score:       {label:'当前评分达标数'},
   score_day:   {label:'评分日净增'},
   score_near:  {label:'50~69分门店数'},
+  score_tgt_w2:{label:'W2目标(6/23)'},
+  score_tgt_w3:{label:'W3目标(6/30)'},
   dongxiao:    {label:'已达标动销门店'},
   dongxiao_day:{label:'昨日净增动销'},
   dongxiao_gtv:{label:'好店店转GTV'},
@@ -1392,7 +1402,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-10d';
+  const EMBED_VER = '2026-06-10e';
     const D={
   "惠州巨浪": {
   cpc:30669,
@@ -1429,7 +1439,9 @@ function renderAll(){
   dongxiao_day:7,
   score:258,
   score_day:7,
-  score_near:307
+  score_near:307,
+  score_tgt_w2:279,
+  score_tgt_w3:306
   },
   "惠州柏万": {
   cpc:33082,
@@ -1466,7 +1478,9 @@ function renderAll(){
   dongxiao_day:11,
   score:169,
   score_day:4,
-  score_near:185
+  score_near:185,
+  score_tgt_w2:188,
+  score_tgt_w3:199
   },
   "泉州小花猫": {
   cpc:29324,
@@ -1503,7 +1517,9 @@ function renderAll(){
   dongxiao_day:8,
   score:174,
   score_day:-1,
-  score_near:237
+  score_near:237,
+  score_tgt_w2:196,
+  score_tgt_w3:209
   },
   "惠安广通": {
   cpc:16597,
@@ -1540,7 +1556,9 @@ function renderAll(){
   dongxiao_day:0,
   score:125,
   score_day:1,
-  score_near:204
+  score_near:204,
+  score_tgt_w2:150,
+  score_tgt_w3:159
   },
   "慈溪哲光": {
   cpc:39949,
@@ -1577,7 +1595,9 @@ function renderAll(){
   dongxiao_day:7,
   score:154,
   score_day:-1,
-  score_near:203
+  score_near:203,
+  score_tgt_w2:181,
+  score_tgt_w3:210
   },
   "义乌汐洋": {
   cpc:43899,
@@ -1614,7 +1634,9 @@ function renderAll(){
   dongxiao_day:9,
   score:168,
   score_day:4,
-  score_near:188
+  score_near:188,
+  score_tgt_w2:202,
+  score_tgt_w3:216
   }
   };
 const ns={...(ex||{}), _updated: '10:30', _dataDate: '2026-06-10b'};
