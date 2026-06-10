@@ -168,7 +168,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <div class="sec">
     <div class="sec-hdr c-score"><span>⭐ 经营评分明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">当前达标数</th><th class="ht">5月目标</th>
+      <th class="hn">代运营商</th><th class="hc">当前达标数</th><th class="ht">W1目标(6/16)</th>
       <th class="hp">完成进度</th><th class="hg">目标缺口</th>
       <th class="hd">日变化</th><th class="hd">50~69分门店</th>
     </tr></thead><tbody id="score-tbody"></tbody></table></div>
@@ -423,12 +423,12 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // 配置：代运营商基础数据
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
-  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3902171, cpc_tgt:95116,  cpc_newsgn_tgt:14, score_tgt:283, dongxiao_tgt:270, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
-  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3346039, cpc_tgt:111657, cpc_newsgn_tgt:14, score_tgt:175, dongxiao_tgt:169, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
-  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:2693256, cpc_tgt:120921, cpc_newsgn_tgt:14, score_tgt:195, dongxiao_tgt:210, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
-  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2290379, cpc_tgt:75645,  cpc_newsgn_tgt:10,  score_tgt:139, dongxiao_tgt:145, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
-  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3116008, cpc_tgt:151959, cpc_newsgn_tgt:18, score_tgt:185, dongxiao_tgt:191, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
-  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3034607, cpc_tgt:156761, cpc_newsgn_tgt:18, score_tgt:184, dongxiao_tgt:173, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
+  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3902171, cpc_tgt:95116,  cpc_newsgn_tgt:14, score_tgt:266, dongxiao_tgt:270, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
+  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3346039, cpc_tgt:111657, cpc_newsgn_tgt:14, score_tgt:174, dongxiao_tgt:169, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
+  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:2693256, cpc_tgt:120921, cpc_newsgn_tgt:14, score_tgt:180, dongxiao_tgt:210, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
+  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2290379, cpc_tgt:75645,  cpc_newsgn_tgt:10,  score_tgt:138, dongxiao_tgt:145, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
+  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3116008, cpc_tgt:151959, cpc_newsgn_tgt:18, score_tgt:169, dongxiao_tgt:191, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
+  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3034607, cpc_tgt:156761, cpc_newsgn_tgt:18, score_tgt:185, dongxiao_tgt:173, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
@@ -1392,7 +1392,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-10b';
+  const EMBED_VER = '2026-06-10c';
     const D={
   "惠州巨浪": {
   cpc:30669,
@@ -1426,7 +1426,10 @@ function renderAll(){
   zrq_pct_y:36.63,
   zrq_shops:2500,
   dongxiao:100,
-  dongxiao_day:7
+  dongxiao_day:7,
+  score:258,
+  score_day:7,
+  score_near:307
   },
   "惠州柏万": {
   cpc:33082,
@@ -1460,7 +1463,10 @@ function renderAll(){
   zrq_pct_y:36.36,
   zrq_shops:1612,
   dongxiao:76,
-  dongxiao_day:11
+  dongxiao_day:11,
+  score:169,
+  score_day:4,
+  score_near:185
   },
   "泉州小花猫": {
   cpc:29324,
@@ -1494,7 +1500,10 @@ function renderAll(){
   zrq_pct_y:41.68,
   zrq_shops:1720,
   dongxiao:70,
-  dongxiao_day:8
+  dongxiao_day:8,
+  score:174,
+  score_day:-1,
+  score_near:237
   },
   "惠安广通": {
   cpc:16597,
@@ -1528,7 +1537,10 @@ function renderAll(){
   zrq_pct_y:32.66,
   zrq_shops:1538,
   dongxiao:53,
-  dongxiao_day:0
+  dongxiao_day:0,
+  score:125,
+  score_day:1,
+  score_near:204
   },
   "慈溪哲光": {
   cpc:39949,
@@ -1562,7 +1574,10 @@ function renderAll(){
   zrq_pct_y:29.11,
   zrq_shops:1741,
   dongxiao:49,
-  dongxiao_day:7
+  dongxiao_day:7,
+  score:154,
+  score_day:-1,
+  score_near:203
   },
   "义乌汐洋": {
   cpc:43899,
@@ -1596,7 +1611,10 @@ function renderAll(){
   zrq_pct_y:34.46,
   zrq_shops:1651,
   dongxiao:71,
-  dongxiao_day:9
+  dongxiao_day:9,
+  score:168,
+  score_day:4,
+  score_near:188
   }
   };
 const ns={...(ex||{}), _updated: '10:30', _dataDate: '2026-06-10b'};
