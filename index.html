@@ -214,7 +214,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
 <!-- Tab6: MEM续约 -->
 <div id="panel-memrate" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">🔄 MEM续约率</div><div class="panel-sub">续约率 · 已续约/到期总数 | 点击可编辑</div></div>
+    <div><div class="panel-title">🔄 MEM续约率</div><div class="panel-sub">续约率 · 已续约/参与续约计算 | 点击可编辑</div></div>
     <div id="memrate-badge" class="timepct-badge"></div>
   </div>
   <div id="memrate-cards" class="sum-cards"></div>
@@ -952,7 +952,7 @@ const FIELD_META = {
   order:       {label:'已铺设合格数'},
   order_day:   {label:'日新增合格'},
   memrenew:    {label:'已续约数'},
-  memexpire:   {label:'到期总数'},
+  memexpire:   {label:'参与计算'},
   memrenew_day:{label:'昨日新增续约'},
   memurgent:   {label:'紧急未续约(≤30天)'},
   mem_visit_all:   {label:'到期上门拜访率'},
@@ -1392,7 +1392,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-10c';
+  const EMBED_VER = '2026-06-10d';
     const D={
   "惠州巨浪": {
   cpc:30669,
@@ -1406,11 +1406,11 @@ function renderAll(){
   gtv_excl:6.05,
   gtv_y:105730,
   mem:66475,
-  memexpire:71,
-  memrate:26.87,
+  memexpire:64,
+  memrate:29.7,
   memrenew:19,
   memrenew_day:5,
-  memurgent:52,
+  memurgent:47,
   zrq_aov:260,
   zrq_bind:760,
   zrq_bind_inc_d:7,
@@ -1443,11 +1443,11 @@ function renderAll(){
   gtv_excl:5.8,
   gtv_y:96595,
   mem:36800,
-  memexpire:58,
-  memrate:24.07,
+  memexpire:53,
+  memrate:24.5,
   memrenew:13,
   memrenew_day:2,
-  memurgent:45,
+  memurgent:40,
   zrq_aov:228,
   zrq_bind:622,
   zrq_bind_inc_d:3,
@@ -1480,11 +1480,11 @@ function renderAll(){
   gtv_excl:3.45,
   gtv_y:64110,
   mem:40878,
-  memexpire:55,
-  memrate:27.08,
+  memexpire:47,
+  memrate:27.7,
   memrenew:13,
   memrenew_day:1,
-  memurgent:42,
+  memurgent:34,
   zrq_aov:297,
   zrq_bind:600,
   zrq_bind_inc_d:1,
@@ -1517,11 +1517,11 @@ function renderAll(){
   gtv_excl:4.46,
   gtv_y:55049,
   mem:30591,
-  memexpire:40,
-  memrate:25.71,
+  memexpire:34,
+  memrate:29.4,
   memrenew:10,
   memrenew_day:1,
-  memurgent:30,
+  memurgent:25,
   zrq_aov:188,
   zrq_bind:504,
   zrq_bind_inc_d:2,
@@ -1554,11 +1554,11 @@ function renderAll(){
   gtv_excl:2.82,
   gtv_y:90264,
   mem:33089,
-  memexpire:41,
-  memrate:19.44,
+  memexpire:35,
+  memrate:20.0,
   memrenew:7,
   memrenew_day:1,
-  memurgent:34,
+  memurgent:29,
   zrq_aov:289,
   zrq_bind:593,
   zrq_bind_inc_d:1,
@@ -1592,7 +1592,7 @@ function renderAll(){
   gtv_y:84488,
   mem:54600,
   memexpire:38,
-  memrate:39.47,
+  memrate:39.5,
   memrenew:15,
   memrenew_day:3,
   memurgent:23,
