@@ -1392,7 +1392,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-12c';
+  const EMBED_VER = '2026-06-12d';
     const D={
   "惠州巨浪": {
   cpc:36927,
@@ -1429,7 +1429,11 @@ function renderAll(){
   memrenew:23,
   memexpire:72,
   memurgent:49,
-  memrenew_day:23
+  memrenew_day:23,
+  bml_shops:28,
+  bml_beat:0,
+  bml_beat_rate:39.3,
+  bml_lose_rate:46.4
   },
   "惠州柏万": {
   cpc:41799,
@@ -1466,7 +1470,11 @@ function renderAll(){
   memrenew:15,
   memexpire:58,
   memurgent:43,
-  memrenew_day:15
+  memrenew_day:15,
+  bml_shops:21,
+  bml_beat:0,
+  bml_beat_rate:19.0,
+  bml_lose_rate:66.7
   },
   "泉州小花猫": {
   cpc:37501,
@@ -1503,7 +1511,11 @@ function renderAll(){
   memrenew:18,
   memexpire:55,
   memurgent:37,
-  memrenew_day:18
+  memrenew_day:18,
+  bml_shops:19,
+  bml_beat:0,
+  bml_beat_rate:68.4,
+  bml_lose_rate:21.1
   },
   "惠安广通": {
   cpc:19983,
@@ -1540,7 +1552,11 @@ function renderAll(){
   memrenew:12,
   memexpire:40,
   memurgent:28,
-  memrenew_day:12
+  memrenew_day:12,
+  bml_shops:20,
+  bml_beat:0,
+  bml_beat_rate:45.0,
+  bml_lose_rate:40.0
   },
   "慈溪哲光": {
   cpc:50483,
@@ -1577,7 +1593,11 @@ function renderAll(){
   memrenew:8,
   memexpire:41,
   memurgent:33,
-  memrenew_day:8
+  memrenew_day:8,
+  bml_shops:19,
+  bml_beat:0,
+  bml_beat_rate:36.8,
+  bml_lose_rate:42.1
   },
   "义乌汐洋": {
   cpc:54181,
@@ -1614,10 +1634,14 @@ function renderAll(){
   memrenew:16,
   memexpire:38,
   memurgent:22,
-  memrenew_day:16
+  memrenew_day:16,
+  bml_shops:17,
+  bml_beat:0,
+  bml_beat_rate:47.1,
+  bml_lose_rate:17.6
   }
   };
-const ns={...(ex||{}), _updated: '10:01', _dataDate: '2026-06-12c'};
+const ns={...(ex||{}), _updated: '10:01', _dataDate: '2026-06-12d'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
