@@ -1392,7 +1392,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-12b';
+  const EMBED_VER = '2026-06-12c';
     const D={
   "惠州巨浪": {
   cpc:36927,
@@ -1425,7 +1425,11 @@ function renderAll(){
   score_day:12,
   score_near:301,
   dongxiao:119,
-  dongxiao_day:7
+  dongxiao_day:7,
+  memrenew:23,
+  memexpire:72,
+  memurgent:49,
+  memrenew_day:23
   },
   "惠州柏万": {
   cpc:41799,
@@ -1458,7 +1462,11 @@ function renderAll(){
   score_day:-1,
   score_near:182,
   dongxiao:86,
-  dongxiao_day:6
+  dongxiao_day:6,
+  memrenew:15,
+  memexpire:58,
+  memurgent:43,
+  memrenew_day:15
   },
   "泉州小花猫": {
   cpc:37501,
@@ -1491,7 +1499,11 @@ function renderAll(){
   score_day:0,
   score_near:242,
   dongxiao:80,
-  dongxiao_day:7
+  dongxiao_day:7,
+  memrenew:18,
+  memexpire:55,
+  memurgent:37,
+  memrenew_day:18
   },
   "惠安广通": {
   cpc:19983,
@@ -1524,7 +1536,11 @@ function renderAll(){
   score_day:5,
   score_near:203,
   dongxiao:60,
-  dongxiao_day:4
+  dongxiao_day:4,
+  memrenew:12,
+  memexpire:40,
+  memurgent:28,
+  memrenew_day:12
   },
   "慈溪哲光": {
   cpc:50483,
@@ -1557,7 +1573,11 @@ function renderAll(){
   score_day:2,
   score_near:203,
   dongxiao:62,
-  dongxiao_day:9
+  dongxiao_day:9,
+  memrenew:8,
+  memexpire:41,
+  memurgent:33,
+  memrenew_day:8
   },
   "义乌汐洋": {
   cpc:54181,
@@ -1590,10 +1610,14 @@ function renderAll(){
   score_day:17,
   score_near:174,
   dongxiao:92,
-  dongxiao_day:9
+  dongxiao_day:9,
+  memrenew:16,
+  memexpire:38,
+  memurgent:22,
+  memrenew_day:16
   }
   };
-const ns={...(ex||{}), _updated: '10:01', _dataDate: '2026-06-12b'};
+const ns={...(ex||{}), _updated: '10:01', _dataDate: '2026-06-12c'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
