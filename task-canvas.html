@@ -1392,7 +1392,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-12a';
+  const EMBED_VER = '2026-06-12b';
     const D={
   "惠州巨浪": {
   cpc:36927,
@@ -1423,7 +1423,9 @@ function renderAll(){
   zrq_shops:2494,
   score:257,
   score_day:12,
-  score_near:301
+  score_near:301,
+  dongxiao:119,
+  dongxiao_day:7
   },
   "惠州柏万": {
   cpc:41799,
@@ -1454,7 +1456,9 @@ function renderAll(){
   zrq_shops:1606,
   score:165,
   score_day:-1,
-  score_near:182
+  score_near:182,
+  dongxiao:86,
+  dongxiao_day:6
   },
   "泉州小花猫": {
   cpc:37501,
@@ -1485,7 +1489,9 @@ function renderAll(){
   zrq_shops:1719,
   score:169,
   score_day:0,
-  score_near:242
+  score_near:242,
+  dongxiao:80,
+  dongxiao_day:7
   },
   "惠安广通": {
   cpc:19983,
@@ -1516,7 +1522,9 @@ function renderAll(){
   zrq_shops:1531,
   score:128,
   score_day:5,
-  score_near:203
+  score_near:203,
+  dongxiao:60,
+  dongxiao_day:4
   },
   "慈溪哲光": {
   cpc:50483,
@@ -1547,7 +1555,9 @@ function renderAll(){
   zrq_shops:1735,
   score:155,
   score_day:2,
-  score_near:203
+  score_near:203,
+  dongxiao:62,
+  dongxiao_day:9
   },
   "义乌汐洋": {
   cpc:54181,
@@ -1578,10 +1588,12 @@ function renderAll(){
   zrq_shops:1647,
   score:181,
   score_day:17,
-  score_near:174
+  score_near:174,
+  dongxiao:92,
+  dongxiao_day:9
   }
   };
-const ns={...(ex||{}), _updated: '10:01', _dataDate: '2026-06-12a'};
+const ns={...(ex||{}), _updated: '10:01', _dataDate: '2026-06-12b'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
