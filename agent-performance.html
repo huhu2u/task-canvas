@@ -196,57 +196,57 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 // ============ 数据 ============ 
 const OPS = ['惠州巨浪','惠州柏万','泉州小花猫','惠安广通','慈溪哲光','义乌汐洋'];
 const PERSONS = { '惠州巨浪':'肖立铭', '惠州柏万':'林启梁', '泉州小花猫':'康子诚', '惠安广通':'尤云生', '慈溪哲光':'孙浩', '义乌汐洋':'陈铨' };
-const DATA_DATE = '2026-06-14';
-const TIME_PROGRESS = '43.33%(13/30天)';
+const DATA_DATE = '2026-06-16';
+const TIME_PROGRESS = '53.33%(16/30天)';
 
 // 核心业绩数据（完成率%）
 const PERF = {
   "惠州巨浪": {
-    gtv: 40.96,
-    cpc: 46.94,
-    mem: 37.31,
+    gtv: 46.13,
+    cpc: 53.48,
+    mem: 38.81,
     cpc_new: 35.71,
-    elim: 6.24,
+    elim: 5.96,
     risk: 0
   },
   "惠州柏万": {
-    gtv: 42.01,
-    cpc: 47.11,
-    mem: 35.19,
+    gtv: 48.14,
+    cpc: 55.3,
+    mem: 37.04,
     cpc_new: 50.0,
-    elim: 5.21,
+    elim: 4.59,
     risk: 0
   },
   "泉州小花猫": {
-    gtv: 43.91,
-    cpc: 40.19,
-    mem: 41.67,
-    cpc_new: 78.57,
-    elim: 3.05,
+    gtv: 49.68,
+    cpc: 46.84,
+    mem: 45.83,
+    cpc_new: 92.86,
+    elim: 3.47,
     risk: 0
   },
   "惠安广通": {
-    gtv: 41.13,
-    cpc: 32.52,
-    mem: 44.44,
-    cpc_new: 40.0,
-    elim: 4.05,
+    gtv: 47.53,
+    cpc: 40.23,
+    mem: 47.22,
+    cpc_new: 60.0,
+    elim: 3.81,
     risk: 0
   },
   "慈溪哲光": {
-    gtv: 38.57,
-    cpc: 40.66,
-    mem: 27.78,
-    cpc_new: 22.22,
-    elim: 2.87,
+    gtv: 46.01,
+    cpc: 47.87,
+    mem: 30.56,
+    cpc_new: 33.33,
+    elim: 3.28,
     risk: 0
   },
   "义乌汐洋": {
-    gtv: 42.45,
-    cpc: 42.24,
-    mem: 47.37,
-    cpc_new: 11.11,
-    elim: 2.06,
+    gtv: 49.85,
+    cpc: 49.88,
+    mem: 52.63,
+    cpc_new: 22.22,
+    elim: 1.99,
     risk: 0
   }
 };
@@ -254,117 +254,117 @@ const PERF = {
 // 项目数据
 const PROJ = {
   "惠州巨浪": {
-    score: -50.0,
+    score: 93.8,
     dx: {
-      val: 112,
-      target: 225,
-      rate: 49.78
+      val: 153,
+      target: 270,
+      rate: 56.7
     },
     zrq: {
-      st: 36.19,
-      mat: 0.0
+      st: 35.13,
+      mat: 639125.0
     },
     bml: 0,
     wpt: {
-      open: 243,
-      hd: 818,
-      hdOpen: 172,
-      hdRate: 21.03
+      open: 287,
+      hd: 888,
+      hdOpen: 197,
+      hdRate: 22.18
     }
   },
   "惠州柏万": {
-    score: 20.0,
+    score: 85.9,
     dx: {
-      val: 81,
-      target: 162,
-      rate: 50.0
+      val: 109,
+      target: 169,
+      rate: 64.5
     },
     zrq: {
-      st: 37.58,
-      mat: 0.0
+      st: 36.41,
+      mat: 584260.0
     },
     bml: 0,
     wpt: {
-      open: 171,
-      hd: 482,
-      hdOpen: 106,
-      hdRate: 21.99
+      open: 199,
+      hd: 505,
+      hdOpen: 122,
+      hdRate: 24.16
     }
   },
   "泉州小花猫": {
-    score: 15.38,
+    score: 85.2,
     dx: {
-      val: 74,
-      target: 193,
-      rate: 38.34
+      val: 100,
+      target: 210,
+      rate: 47.6
     },
     zrq: {
-      st: 43.09,
-      mat: 0.0
+      st: 42.92,
+      mat: 584365.0
     },
     bml: 0,
     wpt: {
-      open: 160,
-      hd: 595,
-      hdOpen: 113,
-      hdRate: 18.99
+      open: 180,
+      hd: 664,
+      hdOpen: 128,
+      hdRate: 19.28
     }
   },
   "惠安广通": {
-    score: -66.67,
+    score: 84.3,
     dx: {
-      val: 56,
-      target: 132,
-      rate: 42.42
+      val: 81,
+      target: 145,
+      rate: 55.9
     },
     zrq: {
-      st: 33.32,
-      mat: 0.0
+      st: 33.41,
+      mat: 365704.0
     },
     bml: 0,
     wpt: {
-      open: 129,
-      hd: 401,
-      hdOpen: 90,
-      hdRate: 22.44
+      open: 154,
+      hd: 440,
+      hdOpen: 104,
+      hdRate: 23.64
     }
   },
   "慈溪哲光": {
-    score: -23.08,
+    score: 77.6,
     dx: {
-      val: 53,
-      target: 151,
-      rate: 35.1
+      val: 94,
+      target: 191,
+      rate: 49.2
     },
     zrq: {
-      st: 31.49,
-      mat: 0.0
+      st: 32.02,
+      mat: 464329.0
     },
     bml: 0,
     wpt: {
-      open: 110,
-      hd: 517,
-      hdOpen: 65,
-      hdRate: 12.57
+      open: 145,
+      hd: 673,
+      hdOpen: 82,
+      hdRate: 12.18
     }
   },
   "义乌汐洋": {
-    score: -50.0,
+    score: 83.8,
     dx: {
-      val: 83,
-      target: 162,
-      rate: 51.23
+      val: 120,
+      target: 173,
+      rate: 69.4
     },
     zrq: {
-      st: 37.42,
-      mat: 0.0
+      st: 37.1,
+      mat: 565629.0
     },
     bml: 0,
     wpt: {
-      open: 110,
-      hd: 462,
-      hdOpen: 91,
-      hdRate: 19.7
+      open: 137,
+      hd: 507,
+      hdOpen: 113,
+      hdRate: 22.29
     }
   }
 };
