@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-30",
+  "source_file": "/tmp/files/1780104966.xlsx",
+  "pool_file": "/root/.openclaw/workspace/data/haodian_pool.xlsx",
+  "stats": {
+    "惠州巨浪": {
+      "pool": 901,
+      "target": 225,
+      "achieved": 0,
+      "rate": 0.0,
+      "gap": 225,
+      "two_three": 0,
+      "one": 0,
+      "zero": 0,
+      "bound": 0,
+      "unbound": 0,
+      "dyn_rate": 0.0
+    },
+    "惠州柏万": {
+      "pool": 540,
+      "target": 162,
+      "achieved": 0,
+      "rate": 0.0,
+      "gap": 162,
+      "two_three": 0,
+      "one": 0,
+      "zero": 0,
+      "bound": 0,
+      "unbound": 0,
+      "dyn_rate": 0.0
+    },
+    "泉州小花猫": {
+      "pool": 678,
+      "target": 193,
+      "achieved": 0,
+      "rate": 0.0,
+      "gap": 193,
+      "two_three": 0,
+      "one": 0,
+      "zero": 0,
+      "bound": 0,
+      "unbound": 0,
+      "dyn_rate": 0.0
+    },
+    "惠安广通": {
+      "pool": 455,
+      "target": 132,
+      "achieved": 129,
+      "rate": 0.977273,
+      "gap": 3,
+      "two_three": 16,
+      "one": 15,
+      "zero": 290,
+      "bound": 448,
+      "unbound": 2,
+      "dyn_rate": 0.283516
+    },
+    "慈溪哲光": {
+      "pool": 623,
+      "target": 151,
+      "achieved": 151,
+      "rate": 1.0,
+      "gap": 0,
+      "two_three": 15,
+      "one": 13,
+      "zero": 434,
+      "bound": 609,
+      "unbound": 4,
+      "dyn_rate": 0.242376
+    },
+    "义乌汐洋": {
+      "pool": 539,
+      "target": 162,
+      "achieved": 0,
+      "rate": 0.0,
+      "gap": 162,
+      "two_three": 0,
+      "one": 0,
+      "zero": 0,
+      "bound": 0,
+      "unbound": 0,
+      "dyn_rate": 0.0
+    }
+  }
+}

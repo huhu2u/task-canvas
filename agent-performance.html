@@ -114,7 +114,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 
 <div class="hdr">
   <h1>粤闽浙代运营商绩效排名</h1>
-  <div class="dt">数据日期：2026-05-31 | 核心业绩：5月MTD | 项目数据：5月最新</div>
+  <div class="dt">数据日期：2026-06-12 | 核心业绩：6月MTD | 项目数据：6月最新</div>
 </div>
 
 <div class="tab-bar">
@@ -196,25 +196,177 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 // ============ 数据 ============ 
 const OPS = ['惠州巨浪','惠州柏万','泉州小花猫','惠安广通','慈溪哲光','义乌汐洋'];
 const PERSONS = { '惠州巨浪':'肖立铭', '惠州柏万':'林启梁', '泉州小花猫':'康子诚', '惠安广通':'尤云生', '慈溪哲光':'孙浩', '义乌汐洋':'陈铨' };
+const DATA_DATE = '2026-06-17';
+const TIME_PROGRESS = '56.67%(17/30天)';
 
 // 核心业绩数据（完成率%）
 const PERF = {
-  '惠州巨浪': {gtv: 91.5, cpc: 97.44, mem: 70.9, cpc_new: 120.0, elim: 5.73, risk: 18.0},
-  '惠州柏万': {gtv: 99.47, cpc: 100.03, mem: 63.3, cpc_new: 158.3, elim: 3.33, risk: 12.0},
-  '泉州小花猫': {gtv: 97.43, cpc: 98.70, mem: 52.5, cpc_new: 116.7, elim: 3.21, risk: 15.0},
-  '惠安广通': {gtv: 96.63, cpc: 101.76, mem: 50.0, cpc_new: 122.2, elim: 3.91, risk: 14.0},
-  '慈溪哲光': {gtv: 97.51, cpc: 94.86, mem: 55.1, cpc_new: 106.3, elim: 5.00, risk: 20.0},
-  '义乌汐洋': {gtv: 98.16, cpc: 105.77, mem: 69.2, cpc_new: 100.0, elim: 1.47, risk: 16.0},
+  "惠州巨浪": {
+    gtv: 48.62,
+    cpc: 56.57,
+    mem: 40.30,
+    cpc_new: 42.86,
+    elim: 5.89,
+    risk: 0
+  },
+  "惠州柏万": {
+    gtv: 50.68,
+    cpc: 81.29,
+    mem: 38.89,
+    cpc_new: 50.00,
+    elim: 6.62,
+    risk: 0
+  },
+  "泉州小花猫": {
+    gtv: 53.12,
+    cpc: 78.72,
+    mem: 45.83,
+    cpc_new: 92.86,
+    elim: 6.54,
+    risk: 0
+  },
+  "惠安广通": {
+    gtv: 50.85,
+    cpc: 69.59,
+    mem: 47.22,
+    cpc_new: 60.00,
+    elim: 4.22,
+    risk: 0
+  },
+  "慈溪哲光": {
+    gtv: 48.80,
+    cpc: 69.96,
+    mem: 33.33,
+    cpc_new: 33.33,
+    elim: 4.77,
+    risk: 0
+  },
+  "义乌汐洋": {
+    gtv: 52.89,
+    cpc: 81.91,
+    mem: 52.63,
+    cpc_new: 27.78,
+    elim: 2.93,
+    risk: 0
+  }
 };
 
 // 项目数据
 const PROJ = {
-  '惠州巨浪': {score: 30.3, dx: {val: 187, target: 225, rate: 83.1}, zrq: {st: 26.12, mat: 31.09}, bml: 0.00, wpt: {open: 321, hd: 901, hdOpen: 211, hdRate: 23.4}},
-  '惠州柏万': {score: 32.4, dx: {val: 151, target: 162, rate: 93.2}, zrq: {st: 31.04, mat: 34.05}, bml: 7.69, wpt: {open: 209, hd: 534, hdOpen: 120, hdRate: 22.5}},
-  '泉州小花猫': {score: 28.8, dx: {val: 176, target: 193, rate: 91.2}, zrq: {st: 34.84, mat: 33.39}, bml: 35.71, wpt: {open: 217, hd: 929, hdOpen: 148, hdRate: 15.9}},
-  '惠安广通': {score: 30.2, dx: {val: 113, target: 132, rate: 85.6}, zrq: {st: 33.24, mat: 33.20}, bml: 30.77, wpt: {open: 183, hd: 512, hdOpen: 120, hdRate: 23.4}},
-  '慈溪哲光': {score: 27.5, dx: {val: 145, target: 151, rate: 96.0}, zrq: {st: 27.44, mat: 22.39}, bml: 28.57, wpt: {open: 146, hd: 758, hdOpen: 84, hdRate: 11.1}},
-  '义乌汐洋': {score: 33.8, dx: {val: 158, target: 162, rate: 97.5}, zrq: {st: 30.72, mat: 28.57}, bml: 33.33, wpt: {open: 152, hd: 578, hdOpen: 112, hdRate: 19.4}},
+  "惠州巨浪": {
+    score: 94.12,
+    dx: {
+      val: 158,
+      target: 225,
+      rate: 70.22
+    },
+    zrq: {
+      st: 35.21,
+      mat: 673112.0
+    },
+    bml: 0,
+    wpt: {
+      open: 287,
+      hd: 888,
+      hdOpen: 197,
+      hdRate: 22.18
+    }
+  },
+  "惠州柏万": {
+    score: 87.44,
+    dx: {
+      val: 121,
+      target: 162,
+      rate: 74.69
+    },
+    zrq: {
+      st: 37.62,
+      mat: 648168.0
+    },
+    bml: 0,
+    wpt: {
+      open: 199,
+      hd: 505,
+      hdOpen: 122,
+      hdRate: 24.16
+    }
+  },
+  "泉州小花猫": {
+    score: 85.65,
+    dx: {
+      val: 112,
+      target: 193,
+      rate: 58.03
+    },
+    zrq: {
+      st: 43.06,
+      mat: 623903.0
+    },
+    bml: 0,
+    wpt: {
+      open: 180,
+      hd: 664,
+      hdOpen: 128,
+      hdRate: 19.28
+    }
+  },
+  "惠安广通": {
+    score: 87.42,
+    dx: {
+      val: 86,
+      target: 132,
+      rate: 65.15
+    },
+    zrq: {
+      st: 33.46,
+      mat: 389276.0
+    },
+    bml: 0,
+    wpt: {
+      open: 154,
+      hd: 440,
+      hdOpen: 104,
+      hdRate: 23.64
+    }
+  },
+  "慈溪哲光": {
+    score: 80.48,
+    dx: {
+      val: 113,
+      target: 151,
+      rate: 74.83
+    },
+    zrq: {
+      st: 31.84,
+      mat: 489385.0
+    },
+    bml: 0,
+    wpt: {
+      open: 145,
+      hd: 673,
+      hdOpen: 82,
+      hdRate: 12.18
+    }
+  },
+  "义乌汐洋": {
+    score: 86.11,
+    dx: {
+      val: 124,
+      target: 162,
+      rate: 76.54
+    },
+    zrq: {
+      st: 37.20,
+      mat: 601517.0
+    },
+    bml: 0,
+    wpt: {
+      open: 137,
+      hd: 507,
+      hdOpen: 113,
+      hdRate: 22.29
+    }
+  }
 };
 
 // 满编率（暂缺，显示N/A）

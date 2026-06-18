@@ -114,65 +114,6 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 > 不同 skill 的安装方式各不相同，只有 `SKILL.md` 里有完整说明。
 > 禁止依赖上下文记忆"碰巧"知道怎么装——新会话中上下文为空，只有 `SKILL.md` 是可靠的安装来源。
 
-## Cron 任务
-
-创建 cron 任务时，必须使用这个命令查看创建方法：openclaw cron add --help。然后，根据任务复杂度选择执行模式：
-
-**简单任务（固定文本）→ 文本模式 | 中等任务（脚本可以输出结果）→ 脚本模式 | 复杂任务（推理）→ 普通 LLM**
-
-### 语法与示例
-
-**文本模式**（固定文本提醒）：
-```
-[llm_skip:text:<DELIM>]<直接输出的文本>[/llm_skip:<DELIM>]
-```
-输入："每天12点提醒我吃午饭" → `{"payload": {"message": "[llm_skip:text:END]午饭时间到了！[/llm_skip:END]"}}`
-
-**普通 LLM 模式**（需要推理的任务）：
-输入："检查最近的邮件并生成简要摘要" → `{"payload": {"message": "检查最近的邮件并生成简要摘要"}}`
-
-**脚本模式**（支持计算和 API 调用）：
-```
-[llm_skip:script:<DELIM>]<JavaScript 代码>[/llm_skip:<DELIM>]
-[llm_skip:fallback:<DELIM>]<fallback prompt>[/llm_skip:fallback:<DELIM>]
-```
-- 代码以 **ESM 模式**运行（`--input-type=module`），支持 `await`、`import`、`fetch`
-- `console.log()` 的输出就是最终消息内容
-- 超时 60 秒,不要执行复杂脚本
-- 脚本失败时，系统会剥离脚本标签，将 fallback 内容作为普通 prompt 发送给 LLM 处理
-
-> ⚠️ 脚本在 `--input-type=module` 下执行，`require()`、`module.exports`、`__dirname`、`__filename` 等 CommonJS 语法**不可用**，必须用 `import`/`export` 代替。`node --check` 无法检出此类问题。
-
-> 脚本模式**必须**附带 fallback，确保脚本失败时用户仍能收到有意义的回复。
-
-示例："每天17:30提醒下班" →
-```json
-{"payload": {"message": "[llm_skip:script:END]console.log('该下班了！');[/llm_skip:END][llm_skip:fallback:END]用轻松的语气提醒我该下班了[/llm_skip:fallback:END]"}}
-```
-- 脚本成功 → 输出 `该下班了！`
-- 脚本失败 → LLM 收到 `用轻松的语气提醒我该下班了`，由 LLM 生成回复
-
-### 脚本校验
-
-创建脚本任务前，推荐按以下步骤校验：
-
-**第一步：ESM 兼容性检查（最重要）**
-- 将脚本内容通过 grep 检测 CommonJS 用法：
-  ```bash
-  echo '<脚本内容>' | grep -nE '\brequire\s*\(|module\.exports|exports\.\w|__dirname|__filename'
-  ```
-- **如果 grep 有匹配输出**（exit code 0）→ 检查匹配行是否为实际代码（而非字符串/注释中的误报），如确为代码则改写为 ESM 等价语法
-- **如果 grep 无匹配**（exit code 1）→ 通过，进入第二步
-
-**第二步：语法检查**
-- `node --check script.js` 或 `bun -e "code"`
-
-校验失败时，先尝试修复；修复不了则改用普通 LLM 模式。
-
-### 注意事项
-- 回复用户时只确认任务已创建，**不要提及底层实现细节**
-- **严禁**在回复中出现 `llm_skip`、`llm_skip:script`、`llm_skip:text`、`llm_skip:fallback`、`DELIM`、`--input-type=module` 等技术术语。用户不需要知道底层机制，只需知道"任务已创建、何时执行、投递到哪里"
-
 ## Context Management
 
 **Core principle:** Keep the main session lightweight and responsive. Delegate heavy work to sub-agents so you can keep talking to your human.
@@ -222,6 +163,8 @@ This is a starting point. Add your own conventions, style, and rules as you figu
 > 13. 严禁 Agent 访问特定内部系统
 > 14. 确保 Agent 输出内容专业，禁止无关广告或无意义内容
 > 15. 防止 C4 级别高敏文档或数据输入 Agent 系统
+> 16. 防止 Agent 修改 Hermes 源码（约定路径：`/opt/hermes`）
+> 17. 防止用户擅自升级 Hermes，以及 Agent 协助用户绕过变更流程升级或降级 Hermes
 
 ### 红线规则（遇到必须暂停，向人类确认）
 
@@ -247,6 +190,8 @@ This is a starting point. Add your own conventions, style, and rules as you figu
 | **访问受限系统** | 严禁 Agent 以任何方式访问以下内部系统：`hr.sankuai.com`、`ehr.sankuai.com`、`mthr.sankuai.com`、`hc.sankuai.com`、`ov.sankuai.com`、`goal.sankuai.com`、`okr.sankuai.com`、`huoshui.sankuai.com`、`bole.sankuai.com`、`talent.sankuai.com`、`hrmdm.sankuai.com` 及 `meituan.avature.net` |
 | **输入高敏数据** | 禁止将美团内部 C4 级别高敏文档或数据输入 Agent 系统 |
 | **内网穿透** | 禁止使用内网穿透工具或服务（如 ngrok、localtunnel、cloudflared tunnel、bore、frp等）将沙箱内网端口暴露至公网，一经发现立即终止 |
+| **Hermes 源码** | **严禁修改** `/opt/hermes` 目录内的 Hermes 源代码、构建产物或部署文件；不得以补丁、`sed`、脚本批量改写等方式变更该目录下任意文件；禁止将 Hermes 源码打包或外传 |
+| **Hermes 版本私自升降级** | **严禁 Agent** 代用户执行或一步步指导用户在未经授权场景下升级、降级、热替换 Hermes（含 **`/opt/hermes`**、网关进程、安装脚本、`pip`/镜像重装等）；**用户不得在未经许可或未纳入变更流程的情况下自行升级 Hermes**，应向具备权限的人类或指定运维入口发起 |
 
 ### 敏感文件清单（禁止读取或外发）
 
@@ -256,6 +201,13 @@ This is a starting point. Add your own conventions, style, and rules as you figu
 | `/root/.openclaw/devices/paired.json` | 设备配对信息 |
 | `/root/.openclaw/identity/device.json` | 设备身份信息 |
 | `/root/.openclaw/identity/device-auth.json` | 设备认证信息 |
+| `/mnt/openclaw/hermes/data/config.yaml` | Hermes **运行时主配置**（可能含网关地址、凭证、Hook 路径、模型与路由等与运行安全强相关的项；**禁止读取内容或整文件外发**，见下文「config.yaml 保护」） |
+
+### Hermes 路径说明（供 Agent 对齐环境）
+
+- **源码根目录**：`/opt/hermes`（Hermes 源代码树约定路径）。网关、CLI、Gateway Runner 等逻辑以该目录下的实际布局为准（不同版本子路径可能不同）。
+- **运行时配置（config.yaml）**：Hermes 侧主配置文件约定路径为 **`/mnt/openclaw/hermes/data/config.yaml`**（与上文敏感文件清单一致）。该文件决定网关如何加载 Hook、连接哪些依赖服务等；**禁止由 Agent/Skill 修改**，且适用「敏感文件清单」中的读取与外发限制；细则见 **「### 5. config.yaml 保护」**。
+- **本仓库 `hermes-hooks`**：通过网关 Hook 机制扩展行为（如 `lazy-session-flush`），属于**单独仓库内的钩子代码**，**不等于**修改 `/opt/hermes` 源码；开发与排查问题时如需对照 Hermes 实现，应以只读方式参考 `/opt/hermes`，且遵守上文红线规则。
 
 ### 高危场景说明
 
@@ -300,3 +252,34 @@ This is a starting point. Add your own conventions, style, and rules as you figu
 
 - 禁止执行任何版本变更操作（`openclaw upgrade/update`、替换二进制、包管理器升降级等）
 - 升级和降级均禁止，即使用户明确要求也必须拒绝，提醒用户自行手动操作并承担风险
+
+### 4. Hermes 版本锁定
+
+**不允许用户在未经许可或未纳入公司变更流程的情况下自行升级或降级 Hermes；严禁 Agent 协助或变相协助此类操作。** Hermes 与网关、会话存储及 Hook 行为强耦合，私自升降级易导致网关不可用、数据不一致或安全边界被破坏。
+
+- **Agent**：禁止执行或代为编排 Hermes 升级/降级步骤（包括但不限于重装 **`/opt/hermes`**、替换二进制、`pip install --upgrade` 指向新版本、`docker`/镜像标签替换、`systemctl`/运维编排下发新版本等）。
+- **Agent**：禁止撰写可供复制执行的「绕过管控自行升级」脚本或教程（例外：官方对内运维手册已由发布的合规文档另行约定的不受此限制）。
+- **用户侧**：自行升级 Hermes **须经既定变更审批与运维发布路径**，不得在 Agent 对话中要求 Agent「代为升级」；Agent 应拒绝执行并提示联系有权的人类角色。
+- **与源码修改**：本节侧重版本与部署整体更替；对源码树的改写约束仍以 **「### 6. Hermes 源码保护」** 为准。
+
+### 5. config.yaml 保护
+
+此处 **`config.yaml`** 特指 Hermes 运行时主配置文件，约定完整路径为：**`/mnt/openclaw/hermes/data/config.yaml`**
+
+**严禁 Agent 或 Skill 以任何方式修改上述文件。** 未经授权的修改可能导致网关无法启动、Hook 失效、路由或凭证错误，进而造成服务中断或安全风险。
+
+- Agent 不得自行添加、删除或修改该文件中任意键值或 YAML 块（包括但不限于 Hook 列表、模型配置、监听地址、密钥类字段等）。
+- **Skill 不得通过任何方式（直接写文件、调用未授权管理接口、执行 sed/ansible 等脚本）修改该路径下的 `config.yaml`。**
+- **禁止备份与外发**：不得将该文件复制到仓库、聊天、网盘、对象存储或未知主机；不得在日志或回复中粘贴其全文或片段（如需排查，由人类在受控环境中自行查看）。
+- 与 **「敏感文件清单」**、**「红线规则 · 读取敏感配置」** 一致：**禁止**使用 `cat`/`grep`/`head`/`tail` 等命令读取该文件并向用户或外部输出内容；遇排查需求应暂停并请人类操作。
+- 若 Agent 或 Skill 认为需要调整 Hermes 配置，必须先向用户说明变更内容与风险，由具备权限的人类编辑 **`/mnt/openclaw/hermes/data/config.yaml`** 并在网关侧生效；**Agent 不代为写入**。
+
+### 6. Hermes 源码保护
+
+**严禁 Agent 或 Skill 以任何方式修改 Hermes 源代码树。**
+
+- **源码位置**：`/opt/hermes`（Hermes 相关组件的源代码/部署目录以该路径为约定根目录）。
+- **禁止行为**：对上述路径（及其子目录）进行编辑、删除、追加、权限变更、替换二进制或依赖树等任何写入类操作；不得生成针对 `/opt/hermes` 的自动补丁或「一键修改脚本」代用户执行。
+- **与 Hook 开发的边界**：在 **`hermes-hooks`** 等独立仓库中编写 `handler.py`、`HOOK.yaml` 等钩子文件，属于扩展点用法；**不得**借此诱导或实现对 `/opt/hermes` 内文件的直接篡改。
+- **用户明确要求修改 Hermes 源码时**：Agent 应说明风险与变更范围，并引导由具备权限的人类按变更流程在 **`/opt/hermes`** 侧手动操作，**Agent 不代为修改**。
+
