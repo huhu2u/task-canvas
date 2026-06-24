@@ -161,16 +161,18 @@ table.dt tbody tr:last-child td{border-bottom:none}
 <!-- Tab2: 好店评分 -->
 <div id="panel-score" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">⭐ 好店经营评分</div><div class="panel-sub">达标≥70分 · 优先做工50~69分 | 点击可编辑</div></div>
+    <div><div class="panel-title">⭐ 好店经营评分</div><div class="panel-sub">达标≥70分 · 6月三节点(W1:6/16 W2:6/23 W3:6/30) | 点击可编辑</div></div>
     <div id="score-badge" class="timepct-badge"></div>
   </div>
   <div id="score-cards" class="sum-cards"></div>
   <div class="sec">
-    <div class="sec-hdr c-score"><span>⭐ 经营评分明细</span></div>
+    <div class="sec-hdr c-score"><span>⭐ 经营评分三节点明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">当前达标数</th><th class="ht">5月目标</th>
-      <th class="hp">完成进度</th><th class="hg">目标缺口</th>
-      <th class="hd">日变化</th><th class="hd">50~69分门店</th>
+      <th class="hn">代运营商</th><th class="hc">当前达标</th>
+      <th class="hd">W1(6/16)</th><th class="hd">W1缺口</th>
+      <th class="hd">W2(6/23)</th><th class="hd">W2缺口</th>
+      <th class="ht">W3(6/30)</th><th class="hg">W3缺口</th>
+      <th class="hp">达标率(vsW3)</th><th class="hd">日变化</th><th class="hd">50~69分</th>
     </tr></thead><tbody id="score-tbody"></tbody></table></div>
   </div>
 </div>
@@ -185,7 +187,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <div class="sec">
     <div class="sec-hdr c-dong"><span>🔖 好店职人码动销明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">已达标门店</th><th class="ht">5月目标</th>
+      <th class="hn">代运营商</th><th class="hc">已达标门店</th><th class="ht">6月目标</th>
       <th class="hp">完成进度</th><th class="hg">目标缺口</th>
       <th class="hd">昨日净增</th><th class="hd">好店店转GTV</th>
     </tr></thead><tbody id="dongxiao-tbody"></tbody></table></div>
@@ -423,12 +425,12 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // 配置：代运营商基础数据
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
-  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3956557, cpc_tgt:92300,  cpc_newsgn_tgt:14, score_tgt:283, dongxiao_tgt:225, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
-  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3240197, cpc_tgt:115819, cpc_newsgn_tgt:14, score_tgt:175, dongxiao_tgt:162, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
-  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:2774237, cpc_tgt:129943, cpc_newsgn_tgt:14, score_tgt:195, dongxiao_tgt:193, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
-  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2358641, cpc_tgt:77385,  cpc_newsgn_tgt:10,  score_tgt:139, dongxiao_tgt:132, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
-  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3117649, cpc_tgt:162905, cpc_newsgn_tgt:18, score_tgt:185, dongxiao_tgt:151, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
-  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3002361, cpc_tgt:158936, cpc_newsgn_tgt:18, score_tgt:184, dongxiao_tgt:162, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
+  {name:'惠州巨浪',  mgr:'肖立铭', gtv_tgt:3956557, cpc_tgt:92300,  cpc_newsgn_tgt:14, score_tgt:306, score_w1:266, score_w2:279, score_w3:306, dongxiao_tgt:270, visit_tgt:20, order_tgt:181,  memrate_tgt:65, order_pool:329},
+  {name:'惠州柏万',  mgr:'林启梁', gtv_tgt:3240197, cpc_tgt:115819, cpc_newsgn_tgt:14, score_tgt:199, score_w1:174, score_w2:188, score_w3:199, dongxiao_tgt:169, visit_tgt:20, order_tgt:111,  memrate_tgt:65, order_pool:201},
+  {name:'泉州小花猫',mgr:'康子诚', gtv_tgt:2774237, cpc_tgt:129943, cpc_newsgn_tgt:14, score_tgt:209, score_w1:180, score_w2:196, score_w3:209, dongxiao_tgt:210, visit_tgt:20, order_tgt:124,  memrate_tgt:65, order_pool:226},
+  {name:'惠安广通',  mgr:'尤云生', gtv_tgt:2358641, cpc_tgt:77385,  cpc_newsgn_tgt:10,  score_tgt:159, score_w1:138, score_w2:150, score_w3:159, dongxiao_tgt:145, visit_tgt:20, order_tgt:78,  memrate_tgt:65, order_pool:141},
+  {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:3117649, cpc_tgt:162905, cpc_newsgn_tgt:18, score_tgt:210, score_w1:172, score_w2:194, score_w3:210, dongxiao_tgt:191, visit_tgt:20, order_tgt:138,  memrate_tgt:65, order_pool:251},
+  {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:3002361, cpc_tgt:158936, cpc_newsgn_tgt:18, score_tgt:216, score_w1:185, score_w2:202, score_w3:216, dongxiao_tgt:173, visit_tgt:20, order_tgt:105,  memrate_tgt:65, order_pool:191},
 ];
 
 const LS_KEY = 'pjdashboard_v2';
@@ -655,26 +657,34 @@ function renderMem(){
 // ════════════════════════════════════════════════════════════
 function renderScore(){
   const {pct:tp,day,total}=timePct();
-  let totCur=0, totTgt=0, html='';
+  let totCur=0, totW3=0, html='';
   AGENTS.forEach(a=>{
-    const cur=g(a.name,'score'), tgt=gt(a.name,'score');
-    const pct=tgt>0?cur/tgt:0, cls=colorOf(pct,tp);
+    const cur=g(a.name,'score');
+    const w1=a.score_w1||0, w2=a.score_w2||0, w3=a.score_w3||0;
+    const g1=cur-w1, g2=cur-w2, g3=cur-w3;
+    const pct3=w3>0?cur/w3:0, cls=colorOf(pct3,tp);
     const dayChg=g(a.name,'score_day'), near=g(a.name,'score_near');
-    totCur+=cur; totTgt+=tgt;
+    totCur+=cur; totW3+=w3;
+    const gapClr=v=>v>=0?'#16a34a':'#dc2626';
+    const gapFmt=v=>v>=0?`<span style="color:#16a34a;font-weight:700">超额 +${v}</span>`:`<span style="color:#dc2626;font-weight:700">差 ${Math.abs(v)}</span>`;
     html+=`<tr>
       <td class="tn">${a.name}</td>
-      <td class="tc" style="color:${colorText(cls)};cursor:pointer" onclick="openEdit('${a.name}','score')">${cur||'<span style="color:#9ca3af">—</span>'}</td>
-      <td style="color:#6b7280">${tgt}</td>
-      <td>${pctCell(pct,cls)}</td>
-      <td>${gapHtml(cur,tgt,true)}</td>
+      <td class="tc" style="color:${colorText(cls)};cursor:pointer;font-weight:700" onclick="openEdit('${a.name}','score')">${cur||'—'}</td>
+      <td style="color:#6b7280">${w1}</td>
+      <td>${gapFmt(g1)}</td>
+      <td style="color:#6b7280">${w2}</td>
+      <td>${gapFmt(g2)}</td>
+      <td style="color:#1e40af;font-weight:700">${w3}</td>
+      <td>${gapFmt(g3)}</td>
+      <td>${pctCell(pct3,cls)}</td>
       <td style="cursor:pointer" onclick="openEdit('${a.name}','score_day')">${dayHtml(dayChg,'')}</td>
-      <td style="cursor:pointer;color:#d97706;font-weight:700" onclick="openEdit('${a.name}','score_near')">${near||'<span style="color:#9ca3af">—</span>'}</td>
+      <td style="cursor:pointer;color:#d97706;font-weight:700" onclick="openEdit('${a.name}','score_near')">${near||'—'}</td>
     </tr>`;
   });
   document.getElementById('score-tbody').innerHTML=html;
-  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  const totPct=totW3>0?totCur/totW3:0, cls=colorOf(totPct,tp);
   makeCards('score-cards',[
-    {name:'评分综合达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
+    {name:'评分达成(vsW3)',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totW3}`},
     {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
   ]);
   const b=document.getElementById('score-badge');
@@ -1390,7 +1400,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-06-24a';
+  const EMBED_VER = '2026-06-24b';
     const D={
   "惠州巨浪": {
   cpc:47011,
@@ -1423,10 +1433,10 @@ function renderAll(){
   memurgent:30,
   memrenew_day:1,
   score:288,
-  score_day:0,
+  score_day:-2,
   score_near:274,
   dongxiao:195,
-  dongxiao_day:7,
+  dongxiao_day:6,
   aurora_total:7,
   aurora_act_done:5,
   aurora_act_pend:2,
@@ -1463,11 +1473,11 @@ function renderAll(){
   memexpire:53,
   memurgent:23,
   memrenew_day:4,
-  score:186,
-  score_day:0,
+  score:177,
+  score_day:7,
   score_near:157,
   dongxiao:145,
-  dongxiao_day:6,
+  dongxiao_day:8,
   aurora_total:12,
   aurora_act_done:10,
   aurora_act_pend:2,
@@ -1504,11 +1514,11 @@ function renderAll(){
   memexpire:47,
   memurgent:20,
   memrenew_day:0,
-  score:178,
-  score_day:0,
+  score:191,
+  score_day:8,
   score_near:214,
   dongxiao:163,
-  dongxiao_day:7,
+  dongxiao_day:11,
   aurora_total:9,
   aurora_act_done:7,
   aurora_act_pend:2,
@@ -1545,11 +1555,11 @@ function renderAll(){
   memexpire:35,
   memurgent:12,
   memrenew_day:1,
-  score:152,
-  score_day:0,
+  score:148,
+  score_day:5,
   score_near:170,
   dongxiao:113,
-  dongxiao_day:4,
+  dongxiao_day:7,
   aurora_total:8,
   aurora_act_done:5,
   aurora_act_pend:3,
@@ -1586,11 +1596,11 @@ function renderAll(){
   memexpire:35,
   memurgent:23,
   memrenew_day:0,
-  score:177,
-  score_day:0,
+  score:171,
+  score_day:6,
   score_near:181,
   dongxiao:146,
-  dongxiao_day:9,
+  dongxiao_day:6,
   aurora_total:19,
   aurora_act_done:18,
   aurora_act_pend:1,
@@ -1627,11 +1637,11 @@ function renderAll(){
   memexpire:38,
   memurgent:15,
   memrenew_day:2,
-  score:201,
+  score:196,
   score_day:0,
   score_near:151,
   dongxiao:145,
-  dongxiao_day:9,
+  dongxiao_day:5,
   aurora_total:14,
   aurora_act_done:12,
   aurora_act_pend:2,
@@ -1639,7 +1649,7 @@ function renderAll(){
   aurora_res_pend:11
   }
   };
-const ns={...(ex||{}), _updated: '11:25', _dataDate: '2026-06-24a'};
+const ns={...(ex||{}), _updated: '11:37', _dataDate: '2026-06-24b'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
