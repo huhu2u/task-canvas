@@ -1022,7 +1022,7 @@ function renderZrq(){
     const safeNum=v => (parseFloat(v)||0);
     const fmtSafe=v => (safeNum(v) ? fmtNum(Math.round(safeNum(v))) : '—');
     const sumRow=()=>{
-      let cols='<td class="tn" style="font-weight:700">苏皖汇总</td><td class="tc">方广生</td>';
+      let cols='<td class="tn" style="font-weight:700">苏皖汇总</td><td class="tc">胡英杰</td>';
       const numFields=['zrq_shops','zrq_bind','zrq_bind_inc_m','zrq_bind_inc_d','zrq_dong','zrq_gtv','zrq_gtv_y','zrq_pay_y','zrq_pay'];
       let sums={};
       numFields.forEach(f=>{ sums[f]=AGENTS.reduce((acc,a)=>acc+(parseFloat(g(a.name,f))||0),0); });
