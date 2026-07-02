@@ -1359,8 +1359,16 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-07-02a';
-    const D={};
+  const EMBED_VER = '2026-07-02b';
+    const D={
+  '南京知了(芜湖)': {gtv:96659, gtv_y:99058, gtv_excl:4.94, cpc:4715, cpc_y:3386, cpc_y2:4715, cpc_wpu:1330, cpc_newsgn:1, mem:0, memrate:3.8, bml_lose:1},
+  '南京知了(扬州)': {gtv:83606, gtv_y:87195, gtv_excl:4.41, cpc:3391, cpc_y:2204, cpc_y2:3391, cpc_wpu:1186, cpc_newsgn:0, mem:1000, memrate:41.5, bml_lose:1},
+  '常州金蚂蚁': {gtv:89049, gtv_y:93705, gtv_excl:0.85, cpc:4858, cpc_y:3754, cpc_y2:4858, cpc_wpu:1104, cpc_newsgn:0, mem:-3550, memrate:2.6, bml_lose:2},
+  '青岛晖煌': {gtv:92298, gtv_y:97876, gtv_excl:1.96, cpc:3730, cpc_y:2676, cpc_y2:3730, cpc_wpu:1054, cpc_newsgn:0, mem:4800, memrate:7.5, bml_lose:1},
+  '星企动': {gtv:72115, gtv_y:74959, gtv_excl:0.76, cpc:3935, cpc_y:3336, cpc_y2:3935, cpc_wpu:600, cpc_newsgn:0, mem:0, memrate:18.5, bml_lose:0},
+  '盐城一甲一': {gtv:54042, gtv_y:55868, gtv_excl:0.99, cpc:2910, cpc_y:2010, cpc_y2:2910, cpc_wpu:900, cpc_newsgn:1, mem:6600, memrate:6.7, bml_lose:3},
+  '惠州柏万': {gtv:74987, gtv_y:78515, gtv_excl:0, cpc:2812, cpc_y:1241, cpc_y2:2812, cpc_wpu:1571, cpc_newsgn:0, mem:0, memrate:0, bml_lose:2}
+};
 const ns={...(ex||{}), _updated: '', _dataDate: '2026-07-02a'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
