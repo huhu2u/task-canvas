@@ -1135,10 +1135,26 @@ function updateClock(){
   document.getElementById('clockdate').textContent=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
 }
 
-// ── 周目标数据（苏皖新区域，待填充）──
+// ── 周目标数据（苏皖，2026-07-02更新）──
 const WEEK_DATA = {
-  gtv: [],
-  cpc: [],
+  gtv: [
+    {name:'青岛晖煌', mgr:'谭顺心', days:[null,null,90000,90000,110000,130000,130000], cur:95700, forecast:0.174},
+    {name:'常州金蚂蚁', mgr:'鲍贤波', days:[null,null,90000,95000,110000,130000,130000], cur:97680, forecast:0.176},
+    {name:'惠州柏万', mgr:'林启梁', days:[0,0,0,0,0,0,0], cur:0, forecast:null},
+    {name:'星企动', mgr:'刘亚东', days:[null,null,80000,80000,90000,90000,90000], cur:90100, forecast:0.17},
+    {name:'盐城一甲一', mgr:'罗胜静', days:[null,null,50000,80000,100000,100000,100000], cur:69230, forecast:0.161},
+    {name:'南京知了(扬州)', mgr:'王延春', days:[null,null,100000,100000,123000,154000,133000], cur:103860, forecast:0.165},
+    {name:'南京知了(芜湖)', mgr:'陈具礼', days:[null,null,100000,100000,110000,140000,140000], cur:84000, forecast:0.15},
+  ],
+  cpc: [
+    {name:'青岛晖煌', mgr:'谭顺心', days:[null,null,3500,3500,4500,5000,5000], cur:3032, forecast:0.141},
+    {name:'常州金蚂蚁', mgr:'鲍贤波', days:[null,null,4500,4500,5000,6000,6000], cur:4082, forecast:0.157},
+    {name:'惠州柏万', mgr:'林启梁', days:[0,0,0,0,0,0,0], cur:0, forecast:null},
+    {name:'星企动', mgr:'刘亚东', days:[null,null,3500,3500,4500,4500,4500], cur:2522, forecast:0.123},
+    {name:'盐城一甲一', mgr:'罗胜静', days:[null,null,2500,2500,3000,3500,3000], cur:1800, forecast:0.12},
+    {name:'南京知了(扬州)', mgr:'王延春', days:[null,null,3800,3800,4850,5900,4800], cur:3292, forecast:0.142},
+    {name:'南京知了(芜湖)', mgr:'陈具礼', days:[null,null,4500,4500,4500,6000,6000], cur:3825, forecast:0.15},
+  ],
   coupon: [],
   newsgn: [],
 };
