@@ -1135,28 +1135,44 @@ function updateClock(){
   document.getElementById('clockdate').textContent=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
 }
 
-// ── 周目标数据（苏皖，2026-07-02更新）──
+// ── 周目标数据（苏皖，2026-07-06 第二周更新）──
 const WEEK_DATA = {
   gtv: [
-    {name:'青岛晖煌', mgr:'谭顺心', days:[null,null,90000,90000,110000,130000,130000], cur:95700, forecast:0.174},
-    {name:'常州金蚂蚁', mgr:'鲍贤波', days:[null,null,90000,95000,110000,130000,130000], cur:97680, forecast:0.176},
-    {name:'惠州柏万', mgr:'林启梁', days:[0,0,0,0,0,0,0], cur:0, forecast:null},
-    {name:'星企动', mgr:'刘亚东', days:[null,null,80000,80000,90000,90000,90000], cur:90100, forecast:0.17},
-    {name:'盐城一甲一', mgr:'罗胜静', days:[null,null,50000,80000,100000,100000,100000], cur:69230, forecast:0.161},
-    {name:'南京知了(扬州)', mgr:'王延春', days:[null,null,100000,100000,123000,154000,133000], cur:103860, forecast:0.165},
-    {name:'南京知了(芜湖)', mgr:'陈具礼', days:[null,null,100000,100000,110000,140000,140000], cur:84000, forecast:0.15},
+    {name:'青岛晖煌', mgr:'谭顺心', days:[90000,90000,90000,100000,110000,140000,150000], cur:null, forecast:0.436},
+    {name:'常州金蚂蚁', mgr:'鲍贤波', days:[90000,90000,90000,100000,110000,140000,140000], cur:null, forecast:0.41},
+    {name:'惠州柏万', mgr:'林启梁', days:[90000,90000,100000,100000,100000,140000,130000], cur:null, forecast:0.396},
+    {name:'星企动', mgr:'刘亚东', days:[80000,80000,80000,80000,80000,90000,90000], cur:null, forecast:0.39},
+    {name:'盐城一甲一', mgr:'罗胜静', days:[70000,80000,80000,80000,90000,90000,90000], cur:null, forecast:0.39},
+    {name:'南京知了(扬州)', mgr:'王延春', days:[110000,110000,120000,120000,140000,170000,150000], cur:null, forecast:0.388},
+    {name:'南京知了(芜湖)', mgr:'陈具礼', days:[115000,110000,110000,110000,120000,130000,130000], cur:null, forecast:0.39},
   ],
   cpc: [
-    {name:'青岛晖煌', mgr:'谭顺心', days:[null,null,3500,3500,4500,5000,5000], cur:3032, forecast:0.141},
-    {name:'常州金蚂蚁', mgr:'鲍贤波', days:[null,null,4500,4500,5000,6000,6000], cur:4082, forecast:0.157},
-    {name:'惠州柏万', mgr:'林启梁', days:[0,0,0,0,0,0,0], cur:0, forecast:null},
-    {name:'星企动', mgr:'刘亚东', days:[null,null,3500,3500,4500,4500,4500], cur:2522, forecast:0.123},
-    {name:'盐城一甲一', mgr:'罗胜静', days:[null,null,2500,2500,3000,3500,3000], cur:1800, forecast:0.12},
-    {name:'南京知了(扬州)', mgr:'王延春', days:[null,null,3800,3800,4850,5900,4800], cur:3292, forecast:0.142},
-    {name:'南京知了(芜湖)', mgr:'陈具礼', days:[null,null,4500,4500,4500,6000,6000], cur:3825, forecast:0.15},
+    {name:'青岛晖煌', mgr:'谭顺心', days:[3000,3000,35000,3500,4000,4500,4500], cur:26000, forecast:0.267},
+    {name:'常州金蚂蚁', mgr:'鲍贤波', days:[4000,4000,4000,4000,5500,5500,5500], cur:26573, forecast:0.357},
+    {name:'惠州柏万', mgr:'林启梁', days:[3000,3000,3500,3500,5000,5500,5500], cur:26000, forecast:0.255},
+    {name:'星企动', mgr:'刘亚东', days:[3800,3800,3900,3900,3900,4300,4300], cur:53000, forecast:0.3192},
+    {name:'盐城一甲一', mgr:'罗胜静', days:[3000,3000,3000,4000,5000,5000,5000], cur:28000, forecast:0.363},
+    {name:'南京知了(扬州)', mgr:'王延春', days:[4500,4500,4500,5500,6000,7500,6500], cur:39000, forecast:0.361},
+    {name:'南京知了(芜湖)', mgr:'陈具礼', days:[4500,4500,4500,4500,6000,7000,7000], cur:38000, forecast:0.376},
   ],
-  coupon: [],
-  newsgn: [],
+  coupon: [
+    {name:'青岛晖煌', mgr:'谭顺心', days:[40000,40000,40000,40000,40000,60000,60000], cur:null, forecast:0.42},
+    {name:'常州金蚂蚁', mgr:'鲍贤波', days:[40000,40000,40000,40000,40000,60000,60000], cur:null, forecast:0.42},
+    {name:'惠州柏万', mgr:'林启梁', days:[35000,35000,35000,40000,40000,35000,35000], cur:null, forecast:0.35},
+    {name:'星企动', mgr:'刘亚东', days:[28000,28000,28000,28000,28000,30000,30000], cur:null, forecast:0.39},
+    {name:'盐城一甲一', mgr:'罗胜静', days:[31500,36000,36000,36000,40000,40000,40000], cur:null, forecast:0.45},
+    {name:'南京知了(扬州)', mgr:'王延春', days:[38000,40000,44000,46000,55000,65000,60000], cur:null, forecast:0.38},
+    {name:'南京知了(芜湖)', mgr:'陈具礼', days:[40000,40000,40000,40000,40000,60000,60000], cur:null, forecast:0.38},
+  ],
+  newsgn: [
+    {name:'青岛晖煌', mgr:'谭顺心', tgt:14, cur:7, forecast:null},
+    {name:'常州金蚂蚁', mgr:'鲍贤波', tgt:14, cur:7, forecast:null},
+    {name:'惠州柏万', mgr:'林启梁', tgt:14, cur:9, forecast:null},
+    {name:'星企动', mgr:'刘亚东', tgt:14, cur:6, forecast:null},
+    {name:'盐城一甲一', mgr:'罗胜静', tgt:14, cur:7, forecast:null},
+    {name:'南京知了(扬州)', mgr:'王延春', tgt:16, cur:10, forecast:null},
+    {name:'南京知了(芜湖)', mgr:'陈具礼', tgt:16, cur:12, forecast:null},
+  ],
 };
 
 function renderWeek(){
