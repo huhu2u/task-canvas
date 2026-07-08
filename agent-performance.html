@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苏皖代运营商绩效排名</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
+
+.hdr{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.hdr h1{font-size:20px;font-weight:800;flex:1}
+.hdr .dt{font-size:13px;opacity:.85}
+.tab-bar{display:flex;gap:0;margin-bottom:20px;position:sticky;top:60px;z-index:99;background:#f0f2f5;padding:10px 0 0}
+.tab-btn{padding:10px 30px;border:none;background:transparent;color:#666;font-size:15px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn.active{color:#1a73e8;border-bottom-color:#1a73e8}
+.tab-btn:hover{color:#1a73e8}
+
+.ct{padding:0 20px 40px;max-width:1200px;margin:0 auto}
+.sec{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:20px}
+.sec h2{font-size:17px;font-weight:700;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #e8eaf0}
+
+/* 核心业绩排名 */
+.rank-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.rank-table th{background:linear-gradient(135deg,#1a73e8,#4285f4);color:#fff;font-size:13px;padding:12px 8px;text-align:center;white-space:nowrap}
+.rank-table td{font-size:13px;padding:10px 8px;text-align:center;border-bottom:1px solid #f0f0f0}
+.rank-table tr:hover td{background:#fafbff}
+.rank-table .op-name{font-weight:700;font-size:14px;text-align:left;padding-left:12px}
+.rank-table .op-person{font-size:11px;color:#888}
+.rank-table .rank-num{font-size:20px;font-weight:800}
+.rank-table .rank-1{color:#f6c90e}
+.rank-table .rank-2{color:#b0b0b0}
+.rank-table .rank-3{color:#cd7f32}
+.rank-table .rank-4{color:#1a73e8}
+.rank-table .rank-5{color:#888}
+.rank-table .rank-6{color:#aaa}
+.rank-table .rank-7{color:#ccc}
+
+.score-bar{display:inline-block;width:100px;height:22px;background:#f0f0f0;border-radius:11px;overflow:hidden;vertical-align:middle;margin:0 6px}
+.score-bar .fill{height:100%;border-radius:11px;transition:width .5s ease}
+.score-bar .fill.g{color:#4caf50}
+.score-bar .fill.y{color:#ff9800}
+.score-bar .fill.r{color:#f44336}
+.score-val{font-weight:700;font-size:14px;display:inline-block;width:50px;text-align:left}
+
+/* 项目排名 */
+.proj-table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.proj-table th{background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;font-size:13px;padding:12px 8px;text-align:center;white-space:nowrap}
+.proj-table td{font-size:13px;padding:10px 8px;text-align:center;border-bottom:1px solid #f0f0f0}
+.proj-table .op-name{font-weight:700;font-size:14px;text-align:left;padding-left:12px}
+.proj-table .op-person{font-size:11px;color:#888}
+.proj-table .rank-num{font-size:20px;font-weight:800}
+.proj-table .rank-1{color:#f6c90e}
+.proj-table .rank-2{color:#b0b0b0}
+.proj-table .rank-3{color:#cd7f32}
+.proj-table .rank-4{color:#1a73e8}
+.proj-table .rank-5{color:#888}
+.proj-table .rank-6{color:#aaa}
+.proj-table .rank-7{color:#ccc}
+
+/* 颜色 */
+.c-green{color:#4caf50;font-weight:700}
+.c-yellow{color:#ff9800;font-weight:700}
+.c-red{color:#f44336;font-weight:700}
+.c-blue{color:#1a73e8;font-weight:700}
+
+/* 职人码双指标 */
+.zrq-dual{display:flex;gap:6px;justify-content:center}
+.zrq-dual .zrq-item{font-size:12px;padding:3px 8px;border-radius:6px;background:#e3f2fd;color:#1565c0}
+.zrq-dual .zrq-item .label{font-size:10px;color:#90a4ae}
+
+/* 健康度双指标 */
+.health-dual{display:flex;gap:6px;justify-content:center}
+.health-dual .hl-item{font-size:12px;padding:3px 8px;border-radius:6px}
+.health-dual .hl-item.elim{background:#fff3e0;color:#e65100}
+.health-dual .hl-item.risk{background:#fce4ec;color:#c62828}
+
+/* 综合得分卡片 */
+.score-card{display:flex;gap:16px;justify-content:space-around;flex-wrap:wrap;margin-bottom:20px}
+.score-card .sc{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 2px 10px rgba(0,0,0,.08);text-align:center;min-width:160px;flex:1;border-top:4px solid #e0e0e0}
+.score-card .sc.top1{border-top-color:#f6c90e}
+.score-card .sc.top2{border-top-color:#b0b0b0}
+.score-card .sc.top3{border-top-color:#cd7f32}
+.score-card .sc .sc-rank{font-size:32px;font-weight:900;margin-bottom:4px}
+.score-card .sc .sc-rank.r1{color:#f6c90e}
+.score-card .sc .sc-rank.r2{color:#b0b0b0}
+.score-card .sc .sc-rank.r3{color:#cd7f32}
+.score-card .sc .sc-rank.r4{color:#1a73e8}
+.score-card .sc .sc-rank.r5{color:#888}
+.score-card .sc .sc-rank.r6{color:#aaa}
+.score-card .sc .sc-rank.r7{color:#ccc}
+.score-card .sc .sc-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.score-card .sc .sc-person{font-size:11px;color:#888;margin-bottom:8px}
+.score-card .sc .sc-score{font-size:28px;font-weight:800;color:#1a73e8}
+.score-card .sc .sc-score-label{font-size:11px;color:#888;margin-top:2px}
+
+/* 维度得分明细 */
+.dims{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.dims .d-item{text-align:left}
+.dims .d-label{font-size:11px;color:#888}
+.dims .d-val{font-size:13px;font-weight:600}
+
+/* 隐藏 */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* 说明 */
+.legend{font-size:12px;color:#888;margin-top:14px;display:flex;gap:16px;flex-wrap:wrap}
+.legend .l-item{display:flex;align-items:center;gap:4px}
+.legend .l-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.l-dot.g{background:#4caf50}
+.l-dot.y{background:#ff9800}
+.l-dot.r{background:#f44336}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>苏皖代运营商绩效排名</h1>
+  <div class="dt">数据日期：2026-07-08 | 核心业绩：7月MTD | 项目数据：7月最新</div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('perf')">核心业绩排名</button>
+  <button class="tab-btn" onclick="showTab('proj')">项目排名</button>
+</div>
+
+<div class="ct">
+
+<!-- ============ 核心业绩排名 ============ -->
+<div id="perf-tab" class="tab-content active">
+
+  <!-- 综合得分卡片 -->
+  <div class="sec">
+    <h2>📊 核心业绩综合得分</h2>
+    <div class="score-card" id="perf-score-card"></div>
+  </div>
+
+  <!-- 排名明细表 -->
+  <div class="sec">
+    <h2>📋 核心业绩排名明细</h2>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>排名</th>
+          <th>代运营商</th>
+          <th>GTV完成率<br><span style="font-size:10px;font-weight:400">权重30%</span></th>
+          <th>CPC消耗完成率<br><span style="font-size:10px;font-weight:400">权重30%</span></th>
+          <th>MEM续约率<br><span style="font-size:10px;font-weight:400">权重10%</span></th>
+          <th>CPC新签完成率<br><span style="font-size:10px;font-weight:400">权重10%</span></th>
+          <th>业绩健康度<br><span style="font-size:10px;font-weight:400">剔除率+感知风控(20%)</span></th>
+          <th>综合得分</th>
+        </tr>
+      </thead>
+      <tbody id="perf-tbody"></tbody>
+    </table>
+    <div class="legend">
+      <div class="l-item"><span class="l-dot g"></span> 达标(≥目标)</div>
+      <div class="l-item"><span class="l-dot y"></span> 接近目标(≥80%)</div>
+      <div class="l-item"><span class="l-dot r"></span> 未达标(&lt;80%)</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ 项目排名 ============ -->
+<div id="proj-tab" class="tab-content">
+
+  <!-- 项目排名表 -->
+  <div class="sec">
+    <h2>📋 项目强排明细（完成100%排名一致）</h2>
+    <table class="proj-table">
+      <thead>
+        <tr>
+          <th>排名</th>
+          <th>代运营商</th>
+          <th>经营评分达标率</th>
+          <th>好店动销达标数</th>
+          <th>职人码<br><span style="font-size:10px;font-weight:400">店转渗透率+物料覆盖率</span></th>
+          <th>BML Lose率</th>
+          <th>旺铺通开通</th>
+          <th>真实满编率</th>
+        </tr>
+      </thead>
+      <tbody id="proj-tbody"></tbody>
+    </table>
+    <div class="legend" style="margin-top:10px">
+      <div class="l-item"><span class="l-dot g"></span> 排名1-2</div>
+      <div class="l-item"><span class="l-dot y"></span> 排名3-4</div>
+      <div class="l-item"><span class="l-dot r"></span> 排名5-7</div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+// ============ 数据 ============ 
+const OPS = ['南京知了(芜湖)','南京知了(扬州)','常州金蚂蚁','青岛晖煌','星企动','盐城一甲一','惠州柏万'];
+const PERSONS = { '南京知了(芜湖)':'陈县礼', '南京知了(扬州)':'王延春', '常州金蚂蚁':'鲍贤波', '青岛晖煌':'孔祥辉', '星企动':'刘亚东', '盐城一甲一':'罗胜静', '惠州柏万':'梁雨' };
+const DATA_DATE = '2026-07-08';
+const TIME_PROGRESS = '22.58%(7/31天)';
+
+// 核心业绩数据（完成率%）
+const PERF = {
+  "南京知了(芜湖)": {
+    gtv: 23.4,
+    cpc: 21.2,
+    mem: 24.53,
+    cpc_new: 12.5,
+    elim: 1.96,
+    risk: 0
+  },
+  "南京知了(扬州)": {
+    gtv: 20.9,
+    cpc: 15.6,
+    mem: 18.37,
+    cpc_new: 0,
+    elim: 3.19,
+    risk: 0
+  },
+  "常州金蚂蚁": {
+    gtv: 23.3,
+    cpc: 22.1,
+    mem: 13.16,
+    cpc_new: 0,
+    elim: 1.87,
+    risk: 0
+  },
+  "青岛晖煌": {
+    gtv: 26.3,
+    cpc: 15.6,
+    mem: 27.50,
+    cpc_new: 6.25,
+    elim: 1.37,
+    risk: 0
+  },
+  "星企动": {
+    gtv: 22.6,
+    cpc: 17.6,
+    mem: 40.74,
+    cpc_new: 12.5,
+    elim: 0.97,
+    risk: 0
+  },
+  "盐城一甲一": {
+    gtv: 23.1,
+    cpc: 17.5,
+    mem: 20.00,
+    cpc_new: 6.25,
+    elim: 1.59,
+    risk: 0
+  },
+  "惠州柏万": {
+    gtv: 21.3,
+    cpc: 11.8,
+    mem: 15.79,
+    cpc_new: 0,
+    elim: 1.12,
+    risk: 0
+  }
+};
+
+// 项目数据
+const PROJ = {
+  "南京知了(芜湖)": {
+    score: 0,
+    dx: {
+      val: 3,
+      target: 130,
+      rate: 2.3
+    },
+    zrq: {
+      st: 38.1,
+      mat: 27.5
+    },
+    bml: 0.65,
+    wpt: {
+      open: 171,
+      hd: 570,
+      hdOpen: 100,
+      hdRate: 17.54
+    }
+  },
+  "南京知了(扬州)": {
+    score: 0,
+    dx: {
+      val: 4,
+      target: 157,
+      rate: 2.5
+    },
+    zrq: {
+      st: 32.4,
+      mat: 28.2
+    },
+    bml: 0.43,
+    wpt: {
+      open: 132,
+      hd: 602,
+      hdOpen: 85,
+      hdRate: 14.12
+    }
+  },
+  "常州金蚂蚁": {
+    score: 0,
+    dx: {
+      val: 3,
+      target: 102,
+      rate: 2.9
+    },
+    zrq: {
+      st: 31.8,
+      mat: 40.1
+    },
+    bml: 0.91,
+    wpt: {
+      open: 105,
+      hd: 407,
+      hdOpen: 60,
+      hdRate: 14.74
+    }
+  },
+  "青岛晖煌": {
+    score: 0,
+    dx: {
+      val: 1,
+      target: 109,
+      rate: 0.9
+    },
+    zrq: {
+      st: 37.7,
+      mat: 43.1
+    },
+    bml: 0.44,
+    wpt: {
+      open: 135,
+      hd: 533,
+      hdOpen: 95,
+      hdRate: 17.82
+    }
+  },
+  "星企动": {
+    score: 0,
+    dx: {
+      val: 2,
+      target: 85,
+      rate: 2.4
+    },
+    zrq: {
+      st: 32.6,
+      mat: 37.9
+    },
+    bml: 0.65,
+    wpt: {
+      open: 65,
+      hd: 262,
+      hdOpen: 41,
+      hdRate: 15.65
+    }
+  },
+  "盐城一甲一": {
+    score: 0,
+    dx: {
+      val: 1,
+      target: 97,
+      rate: 1.0
+    },
+    zrq: {
+      st: 36.4,
+      mat: 41.9
+    },
+    bml: 0.27,
+    wpt: {
+      open: 133,
+      hd: 427,
+      hdOpen: 96,
+      hdRate: 22.48
+    }
+  },
+  "惠州柏万": {
+    score: 0,
+    dx: {
+      val: 3,
+      target: 109,
+      rate: 2.8
+    },
+    zrq: {
+      st: 39.4,
+      mat: 30.1
+    },
+    bml: 1.05,
+    wpt: {
+      open: 181,
+      hd: 667,
+      hdOpen: 117,
+      hdRate: 17.54
+    }
+  }
+};
+
+// 满编率（暂缺，显示N/A）
+const FILL_RATE = {
+  '南京知了(芜湖)': null,
+  '南京知了(扬州)': null,
+  '常州金蚂蚁': null,
+  '青岛晖煌': null,
+  '星企动': null,
+  '盐城一甲一': null,
+  '惠州柏万': null,
+};
+
+// ============ 核心业绩综合得分计算 ============
+// GTV 30% + CPC消耗 30% + MEM续约 10% + CPC新签 10% + 健康度 20%
+// 健康度 = 剔除率(10%) + 感知风控(10%)
+// 剔除率：越低越好 → 得分 = 100 - 剔除率*1000 (上限100, 下限0)
+// 感知风控：越低越好 → 同剔除率
+// 各项完成率直接作为得分（上限100）
+function calcPerfScore(op) {
+  const d = PERF[op];
+  // 剔除率得分：<2%满分, 2-5%线性, >10%0分
+  let elimScore = 100 - d.elim * 20;
+  if (elimScore < 0) elimScore = 0;
+  if (elimScore > 100) elimScore = 100;
+  // 感知风控得分：<15%满分, 15-25%线性, >30%0分
+  let riskScore = 100 - (d.risk - 15) * 10;
+  if (riskScore < 0) riskScore = 0;
+  if (riskScore > 100) riskScore = 100;
+  const healthScore = (elimScore + riskScore) / 2;
+  const total = d.gtv * 0.30 + d.cpc * 0.30 + d.mem * 0.10 + d.cpc_new * 0.10 + healthScore * 0.20;
+  return Math.round(total * 10) / 10;
+}
+
+// ============ 渲染 ============
+function render() {
+  renderPerfScoreCard();
+  renderPerfTable();
+  renderProjTable();
+}
+
+// 渲染核心业绩综合得分卡片
+function renderPerfScoreCard() {
+  const order = [...OPS].sort((a, b) => calcPerfScore(b) - calcPerfScore(a));
+  let html = '';
+  const scores = {};
+  for (const op of OPS) scores[op] = calcPerfScore(op);
+  for (let i = 0; i < order.length; i++) {
+    const op = order[i];
+    const rank = i + 1;
+    const score = scores[op];
+    const cls = rank <= 3 ? 'top' + rank : '';
+    const dimCls = rank <= 3 ? 'r' + rank : 'r' + rank;
+    html += `<div class="sc ${cls}">
+      <div class="sc-rank ${dimCls}">${rank}</div>
+      <div class="sc-name">${op}</div>
+      <div class="sc-person">${PERSONS[op]}</div>
+      <div class="sc-score">${score}</div>
+      <div class="sc-score-label">综合得分</div>
+      <div class="dims">
+        <div class="d-item"><span class="d-label">GTV</span><span class="d-val">${PERF[op].gtv}%</span></div>
+        <div class="d-item"><span class="d-label">CPC消耗</span><span class="d-val">${PERF[op].cpc}%</span></div>
+        <div class="d-item"><span class="d-label">MEM续约</span><span class="d-val">${PERF[op].mem}%</span></div>
+        <div class="d-item"><span class="d-label">CPC新签</span><span class="d-val">${PERF[op].cpc_new}%</span></div>
+        <div class="d-item"><span class="d-label">剔除率</span><span class="d-val">${PERF[op].elim}%</span></div>
+        <div class="d-item"><span class="d-label">感知风控</span><span class="d-val">${PERF[op].risk}%</span></div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('perf-score-card').innerHTML = html;
+}
+
+// 渲染核心业绩排名表
+function renderPerfTable() {
+  const order = [...OPS].sort((a, b) => calcPerfScore(b) - calcPerfScore(a));
+  let html = '';
+  for (let i = 0; i < order.length; i++) {
+    const op = order[i];
+    const d = PERF[op];
+    const score = calcPerfScore(op);
+    const rankCls = 'rank-' + (i+1);
+    // 颜色
+    const gtvColor = d.gtv >= 100 ? 'c-green' : d.gtv >= 80 ? 'c-yellow' : 'c-red';
+    const cpcColor = d.cpc >= 100 ? 'c-green' : d.cpc >= 80 ? 'c-yellow' : 'c-red';
+    const memColor = d.mem >= 100 ? 'c-green' : d.mem >= 80 ? 'c-yellow' : 'c-red';
+    const newColor = d.cpc_new >= 100 ? 'c-green' : d.cpc_new >= 80 ? 'c-yellow' : 'c-red';
+    html += `<tr>
+      <td><span class="rank-num ${rankCls}">${i+1}</span></td>
+      <td class="op-name">${op}<br><span class="op-person">${PERSONS[op]}</span></td>
+      <td class="${gtvColor}">${d.gtv}%</td>
+      <td class="${cpcColor}">${d.cpc}%</td>
+      <td class="${memColor}">${d.mem}%</td>
+      <td class="${newColor}">${d.cpc_new}%</td>
+      <td>
+        <div class="health-dual">
+          <span class="hl-item elim">剔${d.elim}%</span>
+          <span class="hl-item risk">风${d.risk}%</span>
+        </div>
+      </td>
+      <td><span class="c-blue" style="font-size:16px">${score}</span></td>
+    </tr>`;
+  }
+  document.getElementById('perf-tbody').innerHTML = html;
+}
+
+// 渲染项目排名表（强排，完成100%排名一致）
+function renderProjTable() {
+  // 每个项目单独排名1-6
+  const metrics = [
+    {key: 'score', label: '经营评分达标率', sort: 'desc', unit: '%'},
+    {key: 'dx', label: '好店动销达标数', sort: 'desc', unit: '', accessor: (d) => d.val},
+    {key: 'zrq', label: '职人码店转渗透率', sort: 'desc', unit: '%', accessor: (d) => d.st},
+    {key: 'bml', label: 'BML Lose率', sort: 'asc', unit: '%'},
+    {key: 'wpt', label: '旺铺通好店开通率', sort: 'desc', unit: '%', accessor: (d) => d.hdRate},
+    {key: 'fill', label: '真实满编率', sort: 'desc', unit: '%', accessor: (d) => d},
+  ];
+  // 计算每个指标排名
+  const ranks = {};
+  for (const m of metrics) {
+    const vals = OPS.map(op => ({op, val: m.accessor ? m.accessor(PROJ[op][m.key]) : PROJ[op][m.key]}));
+    vals.sort((a, b) => m.sort === 'desc' ? b.val - a.val : a.val - b.val);
+    ranks[m.key] = {};
+    for (let i = 0; i < vals.length; i++) {
+      ranks[m.key][vals[i].op] = i + 1;
+    }
+  }
+  // 渲染
+  let html = '';
+  for (let i = 0; i < OPS.length; i++) {
+    const op = OPS[i];
+    const d = PROJ[op];
+    const rankCls = 'rank-' + (i+1);
+    const cellColor = (r) => r <= 2 ? 'c-green' : r <= 4 ? 'c-yellow' : 'c-red';
+    html += `<tr>
+      <td><span class="rank-num ${rankCls}">${i+1}</span></td>
+      <td class="op-name">${op}<br><span class="op-person">${PERSONS[op]}</span></td>
+      <td class="${cellColor(ranks.score[op])}">${d.score}%<br><span style="font-size:10px;color:#aaa">#${ranks.score[op]}</span></td>
+      <td class="${cellColor(ranks.dx[op])}">${d.dx.val}/${d.dx.target}<br><span style="font-size:10px;color:#aaa">${d.dx.rate}% #${ranks.dx[op]}</span></td>
+      <td>
+        <div class="zrq-dual">
+          <span class="zrq-item ${cellColor(ranks.zrq[op])}">渗透${d.zrq.st}%<br><span style="font-size:10px">#${ranks.zrq[op]}</span></span>
+          <span class="zrq-item">物料${d.zrq.mat}%</span>
+        </div>
+      </td>
+      <td class="${cellColor(ranks.bml[op])}">${d.bml.toFixed(1)}%<br><span style="font-size:10px;color:#aaa">#${ranks.bml[op]}</span></td>
+      <td class="${cellColor(ranks.wpt[op])}">${d.wpt.hdOpen}/${d.wpt.hd}<br><span style="font-size:10px;color:#aaa">${d.wpt.hdRate}% #${ranks.wpt[op]}</span></td>
+      <td style="color:#aaa">N/A</td>
+    </tr>`;
+  }
+  document.getElementById('proj-tbody').innerHTML = html;
+}
+
+// ============ 标签切换 ============
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+  document.getElementById(name + '-tab').classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============ 初始化 ============
+document.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+</html>
