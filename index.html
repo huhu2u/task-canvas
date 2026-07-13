@@ -1402,8 +1402,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-07-02c';
-    const D={
+  const D={
       '南京知了(芜湖)': {gtv:180215, gtv_y:82273, gtv_excl:2.66, cpc:7238, cpc_y:3852, cpc_y2:7238, cpc_wpu:2358, cpc_newsgn:0, mem:0, memrate:8.9, bml_lose:0, zrq_shops:2056, zrq_bind:768, zrq_bindrate:37.4, zrq_bind_inc_m:1, zrq_bind_inc_d:1, zrq_dong:67, zrq_dongrate:3.3, zrq_gtv:24203, zrq_gtv_y:11818, zrq_pct:13.0, zrq_pct_y:0.8, zrq_pay_y:84124, zrq_pay:185586, zrq_aov:361, memrenew:5, memexpire:56, memrenew_day:3, memurgent:51, dongxiao:34, dongxiao_day:0, dongxiao_gtv:0, score:102, score_day:0, score_pool:608, score_begin:102, score_rate:37.5, score_add:2, score_drop:2, score_avg:54.2, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
       '南京知了(扬州)': {gtv:181543, gtv_y:98146, gtv_excl:0.94, cpc:4778, cpc_y:2574, cpc_y2:4778, cpc_wpu:2751, cpc_newsgn:0, mem:0, memrate:14.8, bml_lose:0, zrq_shops:2365, zrq_bind:749, zrq_bindrate:31.7, zrq_bind_inc_m:2, zrq_bind_inc_d:2, zrq_dong:89, zrq_dongrate:3.8, zrq_gtv:31042, zrq_gtv_y:17622, zrq_pct:16.7, zrq_pct_y:1.5, zrq_pay_y:97546, zrq_pay:185858, zrq_aov:349, memrenew:9, memexpire:61, memrenew_day:2, memurgent:52, dongxiao:56, dongxiao_day:0, dongxiao_gtv:0, score:143, score_day:3, score_pool:691, score_begin:144, score_rate:40.0, score_add:8, score_drop:5, score_avg:55.2, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
       '常州金蚂蚁': {gtv:184711, gtv_y:96301, gtv_excl:0.73, cpc:7656, cpc_y:3902, cpc_y2:7656, cpc_wpu:2060, cpc_newsgn:0, mem:0, memrate:2.6, bml_lose:0, zrq_shops:1583, zrq_bind:494, zrq_bindrate:31.2, zrq_bind_inc_m:6, zrq_bind_inc_d:6, zrq_dong:51, zrq_dongrate:3.2, zrq_gtv:70424, zrq_gtv_y:39236, zrq_pct:37.2, zrq_pct_y:4.0, zrq_pay_y:95359, zrq_pay:189396, zrq_aov:1381, memrenew:1, memexpire:39, memrenew_day:0, memurgent:38, dongxiao:48, dongxiao_day:0, dongxiao_gtv:0, score:94, score_day:3, score_pool:439, score_begin:91, score_rate:47.5, score_add:4, score_drop:1, score_avg:58.2, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
@@ -1412,10 +1411,16 @@ function renderAll(){
       '盐城一甲一': {gtv:128547, gtv_y:75210, gtv_excl:0.57, cpc:3997, cpc_y:1988, cpc_y2:3997, cpc_wpu:2073, cpc_newsgn:0, mem:0, memrate:12.1, bml_lose:0, zrq_shops:1396, zrq_bind:500, zrq_bindrate:35.8, zrq_bind_inc_m:-2, zrq_bind_inc_d:-2, zrq_dong:68, zrq_dongrate:4.9, zrq_gtv:40510, zrq_gtv_y:32698, zrq_pct:30.8, zrq_pct_y:16.9, zrq_pay_y:75191, zrq_pay:131317, zrq_aov:596, memrenew:4, memexpire:33, memrenew_day:2, memurgent:29, dongxiao:33, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:1, score_pool:362, score_begin:87, score_rate:60.7, score_add:3, score_drop:2, score_avg:59.7, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
       '惠州柏万': {gtv:155043, gtv_y:81138, gtv_excl:0.06, cpc:2299, cpc_y:1058, cpc_y2:2299, cpc_wpu:2688, cpc_newsgn:0, mem:0, memrate:2.5, bml_lose:0, zrq_shops:1602, zrq_bind:619, zrq_bindrate:38.6, zrq_bind_inc_m:1, zrq_bind_inc_d:1, zrq_dong:50, zrq_dongrate:3.1, zrq_gtv:22731, zrq_gtv_y:12329, zrq_pct:14.3, zrq_pct_y:1.0, zrq_pay_y:80718, zrq_pay:158972, zrq_aov:455, memrenew:1, memexpire:40, memrenew_day:1, memurgent:39, dongxiao:35, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:3, score_pool:471, score_begin:86, score_rate:41.5, score_add:5, score_drop:2, score_avg:57.3, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
     };
-const ns={...(ex||{}), _updated: '', _dataDate: '2026-07-13c'};
-  // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
+const CUR_VER = '2026-07-13d';
+  // 如果版本变了，强制用SEED_DATA覆盖，避免旧localStorage残留
+  const verChanged = (ex._dataDate||'') !== CUR_VER;
+  const ns = verChanged ? {_updated:'', _dataDate: CUR_VER} : {...(ex||{}), _updated:'', _dataDate: CUR_VER};
   Object.entries(D).forEach(([k,v])=>{
-    ns[k] = {...((ex||{})[k]||{}), ...v};
+    if(verChanged){
+      ns[k] = {...v}; // 版本变了，完全用新数据
+    } else {
+      ns[k] = {...((ex||{})[k]||{}), ...v}; // 同版本，合并保留用户编辑
+    }
   });
   localStorage.setItem(LS_KEY, JSON.stringify(ns));
   S = ns; // 立即同步内存态，避免首次加载表头有数据但明细空白
@@ -1439,4 +1444,3 @@ setInterval(updateStatusBar,60000);
 </script>
 </body>
 </html>
-<!-- cache-bust: 1783910236 -->
