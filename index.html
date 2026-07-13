@@ -161,18 +161,18 @@ table.dt tbody tr:last-child td{border-bottom:none}
 <!-- Tab2: 好店评分 -->
 <div id="panel-score" class="tab-panel">
   <div class="panel-topbar">
-    <div><div class="panel-title">⭐ 好店经营评分</div><div class="panel-sub">达标≥70分 · 三节点目标待填充 | 点击可编辑</div></div>
+    <div><div class="panel-title">⭐ 重点门店经营评分</div><div class="panel-sub">达标≥70分 | 点击可编辑</div></div>
     <div id="score-badge" class="timepct-badge"></div>
   </div>
   <div id="score-cards" class="sum-cards"></div>
   <div class="sec">
-    <div class="sec-hdr c-score"><span>⭐ 经营评分三节点明细</span></div>
+    <div class="sec-hdr c-score"><span>⭐ 经营评分进度明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
-      <th class="hn">代运营商</th><th class="hc">当前达标</th>
-      <th class="hd">W1(6/16)</th><th class="hd">W1缺口</th>
-      <th class="hd">W2(6/23)</th><th class="hd">W2缺口</th>
-      <th class="ht">W3(6/30)</th><th class="hg">W3缺口</th>
-      <th class="hp">达标率(vsW3)</th><th class="hd">日变化</th><th class="hd">50~69分</th>
+      <th class="hn">代运营商</th><th class="hd">门店池</th><th class="hd">期初达标</th>
+      <th class="ht">本月目标</th><th class="hc">当前达标</th>
+      <th class="hp">达标率</th><th class="hg">缺口</th>
+      <th class="hd">日新增</th><th class="hd">日掉标</th><th class="hd">日净增</th>
+      <th class="hd">平均评分</th><th class="hd">50~69分</th>
     </tr></thead><tbody id="score-tbody"></tbody></table></div>
   </div>
 </div>
@@ -648,42 +648,47 @@ function renderMem(){
 }
 
 // ════════════════════════════════════════════════════════════
-// 渲染：好店评分
+// 渲染：经营评分
 // ════════════════════════════════════════════════════════════
 function renderScore(){
   const {pct:tp,day,total}=timePct();
-  let totCur=0, totW3=0, html='';
+  let totCur=0, totTgt=0, totPool=0, totBegin=0, totAdd=0, totDrop=0, html='';
   AGENTS.forEach(a=>{
-    const cur=g(a.name,'score');
-    const w1=a.score_w1||0, w2=a.score_w2||0, w3=a.score_w3||0;
-    const g1=cur-w1, g2=cur-w2, g3=cur-w3;
-    const pct3=w3>0?cur/w3:0, cls=colorOf(pct3,tp);
-    const dayChg=g(a.name,'score_day'), near=g(a.name,'score_near');
-    totCur+=cur; totW3+=w3;
-    const gapClr=v=>v>=0?'#16a34a':'#dc2626';
-    const gapFmt=v=>v>=0?`<span style="color:#16a34a;font-weight:700">超额 +${v}</span>`:`<span style="color:#dc2626;font-weight:700">差 ${Math.abs(v)}</span>`;
+    const cur=g(a.name,'score'), tgt=gt(a.name,'score');
+    const pool=g(a.name,'score_pool')||0, begin=g(a.name,'score_begin')||0;
+    const rate=g(a.name,'score_rate')||0;
+    const gap=cur-tgt;
+    const addD=g(a.name,'score_add')||0, dropD=g(a.name,'score_drop')||0;
+    const netD=addD-dropD;
+    const avg=g(a.name,'score_avg')||0, near=g(a.name,'score_near')||0;
+    const pctV=tgt>0?cur/tgt:0, cls=colorOf(pctV,tp);
+    totCur+=cur; totTgt+=tgt; totPool+=pool; totBegin+=begin; totAdd+=addD; totDrop+=dropD;
+    const gapFmt=gap>=0?`<span style="color:#16a34a;font-weight:700">超 +${gap}</span>`:`<span style="color:#dc2626;font-weight:700">差 ${Math.abs(gap)}</span>`;
     html+=`<tr>
       <td class="tn">${a.name}</td>
+      <td style="color:#6b7280">${pool||'—'}</td>
+      <td style="color:#6b7280">${begin||'—'}</td>
+      <td style="color:#1e40af;font-weight:700">${tgt||'—'}</td>
       <td class="tc" style="color:${colorText(cls)};cursor:pointer;font-weight:700" onclick="openEdit('${a.name}','score')">${cur||'—'}</td>
-      <td style="color:#6b7280">${w1}</td>
-      <td>${gapFmt(g1)}</td>
-      <td style="color:#6b7280">${w2}</td>
-      <td>${gapFmt(g2)}</td>
-      <td style="color:#1e40af;font-weight:700">${w3}</td>
-      <td>${gapFmt(g3)}</td>
-      <td>${pctCell(pct3,cls)}</td>
-      <td style="cursor:pointer" onclick="openEdit('${a.name}','score_day')">${dayHtml(dayChg,'')}</td>
+      <td>${pctCell(pctV,cls)}</td>
+      <td>${gapFmt}</td>
+      <td style="cursor:pointer;color:#16a34a" onclick="openEdit('${a.name}','score_add')">${addD>0?'+'+addD:addD||'—'}</td>
+      <td style="cursor:pointer;color:#dc2626" onclick="openEdit('${a.name}','score_drop')">${dropD>0?'-'+dropD:'—'}</td>
+      <td style="font-weight:700">${dayHtml(netD,'')}</td>
+      <td style="color:#7c3aed;cursor:pointer" onclick="openEdit('${a.name}','score_avg')">${avg||'—'}</td>
       <td style="cursor:pointer;color:#d97706;font-weight:700" onclick="openEdit('${a.name}','score_near')">${near||'—'}</td>
     </tr>`;
   });
   document.getElementById('score-tbody').innerHTML=html;
-  const totPct=totW3>0?totCur/totW3:0, cls=colorOf(totPct,tp);
+  const totPct=totTgt>0?totCur/totTgt:0, cls=colorOf(totPct,tp);
+  const totNet=totAdd-totDrop;
   makeCards('score-cards',[
-    {name:'评分达成(vsW3)',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totW3}`},
+    {name:'评分达成',pct:fmtPct(totPct),cls,barW:Math.min(100,totPct*100).toFixed(1),sub:`${totCur} / ${totTgt}`},
     {name:'时间进度',pct:fmtPct(tp),cls:'sb',barW:(tp*100).toFixed(1),sub:`${day}/${total}天`},
+    {name:'日净增',pct:totNet>=0?'+'+totNet:totNet,cls:totNet>=0?'sg':'sr',barW:50,sub:`新增${totAdd} 掉标${totDrop}`},
   ]);
   const b=document.getElementById('score-badge');
-  if(b) b.textContent=`综合 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
+  if(b) b.textContent=`达成 ${fmtPct(totPct)} | 时间 ${fmtPct(tp)}`;
 }
 
 // ════════════════════════════════════════════════════════════
@@ -945,6 +950,12 @@ const FIELD_META = {
   memrate_day: {label:'续约率日变化(pp)'},
   score:       {label:'当前评分达标数'},
   score_day:   {label:'评分日净增'},
+  score_pool:  {label:'重点门店池'},
+  score_begin: {label:'期初达标'},
+  score_rate:  {label:'当前达标率'},
+  score_add:   {label:'日新增达标'},
+  score_drop:  {label:'日掉标'},
+  score_avg:   {label:'平均评分'},
   score_near:  {label:'50~69分门店数'},
   dongxiao:    {label:'已达标动销门店'},
   dongxiao_day:{label:'昨日净增动销'},
@@ -1393,15 +1404,15 @@ function renderAll(){
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
   const EMBED_VER = '2026-07-02c';
     const D={
-      '南京知了(芜湖)': {gtv:180215, gtv_y:82273, gtv_excl:2.66, cpc:7238, cpc_y:3852, cpc_y2:7238, cpc_wpu:2358, cpc_newsgn:0, mem:0, memrate:8.9, bml_lose:0, zrq_shops:2056, zrq_bind:768, zrq_bindrate:37.4, zrq_bind_inc_m:1, zrq_bind_inc_d:1, zrq_dong:67, zrq_dongrate:3.3, zrq_gtv:24203, zrq_gtv_y:11818, zrq_pct:13.0, zrq_pct_y:0.8, zrq_pay_y:84124, zrq_pay:185586, zrq_aov:361, memrenew:5, memexpire:56, memrenew_day:3, memurgent:51, dongxiao:34, dongxiao_day:0, dongxiao_gtv:0, score:102, score_day:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
-      '南京知了(扬州)': {gtv:181543, gtv_y:98146, gtv_excl:0.94, cpc:4778, cpc_y:2574, cpc_y2:4778, cpc_wpu:2751, cpc_newsgn:0, mem:0, memrate:14.8, bml_lose:0, zrq_shops:2365, zrq_bind:749, zrq_bindrate:31.7, zrq_bind_inc_m:2, zrq_bind_inc_d:2, zrq_dong:89, zrq_dongrate:3.8, zrq_gtv:31042, zrq_gtv_y:17622, zrq_pct:16.7, zrq_pct_y:1.5, zrq_pay_y:97546, zrq_pay:185858, zrq_aov:349, memrenew:9, memexpire:61, memrenew_day:2, memurgent:52, dongxiao:56, dongxiao_day:0, dongxiao_gtv:0, score:143, score_day:3, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
-      '常州金蚂蚁': {gtv:184711, gtv_y:96301, gtv_excl:0.73, cpc:7656, cpc_y:3902, cpc_y2:7656, cpc_wpu:2060, cpc_newsgn:0, mem:0, memrate:2.6, bml_lose:0, zrq_shops:1583, zrq_bind:494, zrq_bindrate:31.2, zrq_bind_inc_m:6, zrq_bind_inc_d:6, zrq_dong:51, zrq_dongrate:3.2, zrq_gtv:70424, zrq_gtv_y:39236, zrq_pct:37.2, zrq_pct_y:4.0, zrq_pay_y:95359, zrq_pay:189396, zrq_aov:1381, memrenew:1, memexpire:39, memrenew_day:0, memurgent:38, dongxiao:48, dongxiao_day:0, dongxiao_gtv:0, score:94, score_day:3, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
-      '青岛晖煌': {gtv:209416, gtv_y:116557, gtv_excl:1.02, cpc:5585, cpc_y:2908, cpc_y2:5585, cpc_wpu:1870, cpc_newsgn:0, mem:0, memrate:9.8, bml_lose:0, zrq_shops:1586, zrq_bind:585, zrq_bindrate:36.9, zrq_bind_inc_m:3, zrq_bind_inc_d:3, zrq_dong:73, zrq_dongrate:4.6, zrq_gtv:78049, zrq_gtv_y:45563, zrq_pct:37.3, zrq_pct_y:4.4, zrq_pay_y:110526, zrq_pay:209393, zrq_aov:1069, memrenew:4, memexpire:41, memrenew_day:1, memurgent:37, dongxiao:52, dongxiao_day:0, dongxiao_gtv:0, score:133, score_day:-4, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
-      '星企动': {gtv:152463, gtv_y:81260, gtv_excl:0.23, cpc:6647, cpc_y:3311, cpc_y2:6647, cpc_wpu:1391, cpc_newsgn:0, mem:0, memrate:20.0, bml_lose:0, zrq_shops:1365, zrq_bind:419, zrq_bindrate:30.7, zrq_bind_inc_m:4, zrq_bind_inc_d:4, zrq_dong:49, zrq_dongrate:3.6, zrq_gtv:63405, zrq_gtv_y:31603, zrq_pct:41.2, zrq_pct_y:-1.0, zrq_pay_y:78683, zrq_pay:154052, zrq_aov:1294, memrenew:6, memexpire:30, memrenew_day:1, memurgent:24, dongxiao:28, dongxiao_day:0, dongxiao_gtv:0, score:75, score_day:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
-      '盐城一甲一': {gtv:128547, gtv_y:75210, gtv_excl:0.57, cpc:3997, cpc_y:1988, cpc_y2:3997, cpc_wpu:2073, cpc_newsgn:0, mem:0, memrate:12.1, bml_lose:0, zrq_shops:1396, zrq_bind:500, zrq_bindrate:35.8, zrq_bind_inc_m:-2, zrq_bind_inc_d:-2, zrq_dong:68, zrq_dongrate:4.9, zrq_gtv:40510, zrq_gtv_y:32698, zrq_pct:30.8, zrq_pct_y:16.9, zrq_pay_y:75191, zrq_pay:131317, zrq_aov:596, memrenew:4, memexpire:33, memrenew_day:2, memurgent:29, dongxiao:33, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:1, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
-      '惠州柏万': {gtv:155043, gtv_y:81138, gtv_excl:0.06, cpc:2299, cpc_y:1058, cpc_y2:2299, cpc_wpu:2688, cpc_newsgn:0, mem:0, memrate:2.5, bml_lose:0, zrq_shops:1602, zrq_bind:619, zrq_bindrate:38.6, zrq_bind_inc_m:1, zrq_bind_inc_d:1, zrq_dong:50, zrq_dongrate:3.1, zrq_gtv:22731, zrq_gtv_y:12329, zrq_pct:14.3, zrq_pct_y:1.0, zrq_pay_y:80718, zrq_pay:158972, zrq_aov:455, memrenew:1, memexpire:40, memrenew_day:1, memurgent:39, dongxiao:35, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:3, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
+      '南京知了(芜湖)': {gtv:180215, gtv_y:82273, gtv_excl:2.66, cpc:7238, cpc_y:3852, cpc_y2:7238, cpc_wpu:2358, cpc_newsgn:0, mem:0, memrate:8.9, bml_lose:0, zrq_shops:2056, zrq_bind:768, zrq_bindrate:37.4, zrq_bind_inc_m:1, zrq_bind_inc_d:1, zrq_dong:67, zrq_dongrate:3.3, zrq_gtv:24203, zrq_gtv_y:11818, zrq_pct:13.0, zrq_pct_y:0.8, zrq_pay_y:84124, zrq_pay:185586, zrq_aov:361, memrenew:5, memexpire:56, memrenew_day:3, memurgent:51, dongxiao:34, dongxiao_day:0, dongxiao_gtv:0, score:102, score_day:0, score_pool:608, score_begin:102, score_rate:37.5, score_add:2, score_drop:2, score_avg:54.2, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
+      '南京知了(扬州)': {gtv:181543, gtv_y:98146, gtv_excl:0.94, cpc:4778, cpc_y:2574, cpc_y2:4778, cpc_wpu:2751, cpc_newsgn:0, mem:0, memrate:14.8, bml_lose:0, zrq_shops:2365, zrq_bind:749, zrq_bindrate:31.7, zrq_bind_inc_m:2, zrq_bind_inc_d:2, zrq_dong:89, zrq_dongrate:3.8, zrq_gtv:31042, zrq_gtv_y:17622, zrq_pct:16.7, zrq_pct_y:1.5, zrq_pay_y:97546, zrq_pay:185858, zrq_aov:349, memrenew:9, memexpire:61, memrenew_day:2, memurgent:52, dongxiao:56, dongxiao_day:0, dongxiao_gtv:0, score:143, score_day:3, score_pool:691, score_begin:144, score_rate:40.0, score_add:8, score_drop:5, score_avg:55.2, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
+      '常州金蚂蚁': {gtv:184711, gtv_y:96301, gtv_excl:0.73, cpc:7656, cpc_y:3902, cpc_y2:7656, cpc_wpu:2060, cpc_newsgn:0, mem:0, memrate:2.6, bml_lose:0, zrq_shops:1583, zrq_bind:494, zrq_bindrate:31.2, zrq_bind_inc_m:6, zrq_bind_inc_d:6, zrq_dong:51, zrq_dongrate:3.2, zrq_gtv:70424, zrq_gtv_y:39236, zrq_pct:37.2, zrq_pct_y:4.0, zrq_pay_y:95359, zrq_pay:189396, zrq_aov:1381, memrenew:1, memexpire:39, memrenew_day:0, memurgent:38, dongxiao:48, dongxiao_day:0, dongxiao_gtv:0, score:94, score_day:3, score_pool:439, score_begin:91, score_rate:47.5, score_add:4, score_drop:1, score_avg:58.2, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
+      '青岛晖煌': {gtv:209416, gtv_y:116557, gtv_excl:1.02, cpc:5585, cpc_y:2908, cpc_y2:5585, cpc_wpu:1870, cpc_newsgn:0, mem:0, memrate:9.8, bml_lose:0, zrq_shops:1586, zrq_bind:585, zrq_bindrate:36.9, zrq_bind_inc_m:3, zrq_bind_inc_d:3, zrq_dong:73, zrq_dongrate:4.6, zrq_gtv:78049, zrq_gtv_y:45563, zrq_pct:37.3, zrq_pct_y:4.4, zrq_pay_y:110526, zrq_pay:209393, zrq_aov:1069, memrenew:4, memexpire:41, memrenew_day:1, memurgent:37, dongxiao:52, dongxiao_day:0, dongxiao_gtv:0, score:133, score_day:-4, score_pool:455, score_begin:132, score_rate:54.2, score_add:4, score_drop:8, score_avg:61.1, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
+      '星企动': {gtv:152463, gtv_y:81260, gtv_excl:0.23, cpc:6647, cpc_y:3311, cpc_y2:6647, cpc_wpu:1391, cpc_newsgn:0, mem:0, memrate:20.0, bml_lose:0, zrq_shops:1365, zrq_bind:419, zrq_bindrate:30.7, zrq_bind_inc_m:4, zrq_bind_inc_d:4, zrq_dong:49, zrq_dongrate:3.6, zrq_gtv:63405, zrq_gtv_y:31603, zrq_pct:41.2, zrq_pct_y:-1.0, zrq_pay_y:78683, zrq_pay:154052, zrq_aov:1294, memrenew:6, memexpire:30, memrenew_day:1, memurgent:24, dongxiao:28, dongxiao_day:0, dongxiao_gtv:0, score:75, score_day:0, score_pool:300, score_begin:77, score_rate:51.2, score_add:0, score_drop:0, score_avg:59.9, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
+      '盐城一甲一': {gtv:128547, gtv_y:75210, gtv_excl:0.57, cpc:3997, cpc_y:1988, cpc_y2:3997, cpc_wpu:2073, cpc_newsgn:0, mem:0, memrate:12.1, bml_lose:0, zrq_shops:1396, zrq_bind:500, zrq_bindrate:35.8, zrq_bind_inc_m:-2, zrq_bind_inc_d:-2, zrq_dong:68, zrq_dongrate:4.9, zrq_gtv:40510, zrq_gtv_y:32698, zrq_pct:30.8, zrq_pct_y:16.9, zrq_pay_y:75191, zrq_pay:131317, zrq_aov:596, memrenew:4, memexpire:33, memrenew_day:2, memurgent:29, dongxiao:33, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:1, score_pool:362, score_begin:87, score_rate:60.7, score_add:3, score_drop:2, score_avg:59.7, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
+      '惠州柏万': {gtv:155043, gtv_y:81138, gtv_excl:0.06, cpc:2299, cpc_y:1058, cpc_y2:2299, cpc_wpu:2688, cpc_newsgn:0, mem:0, memrate:2.5, bml_lose:0, zrq_shops:1602, zrq_bind:619, zrq_bindrate:38.6, zrq_bind_inc_m:1, zrq_bind_inc_d:1, zrq_dong:50, zrq_dongrate:3.1, zrq_gtv:22731, zrq_gtv_y:12329, zrq_pct:14.3, zrq_pct_y:1.0, zrq_pay_y:80718, zrq_pay:158972, zrq_aov:455, memrenew:1, memexpire:40, memrenew_day:1, memurgent:39, dongxiao:35, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:3, score_pool:471, score_begin:86, score_rate:41.5, score_add:5, score_drop:2, score_avg:57.3, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
     };
-const ns={...(ex||{}), _updated: '', _dataDate: '2026-07-13b'};
+const ns={...(ex||{}), _updated: '', _dataDate: '2026-07-13c'};
   // 关键修复：不要因为 _dataDate 相同就跳过；每次加载都用嵌入数据补齐缺失字段，避免 localStorage 残缺导致整块看板空白
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
