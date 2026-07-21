@@ -1840,10 +1840,10 @@ function renderAll(){
       '盐城一甲一': {gtv:128547, gtv_y:75210, gtv_excl:0.57, cpc:3997, cpc_y:1988, cpc_y2:3997, cpc_wpu:2073, cpc_newsgn:0, mem:0, memrate:12.1, bml_lose:0, zrq_shops:1396, zrq_bind:500, zrq_bindrate:35.8, zrq_bind_inc_m:-2, zrq_bind_inc_d:-2, zrq_dong:68, zrq_dongrate:4.9, zrq_gtv:40510, zrq_gtv_y:32698, zrq_pct:30.8, zrq_pct_y:16.9, zrq_pay_y:75191, zrq_pay:131317, zrq_aov:596, memrenew:4, memexpire:33, memrenew_day:2, memurgent:29, dongxiao:33, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:1, score_pool:362, score_begin:87, score_rate:60.7, score_add:3, score_drop:2, score_avg:59.7, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
       '惠州柏万': {gtv:155043, gtv_y:81138, gtv_excl:0.06, cpc:2299, cpc_y:1058, cpc_y2:2299, cpc_wpu:2688, cpc_newsgn:0, mem:0, memrate:2.5, bml_lose:0, zrq_shops:1602, zrq_bind:619, zrq_bindrate:38.6, zrq_bind_inc_m:1, zrq_bind_inc_d:1, zrq_dong:50, zrq_dongrate:3.1, zrq_gtv:22731, zrq_gtv_y:12329, zrq_pct:14.3, zrq_pct_y:1.0, zrq_pay_y:80718, zrq_pay:158972, zrq_aov:455, memrenew:1, memexpire:40, memrenew_day:1, memurgent:39, dongxiao:35, dongxiao_day:0, dongxiao_gtv:0, score:88, score_day:3, score_pool:471, score_begin:86, score_rate:41.5, score_add:5, score_drop:2, score_avg:57.3, score_near:0, bml_lose_n:0, bml_lose_pct:0.0, bml_high:0, bml_mid:0, bml_low:0, bml_days:2},
     };
-const CUR_VER = '2026-07-13e';
+const CUR_VER = '2026-07-20a';
   // 如果版本变了，强制用SEED_DATA覆盖，避免旧localStorage残留
   const verChanged = (ex._dataDate||'') !== CUR_VER;
-  const ns = verChanged ? {_updated:'7/13 10:30', _dataDate: CUR_VER} : {...(ex||{}), _dataDate: CUR_VER};
+  const ns = verChanged ? {_updated:'7/20 10:30', _dataDate: CUR_VER} : {...(ex||{}), _dataDate: CUR_VER};
   Object.entries(D).forEach(([k,v])=>{
     if(verChanged){
       ns[k] = {...v}; // 版本变了，完全用新数据
