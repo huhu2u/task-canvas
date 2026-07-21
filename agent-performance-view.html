@@ -152,197 +152,113 @@ const OPS = ['惠州巨浪','惠州柏万','泉州小花猫','惠安广通','慈
 const PERSONS = {'惠州巨浪':'肖立铭','惠州柏万':'林启梁','泉州小花猫':'康子诚','惠安广通':'尤云生','慈溪哲光':'孙浩','义乌汐洋':'陈铨'};
 
 const PERF = {
-  "南京知了(芜湖)": {
-    gtv: 38.2,
-    cpc: 46.9,
-    mem: 38.46,
-    cpc_new: 11.8,
-    elim: 2.49,
+  '南京知了(芜湖)': {
+    gtv: 63.2,
+    cpc: 62.8,
+    mem: 58.0,
+    cpc_new: 0,
+    elim: 2.82,
     risk: 0
   },
-  "南京知了(扬州)": {
-    gtv: 36.9,
-    cpc: 41.9,
-    mem: 39.13,
-    cpc_new: 15.8,
-    elim: 3.59,
+  '南京知了(扬州)': {
+    gtv: 62.6,
+    cpc: 54.6,
+    mem: 51.9,
+    cpc_new: 0,
+    elim: 3.79,
     risk: 0
   },
-  "常州金蚂蚁": {
-    gtv: 37.3,
-    cpc: 52.0,
-    mem: 21.05,
-    cpc_new: 0.0,
-    elim: 2.09,
+  '常州金蚂蚁': {
+    gtv: 63.5,
+    cpc: 75.5,
+    mem: 35.1,
+    cpc_new: 0,
+    elim: 3.04,
     risk: 0
   },
-  "青岛晖煌": {
-    gtv: 43.0,
-    cpc: 37.4,
-    mem: 35.0,
-    cpc_new: 7.7,
-    elim: 1.88,
+  '青岛晖煌': {
+    gtv: 72.0,
+    cpc: 51.1,
+    mem: 47.4,
+    cpc_new: 0,
+    elim: 1.93,
     risk: 0
   },
-  "星企动": {
-    gtv: 37.5,
-    cpc: 37.4,
-    mem: 46.15,
-    cpc_new: 15.4,
-    elim: 1.61,
+  '星企动': {
+    gtv: 64.7,
+    cpc: 52.9,
+    mem: 56.5,
+    cpc_new: 0,
+    elim: 1.32,
     risk: 0
   },
-  "盐城一甲一": {
-    gtv: 34.5,
-    cpc: 45.0,
-    mem: 43.33,
-    cpc_new: 7.7,
-    elim: 13.75,
+  '盐城一甲一': {
+    gtv: 60.4,
+    cpc: 62.6,
+    mem: 57.1,
+    cpc_new: 0,
+    elim: 9.6,
     risk: 0
   },
-  "惠州柏万": {
-    gtv: 37.3,
-    cpc: 37.5,
-    mem: 28.95,
-    cpc_new: 50.0,
-    elim: 4.61,
+  '惠州柏万': {
+    gtv: 62.1,
+    cpc: 53.1,
+    mem: 40.5,
+    cpc_new: 0,
+    elim: 4.3,
     risk: 0
   }
 };
 
 const PROJ = {
-  "南京知了(芜湖)": {
-    score: 37.5,
-    dx: {
-      val: 34,
-      target: 130,
-      rate: 26.2
-    },
-    zrq: {
-      st: 28.2,
-      mat: 27.5
-    },
-    bml: 0.65,
-    wpt: {
-      open: 218,
-      hd: 601,
-      hdOpen: 126,
-      hdRate: 21.0
-    }
+  '南京知了(芜湖)': {
+    score: 21.5,
+    dx: { val: 67, target: 8, rate: 26 },
+    zrq: { st: 30.4, mat: 67.2 },
+    bml: 0.0,
+    wpt: { open: 269, hd: 637, hdOpen: 154, hdRate: 24.2 }
   },
-  "南京知了(扬州)": {
-    score: 40.0,
-    dx: {
-      val: 56,
-      target: 157,
-      rate: 35.7
-    },
-    zrq: {
-      st: 31.1,
-      mat: 28.2
-    },
-    bml: 0.43,
-    wpt: {
-      open: 172,
-      hd: 684,
-      hdOpen: 112,
-      hdRate: 16.4
-    }
+  '南京知了(扬州)': {
+    score: 25.8,
+    dx: { val: 88, target: 9, rate: 55 },
+    zrq: { st: 32.3, mat: 64.0 },
+    bml: 0.0,
+    wpt: { open: 211, hd: 715, hdOpen: 139, hdRate: 19.4 }
   },
-  "常州金蚂蚁": {
-    score: 47.5,
-    dx: {
-      val: 48,
-      target: 102,
-      rate: 47.1
-    },
-    zrq: {
-      st: 38.4,
-      mat: 40.1
-    },
-    bml: 0.91,
-    wpt: {
-      open: 132,
-      hd: 430,
-      hdOpen: 74,
-      hdRate: 17.2
-    }
+  '常州金蚂蚁': {
+    score: 29.3,
+    dx: { val: 64, target: 6, rate: 26 },
+    zrq: { st: 40.3, mat: 65.5 },
+    bml: 0.0,
+    wpt: { open: 174, hd: 454, hdOpen: 100, hdRate: 22.0 }
   },
-  "青岛晖煌": {
-    score: 54.2,
-    dx: {
-      val: 52,
-      target: 109,
-      rate: 47.7
-    },
-    zrq: {
-      st: 42.2,
-      mat: 43.1
-    },
-    bml: 0.44,
-    wpt: {
-      open: 164,
-      hd: 546,
-      hdOpen: 112,
-      hdRate: 20.5
-    }
+  '青岛晖煌': {
+    score: 35.2,
+    dx: { val: 70, target: 6, rate: 25 },
+    zrq: { st: 41.9, mat: 71.1 },
+    bml: 0.0,
+    wpt: { open: 217, hd: 571, hdOpen: 139, hdRate: 24.3 }
   },
-  "星企动": {
-    score: 51.2,
-    dx: {
-      val: 28,
-      target: 85,
-      rate: 32.9
-    },
-    zrq: {
-      st: 37.7,
-      mat: 37.9
-    },
-    bml: 0.65,
-    wpt: {
-      open: 81,
-      hd: 302,
-      hdOpen: 47,
-      hdRate: 15.6
-    }
+  '星企动': {
+    score: 37.7,
+    dx: { val: 47, target: 6, rate: 14 },
+    zrq: { st: 40.0, mat: 71.6 },
+    bml: 0.0,
+    wpt: { open: 96, hd: 331, hdOpen: 56, hdRate: 16.9 }
   },
-  "盐城一甲一": {
-    score: 60.7,
-    dx: {
-      val: 33,
-      target: 97,
-      rate: 34.0
-    },
-    zrq: {
-      st: 32.9,
-      mat: 41.9
-    },
-    bml: 0.27,
-    wpt: {
-      open: 168,
-      hd: 460,
-      hdOpen: 121,
-      hdRate: 26.3
-    }
+  '盐城一甲一': {
+    score: 32.7,
+    dx: { val: 54, target: 6, rate: 27 },
+    zrq: { st: 35.6, mat: 73.7 },
+    bml: 0.0,
+    wpt: { open: 196, hd: 488, hdOpen: 138, hdRate: 28.3 }
   },
-  "惠州柏万": {
-    score: 41.5,
-    dx: {
-      val: 35,
-      target: 109,
-      rate: 32.1
-    },
-    zrq: {
-      st: 32.4,
-      mat: 30.1
-    },
-    bml: 1.05,
-    wpt: {
-      open: 211,
-      hd: 690,
-      hdOpen: 134,
-      hdRate: 19.4
-    }
+  '惠州柏万': {
+    score: 28.5,
+    dx: { val: 60, target: 7, rate: 36 },
+    zrq: { st: 32.1, mat: 69.0 },
+    bml: 0.0,
+    wpt: { open: 240, hd: 709, hdOpen: 151, hdRate: 21.3 }
   }
 };
 
