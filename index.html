@@ -428,7 +428,7 @@ const AGENTS = [
   {name:'惠州柏万', mgr:'梁雨', gtv_tgt:3040644, cpc_tgt:168832, cpc_newsgn_tgt:14, score_tgt:103, dongxiao_tgt:109, visit_tgt:20, memrate_tgt:65},
 ];
 
-const LS_KEY = 'pjdashboard_suwan_v1';
+const LS_KEY = 'pjdashboard_suwan_v2';
 let S = {};
 
 const DEFAULT_S = {
@@ -860,7 +860,7 @@ const DEFAULT_S = {
     "bml_days": 0
   }
 };
-function ls(){ try{ S=JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(!S){ S=JSON.parse(JSON.stringify(DEFAULT_S)); ss(); } }catch(e){ S=JSON.parse(JSON.stringify(DEFAULT_S)); } }
+function ls(){ S={...DEFAULT_S}; try{ const saved=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); S={...DEFAULT_S, ...saved}; }catch(e){ S={...DEFAULT_S}; } }
 function ss(){ localStorage.setItem(LS_KEY, JSON.stringify(S)); }
 
 // 取值/设值
