@@ -117,7 +117,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 
 <div class="hdr">
   <h1>苏皖代运营商绩效排名</h1>
-  <div class="dt">数据日期：2026-07-21 | 核心业绩：7月MTD | 项目数据：7月最新</div>
+  <div class="dt">数据日期：2026-07-24 | 核心业绩：7月MTD | 项目数据：7月最新</div>
 </div>
 
 <div class="tab-bar">
@@ -199,119 +199,203 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 // ============ 数据 ============ 
 const OPS = ['南京知了(芜湖)','南京知了(扬州)','常州金蚂蚁','青岛晖煌','星企动','盐城一甲一','惠州柏万'];
 const PERSONS = { '南京知了(芜湖)':'陈具礼', '南京知了(扬州)':'王延春', '常州金蚂蚁':'鲍贤波', '青岛晖煌':'孔祥辉', '星企动':'刘亚东', '盐城一甲一':'罗胜静', '惠州柏万':'梁雨' };
-const DATA_DATE = '2026-07-20';
-const TIME_PROGRESS = '64.52%(20/31天)';
+const DATA_DATE = '2026-07-24';
+const TIME_PROGRESS = '74.19%(23/31天)';
 
 // 核心业绩数据（完成率%）
 const PERF = {
-  '南京知了(芜湖)': {
-    gtv: 63.2,
-    cpc: 62.8,
-    mem: 58.0,
-    cpc_new: 0,
-    elim: 2.82,
+  "南京知了(芜湖)": {
+    gtv: 70.88,
+    cpc: 70.96,
+    mem: 65.31,
+    cpc_new: 58.82,
+    elim: 3.82,
     risk: 0
   },
-  '南京知了(扬州)': {
-    gtv: 62.6,
-    cpc: 54.6,
-    mem: 51.9,
-    cpc_new: 0,
-    elim: 3.79,
+  "南京知了(扬州)": {
+    gtv: 71.78,
+    cpc: 60.96,
+    mem: 57.10,
+    cpc_new: 36.84,
+    elim: 3.53,
     risk: 0
   },
-  '常州金蚂蚁': {
-    gtv: 63.5,
-    cpc: 75.5,
-    mem: 35.1,
-    cpc_new: 0,
-    elim: 3.04,
+  "常州金蚂蚁": {
+    gtv: 72.72,
+    cpc: 85.64,
+    mem: 35.90,
+    cpc_new: 38.46,
+    elim: 3.60,
     risk: 0
   },
-  '青岛晖煌': {
-    gtv: 72.0,
-    cpc: 51.1,
-    mem: 47.4,
-    cpc_new: 0,
-    elim: 1.93,
+  "青岛晖煌": {
+    gtv: 81.22,
+    cpc: 58.62,
+    mem: 57.89,
+    cpc_new: 38.46,
+    elim: 2.02,
     risk: 0
   },
-  '星企动': {
-    gtv: 64.7,
-    cpc: 52.9,
-    mem: 56.5,
-    cpc_new: 0,
-    elim: 1.32,
+  "星企动": {
+    gtv: 73.98,
+    cpc: 63.01,
+    mem: 65.38,
+    cpc_new: 61.54,
+    elim: 2.06,
     risk: 0
   },
-  '盐城一甲一': {
-    gtv: 60.4,
-    cpc: 62.6,
-    mem: 57.1,
-    cpc_new: 0,
-    elim: 9.6,
+  "盐城一甲一": {
+    gtv: 69.13,
+    cpc: 73.28,
+    mem: 62.07,
+    cpc_new: 46.15,
+    elim: 8.87,
     risk: 0
   },
-  '惠州柏万': {
-    gtv: 62.1,
-    cpc: 53.1,
-    mem: 40.5,
-    cpc_new: 0,
-    elim: 4.3,
+  "惠州柏万": {
+    gtv: 71.39,
+    cpc: 61.63,
+    mem: 44.44,
+    cpc_new: 150.00,
+    elim: 5.44,
     risk: 0
   }
 };
 
 // 项目数据
 const PROJ = {
-  '南京知了(芜湖)': {
-    score: 21.5,
-    dx: { val: 67, target: 130, rate: 51.5 },
-    zrq: { st: 30.4, mat: 67.2 },
-    bml: 0.0,
-    wpt: { open: 269, hd: 637, hdOpen: 154, hdRate: 24.2 }
+  "南京知了(芜湖)": {
+    score: 141.27,
+    dx: {
+      val: 91,
+      target: 130,
+      rate: 70.00
+    },
+    zrq: {
+      st: 40.65,
+      mat: 775436.0
+    },
+    bml: 0,
+    wpt: {
+      open: 148,
+      hd: 597,
+      hdOpen: 148,
+      hdRate: 24.79
+    }
   },
-  '南京知了(扬州)': {
-    score: 25.8,
-    dx: { val: 88, target: 157, rate: 56.1 },
-    zrq: { st: 32.3, mat: 64.0 },
-    bml: 0.0,
-    wpt: { open: 211, hd: 715, hdOpen: 139, hdRate: 19.4 }
+  "南京知了(扬州)": {
+    score: 137.04,
+    dx: {
+      val: 112,
+      target: 157,
+      rate: 71.34
+    },
+    zrq: {
+      st: 34.59,
+      mat: 907979.0
+    },
+    bml: 0,
+    wpt: {
+      open: 128,
+      hd: 685,
+      hdOpen: 128,
+      hdRate: 18.69
+    }
   },
-  '常州金蚂蚁': {
-    score: 29.3,
-    dx: { val: 64, target: 102, rate: 62.7 },
-    zrq: { st: 40.3, mat: 65.5 },
-    bml: 0.0,
-    wpt: { open: 174, hd: 454, hdOpen: 100, hdRate: 22.0 }
+  "常州金蚂蚁": {
+    score: 158.25,
+    dx: {
+      val: 88,
+      target: 102,
+      rate: 86.27
+    },
+    zrq: {
+      st: 34.30,
+      mat: 938408.0
+    },
+    bml: 0,
+    wpt: {
+      open: 102,
+      hd: 438,
+      hdOpen: 102,
+      hdRate: 23.29
+    }
   },
-  '青岛晖煌': {
-    score: 35.2,
-    dx: { val: 70, target: 109, rate: 64.2 },
-    zrq: { st: 41.9, mat: 71.1 },
-    bml: 0.0,
-    wpt: { open: 217, hd: 571, hdOpen: 139, hdRate: 24.3 }
+  "青岛晖煌": {
+    score: 134.06,
+    dx: {
+      val: 83,
+      target: 109,
+      rate: 76.15
+    },
+    zrq: {
+      st: 40.42,
+      mat: 1082071.0
+    },
+    bml: 0,
+    wpt: {
+      open: 133,
+      hd: 453,
+      hdOpen: 133,
+      hdRate: 29.36
+    }
   },
-  '星企动': {
-    score: 37.7,
-    dx: { val: 47, target: 85, rate: 55.3 },
-    zrq: { st: 40.0, mat: 71.6 },
-    bml: 0.0,
-    wpt: { open: 96, hd: 331, hdOpen: 56, hdRate: 16.9 }
+  "星企动": {
+    score: 131.33,
+    dx: {
+      val: 60,
+      target: 85,
+      rate: 70.59
+    },
+    zrq: {
+      st: 33.64,
+      mat: 739135.0
+    },
+    bml: 0,
+    wpt: {
+      open: 53,
+      hd: 296,
+      hdOpen: 53,
+      hdRate: 17.91
+    }
   },
-  '盐城一甲一': {
-    score: 32.7,
-    dx: { val: 54, target: 97, rate: 55.7 },
-    zrq: { st: 35.6, mat: 73.7 },
-    bml: 0.0,
-    wpt: { open: 196, hd: 488, hdOpen: 138, hdRate: 28.3 }
+  "盐城一甲一": {
+    score: 167.68,
+    dx: {
+      val: 63,
+      target: 97,
+      rate: 64.95
+    },
+    zrq: {
+      st: 37.69,
+      mat: 623652.0
+    },
+    bml: 0,
+    wpt: {
+      open: 112,
+      hd: 360,
+      hdOpen: 112,
+      hdRate: 31.11
+    }
   },
-  '惠州柏万': {
-    score: 28.5,
-    dx: { val: 60, target: 109, rate: 55.0 },
-    zrq: { st: 32.1, mat: 69.0 },
-    bml: 0.0,
-    wpt: { open: 240, hd: 709, hdOpen: 151, hdRate: 21.3 }
+  "惠州柏万": {
+    score: 138.83,
+    dx: {
+      val: 84,
+      target: 109,
+      rate: 77.06
+    },
+    zrq: {
+      st: 41.36,
+      mat: 745023.0
+    },
+    bml: 0,
+    wpt: {
+      open: 126,
+      hd: 465,
+      hdOpen: 126,
+      hdRate: 27.10
+    }
   }
 };
 
