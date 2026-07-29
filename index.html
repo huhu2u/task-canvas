@@ -878,8 +878,10 @@ function sv(name,f,v,t){
 }
 
 // ── 时间进度 ─────────────────────────────────────────────────
+const DATA_DATE = '2026-07-29';
 function timePct(){
-  const now=new Date(), y=now.getFullYear(), m=now.getMonth(), d=now.getDate();
+  const dd=new Date(DATA_DATE+'T00:00:00+08:00');
+  const y=dd.getFullYear(), m=dd.getMonth(), d=dd.getDate();
   const total=new Date(y,m+1,0).getDate();
   return {pct:(d-1)/total, day:d, total};
 }
