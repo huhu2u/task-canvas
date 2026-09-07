@@ -431,7 +431,7 @@ const DEFAULT_S = {
 "绍兴星企动": {
 "gtv": 348199.87,
 "gtv_tgt": 3984026,
-"gtv_yesterday": 140525.27,
+"gtv_y": 140525.27,
 "gtv_excl": 4.07,
 "cpc": 15218.45,
 "cpc_tgt": 0,
@@ -485,7 +485,7 @@ const DEFAULT_S = {
 "泉州小花猫": {
 "gtv": 137150.78,
 "gtv_tgt": 1803275,
-"gtv_yesterday": 44473.85,
+"gtv_y": 44473.85,
 "gtv_excl": -3.73,
 "cpc": 8195.01,
 "cpc_tgt": 0,
@@ -539,7 +539,7 @@ const DEFAULT_S = {
 "慈溪哲光": {
 "gtv": 205413.38,
 "gtv_tgt": 2289852,
-"gtv_yesterday": 69972.62,
+"gtv_y": 69972.62,
 "gtv_excl": 2.66,
 "cpc": 10336.81,
 "cpc_tgt": 0,
@@ -593,7 +593,7 @@ const DEFAULT_S = {
 "义乌汐洋": {
 "gtv": 192776.02,
 "gtv_tgt": 2366659,
-"gtv_yesterday": 85497.36,
+"gtv_y": 85497.36,
 "gtv_excl": 11.73,
 "cpc": 14058.59,
 "cpc_tgt": 0,
@@ -647,7 +647,7 @@ const DEFAULT_S = {
 "仙居烁果": {
 "gtv": 266614.9,
 "gtv_tgt": 2687168,
-"gtv_yesterday": 109828.5,
+"gtv_y": 109828.5,
 "gtv_excl": 0.24,
 "cpc": 6042.02,
 "cpc_tgt": 0,
@@ -701,7 +701,7 @@ const DEFAULT_S = {
 "惠安广通": {
 "gtv": 144398.85,
 "gtv_tgt": 1773106,
-"gtv_yesterday": 48790.36,
+"gtv_y": 48790.36,
 "gtv_excl": 5.72,
 "cpc": 6107.69,
 "cpc_tgt": 0,
@@ -755,7 +755,7 @@ const DEFAULT_S = {
 "芜湖知了": {
 "gtv": 260573.74,
 "gtv_tgt": 2758985,
-"gtv_yesterday": 97807.24,
+"gtv_y": 97807.24,
 "gtv_excl": 3.27,
 "cpc": 9439.87,
 "cpc_tgt": 0,
@@ -1771,12 +1771,12 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-09-07a';
+  const EMBED_VER = '2026-09-07b';
   const D = {
 "绍兴星企动": {
 "gtv": 868943.98,
 "gtv_tgt": 3984026,
-"gtv_yesterday": 186963.45,
+"gtv_y": 186963.45,
 "gtv_excl": 4.85,
 "cpc": 32871.08,
 "cpc_tgt": 0,
@@ -1830,7 +1830,7 @@ function renderAll(){
 "泉州小花猫": {
 "gtv": 341106.68,
 "gtv_tgt": 1803275,
-"gtv_yesterday": 72002.42,
+"gtv_y": 72002.42,
 "gtv_excl": 0.82,
 "cpc": 18850.87,
 "cpc_tgt": 0,
@@ -1884,7 +1884,7 @@ function renderAll(){
 "慈溪哲光": {
 "gtv": 444819.18,
 "gtv_tgt": 2289852,
-"gtv_yesterday": 86592.08,
+"gtv_y": 86592.08,
 "gtv_excl": 2.75,
 "cpc": 23415.92,
 "cpc_tgt": 0,
@@ -1938,7 +1938,7 @@ function renderAll(){
 "义乌汐洋": {
 "gtv": 472056.31,
 "gtv_tgt": 2366659,
-"gtv_yesterday": 93208.54,
+"gtv_y": 93208.54,
 "gtv_excl": 6.09,
 "cpc": 31057.87,
 "cpc_tgt": 0,
@@ -1992,7 +1992,7 @@ function renderAll(){
 "仙居烁果": {
 "gtv": 576375.12,
 "gtv_tgt": 2687168,
-"gtv_yesterday": 92228.77,
+"gtv_y": 92228.77,
 "gtv_excl": 0.33,
 "cpc": 12817.0,
 "cpc_tgt": 0,
@@ -2046,7 +2046,7 @@ function renderAll(){
 "惠安广通": {
 "gtv": 326753.99,
 "gtv_tgt": 1773106,
-"gtv_yesterday": 60319.23,
+"gtv_y": 60319.23,
 "gtv_excl": 4.04,
 "cpc": 13617.58,
 "cpc_tgt": 0,
@@ -2100,7 +2100,7 @@ function renderAll(){
 "芜湖知了": {
 "gtv": 595562.57,
 "gtv_tgt": 2758985,
-"gtv_yesterday": 124906.97,
+"gtv_y": 124906.97,
 "gtv_excl": 4.48,
 "cpc": 20144.83,
 "cpc_tgt": 0,
@@ -2152,7 +2152,7 @@ function renderAll(){
 "visit_haodian": 0,
 },
 };
-const ns={...(ex||{}), _updated: '09:45', _dataDate: '2026-09-07a'};
+const ns={...(ex||{}), _updated: '09:45', _dataDate: '2026-09-07b'};
   // 皖闽浙版首刷 2026-09-04：数据日期9/3
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
