@@ -122,6 +122,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
   <button class="tabn"        id="tab-week"     onclick="switchTab('week')">🎯 周目标追踪</button>
   <button class="tabn"        id="tab-bml"      onclick="switchTab('bml')">🏷 BML</button>
   <button class="tabn"        id="tab-wpt"      onclick="switchTab('wpt')">🏪 旺铺通</button>
+  <button class="tabn"        id="tab-sa"       onclick="switchTab('sa')">🏅 商分层</button>
 </div>
 
 <!-- Tab1: 核心业绩 -->
@@ -396,6 +397,32 @@ table.dt tbody tr:last-child td{border-bottom:none}
       <th style="background:#dcfce7;color:#166534">好店开通率</th>
       <th style="background:#fef9c3;color:#854d0e">旺铺通消耗额</th>
     </tr></thead><tbody id="wpt-tbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- Tab15: 商分层（7-8月） -->
+<div id="panel-sa" class="tab-panel">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div>
+      <div style="font-size:18px;font-weight:700;color:#7c3aed">🏅 商分层 &amp; CPC阶段（7-8月）</div>
+      <div style="font-size:11px;color:#6b7280;margin-top:2px">子组织口径 · 分层变化着色 · GTV目标达成率</div>
+    </div>
+    <div style="font-size:11px;color:#9ca3af">来源：商分层&诊断结果明细（2607）+ 8月代运营商分层 2026-09-20</div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr" style="background:#ede9fe;border-left:4px solid #7c3aed"><span>🏅 7月 vs 8月 商分层明细（17个子组织）</span></div>
+    <div class="tw"><table class="dt"><thead><tr>
+      <th class="hn">代运营商</th>
+      <th class="hc">城市</th>
+      <th>7月分层</th>
+      <th style="background:#ede9fe;color:#5b21b6">8月分层</th>
+      <th style="background:#fef9c3;color:#854d0e">分层变化</th>
+      <th>7月GTV达成率</th>
+      <th style="background:#ede9fe;color:#5b21b6">8月GTV达成率</th>
+      <th>8月在线门店</th>
+      <th style="background:#ede9fe;color:#5b21b6">8月好店</th>
+      <th>CPC阶段(8月)</th>
+    </tr></thead><tbody id="sa-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -1716,6 +1743,51 @@ function renderBml(){
 // ════════════════════════════════════════════════════════════
 // 渲染：旺铺通
 // ════════════════════════════════════════════════════════════
+const SA_DATA=[{"org":"星企动-绍兴乐生活区县聚合组","city":"柯桥区","g":"绍兴星企动","t7":"S","t8":"A","c7":"培育期","c8":"培育期","g7":3563196,"gd7":3623803.3649,"g8":3623218,"gd8":3400531.7446,"h8":506,"s8":1513},{"org":"星企动-绍兴诸暨组","city":"诸暨","g":"绍兴星企动","t7":"B","t8":"S","c7":"竞价期","c8":"竞价期","g7":2614712,"gd7":2687326.1772,"g8":2935090,"gd8":2959827.0935,"h8":495,"s8":1936},{"org":"星企动-南通乐生活组","city":"南通","g":"绍兴星企动","t7":"A","t8":"S","c7":"竞价期","c8":"竞价期","g7":2433218,"gd7":2495548.6235999996,"g8":2347866,"gd8":2421836.7822,"h8":336,"s8":1295},{"org":"星企动-温州瑞安组","city":"瑞安","g":"绍兴星企动","t7":"S","t8":"A","c7":"培育期","c8":"培育期","g7":1954005,"gd7":2041539.9788,"g8":2290380,"gd8":2148972.5467,"h8":477,"s8":2305},{"org":"星企动-绍兴乐生活组","city":"绍兴","g":"绍兴星企动","t7":"B","t8":"S","c7":"竞价期","c8":"竞价期","g7":2357709,"gd7":1575028.276,"g8":1952339,"gd8":2212951.5355,"h8":405,"s8":1063},{"org":"星企动-台州临海组","city":"临海市","g":"绍兴星企动","t7":"S","t8":"S","c7":"培育期","c8":"培育期","g7":1532996,"gd7":1621090.1428,"g8":1689144,"gd8":1655131.8565,"h8":328,"s8":1321},{"org":"泉州市小花猫-泉州乐生活组","city":"泉州","g":"泉州小花猫","t7":"A","t8":"B","c7":"竞价期","c8":"竞价期","g7":2937162,"gd7":2944141.9173,"g8":2915131,"gd8":2387457.5713,"h8":552,"s8":1567},{"org":"慈溪哲光-东阳横店组","city":"东阳","g":"慈溪哲光","t7":"B","t8":"B","c7":"培育期","c8":"培育期","g7":3164842,"gd7":3082630.0305,"g8":3429306,"gd8":2732131.3613,"h8":613,"s8":2089},{"org":"慈溪哲光-金华义乌乐生活组","city":"义乌","g":"慈溪哲光","t7":"B","t8":"B","c7":"培育期","c8":"培育期","g7":3434923,"gd7":3118551.1781,"g8":3084288,"gd8":2878935.2665,"h8":552,"s8":1573},{"org":"慈溪哲光-金华组","city":"金华","g":"慈溪哲光","t7":"S","t8":"A","c7":"竞价期","c8":"竞价期","g7":2288546,"gd7":2304938.743,"g8":2453759,"gd8":2245109.0863,"h8":477,"s8":1715},{"org":"义乌市汐洋-金华义乌乐生活组","city":"义乌","g":"义乌汐洋","t7":"B","t8":"S","c7":"培育期","c8":"培育期","g7":3596428,"gd7":3288775.7142000003,"g8":3280659,"gd8":3293803.4492,"h8":527,"s8":1498},{"org":"仙居烁果-台州乐生活组","city":"台州","g":"仙居烁果","t7":"S","t8":"B","c7":"培育期","c8":"培育期","g7":2820051,"gd7":3020226.8529999997,"g8":2813627,"gd8":2555473.2405,"h8":589,"s8":1751},{"org":"仙居烁果-台州温岭乐生活组","city":"温岭市","g":"仙居烁果","t7":"B","t8":"B","c7":"蓄水期","c8":"蓄水期","g7":1093955,"gd7":934125.3672,"g8":957728,"gd8":836909.1,"h8":229,"s8":725},{"org":"惠安广通-晋江乐生活组","city":"晋江","g":"惠安广通","t7":"A","t8":"B","c7":"培育期","c8":"培育期","g7":2722815,"gd7":2745967.5149,"g8":2855260,"gd8":2322361.4411,"h8":413,"s8":1442},{"org":"南京知了-芜湖乐生活组","city":"芜湖","g":"芜湖知了","t7":"A","t8":"A","c7":"竞价期","c8":"竞价期","g7":3547543,"gd7":3565461.4151999997,"g8":3542209,"gd8":3215078.243,"h8":692,"s8":1959},{"org":"南京知了-扬州乐生活组","city":"扬州","g":"芜湖知了","t7":"A","t8":"S","c7":"竞价期","c8":"竞价期","g7":3380941,"gd7":3337540.709500001,"g8":3289403,"gd8":3342088.8884,"h8":609,"s8":1798},{"org":"南京知了-扬州江都区乐生活组","city":"江都区","g":"芜湖知了","t7":"B","t8":"B","c7":"蓄水期","c8":"蓄水期","g7":445417,"gd7":507038.2084,"g8":518318,"gd8":461222.0808,"h8":115,"s8":403}];
+function tierColor(t){ return t==='S'?'#7c3aed':(t==='A'?'#2563eb':(t==='B'?'#6b7280':'#9ca3af')); }
+function renderSa(){
+  const RANK={'S':3,'A':2,'B':1,'C':0};
+  let html='', lastG='';
+  let sum={g7:0,gd7:0,g8:0,gd8:0,shops:0,haodian:0};
+  SA_DATA.forEach(r=>{
+    const r7=r.g7>0?r.gd7/r.g7:null, r8=r.g8>0?r.gd8/r.g8:null;
+    sum.g7+=r.g7||0; sum.gd7+=r.gd7||0; sum.g8+=r.g8||0; sum.gd8+=r.gd8||0;
+    sum.shops+=r.s8||0; sum.haodian+=r.h8||0;
+    let chg='', chgCls='';
+    if(r.t7!==r.t8){
+      const up=(RANK[r.t8]||0)>(RANK[r.t7]||0);
+      chg=(up?'▲ ':'▼ ')+r.t7+'→'+r.t8;
+      chgCls=up?'color:#16a34a;font-weight:700':'color:#dc2626;font-weight:700';
+    }
+    const grpRow=r.g!==lastG?'<td class="tn" style="font-weight:700;'+(r.g!==lastG?'border-top:2px solid #e5e7eb;':'')+'">'+r.g+'</td>':'<td class="tn" style="color:#d1d5db">'+r.g+'</td>';
+    const rate=(v)=>v===null?'—':fmtPct(v);
+    const rateCls=(v)=>v===null?'color:#9ca3af':(v>=1?'color:#16a34a;font-weight:700':(v>=0.85?'color:#d97706;font-weight:700':'color:#dc2626;font-weight:700'));
+    html+='<tr>'+grpRow+
+      '<td class="tn" style="font-size:12px">'+r.city+'</td>'+
+      '<td style="text-align:center;color:'+tierColor(r.t7)+';font-weight:700">'+(r.t7||'—')+'</td>'+
+      '<td style="text-align:center;background:#ede9fe;color:'+tierColor(r.t8)+';font-weight:800;font-size:14px">'+(r.t8||'—')+'</td>'+
+      '<td style="text-align:center;background:#fef9c3;'+chgCls+'">'+(chg||'—')+'</td>'+
+      '<td style="text-align:center;'+rateCls(r7)+'">'+rate(r7)+'</td>'+
+      '<td style="text-align:center;background:#ede9fe;'+rateCls(r8)+'">'+rate(r8)+'</td>'+
+      '<td style="text-align:center;color:#6b7280">'+fmtNum(r.s8)+'</td>'+
+      '<td style="text-align:center;background:#ede9fe;color:#059669;font-weight:700">'+fmtNum(r.h8)+'</td>'+
+      '<td style="text-align:center;font-size:12px;color:#6b7280">'+(r.c8||'—')+'</td>'+
+      '</tr>';
+    lastG=r.g;
+  });
+  // 合计行
+  const R7=sum.g7>0?sum.gd7/sum.g7:null, R8=sum.g8>0?sum.gd8/sum.g8:null;
+  html+='<tr style="border-top:2px solid #9ca3af;background:#f9fafb;font-weight:800">'+
+    '<td class="tn">合计</td><td class="tn">17子组织</td>'+
+    '<td></td><td></td><td></td>'+
+    '<td style="text-align:center;'+(R7>=1?'color:#16a34a':'color:#dc2626')+'">'+(R7===null?'—':fmtPct(R7))+'</td>'+
+    '<td style="text-align:center;'+(R8>=1?'color:#16a34a':'color:#d97706')+'">'+(R8===null?'—':fmtPct(R8))+'</td>'+
+    '<td style="text-align:center">'+fmtNum(sum.shops)+'</td>'+
+    '<td style="text-align:center;color:#059669">'+fmtNum(sum.haodian)+'</td>'+
+    '<td></td></tr>';
+  document.getElementById('sa-tbody').innerHTML=html;
+}
+
 function renderWpt(){
   let html="", totGood=0, totOpen=0, totOpenDay=0, totGoodOpen=0, totGoodNot=0, totConsume=0;
   AGENTS.forEach(a=>{
@@ -1754,7 +1826,7 @@ function renderAll(){
     ['renderScore',renderScore],['renderDongxiao',renderDongxiao],
     ['renderVisit',renderVisit],['renderOrder',renderOrder],['renderMemrate',renderMemrate],
     ['renderAurora',renderAurora],['renderExam',renderExam],['renderZrq',renderZrq],
-    ['renderWeek',renderWeek],['renderBml',renderBml],['renderWpt',renderWpt],
+    ['renderWeek',renderWeek],['renderBml',renderBml],['renderWpt',renderWpt],['renderSa',renderSa],
   ];
   tasks.forEach(([name,fn])=>{
     try{ fn(); }catch(e){ console.error(name, e); }
@@ -1771,7 +1843,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER = '2026-09-20a';
+  const EMBED_VER='2026-09-20b';
   const D = {
 "绍兴星企动": {
 "gtv": 2288083.9,
