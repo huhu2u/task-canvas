@@ -89,30 +89,6 @@ table.dt tbody tr:last-child td{border-bottom:none}
 #toast.show{opacity:1}
 ::-webkit-scrollbar{width:5px;height:5px} ::-webkit-scrollbar-track{background:#f0f4f8} ::-webkit-scrollbar-thumb{background:#d0d8e8;border-radius:3px}
 @media(max-width:800px){.sum-cards{grid-template-columns:repeat(2,1fr)}.tab-panel{padding:10px 12px}}
-
-/* ── 2026-10-06 统一视觉翻新 ── */
-#topbar{background:linear-gradient(135deg,#0e2a6d 0%,#1d4ed8 55%,#6d28d9 100%);box-shadow:0 4px 20px rgba(29,78,216,.35)}
-#tabnav{background:rgba(255,255,255,.92);border-bottom:1px solid #e2e8f0;padding:8px 16px;gap:6px;backdrop-filter:blur(8px)}
-.tabn{background:transparent;border:1px solid transparent;border-radius:999px;color:#64748b;font-size:12.5px;padding:7px 14px}
-.tabn:hover{background:#eef2ff;color:#3730a3}
-.tabn.active{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(79,70,229,.35)}
-.panel-title{font-size:18px;color:#0f172a;display:flex;align-items:center;gap:8px}
-.panel-title::before{content:'';width:4px;height:16px;border-radius:2px;background:linear-gradient(180deg,#2563eb,#7c3aed);flex-shrink:0}
-.panel-sub{font-size:11.5px;color:#94a3b8}
-.timepct-badge{background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;color:#fff;border-radius:999px;padding:5px 14px;box-shadow:0 2px 8px rgba(79,70,229,.3)}
-.sum-cards{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.scard{border-radius:14px;border:1px solid #eef2f7;box-shadow:0 2px 12px rgba(15,23,42,.06);padding:14px 16px;transition:transform .15s,box-shadow .15s}
-.scard:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(15,23,42,.1)}
-.scard::before{width:4px;border-radius:0 4px 4px 0}
-.scard-pct{font-size:27px}
-.sec{border-radius:14px;border:1px solid #e8edf5;box-shadow:0 2px 12px rgba(15,23,42,.05)}
-.sec-hdr{font-size:13.5px;padding:11px 16px}
-.sec-hdr,.sec-hdr.c-cpc,.sec-hdr.c-mem,.sec-hdr.c-score,.sec-hdr.c-dong,.sec-hdr.c-visit,.sec-hdr.c-order,.sec-hdr.c-mem2,.sec-hdr.c-exam,.sec-hdr.c-aurora{background:linear-gradient(90deg,#1e3a8a,#4f46e5)}
-table.dt thead th{background:#f8fafc !important;color:#475569 !important;border-bottom:2px solid #e2e8f0;letter-spacing:.02em}
-table.dt td{border-right:none;border-bottom:1px solid #f1f5f9}
-table.dt tbody tr:nth-child(even) td{background:#fbfcfe}
-table.dt tbody tr:hover td{background:#eef4ff !important}
-table.dt td.tn{color:#1d4ed8}
 </style>
 </head>
 <body>
@@ -247,7 +223,7 @@ table.dt td.tn{color:#1d4ed8}
     <div class="sec-hdr c-mem2"><span>🔄 MEM续约明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">已续约</th><th class="ht">参与计算</th>
-      <th class="hp">续约率</th><th class="hp">目标65%</th><th class="hg">缺口数量</th>
+      <th class="hp">续约率</th><th class="hp" style="background:#fef3c7;color:#92400e">目标65%</th><th class="hg">缺口数量</th>
       <th class="hd">昨日新增</th><th class="hd">紧急未续(&le;30天)</th>
     </tr></thead><tbody id="memrate-tbody"></tbody></table></div>
   </div>
@@ -263,12 +239,12 @@ table.dt td.tn{color:#1d4ed8}
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th>
       <th class="hc">待办总数</th>
-      <th>📋 动作-已完成</th>
-      <th>📋 动作-待处理</th>
-      <th>📋 动作完成率</th>
-      <th>✅ 结果-已完成</th>
-      <th>✅ 结果-待处理</th>
-      <th>✅ 结果完成率</th>
+      <th style="background:#dbeafe">📋 动作-已完成</th>
+      <th style="background:#dbeafe">📋 动作-待处理</th>
+      <th style="background:#dbeafe">📋 动作完成率</th>
+      <th style="background:#d1fae5">✅ 结果-已完成</th>
+      <th style="background:#d1fae5">✅ 结果-待处理</th>
+      <th style="background:#d1fae5">✅ 结果完成率</th>
     </tr></thead><tbody id="aurora-tbody"></tbody></table></div>
   </div>
 </div>
@@ -303,7 +279,7 @@ table.dt td.tn{color:#1d4ed8}
         <th class="hc" rowspan="2">动销率</th>
         <th class="hc" rowspan="2">店转GTV（元）</th>
         <th class="hc" rowspan="2">昨日店转GTV</th>
-        <th colspan="2">店转GTV渗透率</th>
+        <th colspan="2" style="text-align:center;background:#065f46;color:#fff;padding:4px 8px">店转GTV渗透率</th>
         <th class="hc" rowspan="2">昨日实付GTV</th>
         <th class="hc" rowspan="2">实付GTV（元）</th>
         <th class="hc" rowspan="2">店转客单均价</th>
@@ -331,7 +307,7 @@ table.dt td.tn{color:#1d4ed8}
     <div class="sec-hdr"><span>📈 GTV周目标（元）</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">操盘手</th>
-      <th class="ht" title="= 周一~周日之和（自动）">本周目标🔢</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b" title="= 周一~周日之和（自动）">本周目标🔢</th>
       <th class="hd">本周累计</th>
       <th class="hp">预计完成进度</th>
       <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
@@ -343,7 +319,7 @@ table.dt td.tn{color:#1d4ed8}
     <div class="sec-hdr c-cpc"><span>📊 CPC周目标（元）</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">操盘手</th>
-      <th class="ht" title="= 周一~周日之和（自动）">本周目标🔢</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b" title="= 周一~周日之和（自动）">本周目标🔢</th>
       <th class="hd">本周累计</th>
       <th class="hp">预计完成进度</th>
       <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
@@ -355,7 +331,7 @@ table.dt td.tn{color:#1d4ed8}
     <div class="sec-hdr c-dong"><span>🎫 优惠码周目标（元）</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">操盘手</th>
-      <th class="ht" title="= 周一~周日之和（自动）">本周目标🔢</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b" title="= 周一~周日之和（自动）">本周目标🔢</th>
       <th class="hd">周一</th><th class="hd">周二</th><th class="hd">周三</th><th class="hd">周四</th><th class="hd">周五</th><th class="hd">周六</th><th class="hd">周日</th>
     </tr></thead><tbody id="week-coupon-tbody"></tbody></table></div>
   </div>
@@ -365,7 +341,7 @@ table.dt td.tn{color:#1d4ed8}
     <div class="sec-hdr c-cpc"><span>✅ CPC有效新签周目标</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th><th class="hc">操盘手</th>
-      <th class="ht">周目标</th>
+      <th class="ht" style="background:#fee2e2;color:#991b1b">周目标</th>
       <th class="hd">当前完成</th>
       <th class="hp">预计完成进度</th>
     </tr></thead><tbody id="week-newsgn-tbody"></tbody></table></div>
@@ -382,16 +358,16 @@ table.dt td.tn{color:#1d4ed8}
     <div style="font-size:11px;color:#9ca3af">来源：策略管理-PC-中小发BML（组织明细+商户明细）· 全量高销门店</div>
   </div>
   <div class="sec">
-    <div class="sec-hdr"><span>📊 代运营商BML汇总（全量高销口径）</span></div>
+    <div class="sec-hdr" style="background:#fef3c7;border-left:4px solid #d97706"><span>📊 代运营商BML汇总（全量高销口径）</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th>
       <th class="hc">操盘手</th>
-      <th>全量Lose数</th>
-      <th>Lose率<br><span style="font-size:9px;font-weight:400">(目标≤30%)</span></th>
+      <th style="background:#fee2e2;color:#991b1b">全量Lose数</th>
+      <th style="background:#fee2e2;color:#991b1b">Lose率<br><span style="font-size:9px;font-weight:400">(目标≤30%)</span></th>
       <th class="ht">是否达标</th>
-      <th>高危(≥5天)</th>
-      <th>中危(3-4天)</th>
-      <th>低危(≤2天)</th>
+      <th style="background:#fef9c3;color:#854d0e">高危(≥5天)</th>
+      <th style="background:#fef3c7;color:#92400e">中危(3-4天)</th>
+      <th style="background:#f0fdf4;color:#166534">低危(≤2天)</th>
       <th class="hp">月累计天数</th>
     </tr></thead><tbody id="bml-tbody"></tbody></table></div>
   </div>
@@ -409,17 +385,17 @@ table.dt td.tn{color:#1d4ed8}
   </div>
   <div id="wpt-cards" class="sum-cards"></div>
   <div class="sec">
-    <div class="sec-hdr"><span>📊 代运营商旺铺通汇总</span></div>
+    <div class="sec-hdr" style="background:#e0f2fe;border-left:4px solid #0369a1"><span>📊 代运营商旺铺通汇总</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">代运营商</th>
       <th class="hc">操盘手</th>
-      <th>好店数</th>
-      <th>开通数<br><span style="font-size:9px;font-weight:400">(消耗>0)</span></th>
-      <th>日变化</th>
-      <th>好店开通</th>
-      <th>好店未开通</th>
-      <th>好店开通率</th>
-      <th>旺铺通消耗额</th>
+      <th style="background:#dbeafe;color:#1e40af">好店数</th>
+      <th style="background:#dbeafe;color:#1e40af">开通数<br><span style="font-size:9px;font-weight:400">(消耗>0)</span></th>
+      <th style="background:#dcfce7;color:#166534">日变化</th>
+      <th style="background:#dbeafe;color:#1e40af">好店开通</th>
+      <th style="background:#fee2e2;color:#991b1b">好店未开通</th>
+      <th style="background:#dcfce7;color:#166534">好店开通率</th>
+      <th style="background:#fef9c3;color:#854d0e">旺铺通消耗额</th>
     </tr></thead><tbody id="wpt-tbody"></tbody></table></div>
   </div>
 </div>
@@ -444,18 +420,18 @@ table.dt td.tn{color:#1d4ed8}
     <input id="sa-f-q" oninput="renderSa()" placeholder="🔍 搜索代运营商/城市" style="padding:4px 8px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;width:180px">
   </div>
   <div class="sec">
-    <div class="sec-hdr"><span>🏅 7月 vs 8月 商分层明细</span></div>
+    <div class="sec-hdr" style="background:#ede9fe;border-left:4px solid #7c3aed"><span>🏅 7月 vs 8月 商分层明细</span></div>
     <div class="tw"><table class="dt"><thead><tr>
       <th class="hn">城市群</th>
       <th class="hn">代运营商</th>
       <th class="hc">城市</th>
       <th>7月分层</th>
-      <th>8月分层</th>
-      <th>分层变化</th>
+      <th style="background:#ede9fe;color:#5b21b6">8月分层</th>
+      <th style="background:#fef9c3;color:#854d0e">分层变化</th>
       <th>7月GTV达成率</th>
-      <th>8月GTV达成率</th>
+      <th style="background:#ede9fe;color:#5b21b6">8月GTV达成率</th>
       <th>8月在线门店</th>
-      <th>8月好店</th>
+      <th style="background:#ede9fe;color:#5b21b6">8月好店</th>
       <th>CPC阶段(8月)</th>
     </tr></thead><tbody id="sa-tbody"></tbody></table></div>
   </div>
@@ -919,17 +895,17 @@ function pctCell(pct, cls){
 // ── 缺口标签 ─────────────────────────────────────────────────
 function gapTag(gap, isNeg){
   // gap为正=还差 gap为负=已超
-  if(isNeg||gap<=0) return `<span class="gap-g">+${Math.round(Math.abs(gap)).toLocaleString()} 超额</span>`;
+  if(isNeg||gap<=0) return `<span class="gap-g">+${Math.abs(gap).toLocaleString()} 超额</span>`;
   const cls = gap>gap*2?'gap-r':'gap-y'; // 简化：有缺口就用红/黄
   const pct=gap>500?'gap-r':'gap-y';
-  return `<span class="${pct}">-${Math.round(gap).toLocaleString()}</span>`;
+  return `<span class="${pct}">-${gap.toLocaleString()}</span>`;
 }
 function numGap(cur, tgt){ return tgt - cur; }
 function gapHtml(cur, tgt, isCount){
   const gap = tgt - cur;
-  if(gap <= 0) return `<span class="gap-g">超额 +${Math.round(Math.abs(gap)).toLocaleString()}</span>`;
+  if(gap <= 0) return `<span class="gap-g">超额 +${Math.abs(gap).toLocaleString()}</span>`;
   const cls = isCount ? (gap>10?'gap-r':'gap-y') : (gap/tgt>0.1?'gap-r':'gap-y');
-  return `<span class="${cls}">差 ${Math.round(gap).toLocaleString()}</span>`;
+  return `<span class="${cls}">差 ${gap.toLocaleString()}</span>`;
 }
 
 // ── 日变化 ───────────────────────────────────────────────────
@@ -1319,8 +1295,8 @@ function renderExam(){
   const wrap=document.getElementById('exam-table-wrap');
   if(wrap) wrap.innerHTML=`<table class="dt" style="min-width:320px">
     <thead><tr>
-      <th>代运营商</th>
-      <th>月考状态（点击切换）</th>
+      <th style="padding:8px 16px;background:#065F46;color:#fff">代运营商</th>
+      <th style="padding:8px 16px;background:#065F46;color:#fff;min-width:140px">月考状态（点击切换）</th>
     </tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
@@ -1891,7 +1867,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER='2026-09-20c-ui2';
+  const EMBED_VER='2026-09-20c';
   const D = {
 "绍兴星企动": {
 "gtv": 2288083.9,
