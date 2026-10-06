@@ -456,7 +456,7 @@ table.dt tbody tr:last-child td{border-bottom:none}
 // ────────────────────────────────────────────────────────────
 const AGENTS = [
   {name:'绍兴星企动',  mgr:'李晓锋', gtv_tgt:3984026, cpc_tgt:197929,  cpc_newsgn_tgt:25, score_tgt:175, dongxiao_tgt:180, visit_tgt:20, order_tgt:0,  memrate_tgt:65, order_pool:801},
-  {name:'泉州小花猫',  mgr:'康子诚', gtv_tgt:1803275, cpc_tgt:97874,  cpc_newsgn_tgt:17, score_tgt:111, dongxiao_tgt:127, visit_tgt:20, order_tgt:0,  memrate_tgt:65, order_pool:467},
+  {name:'上海代优',  mgr:'康子诚', gtv_tgt:1803275, cpc_tgt:97874,  cpc_newsgn_tgt:17, score_tgt:111, dongxiao_tgt:127, visit_tgt:20, order_tgt:0,  memrate_tgt:65, order_pool:467},
   {name:'慈溪哲光',  mgr:'孙浩',   gtv_tgt:2289852, cpc_tgt:131592,  cpc_newsgn_tgt:19, score_tgt:141, dongxiao_tgt:150, visit_tgt:20, order_tgt:0,  memrate_tgt:65, order_pool:501},
   {name:'义乌汐洋',  mgr:'陈铨',   gtv_tgt:2366659, cpc_tgt:130618,  cpc_newsgn_tgt:19, score_tgt:131, dongxiao_tgt:148, visit_tgt:20, order_tgt:0,  memrate_tgt:65, order_pool:463},
   {name:'仙居烁果',  mgr:'邱伯达', gtv_tgt:2687168, cpc_tgt:76338,  cpc_newsgn_tgt:18, score_tgt:124, dongxiao_tgt:145, visit_tgt:20, order_tgt:0,  memrate_tgt:65, order_pool:700},
@@ -520,7 +520,7 @@ const DEFAULT_S = {
 "visit_y": 54,
 "visit_haodian": 47,
 },
-"泉州小花猫": {
+"上海代优": {
 "gtv": 990065.83,
 "gtv_tgt": 1803275,
 "gtv_y": 66879.74,
@@ -1548,7 +1548,7 @@ function updateClock(){
 const WEEK_DATA = {
   gtv: [
     {name:'绍兴星企动',  mgr:'李晓锋', tgt:0, forecast:0.0, days:[0,0,0,0,0,0,0]},
-    {name:'泉州小花猫',  mgr:'康子诚', tgt:0, forecast:0.0, days:[0,0,0,0,0,0,0]},
+    {name:'上海代优',  mgr:'康子诚', tgt:0, forecast:0.0, days:[0,0,0,0,0,0,0]},
     {name:'慈溪哲光',  mgr:'孙浩',   tgt:0, forecast:0.0, days:[0,0,0,0,0,0,0]},
     {name:'义乌汐洋',  mgr:'陈铨',   tgt:0, forecast:0.0, days:[0,0,0,0,0,0,0]},
     {name:'仙居烁果',  mgr:'邱伯达', tgt:0, forecast:0.0, days:[0,0,0,0,0,0,0]},
@@ -1557,7 +1557,7 @@ const WEEK_DATA = {
   ],
   cpc: [
     {name:'绍兴星企动',  mgr:'李晓锋', tgt:0,  days:[0,0,0,0,0,0,0]},
-    {name:'泉州小花猫',  mgr:'康子诚', tgt:0,  days:[0,0,0,0,0,0,0]},
+    {name:'上海代优',  mgr:'康子诚', tgt:0,  days:[0,0,0,0,0,0,0]},
     {name:'慈溪哲光',  mgr:'孙浩',   tgt:0,  days:[0,0,0,0,0,0,0]},
     {name:'义乌汐洋',  mgr:'陈铨',   tgt:0,  days:[0,0,0,0,0,0,0]},
     {name:'仙居烁果',  mgr:'邱伯达', tgt:0,  days:[0,0,0,0,0,0,0]},
@@ -1566,7 +1566,7 @@ const WEEK_DATA = {
   ],
   coupon: [
     {name:'绍兴星企动',  mgr:'李晓锋', tgt:0, days:[0,0,0,0,0,0,0]},
-    {name:'泉州小花猫',  mgr:'康子诚', tgt:0, days:[0,0,0,0,0,0,0]},
+    {name:'上海代优',  mgr:'康子诚', tgt:0, days:[0,0,0,0,0,0,0]},
     {name:'慈溪哲光',  mgr:'孙浩',   tgt:0, days:[0,0,0,0,0,0,0]},
     {name:'义乌汐洋',  mgr:'陈铨',   tgt:0, days:[0,0,0,0,0,0,0]},
     {name:'仙居烁果',  mgr:'邱伯达', tgt:0, days:[0,0,0,0,0,0,0]},
@@ -1575,7 +1575,7 @@ const WEEK_DATA = {
   ],
   newsgn: [
     {name:'绍兴星企动',  mgr:'李晓锋', tgt:0, cur:0},
-    {name:'泉州小花猫',  mgr:'康子诚', tgt:0, cur:0},
+    {name:'上海代优',  mgr:'康子诚', tgt:0, cur:0},
     {name:'慈溪哲光',  mgr:'孙浩',   tgt:0, cur:0},
     {name:'义乌汐洋',  mgr:'陈铨',   tgt:0, cur:0},
     {name:'仙居烁果',  mgr:'邱伯达', tgt:0, cur:0},
@@ -1702,7 +1702,7 @@ function saveEdit(){
 function renderBml(){
   const AGENTS=[
     {name:'绍兴星企动',  mgr:'李晓锋'},
-    {name:'泉州小花猫',mgr:'康子诚'},
+    {name:'上海代优',mgr:'康子诚'},
     {name:'慈溪哲光',  mgr:'孙浩'},
     {name:'义乌汐洋',  mgr:'陈铨'},
     {name:'仙居烁果',  mgr:'邱伯达'},
@@ -1867,7 +1867,7 @@ function renderAll(){
 (function seedData(){
   let ex={};
   try{ ex=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
-  const EMBED_VER='2026-09-20c';
+  const EMBED_VER='2026-10-06a';
   const D = {
 "绍兴星企动": {
 "gtv": 2288083.9,
@@ -1923,7 +1923,7 @@ function renderAll(){
 "visit_y": 54,
 "visit_haodian": 47,
 },
-"泉州小花猫": {
+"上海代优": {
 "gtv": 990065.83,
 "gtv_tgt": 1803275,
 "gtv_y": 66879.74,
@@ -2248,7 +2248,7 @@ function renderAll(){
 "visit_haodian": 24,
 },
 };;;;;;
-const ns={...(ex||{}), _updated: '09:15', _dataDate: '2026-09-19'};
+const ns={...(ex||{}), _updated: '09:15', _dataDate: '2026-10-05'};
   // 皖闽浙版首刷 2026-09-04：数据日期9/3
   Object.entries(D).forEach(([k,v])=>{
     ns[k] = {...((ex||{})[k]||{}), ...v};
@@ -2270,7 +2270,7 @@ ls();
 (function(){
   const BML_DATA = {
     '绍兴星企动':  {bml_lose_n:0,  bml_lose_pct:0, bml_high:0, bml_mid:0, bml_low:0, bml_days:3},
-    '泉州小花猫':  {bml_lose_n:0,  bml_lose_pct:0, bml_high:0, bml_mid:0, bml_low:0, bml_days:3},
+    '上海代优':  {bml_lose_n:0,  bml_lose_pct:0, bml_high:0, bml_mid:0, bml_low:0, bml_days:3},
     '慈溪哲光':  {bml_lose_n:0,  bml_lose_pct:0, bml_high:0, bml_mid:0, bml_low:0, bml_days:3},
     '义乌汐洋':  {bml_lose_n:0,  bml_lose_pct:0, bml_high:0, bml_mid:0, bml_low:0, bml_days:3},
     '仙居烁果':  {bml_lose_n:0,  bml_lose_pct:0, bml_high:0, bml_mid:0, bml_low:0, bml_days:3},
