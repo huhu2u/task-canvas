@@ -14,10 +14,14 @@ VISIT_FILE = sys.argv[1]
 POOL_FILE = '/root/.openclaw/workspace/data/haodian_pool.xlsx'
 OUT = sys.argv[2]
 
-ALL7 = {'知了': '芜湖知了', '小花猫': '泉州小花猫', '星企动': '绍兴星企动', '哲光': '慈溪哲光',
+ALL7 = {'知了': '芜湖知了', '小花猫': '上海代优', '星企动': '绍兴星企动', '哲光': '慈溪哲光',
         '汐洋': '义乌汐洋', '广通': '惠安广通', '烁果': '仙居烁果'}
-BOSS = {'芜湖知了': '陈具礼', '泉州小花猫': '康子诚', '绍兴星企动': '李晓锋', '慈溪哲光': '孙浩',
+BOSS = {'芜湖知了': '陈具礼', '上海代优': '代永安', '绍兴星企动': '李晓锋', '慈溪哲光': '孙浩',
         '义乌汐洋': '陈铨', '惠安广通': '尤云生', '仙居烁果': '邱伯达'}
+
+# 2026-10-07英杰指令：上海代优拜访展示中删除泉州小花猫时期的8名老销售
+# （池子 haodian_pool 跟进销售未更新，这些人的池内门店保留但不再展示为销售行）
+LEGACY_SALES = {'刘洋', '黄伟', '李家兴', '朱玥杰', '郭俊峰', '曾鹏东', '兰思帆', '康子诚'}
 
 pool = pd.read_excel(POOL_FILE)
 pool['op'] = pool['组织'].apply(lambda o: next((v for k, v in ALL7.items() if k in str(o)), None))
@@ -125,6 +129,8 @@ for op in ALL7.values():
         shop_sales = dict(zip(op_shops['shopId'].astype(str),
                               op_shops[col].astype(str).apply(lambda x: str(x).split('/')[0])))
     all_emps = (set(shop_sales.values()) | set(opd['emp'])) - {'', 'nan', 'None'}
+    # 2026-10-07英杰指令：剔除小花猫时期老销售（池子跟进销售未更新）
+    all_emps -= LEGACY_SALES
     stats = []
     for s in all_emps:
         if s in ('', 'nan'): continue
