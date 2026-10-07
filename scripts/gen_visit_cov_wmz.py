@@ -24,6 +24,35 @@ BOSS = {'芜湖知了': '陈具礼', '上海代优': '代永安', '绍兴星企�
 LEGACY_SALES = {'刘洋', '黄伟', '李家兴', '朱玥杰', '郭俊峰', '曾鹏东', '兰思帆', '康子诚'}
 
 pool = pd.read_excel(POOL_FILE)
+
+# 2026-10-07 英杰指令：私海新归属已是最新对应关系——上海代优池内门店的跟进销售改用私海 score_stores 的 ownerSale
+# （好店底表还是5月版，跟进销售还是小花猫老销售，已过时）
+import json as _json, urllib.request as _ur, urllib.parse as _up
+try:
+    _key = open('/tmp/.supa_key').read().strip()
+    _req = _ur.Request('https://dbcli-8x6qvevf5kpmur91.database.sankuai.com/rest/v1/score_stores?'
+                       + _up.urlencode({'stat_date': 'eq.' + (pd.Timestamp('now') - pd.Timedelta(days=1)).strftime('%Y-%m-%d'),
+                                       'select': 'shop_id,sales_name', 'limit': '20000'}),
+                       headers={'apikey': _key, 'Authorization': 'Bearer ' + _key})
+    _si = {str(r['shop_id']): str(r['sales_name']).split('/')[0]
+           for r in _json.loads(_ur.urlopen(_req, timeout=60).read()) if r.get('sales_name')}
+    _col = next((c for c in pool.columns if '销售' in str(c)), None)
+    if _col:
+        _fixed = 0
+        for _i in pool.index:
+            if pool.at[_i, 'op'] == '上海代优' if 'op' in pool else False:
+                pass
+        # 针对小花猫/代优组织的行，用私海归属覆盖跟进销售
+        _mask = pool['组织'].astype(str).str.contains('小花猫|代优')
+        for _i in pool[_mask].index:
+            _sid = str(pool.at[_i, 'shopId'])
+            _new = _si.get(_sid)
+            if _new and _new not in ('None', ''):
+                pool.at[_i, _col] = _new
+                _fixed += 1
+        print(f'上海代优池内门店跟进销售已按私海覆盖: {_fixed} 家')
+except Exception as _e:
+    print('⚠️ 私海销售归属拉取失败，沿用底表跟进销售:', _e)
 pool['op'] = pool['组织'].apply(lambda o: next((v for k, v in ALL7.items() if k in str(o)), None))
 pp = pool[pool['op'].notna()].copy()
 pool_map = dict(zip(pp['shopId'].astype(str), pp['op']))
