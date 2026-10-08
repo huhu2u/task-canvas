@@ -28,20 +28,41 @@ pool = pd.read_excel(POOL_FILE)
 # 2026-10-07 英杰指令：私海新归属已是最新对应关系——上海代优池内门店的跟进销售改用私海 score_stores 的 ownerSale
 # （好店底表还是5月版，跟进销售还是小花猫老销售，已过时）
 import json as _json, urllib.request as _ur, urllib.parse as _up
+import os as _os
+_key = None
+for _kp in ['/root/.openclaw/workspace/scripts/.supa_key', '/tmp/.supa_key']:
+    if _os.path.exists(_kp):
+        try:
+            _k = open(_kp).read().strip()
+            if _k: _key = _k; break
+        except Exception: pass
 try:
-    _key = open('/tmp/.supa_key').read().strip()
+    if not _key: raise RuntimeError('supa key 不存在（scripts/.supa_key 与 /tmp/.supa_key 都缺失）')
+    _want = (pd.Timestamp('now') - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
     _req = _ur.Request('https://dbcli-8x6qvevf5kpmur91.database.sankuai.com/rest/v1/score_stores?'
-                       + _up.urlencode({'stat_date': 'eq.' + (pd.Timestamp('now') - pd.Timedelta(days=1)).strftime('%Y-%m-%d'),
+                       + _up.urlencode({'stat_date': 'eq.' + _want,
                                        'select': 'shop_id,sales_name', 'limit': '20000'}),
                        headers={'apikey': _key, 'Authorization': 'Bearer ' + _key})
+    _rows = _json.loads(_ur.urlopen(_req, timeout=60).read())
+    if not _rows:
+        # 2026-10-08事故：流水线9:17跑，score_stores 10-07数据9:21才入库 → 拉到空集 → 代优销售归属回退老销售被全剔除 → 覆盖率全0
+        # 修复：昨天没数据时回退到库里最新stat_date
+        _req2 = _ur.Request('https://dbcli-8x6qvevf5kpmur91.database.sankuai.com/rest/v1/score_stores?'
+                            + _up.urlencode({'select': 'stat_date', 'order': 'stat_date.desc', 'limit': '1'}),
+                            headers={'apikey': _key, 'Authorization': 'Bearer ' + _key})
+        _latest = _json.loads(_ur.urlopen(_req2, timeout=30).read())[0]['stat_date']
+        print(f'⚠️ score_stores {_want} 为空，回退最新快照 {_latest}')
+        _req = _ur.Request('https://dbcli-8x6qvevf5kpmur91.database.sankuai.com/rest/v1/score_stores?'
+                           + _up.urlencode({'stat_date': 'eq.' + _latest,
+                                           'select': 'shop_id,sales_name', 'limit': '20000'}),
+                           headers={'apikey': _key, 'Authorization': 'Bearer ' + _key})
+        _rows = _json.loads(_ur.urlopen(_req, timeout=60).read())
+        if not _rows: raise RuntimeError('score_stores 任何日期都无数据')
     _si = {str(r['shop_id']): str(r['sales_name']).split('/')[0]
-           for r in _json.loads(_ur.urlopen(_req, timeout=60).read()) if r.get('sales_name')}
+           for r in _rows if r.get('sales_name')}
     _col = next((c for c in pool.columns if '销售' in str(c)), None)
     if _col:
         _fixed = 0
-        for _i in pool.index:
-            if pool.at[_i, 'op'] == '上海代优' if 'op' in pool else False:
-                pass
         # 针对小花猫/代优组织的行，用私海归属覆盖跟进销售
         _mask = pool['组织'].astype(str).str.contains('小花猫|代优')
         for _i in pool[_mask].index:
@@ -51,6 +72,8 @@ try:
                 pool.at[_i, _col] = _new
                 _fixed += 1
         print(f'上海代优池内门店跟进销售已按私海覆盖: {_fixed} 家')
+        if _fixed == 0:
+            raise RuntimeError('⚠️ 代优池内门店私海覆盖0家——销售归属异常，停止出表防止全0覆盖率（见2026-10-08事故）')
 except Exception as _e:
     print('⚠️ 私海销售归属拉取失败，沿用底表跟进销售:', _e)
 pool['op'] = pool['组织'].apply(lambda o: next((v for k, v in ALL7.items() if k in str(o)), None))
