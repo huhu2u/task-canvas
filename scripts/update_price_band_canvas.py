@@ -18,7 +18,15 @@ import subprocess
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CANVAS_FILE = os.path.join(SCRIPT_DIR, '..', 'task-canvas.html')
 COOKIE_FILE = os.path.join(SCRIPT_DIR, '.apollo_cookie')
-GH_TOKEN = ""
+def _gh_pat():
+    v = os.environ.get("GH_PAT")
+    if v:
+        return v
+    try:
+        return open("/root/.openclaw/secrets/gh_pat").read().strip()
+    except Exception:
+        return ""
+GH_TOKEN = _gh_pat()
 GH_REPO = "huhu2u/task-canvas"
 GH_FILE = "index.html"
 

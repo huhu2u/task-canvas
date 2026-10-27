@@ -13,10 +13,19 @@ fetch_rt_today.py
   0: 惠州巨浪, 1: 惠州柏万, 2: 泉州小花猫, 3: 惠安广通,
   4: 慈溪哲光, 5: 义乌汐洋
 """
+import os
 import subprocess, json, re, sys, os, datetime, base64, urllib.request
 from pathlib import Path
 
-GH_TOKEN = ""
+def _gh_pat():
+    v = os.environ.get("GH_PAT")
+    if v:
+        return v
+    try:
+        return open("/root/.openclaw/secrets/gh_pat").read().strip()
+    except Exception:
+        return ""
+GH_TOKEN = _gh_pat()
 GH_REPO  = "huhu2u/task-canvas"
 
 AGENT_BROWSER = "/opt/nvm/versions/node/v24.14.0/bin/agent-browser"

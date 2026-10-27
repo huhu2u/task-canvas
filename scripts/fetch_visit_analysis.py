@@ -3,6 +3,7 @@
 每天9点自动抓取前一天拜访明细数据，生成3Sheet Excel，发给英杰
 v2: 新增Sheet1昨日好店拜访数列、Sheet3是否好店列，去掉月合计/日均列
 """
+import os
 import requests, json, time, math, os, sys
 import pandas as pd
 from datetime import datetime, timedelta
@@ -360,7 +361,7 @@ else:
     print(f"✓ task-canvas.html VISIT_DATA已更新（{target_date}，{len(results4)}个代运营商）")
 
     # 推送GitHub
-    GH_TOKEN = ''
+    GH_TOKEN = 'os.environ.get("GH_PAT", "")'
     GH_REPO = 'huhu2u/task-canvas'
     with open(html_path, 'rb') as f:
         content = base64.b64encode(f.read()).decode()

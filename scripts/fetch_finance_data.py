@@ -15,10 +15,19 @@ fetch_finance_data.py
   5. 读取各代运营商分项数据（7行）
 """
 
+import os
 import subprocess, json, re, sys, os, datetime, base64, urllib.request, time
 from pathlib import Path
 
-GH_TOKEN   = ""
+def _gh_pat():
+    v = os.environ.get("GH_PAT")
+    if v:
+        return v
+    try:
+        return open("/root/.openclaw/secrets/gh_pat").read().strip()
+    except Exception:
+        return ""
+GH_TOKEN   = _gh_pat()
 GH_REPO    = "huhu2u/task-canvas"
 AGENT_BROWSER = "/opt/nvm/versions/node/v24.14.0/bin/agent-browser"
 CANVAS_PATH   = Path("/root/.openclaw/workspace/task-canvas.html")

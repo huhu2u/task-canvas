@@ -3,12 +3,21 @@
 职人码实时数据抓取脚本 v2
 从Apollo职人码页面用DOM直接读取，写入 data/zr_realtime.json
 """
+import os
 import subprocess, json, os, datetime, sys, time, re, base64, urllib.request
 
 WORKSPACE = "/root/.openclaw/workspace"
 OUT_FILE = f"{WORKSPACE}/data/zr_realtime.json"
 DAILY_FILE = f"{WORKSPACE}/data/zrq_daily_bind.json"
-GH_TOKEN = ""
+def _gh_pat():
+    v = os.environ.get("GH_PAT")
+    if v:
+        return v
+    try:
+        return open("/root/.openclaw/secrets/gh_pat").read().strip()
+    except Exception:
+        return ""
+GH_TOKEN = _gh_pat()
 GH_REPO = "huhu2u/task-canvas"
 
 APOLLO_URL = "https://apollo.meituan.com/crm-platform?iurl=JTJGJTJGYXBvbGxvLm1laXR1YW4uY29tJTJGY3JtLXBjLWRhdGEtYnVsbGV0aW4tYm9hcmQlMkZzdHJhdGVneS1tYW5hZ2VtZW50JTJGaW5kZXguaHRtbCUyMyUyRmRhdGEtb3ZlcnZpZXclM0ZzdHJhdGVneUlkJTNENw%253D%253D&pageId=1721888474rcncbe"
