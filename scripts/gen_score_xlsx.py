@@ -1,0 +1,357 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""经营评分分析Excel生成（2026-10-06补齐数据源下载）：从 score_stores 复刻 auto_score_summary 口径 + gen_score_wmz 明细格式
+输出：/tmp/经营评分分析_皖闽浙_<date>.xlsx 并 base64 入库 wmz_report_files (module=score)
+Sheet: 组织汇总 / 销售维度 / ≥70分门店明细 / <30分门店明细
+"""
+import sys, json, base64, os, urllib.request, urllib.parse
+from collections import defaultdict
+import pandas as pd
+
+# 2026-10-22英杰定稿 → 23:50修正：档位水位线 = 9月全国代运营商分层「好店经营评分」区间实际最低分
+# （初版误用平均分+1分，英杰指出P50档最低54.35，修正为实算：P50=54.35 / P50-80=52.72 / P80-90=52.00 / P90=49.44）
+SCORE_TIERS = [('P50', 54.35), ('P50-80', 52.72), ('P80-90', 52.0), ('P90', 49.44)]
+
+def score_tier(avg):
+    if avg is None or avg == '':
+        return ('--', '--')
+    avg = float(avg)
+    for i, (name, line) in enumerate(SCORE_TIERS):
+        if avg >= line:
+            nxt = SCORE_TIERS[i - 1][1] if i > 0 else None
+            return (name, round(nxt - avg, 1) if nxt is not None else 0)
+    return ('低于P90', round(SCORE_TIERS[-1][1] - avg, 1))
+
+WS = '/mnt/openclaw/.openclaw/workspace'
+BASE = 'https://dbcli-el9byiqifrr7yh4c.database.sankuai.com/rest/v1'
+URL8 = 'https://dbcli-8x6qvevf5kpmur91.database.sankuai.com/rest/v1'
+key = open('/tmp/.wb_key').read().strip()
+key8 = open('/tmp/.supa_key').read().strip() if os.path.exists('/tmp/.supa_key') else key
+
+def orgfix(s):
+    s = str(s or '').strip()
+    if '代优' in s: return '上海代优'
+    for k in ['义乌汐洋', '慈溪哲光', '上海代优', '惠安广通', '仙居烁果', '绍兴星企动']:
+        if k in s: return k
+    if '小花猫' in s: return '上海代优'
+    if '汐洋' in s: return '义乌汐洋'
+    if '哲光' in s: return '慈溪哲光'
+    if '广通' in s: return '惠安广通'
+    if '烁果' in s: return '仙居烁果'
+    if '星企动' in s: return '绍兴星企动'
+    if '知了' in s: return '芜湖知了'
+    return None
+
+MGR = {'绍兴星企动': '李晓锋', '上海代优': '代永安', '慈溪哲光': '孙浩', '义乌汐洋': '陈铨',
+       '仙居烁果': '邱伯达', '惠安广通': '尤云生', '芜湖知了': '陈具礼', '泉州小花猫': '代永安'}
+ORG_ORDER = ['上海代优', '慈溪哲光', '义乌汐洋', '惠安广通', '芜湖知了', '绍兴星企动', '仙居烁果']
+
+def req(url, key_, path, method='GET', body=None):
+    r = urllib.request.Request(url + path, data=json.dumps(body).encode() if body else None, method=method)
+    r.add_header('apikey', key_); r.add_header('Authorization', 'Bearer ' + key_)
+    r.add_header('Content-Type', 'application/json')
+    return json.loads(urllib.request.urlopen(r, timeout=60).read() or b'[]')
+
+def q8(path):
+    # 2026-10-24修复：翻页必须加稳定排序，否则行漂移导致重复/漏行（3548明细出现769家重复即此因）
+    if 'order=' not in path:
+        path = path + '&order=shop_id.asc' if 'shop_id' in path else path + '&order=id.asc'
+    rows, off = [], 0
+    seen = set()
+    while True:
+        b = req(URL8, key8, f'{path}&limit=1000&offset={off}')
+        before = len(rows)
+        for r in b:
+            k = str(r.get('shop_id', r.get('id', len(rows))))
+            if k in seen:
+                continue
+            seen.add(k)
+            rows.append(r)
+        if len(b) < 1000: break
+        off += 1000
+    return rows
+
+def main():
+    date = sys.argv[1] if len(sys.argv) > 1 else '2026-10-05'
+    prev_date = (pd.Timestamp(date) - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+
+    SALES_ORG = {}
+    p = f'{WS}/data/cpc_daily_archive/{date}.xlsx'
+    if not os.path.exists(p):
+        import glob
+        cands = sorted(glob.glob(f'{WS}/data/cpc_daily_archive/*.xlsx'))
+        p = cands[-1]
+    df = pd.read_excel(p)
+    for _, r in df.iterrows():
+        s = str(r.get('销售工号名称') or '').strip()
+        o = orgfix(str(r.get('业绩归属组织名称') or '').split('-')[0])
+        if s and o and s != 'nan': SALES_ORG[s] = o
+
+    rows = q8(f'/score_stores?stat_date=eq.{date}&select=shop_id,store_name,sales_name,score,is_target')
+    prows = q8(f'/score_stores?stat_date=eq.{prev_date}&select=shop_id,store_name,sales_name,score,is_target')
+    prev_shop = {str(r['shop_id']): r for r in prows}
+    prev_ok = {str(r['shop_id']) for r in prows if float(r.get('score') or 0) >= 70}
+    prev_ok_key = {str(r['shop_id']) for r in prows if r.get('is_target') in (1, '1', True) and float(r.get('score') or 0) >= 70}
+    print('today rows:', len(rows), 'prev rows:', len(prows))
+
+    recs = []
+    for r in rows:
+        sales = (r.get('sales_name') or '').strip()
+        org = SALES_ORG.get(sales)
+        if not org: continue
+        sc = float(r.get('score') or 0)
+        is_key = r.get('is_target') in (1, '1', True)
+        recs.append(dict(shop_id=str(r['shop_id']), name=r.get('store_name') or '', sales=sales, org=org, score=sc, key=is_key))
+    print('mapped recs:', len(recs))
+
+    # --- Excel ---
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+    from openpyxl.utils import get_column_letter
+    wb = Workbook(); ws0 = wb.active; ws0.title = '组织汇总'
+    # 2026-10-23英杰：组织汇总只留重点池口径，全量分析列全删（看板同步删）
+    hdr = ['代运营商', '操盘手', '重点池门店数', '重点池达标', '重点池平均评分', '重点池评分档位', '距上一档', '重点池≥70分', '重点池50-70分', '重点池<50分', '昨日总分变化']  # 2026-10-27英杰：加昨日总分变化（重点池Σ分差）
+    # 2026-10-23英杰：样式按目标截图定稿（深蓝表头白字/数据行白底黑细边框/数值右对齐/档位纯文本/平均分绿-白-红色阶/合计行浅蓝加粗）
+    THIN = Side(style='thin', color='000000')
+    BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
+    ws0.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr))
+    c = ws0.cell(row=1, column=1, value=f'皖闽浙经营评分分析（数据日期 {date}）')
+    c.font = Font(bold=True, size=18); c.alignment = Alignment(horizontal='center', vertical='center')
+    ws0.row_dimensions[1].height = 34
+    for j, h in enumerate(hdr, 1):
+        c = ws0.cell(row=2, column=j, value=h)
+        c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='1F3864')
+        c.alignment = Alignment(horizontal='center', vertical='center'); c.border = BORDER
+    ws0.row_dimensions[2].height = 24
+    org_agg = defaultdict(lambda: {'n': 0, 'ok': 0, 's': 0.0, 'low': 0, 'kn': 0, 'ks': 0.0, 'kok': 0,
+                                   'new_ok': 0, 'lost': 0, 'kdiff': 0.0,
+                                   'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0})
+    sales_agg = defaultdict(lambda: {'n': 0, 'ok': 0, 'kn': 0, 'kok': 0, 'ks': 0.0, 'new_ok': 0, 'lost': 0, 'kdiff': 0.0,
+                                     'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0})
+    detail70, detail5070, detail50 = [], [], []
+    shop_today = {}
+    for rec in recs:
+        shop_today[str(rec['shop_id'])] = rec
+        a = org_agg[rec['org']]
+        if rec['key']:
+            a['kn'] += 1; a['ks'] += rec['score']
+            pr = prev_shop.get(str(rec['shop_id']))
+            if pr is not None and pr.get('score') not in (None, ''):
+                try: a['kdiff'] += rec['score'] - float(pr.get('score') or 0)
+                except Exception: pass
+            if rec['score'] >= 70: a['kok'] += 1; a['kr70'] += 1
+            elif rec['score'] >= 50: a['kr5070'] += 1
+            else: a['kr50'] += 1
+            if rec['score'] >= 70 and rec['shop_id'] not in prev_ok_key: a['new_ok'] += 1
+            if rec['score'] < 70 and rec['shop_id'] in prev_ok_key: a['lost'] += 1
+        b = sales_agg[(rec['org'], rec['sales'])]
+        if rec['key']:
+            b['kn'] += 1; b['ks'] += rec['score']
+            pr = prev_shop.get(str(rec['shop_id']))
+            if pr is not None and pr.get('score') not in (None, ''):
+                try: b['kdiff'] += rec['score'] - float(pr.get('score') or 0)
+                except Exception: pass
+            if rec['score'] >= 70: b['kok'] += 1; b['kr70'] += 1
+            elif rec['score'] >= 50: b['kr5070'] += 1
+            else: b['kr50'] += 1
+            if rec['score'] >= 70 and rec['shop_id'] not in prev_ok_key: b['new_ok'] += 1
+            if rec['score'] < 70 and rec['shop_id'] in prev_ok_key: b['lost'] += 1
+        row_item = (rec, '新增' if rec['score'] >= 70 and rec['shop_id'] not in prev_ok_key else ('掉标' if rec['score'] < 70 and rec['shop_id'] in prev_ok_key else ''))
+        # 2026-10-22英杰：明细三档下钻改为 ≥70 / 50-70 / <50（重点池门店）
+        if rec['key'] and rec['score'] >= 70: detail70.append(row_item)
+        elif rec['key'] and rec['score'] >= 50: detail5070.append(row_item)
+        elif rec['key'] and rec['score'] < 50: detail50.append(row_item)
+
+    def wrow(ws, i, vals, bold=False, fill=None, avg_fill=None, numeric_from=3, tier_col=None):
+        # 2026-10-23定稿样式：黑细边框/数值右对齐/档位列左对齐纯文本/平均分色阶底色由调用方传
+        for j, v in enumerate(vals, 1):
+            c = ws.cell(row=i, column=j, value=v)
+            c.font = Font(bold=bold)
+            c.border = BORDER
+            if fill: c.fill = PatternFill('solid', fgColor=fill)
+            if avg_fill is not None and j == 5: c.fill = PatternFill('solid', fgColor=avg_fill)
+            c.alignment = Alignment(horizontal='left' if (j < numeric_from or (tier_col and j == tier_col)) else 'right', vertical='center')
+    # 2026-10-23英杰：平均评分列绿-白-红三色色阶（Excel内置 63BE7B/FFFFFF/F4696B）
+    kavgs = [a['ks'] / a['kn'] for a in org_agg.values() if a['kn']]
+    def avg_scale(v):
+        if v is None or len(kavgs) < 2: return None
+        lo, hi = min(kavgs), max(kavgs)
+        if hi == lo: return None
+        t = (v - lo) / (hi - lo)  # 0=最红 1=最绿
+        def lerp(a, b): return int(a + (b - a) * t)
+        if t >= 0.5:
+            u = (t - 0.5) * 2; cols = [lerp(0xFF, 0x63), lerp(0xFF, 0xBE), lerp(0xFF, 0x7B)]  # 白→绿
+        else:
+            u = t * 2; cols = [lerp(0xFF, 0xF4), lerp(0xFF, 0x69), lerp(0xFF, 0x6B)]  # 白→红
+        return f'{cols[0]:02X}{cols[1]:02X}{cols[2]:02X}'
+    i = 3
+    for org in ORG_ORDER:
+        a = org_agg.get(org)
+        if not a: continue
+        kavg = round(a['ks'] / a['kn'], 1) if a['kn'] else None
+        tier, tgap = score_tier(kavg)
+        wrow(ws0, i, [org, MGR.get(org, ''), a['kn'], a['kok'],
+                      kavg if kavg is not None else '-', tier, tgap,
+                      a['kr70'], a['kr5070'], a['kr50'], round(a['kdiff'], 1)],
+             bold=False, avg_fill=avg_scale(kavg), tier_col=6)
+        # 昨日总分变化列色：正=绿字 负=红字
+        dc = ws0.cell(row=i, column=11)
+        dc.font = Font(bold=True, color='137333' if a['kdiff'] > 0 else ('C5221F' if a['kdiff'] < 0 else '000000'))
+        dc.number_format = '+0.0;-0.0;0'
+        ws0.row_dimensions[i].height = 20
+        i += 1
+    tot = {k: sum(a[k] for a in org_agg.values()) for k in ['kn', 'kok', 'new_ok', 'lost', 'kr70', 'kr5070', 'kr50']}
+    tot_kdiff = sum(a['kdiff'] for a in org_agg.values())
+    tot_ks = sum(a['ks'] for a in org_agg.values())
+    kavg_t = round(tot_ks / tot['kn'], 1) if tot['kn'] else None
+    tier_t, tgap_t = score_tier(kavg_t)
+    wrow(ws0, i, ['皖闽浙合计', '', tot['kn'], tot['kok'],
+                  kavg_t if kavg_t is not None else '-', tier_t, tgap_t,
+                  tot['kr70'], tot['kr5070'], tot['kr50'], round(tot_kdiff, 1)],
+         bold=True, fill='DCE6F1', tier_col=6)
+    dc = ws0.cell(row=i, column=11)
+    dc.font = Font(bold=True, color='137333' if tot_kdiff > 0 else ('C5221F' if tot_kdiff < 0 else '000000'))
+    dc.number_format = '+0.0;-0.0;0'
+    ws0.row_dimensions[i].height = 22
+    for j, w in enumerate([14, 11, 14, 13, 16, 15, 11, 14, 15, 14, 13], 1):
+        ws0.column_dimensions[get_column_letter(j)].width = w
+
+    # 销售维度（2026-10-23英杰：只留重点池口径；样式与组织汇总一致，按代运营商分组但用淡蓝组标题行）
+    ws1 = wb.create_sheet('销售维度')
+    hdr1 = ['代运营商', '销售姓名', '重点池门店数', '重点池达标', '重点池平均评分', '重点池评分档位', '距上一档', '重点池≥70分', '重点池50-70分', '重点池<50分', '昨日总分变化']  # 2026-10-27英杰：加昨日总分变化
+    ws1.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr1))
+    c = ws1.cell(row=1, column=1, value=f'销售维度（数据日期 {date}）')
+    c.font = Font(bold=True, size=18); c.alignment = Alignment(horizontal='center', vertical='center')
+    ws1.row_dimensions[1].height = 34
+    for j, h in enumerate(hdr1, 1):
+        c = ws1.cell(row=2, column=j, value=h)
+        c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='1F3864')
+        c.alignment = Alignment(horizontal='center', vertical='center'); c.border = BORDER
+    ws1.row_dimensions[2].height = 24
+    i = 3
+    for org in ORG_ORDER:
+        items = sorted([(k[1], v) for k, v in sales_agg.items() if k[0] == org], key=lambda x: -(x[1]['ks'] / x[1]['kn'] if x[1]['kn'] else 0))
+        if not items: continue
+        wrow(ws1, i, [f'【{org}】'] + [''] * 10, bold=True, fill='DCE6F1', tier_col=6)
+        ws1.row_dimensions[i].height = 20
+        i += 1
+        for sales, b in items:
+            kavg = round(b['ks'] / b['kn'], 1) if b['kn'] else None
+            tier, tgap = score_tier(kavg)
+            wrow(ws1, i, [org, sales, b['kn'], b['kok'],
+                          kavg if kavg is not None else '-', tier, tgap,
+                          b['kr70'], b['kr5070'], b['kr50'], round(b['kdiff'], 1)], tier_col=6)
+            dc = ws1.cell(row=i, column=11)
+            dc.font = Font(bold=True, color='137333' if b['kdiff'] > 0 else ('C5221F' if b['kdiff'] < 0 else '000000'))
+            dc.number_format = '+0.0;-0.0;0'
+            i += 1
+    for j, w in enumerate([14, 12, 14, 13, 16, 15, 11, 14, 15, 14, 13], 1):
+        ws1.column_dimensions[get_column_letter(j)].width = w
+
+    # 明细 Sheet（2026-10-22英杰：三档改为 ≥70 / 50-70 / <50，重点池门店）
+    for sheet_name, items in [('≥70分门店明细', detail70), ('50-70分门店明细', detail5070), ('50分以下门店明细', detail50)]:
+        ws2 = wb.create_sheet(sheet_name)
+        hdr2 = ['代运营商', '销售姓名', '门店ID', '门店名称', '品类' if False else '经营评分', '是否重点池', '状态']
+        hdr2 = ['代运营商', '销售姓名', '门店ID', '门店名称', '经营评分', '是否重点池', '状态']
+        ws2.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr2))
+        c = ws2.cell(row=1, column=1, value=f'{sheet_name}（数据日期 {date}，共{len(items)}家）')
+        c.font = Font(bold=True, size=14); c.alignment = Alignment(horizontal='center')
+        for j, h in enumerate(hdr2, 1):
+            c = ws2.cell(row=2, column=j, value=h)
+            c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='1F3864')
+            c.alignment = Alignment(horizontal='center')
+        for k, (rec, st) in enumerate(items, 3):
+            wrow(ws2, k, [rec['org'], rec['sales'], str(rec['shop_id']), rec['name'], rec['score'], '是' if rec['key'] else '否', st or ''])
+        for j, w in enumerate([14, 12, 14, 26, 10, 11, 8], 1):
+            ws2.column_dimensions[get_column_letter(j)].width = w
+
+    # ===== 2026-10-23英杰新增：全部重点门店经营评分明细 / 日增长明细 / 日下滑明细 =====
+    def shop_extra_sheet(ws, title, rows_):
+        hdr3 = ['代运营商', '销售姓名', '门店ID', '门店名称', '经营评分', '状态']
+        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr3))
+        c = ws.cell(row=1, column=1, value=f'{title}（数据日期 {date}，共{len(rows_)}家）')
+        c.font = Font(bold=True, size=14); c.alignment = Alignment(horizontal='center')
+        for j, h in enumerate(hdr3, 1):
+            c = ws.cell(row=2, column=j, value=h)
+            c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='1F3864')
+            c.alignment = Alignment(horizontal='center')
+        for k, (rec, st) in enumerate(rows_, 3):
+            wrow(ws, k, [rec['org'], rec['sales'], str(rec['shop_id']), rec['name'], rec['score'], st or ''])
+        for j, w in enumerate([14, 12, 14, 26, 10, 10], 1):
+            ws.column_dimensions[get_column_letter(j)].width = w
+
+    all_key = sorted([(r, '') for r in recs if r['key']], key=lambda x: -x[0]['score'])
+    growth = [it for it in all_key if it[0]['shop_id'] not in prev_ok_key and it[0]['score'] >= 70]
+    drop = [it for it in all_key if it[0]['shop_id'] in prev_ok_key and it[0]['score'] < 70]
+    shop_extra_sheet(wb.create_sheet('全部重点门店明细'), '全部重点门店经营评分明细', all_key)
+    shop_extra_sheet(wb.create_sheet('日增长明细'), '日增长明细（昨日新增达标门店）', growth)
+    shop_extra_sheet(wb.create_sheet('日下滑明细'), '日下滑明细（昨日掉标门店）', drop)
+    print('extra sheets: all_key=%d growth=%d drop=%d' % (len(all_key), len(growth), len(drop)))
+
+    # ===== 2026-10-27英杰新增：加分门店 / 减分门店明细（重点池，昨日→今日分数差≠0）=====
+    up_rows, down_rows = [], []
+    for rec in recs:
+        if not rec['key']: continue
+        pr = prev_shop.get(str(rec['shop_id']))
+        if pr is None or pr.get('score') in (None, ''): continue
+        try: prev_sc = float(pr.get('score') or 0)
+        except Exception: continue
+        diff = round(rec['score'] - prev_sc, 1)
+        if diff == 0: continue
+        item = (dict(rec, prev_score=round(prev_sc, 1), diff=diff), '')
+        (up_rows if diff > 0 else down_rows).append(item)
+    up_rows.sort(key=lambda x: -x[0]['diff'])
+    down_rows.sort(key=lambda x: x[0]['diff'])
+
+    def delta_sheet(ws, title, rows_):
+        hdr4 = ['代运营商', '销售姓名', '门店ID', '门店名称', '昨日评分', '今日评分', '分数变化']
+        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr4))
+        c = ws.cell(row=1, column=1, value=f'{title}（数据日期 {date}，共{len(rows_)}家，昨日→今日分数变化≠0）')
+        c.font = Font(bold=True, size=14); c.alignment = Alignment(horizontal='center')
+        for j, h in enumerate(hdr4, 1):
+            c = ws.cell(row=2, column=j, value=h)
+            c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='1F3864')
+            c.alignment = Alignment(horizontal='center'); c.border = BORDER
+        for k, (rec, _st) in enumerate(rows_, 3):
+            wrow(ws, k, [rec['org'], rec['sales'], str(rec['shop_id']), rec['name'],
+                         rec['prev_score'], rec['score'], rec['diff']],
+                 fill=avg_scale(rec['diff']) if False else None)
+            # 分数变化列色阶：正=绿底 负=红底
+            dc = ws.cell(row=k, column=7)
+            dc.font = Font(bold=True, color='137333' if rec['diff'] > 0 else 'C5221F')
+            dc.number_format = '+0.0;-0.0;0'
+        for j, w in enumerate([14, 12, 14, 26, 10, 10, 11], 1):
+            ws.column_dimensions[get_column_letter(j)].width = w
+
+    delta_sheet(wb.create_sheet('加分门店'), '加分门店明细（昨日→今日分数上升）', up_rows)
+    delta_sheet(wb.create_sheet('减分门店明细'), '减分门店明细（昨日→今日分数下降）', down_rows)
+    print('delta sheets: up=%d down=%d' % (len(up_rows), len(down_rows)))
+
+    out = f'/tmp/经营评分分析_皖闽浙_{date}.xlsx'
+    wb.save(out)
+    print('saved', out, os.path.getsize(out), 'bytes')
+
+    # 入库
+    with open(out, 'rb') as f:
+        content = base64.b64encode(f.read()).decode()
+    def rest(path, method='GET', payload=None):
+        r = urllib.request.Request(BASE + path, data=json.dumps(payload).encode() if payload else None, method=method)
+        r.add_header('apikey', key); r.add_header('Authorization', 'Bearer ' + key)
+        r.add_header('Content-Type', 'application/json')
+        with urllib.request.urlopen(r, timeout=120) as rr:
+            t = rr.read().decode()
+            return (rr.status, json.loads(t) if t else None)
+    qs = urllib.parse.urlencode({'date': f'eq.{date}', 'module': 'eq.score', 'select': 'file_name'})
+    exist = rest('/wmz_report_files?' + qs)
+    if exist and len(exist) > 0:
+        reqd = urllib.request.Request(BASE + '/wmz_report_files?' + qs, method='DELETE')
+        reqd.add_header('apikey', key); reqd.add_header('Authorization', 'Bearer ' + key)
+        urllib.request.urlopen(reqd, timeout=30)
+    payload = [{'date': date, 'module': 'score', 'file_name': f'经营评分分析_皖闽浙_{date}.xlsx',
+                'file_path': None, 'file_size': os.path.getsize(out), 'content': content,
+                'source': 'backfill_20261006', 'user_id': ''}]
+    st, resp = rest('/wmz_report_files', 'POST', payload)
+    print('INSERT score file →', st)
+
+if __name__ == '__main__':
+    main()
