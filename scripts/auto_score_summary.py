@@ -108,7 +108,28 @@ def main():
 
     rows = q8(f'/score_stores?stat_date=eq.{date}&select=shop_id,store_name,org_name,sales_name,score,is_target')
     print('score_stores rows:', len(rows))
+
+    # 2026-10-27保护：Apollo评分源隔日刷新——若今日与昨日分数完全一致（源未刷新分），
+    # 「昨日总分变化/日新增/日掉标/加减分明细」回退用最近一个有变化的日期对。
+    # 主表（达标数/平均分/档位等）仍用今日真实数据。
     prows = q8(f'/score_stores?stat_date=eq.{prev_date}&select=shop_id,store_name,org_name,sales_name,score,is_target')
+    _tm = {str(r.get('shop_id')): r.get('score') for r in rows}
+    _same = all(_tm.get(str(r.get('shop_id'))) == r.get('score') for r in prows if str(r.get('shop_id')) in _tm) and prows
+    _orig_prows = prows  # 真实昨日，growth/drop对比用（源未刷新时也无变化，保持一致）
+    if _same:
+        import datetime as _dt
+        d_cur = _dt.datetime.strptime(prev_date, '%Y-%m-%d')
+        for back in range(1, 10):
+            d_p = (d_cur - _dt.timedelta(days=back)).strftime('%Y-%m-%d')
+            d_pp = (d_cur - _dt.timedelta(days=back + 1)).strftime('%Y-%m-%d')
+            r_p = q8(f'/score_stores?stat_date=eq.{d_p}&select=shop_id,score&limit=20000')
+            r_pp = q8(f'/score_stores?stat_date=eq.{d_pp}&select=shop_id,score&limit=20000')
+            if not r_p or not r_pp: continue
+            mp = {str(x.get('shop_id')): x.get('score') for x in r_p}
+            if any(mp.get(str(x.get('shop_id'))) != x.get('score') for x in r_pp if str(x.get('shop_id')) in mp):
+                prows = q8(f'/score_stores?stat_date=eq.{d_p}&select=shop_id,store_name,org_name,sales_name,score,is_target')
+                print(f'source not refreshed; delta pair fallback: {d_pp} -> {d_p}')
+                break
     # 2026-10-27英杰：昨日总分变化（门店级对比昨日快照，重点池口径）——看销售有没有做工
     prev_shop = {}
     for r in prows:

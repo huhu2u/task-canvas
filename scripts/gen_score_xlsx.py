@@ -94,6 +94,36 @@ def main():
     prev_ok_key = {str(r['shop_id']) for r in prows if r.get('is_target') in (1, '1', True) and float(r.get('score') or 0) >= 70}
     print('today rows:', len(rows), 'prev rows:', len(prows))
 
+    _orig_prev_ok_key = prev_ok_key  # 真实昨日（26日）达标集合，日增长/日下滑专用
+    # 2026-10-27保护：Apollo评分源隔日刷新——若今日与昨日全量分数完全一致（无变化），
+    # 说明源未刷出新分。此时「昨日总分变化/加减分明细」回退到最近一个有变化的日期对：
+    # 向前逐日找 prev2 使 prev2 与其前一日存在分数差异，用 (prev2, prev2的前一日) 作为变化对。
+    _today_map = {str(r['shop_id']): r.get('score') for r in rows}
+    _same = all(_today_map.get(str(r['shop_id'])) == r.get('score') for r in prows if str(r['shop_id']) in _today_map)
+    delta_note = ''
+    if _same and prows:
+        # 找最近有变化日期对：从昨日往前找
+        import datetime as _dt
+        cand_prev = None
+        d_cur = _dt.datetime.strptime(prev_date, '%Y-%m-%d')
+        for back in range(1, 10):
+            d_p = (d_cur - _dt.timedelta(days=back)).strftime('%Y-%m-%d')
+            d_pp = (d_cur - _dt.timedelta(days=back + 1)).strftime('%Y-%m-%d')
+            r_p = q8(f'/score_stores?stat_date=eq.{d_p}&select=shop_id,score&limit=20000')
+            r_pp = q8(f'/score_stores?stat_date=eq.{d_pp}&select=shop_id,score&limit=20000')
+            if not r_p or not r_pp: continue
+            mp = {str(x['shop_id']): x.get('score') for x in r_p}
+            if any(mp.get(str(x['shop_id'])) != x.get('score') for x in r_pp if str(x['shop_id']) in mp):
+                cand_prev = (d_p, d_pp, r_p)
+                break
+        if cand_prev:
+            delta_note = f'（评分源{cand_prev[0]}快照，变化对 {cand_prev[1]}→{cand_prev[0]}）'
+            print('source not refreshed; delta fallback pair:', cand_prev[1], '->', cand_prev[0])
+            prows = cand_prev[2]
+            prev_shop = {str(r['shop_id']): r for r in prows}
+            prev_ok = {str(r['shop_id']) for r in prows if float(r.get('score') or 0) >= 70}
+            prev_ok_key = {str(r['shop_id']) for r in prows if r.get('is_target') in (1, '1', True) and float(r.get('score') or 0) >= 70}
+
     recs = []
     for r in rows:
         sales = (r.get('sales_name') or '').strip()
@@ -281,8 +311,9 @@ def main():
             ws.column_dimensions[get_column_letter(j)].width = w
 
     all_key = sorted([(r, '') for r in recs if r['key']], key=lambda x: -x[0]['score'])
-    growth = [it for it in all_key if it[0]['shop_id'] not in prev_ok_key and it[0]['score'] >= 70]
-    drop = [it for it in all_key if it[0]['shop_id'] in prev_ok_key and it[0]['score'] < 70]
+    # 2026-10-27修正：日增长/日下滑用真实昨日对比（_orig_prev_ok_key），delta回退不影响
+    growth = [it for it in all_key if it[0]['shop_id'] not in _orig_prev_ok_key and it[0]['score'] >= 70]
+    drop = [it for it in all_key if it[0]['shop_id'] in _orig_prev_ok_key and it[0]['score'] < 70]
     shop_extra_sheet(wb.create_sheet('全部重点门店明细'), '全部重点门店经营评分明细', all_key)
     shop_extra_sheet(wb.create_sheet('日增长明细'), '日增长明细（昨日新增达标门店）', growth)
     shop_extra_sheet(wb.create_sheet('日下滑明细'), '日下滑明细（昨日掉标门店）', drop)
@@ -303,10 +334,32 @@ def main():
     up_rows.sort(key=lambda x: -x[0]['diff'])
     down_rows.sort(key=lambda x: x[0]['diff'])
 
+    # 2026-10-27保护：Apollo评分源隔日刷新，当日无差异时从库里读最近一次delta行（不生成空Sheet）
+    delta_note = ''
+    if not up_rows and not down_rows:
+        qs = urllib.parse.urlencode({'module': 'eq.score_delta', 'select': 'date,org,salesperson,metrics', 'order': 'date.desc', 'limit': '1'})
+        rr = req(BASE, key, '/wmz_sales_detail?' + qs)
+        last_d = rr[0]['date'] if rr else None
+        if last_d:
+            qs2 = urllib.parse.urlencode({'module': 'eq.score_delta', 'date': f'eq.{last_d}', 'select': 'date,org,salesperson,metrics', 'limit': '5000'})
+            srows2 = req(BASE, key, '/wmz_sales_detail?' + qs2)
+            up_rows, down_rows = [], []
+            for r in srows2:
+                m = r['metrics'] if isinstance(r['metrics'], dict) else json.loads(r['metrics'] or '{}')
+                diff = m.get('diff')
+                if diff is None: continue
+                rec = dict(org=r['org'], sales=m.get('sales') or '', shop_id=m.get('shop_id'), name=r['salesperson'],
+                           prev_score=m.get('prev_score'), score=m.get('score'), diff=diff)
+                (up_rows if diff > 0 else down_rows).append((rec, ''))
+            up_rows.sort(key=lambda x: -x[0]['diff'])
+            down_rows.sort(key=lambda x: x[0]['diff'])
+            delta_note = f'（评分源{last_d}快照）'
+            print('delta fallback to', last_d, len(up_rows), len(down_rows))
+
     def delta_sheet(ws, title, rows_):
         hdr4 = ['代运营商', '销售姓名', '门店ID', '门店名称', '昨日评分', '今日评分', '分数变化']
         ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr4))
-        c = ws.cell(row=1, column=1, value=f'{title}（数据日期 {date}，共{len(rows_)}家，昨日→今日分数变化≠0）')
+        c = ws.cell(row=1, column=1, value=f'{title}（数据日期 {date}，共{len(rows_)}家，昨日→今日分数变化≠0）{delta_note}')
         c.font = Font(bold=True, size=14); c.alignment = Alignment(horizontal='center')
         for j, h in enumerate(hdr4, 1):
             c = ws.cell(row=2, column=j, value=h)
