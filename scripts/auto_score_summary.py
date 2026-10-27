@@ -306,12 +306,17 @@ def main():
     req(URL, 'DELETE', f'/wmz_sales_detail?date=eq.{date}&module=eq.score_shop')
     for i in range(0, len(sshop), 50):
         req(URL, 'POST', '/wmz_sales_detail', sshop[i:i+50])
-    req(URL, 'DELETE', f'/wmz_sales_detail?date=eq.{date}&module=eq.score_delta')
-    for i in range(0, len(sdelta), 50):
-        req(URL, 'POST', '/wmz_sales_detail', sdelta[i:i+50])
-    req(URL, 'DELETE', f'/wmz_sales_detail?date=eq.{date}&module=eq.score_delta_sales')
-    for i in range(0, len(sdsales), 50):
-        req(URL, 'POST', '/wmz_sales_detail', sdsales[i:i+50])
+    # 2026-10-27保护：Apollo评分源隔日刷新，若当日两日分数无差异（delta=0），
+    # 不清空已入库的delta行（保留上一个有变化日期的数据），避免看板加/减分面板变空
+    if sdelta:
+        req(URL, 'DELETE', f'/wmz_sales_detail?date=eq.{date}&module=eq.score_delta')
+        for i in range(0, len(sdelta), 50):
+            req(URL, 'POST', '/wmz_sales_detail', sdelta[i:i+50])
+        req(URL, 'DELETE', f'/wmz_sales_detail?date=eq.{date}&module=eq.score_delta_sales')
+        for i in range(0, len(sdsales), 50):
+            req(URL, 'POST', '/wmz_sales_detail', sdsales[i:i+50])
+    else:
+        print('score_delta empty (source not refreshed), keep previous rows')
     print('DONE score summary', date, 'org', len(out), 'sales', len(srows), 'shop', len(sshop), 'delta', len(sdelta))
 
 if __name__ == '__main__':
