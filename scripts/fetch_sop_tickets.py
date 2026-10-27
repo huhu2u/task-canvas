@@ -244,5 +244,90 @@ def main():
         post('wmz_sales_detail', [{'date': date, 'module': 'sop_sales', **s} for s in sales_rows])
     print(f'入库完成: wmz_reports sop {len(rows)-1}家+合计 | wmz_sales_detail sop_sales {len(sales_rows)}销售')
 
+    # ===== 2026-10-27英杰：MEM工单底表Excel（独立于MEM续约分析底表）入库 wmz_report_files =====
+    try:
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill
+        from openpyxl.utils import get_column_letter
+        wb = Workbook()
+        hdr_fill = PatternFill('solid', fgColor='1F4E79')
+        hdr_font = Font(bold=True, color='FFFFFF')
+        # Sheet1 组织维度（含合计行）
+        ws0 = wb.active
+        ws0.title = '组织维度'
+        h0 = ['代运营商', '工单总数', '有效工单', '已处理', '完成率', '待处理', '未提交', '已过期']
+        ws0.append(['MEM工单底表（MEM到期门店拜访任务·李俊口径）', f'数据日期 {date}'] + [''] * (len(h0) - 2))
+        ws0.cell(row=1, column=1).font = Font(bold=True, size=12, color='1F4E79')
+        ws0.append(h0)
+        for c in range(1, len(h0) + 1):
+            ws0.cell(row=2, column=c).fill = hdr_fill
+            ws0.cell(row=2, column=c).font = hdr_font
+        r_i = 3
+        for org, m in rows:
+            rt = m.get('处理率')
+            ws0.append([org, m['工单总数'], m['有效工单'], m['已处理'],
+                        (rt / 100) if rt is not None else None,
+                        m['待处理'], m['未提交'], m['已过期']])
+            cell = ws0.cell(row=r_i, column=5)
+            cell.number_format = '0.0%'
+            if org == '皖闽浙合计':
+                for c in range(1, len(h0) + 1):
+                    ws0.cell(row=r_i, column=c).font = Font(bold=True)
+            r_i += 1
+        for j, w in enumerate([16, 10, 10, 10, 10, 10, 10, 10], 1):
+            ws0.column_dimensions[get_column_letter(j)].width = w
+        # Sheet2 销售维度
+        ws1 = wb.create_sheet('销售维度')
+        h1 = ['代运营商', '销售姓名', '工单总数', '有效工单', '已处理', '完成率', '待处理', '未提交', '已过期']
+        ws1.append(h1)
+        for c in range(1, len(h1) + 1):
+            ws1.cell(row=1, column=c).fill = hdr_fill
+            ws1.cell(row=1, column=c).font = hdr_font
+        s_i = 2
+        for s in sales_rows:
+            mm = s['metrics']
+            rt = mm.get('处理率')
+            ws1.append([s['org'], s['salesperson'], mm['工单总数'], mm['有效工单'], mm['已处理'],
+                        (rt / 100) if rt is not None else None,
+                        mm['待处理'], mm['未提交'], mm['已过期']])
+            ws1.cell(row=s_i, column=6).number_format = '0.0%'
+            s_i += 1
+        for j, w in enumerate([16, 12, 10, 10, 10, 10, 10, 10, 10], 1):
+            ws1.column_dimensions[get_column_letter(j)].width = w
+        # 排序：按代运营商分组、组内完成率降序
+        ws1_rows = []
+        header = [c.value for c in ws1[1]]
+        for r in ws1.iter_rows(min_row=2, values_only=True):
+            ws1_rows.append(list(r))
+        ws1_rows.sort(key=lambda x: (x[0], -(x[5] or 0)))
+        # 重写
+        for rr in range(len(ws1_rows)):
+            for cc in range(len(header)):
+                ws1.cell(row=rr + 2, column=cc + 1, value=ws1_rows[rr][cc])
+                if cc == 5:
+                    ws1.cell(row=rr + 2, column=cc + 1).number_format = '0.0%'
+        path = f'/tmp/MEM工单底表_皖闽浙_{date}.xlsx'
+        wb.save(path)
+        # 入库 wmz_report_files module='sop'
+        import base64, urllib.parse
+        content = base64.b64encode(open(path, 'rb').read()).decode()
+        def report_files(method, payload=None, q=''):
+            u = f'https://dbcli-el9byiqifrr7yh4c.database.sankuai.com/rest/v1/wmz_report_files{q}'
+            rq = urllib.request.Request(u, data=json.dumps(payload).encode() if payload else None, method=method)
+            rq.add_header('apikey', key); rq.add_header('Authorization', 'Bearer ' + key)
+            rq.add_header('Content-Type', 'application/json')
+            if method == 'POST':
+                rq.add_header('Prefer', 'return=minimal')
+            urllib.request.urlopen(rq, timeout=60)
+        report_files('DELETE', q=f'?date=eq.{date}&module=eq.sop')
+        report_files('POST', [{'date': date, 'module': 'sop', 'file_name': f'MEM工单底表_皖闽浙_{date}.xlsx', 'file_path': None,
+                               'file_size': os.path.getsize(path), 'content': content,
+                               'source': 'daily_pipeline', 'user_id': ''}])
+        print(f'MEM工单底表入库: {path} ({len(rows)}组织行 / {len(sales_rows)}销售行)')
+    except Exception as e:
+        import traceback
+        print(f'⚠️ MEM工单底表入库失败（不影响主数据）: {e}')
+        traceback.print_exc()
+
 if __name__ == '__main__':
     main()
