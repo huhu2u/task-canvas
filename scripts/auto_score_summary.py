@@ -113,6 +113,21 @@ def main():
     # 「昨日总分变化/日新增/日掉标/加减分明细」回退用最近一个有变化的日期对。
     # 主表（达标数/平均分/档位等）仍用今日真实数据。
     prows = q8(f'/score_stores?stat_date=eq.{prev_date}&select=shop_id,store_name,org_name,sales_name,score,is_target')
+    # 2026-10-27英杰：本月总分变化（vs 当月1日基数；库里若没有1日就用最早有数据的日期）
+    month_base_date = f"{date[:8]}01"
+    mrows_chk = q8(f'/score_stores?stat_date=eq.{month_base_date}&select=shop_id&limit=1')
+    if not mrows_chk:
+        _alld = q8('/score_stores?select=stat_date&order=stat_date.asc&limit=1')
+        if _alld and _alld[0]['stat_date'] >= month_base_date:
+            month_base_date = _alld[0]['stat_date']
+        else:
+            month_base_date = None
+    if month_base_date:
+        mrows = q8(f'/score_stores?stat_date=eq.{month_base_date}&select=shop_id,store_name,org_name,sales_name,score,is_target')
+        print(f'month base: {month_base_date} rows={len(mrows)}')
+    else:
+        mrows = []
+        print('month base: none')
     _tm = {str(r.get('shop_id')): r.get('score') for r in rows}
     _same = all(_tm.get(str(r.get('shop_id'))) == r.get('score') for r in prows if str(r.get('shop_id')) in _tm) and prows
     _orig_prows = prows  # 真实昨日，growth/drop对比用（源未刷新时也无变化，保持一致）
@@ -134,12 +149,15 @@ def main():
     prev_shop = {}
     for r in prows:
         prev_shop[str(r.get('shop_id'))] = r
+    month_shop = {}
+    for r in mrows:
+        month_shop[str(r.get('shop_id'))] = r
     # 聚合 org 级 + (org,sales) 级 — 双口径：全量(all) + 重点门店池(key, is_target=1)（2026-10-05英杰口径）
     # 2026-10-22英杰：新增区间分布（≥70 / 50-70 / <50）双口径 + 重点池平均分档位（9月全国水位线+1分）
     org_agg = defaultdict(lambda: {'n': 0, 's': 0.0, 'ok': 0, 'low': 0, 'kn': 0, 'ks': 0.0, 'kok': 0, 'klow': 0,
-                                   'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0, 'kdiff': 0.0})
+                                   'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0, 'kdiff': 0.0, 'kmdiff': 0.0})
     sales_agg = defaultdict(lambda: {'n': 0, 's': 0.0, 'ok': 0, 'kn': 0, 'ks': 0.0, 'kok': 0,
-                                     'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0, 'kdiff': 0.0})
+                                     'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0, 'kdiff': 0.0, 'kmdiff': 0.0})
     has_key_flag = any(r.get('is_target') not in (None, '', 0, '0') for r in rows)
     for r in rows:
         sales = (r.get('sales_name') or '').strip()
@@ -160,9 +178,15 @@ def main():
         if sc >= 70: a['r70'] += 1
         elif sc >= 50: a['r5070'] += 1
         else: a['r50'] += 1
+        mr = month_shop.get(str(r.get('shop_id')))
+        msc = None
+        if mr is not None and mr.get('score') not in (None, ''):
+            try: msc = float(mr.get('score') or 0)
+            except Exception: msc = None
         if is_key:
             a['kn'] += 1; a['ks'] += sc
             if prev_sc is not None: a['kdiff'] += sc - prev_sc
+            if msc is not None: a['kmdiff'] += sc - msc
             if sc >= 70: a['kok'] += 1
             if sc < 30: a['klow'] += 1
             if sc >= 70: a['kr70'] += 1
@@ -177,6 +201,7 @@ def main():
             if is_key:
                 b['kn'] += 1; b['ks'] += sc
                 if prev_sc is not None: b['kdiff'] += sc - prev_sc
+                if msc is not None: b['kmdiff'] += sc - msc
                 if sc >= 70: b['kok'] += 1
                 if sc >= 70: b['kr70'] += 1
                 elif sc >= 50: b['kr5070'] += 1
@@ -218,7 +243,8 @@ def main():
                         '距上一档': tgap,
                         '重点池日新增达标': (a['kok'] - kok_prev) if have_prev else None,
                         '重点池日掉标': (kok_prev - a['kok']) if have_prev else None,
-                        '重点池昨日总分变化': round(a['kdiff'], 1) if have_prev else None})
+                        '重点池昨日总分变化': round(a['kdiff'], 1) if have_prev else None,
+                        '重点池本月总分变化': round(a['kmdiff'], 1) if month_shop else None})
         # 区间分布（全量口径，英杰 2026-10-22：双维度保留全量 + 重点主看平均分）
         met.update({'≥70分门店': a['r70'], '50-70分门店': a['r5070'], '50分以下门店': a['r50']})
         if has_key_flag:
@@ -244,7 +270,8 @@ def main():
                         '重点池平均评分': kavg,
                         '重点池评分档位': tier,
                         '距上一档': tgap,
-                        '重点池昨日总分变化': round(b['kdiff'], 1) if have_prev else None})
+                        '重点池昨日总分变化': round(b['kdiff'], 1) if have_prev else None,
+                        '重点池本月总分变化': round(b['kmdiff'], 1) if month_shop else None})
         # 区间分布（销售维度，2026-10-22英杰：重点池主看平均分，下钻销售）
         met.update({'≥70分门店': b['r70'], '50-70分门店': b['r5070'], '50分以下门店': b['r50']})
         if has_key_flag and b['kn']:

@@ -90,6 +90,22 @@ def main():
     rows = q8(f'/score_stores?stat_date=eq.{date}&select=shop_id,store_name,sales_name,score,is_target')
     prows = q8(f'/score_stores?stat_date=eq.{prev_date}&select=shop_id,store_name,sales_name,score,is_target')
     prev_shop = {str(r['shop_id']): r for r in prows}
+    # 2026-10-27英杰：本月总分变化（vs 当月1日基数；库里没有1日用最早有数据的日期）
+    month_base_date = f"{date[:8]}01"
+    _mb_chk = q8(f'/score_stores?stat_date=eq.{month_base_date}&select=shop_id&limit=1')
+    if not _mb_chk:
+        _alld = q8('/score_stores?select=stat_date&order=stat_date.asc&limit=1')
+        if _alld and _alld[0]['stat_date'] >= month_base_date:
+            month_base_date = _alld[0]['stat_date']
+        else:
+            month_base_date = None
+    if month_base_date:
+        mrows = q8(f'/score_stores?stat_date=eq.{month_base_date}&select=shop_id,score')
+        month_shop = {str(r['shop_id']): r for r in mrows}
+        print('month base:', month_base_date, len(mrows))
+    else:
+        month_shop = {}
+        print('month base: none')
     prev_ok = {str(r['shop_id']) for r in prows if float(r.get('score') or 0) >= 70}
     prev_ok_key = {str(r['shop_id']) for r in prows if r.get('is_target') in (1, '1', True) and float(r.get('score') or 0) >= 70}
     print('today rows:', len(rows), 'prev rows:', len(prows))
@@ -140,7 +156,7 @@ def main():
     from openpyxl.utils import get_column_letter
     wb = Workbook(); ws0 = wb.active; ws0.title = '组织汇总'
     # 2026-10-23英杰：组织汇总只留重点池口径，全量分析列全删（看板同步删）
-    hdr = ['代运营商', '操盘手', '重点池门店数', '重点池达标', '重点池平均评分', '重点池评分档位', '距上一档', '重点池≥70分', '重点池50-70分', '重点池<50分', '昨日总分变化']  # 2026-10-27英杰：加昨日总分变化（重点池Σ分差）
+    hdr = ['代运营商', '操盘手', '重点池门店数', '重点池达标', '重点池平均评分', '重点池评分档位', '距上一档', '重点池≥70分', '重点池50-70分', '重点池<50分', '昨日总分变化', '本月总分变化']  # 2026-10-27英杰：加昨日总分变化（重点池Σ分差）
     # 2026-10-23英杰：样式按目标截图定稿（深蓝表头白字/数据行白底黑细边框/数值右对齐/档位纯文本/平均分绿-白-红色阶/合计行浅蓝加粗）
     THIN = Side(style='thin', color='000000')
     BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
@@ -154,9 +170,9 @@ def main():
         c.alignment = Alignment(horizontal='center', vertical='center'); c.border = BORDER
     ws0.row_dimensions[2].height = 24
     org_agg = defaultdict(lambda: {'n': 0, 'ok': 0, 's': 0.0, 'low': 0, 'kn': 0, 'ks': 0.0, 'kok': 0,
-                                   'new_ok': 0, 'lost': 0, 'kdiff': 0.0,
+                                   'new_ok': 0, 'lost': 0, 'kdiff': 0.0, 'kmdiff': 0.0,
                                    'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0})
-    sales_agg = defaultdict(lambda: {'n': 0, 'ok': 0, 'kn': 0, 'kok': 0, 'ks': 0.0, 'new_ok': 0, 'lost': 0, 'kdiff': 0.0,
+    sales_agg = defaultdict(lambda: {'n': 0, 'ok': 0, 'kn': 0, 'kok': 0, 'ks': 0.0, 'new_ok': 0, 'lost': 0, 'kdiff': 0.0, 'kmdiff': 0.0,
                                      'r70': 0, 'r5070': 0, 'r50': 0, 'kr70': 0, 'kr5070': 0, 'kr50': 0})
     detail70, detail5070, detail50 = [], [], []
     shop_today = {}
@@ -169,6 +185,10 @@ def main():
             if pr is not None and pr.get('score') not in (None, ''):
                 try: a['kdiff'] += rec['score'] - float(pr.get('score') or 0)
                 except Exception: pass
+            mr = month_shop.get(str(rec['shop_id']))
+            if mr is not None and mr.get('score') not in (None, ''):
+                try: a['kmdiff'] += rec['score'] - float(mr.get('score') or 0)
+                except Exception: pass
             if rec['score'] >= 70: a['kok'] += 1; a['kr70'] += 1
             elif rec['score'] >= 50: a['kr5070'] += 1
             else: a['kr50'] += 1
@@ -180,6 +200,10 @@ def main():
             pr = prev_shop.get(str(rec['shop_id']))
             if pr is not None and pr.get('score') not in (None, ''):
                 try: b['kdiff'] += rec['score'] - float(pr.get('score') or 0)
+                except Exception: pass
+            mr = month_shop.get(str(rec['shop_id']))
+            if mr is not None and mr.get('score') not in (None, ''):
+                try: b['kmdiff'] += rec['score'] - float(mr.get('score') or 0)
                 except Exception: pass
             if rec['score'] >= 70: b['kok'] += 1; b['kr70'] += 1
             elif rec['score'] >= 50: b['kr5070'] += 1
@@ -222,33 +246,40 @@ def main():
         tier, tgap = score_tier(kavg)
         wrow(ws0, i, [org, MGR.get(org, ''), a['kn'], a['kok'],
                       kavg if kavg is not None else '-', tier, tgap,
-                      a['kr70'], a['kr5070'], a['kr50'], round(a['kdiff'], 1)],
+                      a['kr70'], a['kr5070'], a['kr50'], round(a['kdiff'], 1), round(a['kmdiff'], 1)],
              bold=False, avg_fill=avg_scale(kavg), tier_col=6)
-        # 昨日总分变化列色：正=绿字 负=红字
+        # 昨日/本月总分变化列色：正=绿字 负=红字
         dc = ws0.cell(row=i, column=11)
         dc.font = Font(bold=True, color='137333' if a['kdiff'] > 0 else ('C5221F' if a['kdiff'] < 0 else '000000'))
         dc.number_format = '+0.0;-0.0;0'
+        mc = ws0.cell(row=i, column=12)
+        mc.font = Font(bold=True, color='137333' if a['kmdiff'] > 0 else ('C5221F' if a['kmdiff'] < 0 else '000000'))
+        mc.number_format = '+0.0;-0.0;0'
         ws0.row_dimensions[i].height = 20
         i += 1
     tot = {k: sum(a[k] for a in org_agg.values()) for k in ['kn', 'kok', 'new_ok', 'lost', 'kr70', 'kr5070', 'kr50']}
     tot_kdiff = sum(a['kdiff'] for a in org_agg.values())
+    tot_kmdiff = sum(a['kmdiff'] for a in org_agg.values())
     tot_ks = sum(a['ks'] for a in org_agg.values())
     kavg_t = round(tot_ks / tot['kn'], 1) if tot['kn'] else None
     tier_t, tgap_t = score_tier(kavg_t)
     wrow(ws0, i, ['皖闽浙合计', '', tot['kn'], tot['kok'],
                   kavg_t if kavg_t is not None else '-', tier_t, tgap_t,
-                  tot['kr70'], tot['kr5070'], tot['kr50'], round(tot_kdiff, 1)],
+                  tot['kr70'], tot['kr5070'], tot['kr50'], round(tot_kdiff, 1), round(tot_kmdiff, 1)],
          bold=True, fill='DCE6F1', tier_col=6)
     dc = ws0.cell(row=i, column=11)
     dc.font = Font(bold=True, color='137333' if tot_kdiff > 0 else ('C5221F' if tot_kdiff < 0 else '000000'))
     dc.number_format = '+0.0;-0.0;0'
+    mc = ws0.cell(row=i, column=12)
+    mc.font = Font(bold=True, color='137333' if tot_kmdiff > 0 else ('C5221F' if tot_kmdiff < 0 else '000000'))
+    mc.number_format = '+0.0;-0.0;0'
     ws0.row_dimensions[i].height = 22
-    for j, w in enumerate([14, 11, 14, 13, 16, 15, 11, 14, 15, 14, 13], 1):
+    for j, w in enumerate([14, 11, 14, 13, 16, 15, 11, 14, 15, 14, 13, 13], 1):
         ws0.column_dimensions[get_column_letter(j)].width = w
 
     # 销售维度（2026-10-23英杰：只留重点池口径；样式与组织汇总一致，按代运营商分组但用淡蓝组标题行）
     ws1 = wb.create_sheet('销售维度')
-    hdr1 = ['代运营商', '销售姓名', '重点池门店数', '重点池达标', '重点池平均评分', '重点池评分档位', '距上一档', '重点池≥70分', '重点池50-70分', '重点池<50分', '昨日总分变化']  # 2026-10-27英杰：加昨日总分变化
+    hdr1 = ['代运营商', '销售姓名', '重点池门店数', '重点池达标', '重点池平均评分', '重点池评分档位', '距上一档', '重点池≥70分', '重点池50-70分', '重点池<50分', '昨日总分变化', '本月总分变化']  # 2026-10-27英杰：加昨日总分变化
     ws1.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr1))
     c = ws1.cell(row=1, column=1, value=f'销售维度（数据日期 {date}）')
     c.font = Font(bold=True, size=18); c.alignment = Alignment(horizontal='center', vertical='center')
@@ -262,7 +293,7 @@ def main():
     for org in ORG_ORDER:
         items = sorted([(k[1], v) for k, v in sales_agg.items() if k[0] == org], key=lambda x: -(x[1]['ks'] / x[1]['kn'] if x[1]['kn'] else 0))
         if not items: continue
-        wrow(ws1, i, [f'【{org}】'] + [''] * 10, bold=True, fill='DCE6F1', tier_col=6)
+        wrow(ws1, i, [f'【{org}】'] + [''] * 11, bold=True, fill='DCE6F1', tier_col=6)
         ws1.row_dimensions[i].height = 20
         i += 1
         for sales, b in items:
@@ -270,12 +301,15 @@ def main():
             tier, tgap = score_tier(kavg)
             wrow(ws1, i, [org, sales, b['kn'], b['kok'],
                           kavg if kavg is not None else '-', tier, tgap,
-                          b['kr70'], b['kr5070'], b['kr50'], round(b['kdiff'], 1)], tier_col=6)
+                          b['kr70'], b['kr5070'], b['kr50'], round(b['kdiff'], 1), round(b['kmdiff'], 1)], tier_col=6)
             dc = ws1.cell(row=i, column=11)
             dc.font = Font(bold=True, color='137333' if b['kdiff'] > 0 else ('C5221F' if b['kdiff'] < 0 else '000000'))
             dc.number_format = '+0.0;-0.0;0'
+            mc = ws1.cell(row=i, column=12)
+            mc.font = Font(bold=True, color='137333' if b['kmdiff'] > 0 else ('C5221F' if b['kmdiff'] < 0 else '000000'))
+            mc.number_format = '+0.0;-0.0;0'
             i += 1
-    for j, w in enumerate([14, 12, 14, 13, 16, 15, 11, 14, 15, 14, 13], 1):
+    for j, w in enumerate([14, 12, 14, 13, 16, 15, 11, 14, 15, 14, 13, 13], 1):
         ws1.column_dimensions[get_column_letter(j)].width = w
 
     # 明细 Sheet（2026-10-22英杰：三档改为 ≥70 / 50-70 / <50，重点池门店）
