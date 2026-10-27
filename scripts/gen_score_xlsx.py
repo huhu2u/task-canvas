@@ -327,6 +327,40 @@ def main():
     delta_sheet(wb.create_sheet('减分门店明细'), '减分门店明细（昨日→今日分数下降）', down_rows)
     print('delta sheets: up=%d down=%d' % (len(up_rows), len(down_rows)))
 
+    # ===== 2026-10-27英杰新增：加/减分销售维度（按代运营商+销售聚合）=====
+    sd_agg = {}
+    for rec, _ in up_rows + down_rows:
+        sales = (rec.get('sales') or '').strip()
+        if not sales: continue
+        k2 = (rec['org'], sales)
+        a = sd_agg.setdefault(k2, {'up': 0, 'down': 0, 'delta': 0.0})
+        a['delta'] += rec['diff']
+        if rec['diff'] > 0: a['up'] += 1
+        elif rec['diff'] < 0: a['down'] += 1
+
+    def sd_sales_sheet(ws, rows_):
+        hdr = ['代运营商', '销售姓名', '变分门店数', '加分门店', '减分门店', '总变化分']
+        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(hdr))
+        c = ws.cell(row=1, column=1, value=f'加/减分销售维度（数据日期 {date}，共{len(rows_)}人，总变化分={round(sum(r[2] for r in rows_), 1)}）')
+        c.font = Font(bold=True, size=14); c.alignment = Alignment(horizontal='center')
+        for j, h in enumerate(hdr, 1):
+            c = ws.cell(row=2, column=j, value=h)
+            c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='1F3864')
+            c.alignment = Alignment(horizontal='center'); c.border = BORDER
+        for k, r in enumerate(rows_, 3):
+            org, sales, delta, up, down = r
+            wrow(ws, k, [org, sales, up + down, up, down, delta])
+            dc = ws.cell(row=k, column=6)
+            dc.font = Font(bold=True, color='137333' if delta > 0 else ('C5221F' if delta < 0 else '000000'))
+            dc.number_format = '+0.0;-0.0;0'
+        for j, w in enumerate([14, 12, 12, 10, 10, 11], 1):
+            ws.column_dimensions[get_column_letter(j)].width = w
+
+    sd_rows = sorted([(org, sales, round(a['delta'], 1), a['up'], a['down']) for (org, sales), a in sd_agg.items()],
+                     key=lambda x: -x[2])
+    sd_sales_sheet(wb.create_sheet('加减分销售维度'), sd_rows)
+    print('sd sales sheet rows=%d sum=%s' % (len(sd_rows), round(sum(r[2] for r in sd_rows), 1)))
+
     out = f'/tmp/经营评分分析_皖闽浙_{date}.xlsx'
     wb.save(out)
     print('saved', out, os.path.getsize(out), 'bytes')

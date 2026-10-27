@@ -274,6 +274,28 @@ def main():
     sdelta.sort(key=lambda x: -x['metrics']['diff'])
     print('score_delta rows:', len(sdelta), '(up', sum(1 for x in sdelta if x['metrics']['diff'] > 0), '/ down', sum(1 for x in sdelta if x['metrics']['diff'] < 0), ')')
 
+    # 2026-10-27英杰：加/减分销售维度聚合（module='score_delta_sales'）
+    # 按代运营商+销售聚合：加分门店数/减分门店数/总变化分
+    agg = {}
+    for x in sdelta:
+        sales = (x['metrics'].get('sales') or '').strip()
+        if not sales: continue
+        k2 = (x['org'], sales)
+        a = agg.setdefault(k2, {'up': 0, 'down': 0, 'delta': 0.0})
+        a['delta'] += x['metrics']['diff']
+        if x['metrics']['diff'] > 0: a['up'] += 1
+        elif x['metrics']['diff'] < 0: a['down'] += 1
+    sdsales = []
+    for (org, sales), a in agg.items():
+        sdsales.append({'date': date, 'module': 'score_delta_sales', 'org': org,
+                        'salesperson': sales,
+                        'metrics': {'up': a['up'], 'down': a['down'],
+                                    'delta': round(a['delta'], 1),
+                                    'total': a['up'] + a['down']},
+                        'user_id': ''})
+    sdsales.sort(key=lambda x: -x['metrics']['delta'])
+    print('score_delta_sales rows:', len(sdsales))
+
     # 写库（先删后插）
     req(URL, 'DELETE', f'/wmz_reports?date=eq.{date}&module=eq.score')
     for i in range(0, len(out), 10):
@@ -287,6 +309,9 @@ def main():
     req(URL, 'DELETE', f'/wmz_sales_detail?date=eq.{date}&module=eq.score_delta')
     for i in range(0, len(sdelta), 50):
         req(URL, 'POST', '/wmz_sales_detail', sdelta[i:i+50])
+    req(URL, 'DELETE', f'/wmz_sales_detail?date=eq.{date}&module=eq.score_delta_sales')
+    for i in range(0, len(sdsales), 50):
+        req(URL, 'POST', '/wmz_sales_detail', sdsales[i:i+50])
     print('DONE score summary', date, 'org', len(out), 'sales', len(srows), 'shop', len(sshop), 'delta', len(sdelta))
 
 if __name__ == '__main__':
